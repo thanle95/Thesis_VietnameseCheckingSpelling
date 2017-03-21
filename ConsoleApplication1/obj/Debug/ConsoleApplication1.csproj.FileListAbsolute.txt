@@ -1,0 +1,10 @@
+C:\Users\Kiet\OneDrive\Thesis\Thesis\ConsoleApplication1\bin\Debug\ConsoleApplication1.exe.config
+C:\Users\Kiet\OneDrive\Thesis\Thesis\ConsoleApplication1\bin\Debug\Resources\myCompoundWordVnDict.txt
+C:\Users\Kiet\OneDrive\Thesis\Thesis\ConsoleApplication1\bin\Debug\Resources\mySyllableDict.txt
+C:\Users\Kiet\OneDrive\Thesis\Thesis\ConsoleApplication1\bin\Debug\Resources\newCompoundDict.txt
+C:\Users\Kiet\OneDrive\Thesis\Thesis\ConsoleApplication1\bin\Debug\ConsoleApplication1.exe
+C:\Users\Kiet\OneDrive\Thesis\Thesis\ConsoleApplication1\bin\Debug\ConsoleApplication1.pdb
+C:\Users\Kiet\OneDrive\Thesis\Thesis\ConsoleApplication1\obj\Debug\ConsoleApplication1.csprojResolveAssemblyReference.cache
+C:\Users\Kiet\OneDrive\Thesis\Thesis\ConsoleApplication1\obj\Debug\ConsoleApplication1.exe
+C:\Users\Kiet\OneDrive\Thesis\Thesis\ConsoleApplication1\obj\Debug\ConsoleApplication1.pdb
+C:\Users\Kiet\OneDrive\Thesis\Thesis\ConsoleApplication1\bin\Debug\Resources\SyllableDictByViet39K.txt
