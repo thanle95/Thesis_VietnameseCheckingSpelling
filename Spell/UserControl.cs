@@ -90,69 +90,15 @@ namespace Spell
                 Word.Words words = Globals.ThisAddIn.Application.ActiveDocument.Words;
 
                 Word.Range tokenRange = lstErrorRange.First(); //0: temp
-                for (int j = 1, i = j - 1; j <= words.Count; j++, i++)
+                for (int iWord = 1; iWord <= words.Count; iWord++)
                 {
-                    if (words[j].Text.ToLower().Trim().Equals(tokenRange.Text.Trim().ToLower()))
+                    string token = tokenRange.Text.Trim().ToLower();
+                    string word = words[iWord].Text.Trim().ToLower();
+                    if (word.Equals(token))
                     {
-                        string word = words[j].Text.Trim().ToLower();
-                        int length = words.Count;
-                        string prepre = "", pre = "", next = "", nextnext = "";
-                        if (i == 0)
-                        {
-                            if (length > 1)
-                                next = words[j + 1].Text.Trim().ToLower();
-                            if (length > 2)
-                                nextnext = words[j + 2].Text.Trim().ToLower();
-                        }
-                        else if (i == 1)
-                        {
-                            if (length > 1)
-                                pre = words[j - 1].Text.Trim().ToLower();
-                            if (length > 2)
-                                next = words[j + 1].Text.Trim().ToLower();
-                            if (length > 3)
-                                nextnext = words[j + 2].Text.Trim().ToLower();
-                        }
-                        else if (i == 2)
-                        {
-                            if (length > 2)
-                            {
-                                prepre = words[j - 2].Text.Trim().ToLower();
-                                pre = words[j - 1].Text.Trim().ToLower();
-                            }
-                            if (length > 3)
-                                next = words[j + 1].Text.Trim().ToLower();
-                            if (length > 4)
-                                nextnext = words[j + 2].Text.Trim().ToLower();
-                        }
-                        else if (i > 2 && i < length - 2)
-                        {
-                            if (length > 5)
-                            {
-                                prepre = words[j - 2].Text.Trim().ToLower();
-                                pre = words[j - 1].Text.Trim().ToLower();
-                                next = words[j + 1].Text.Trim().ToLower();
-                                nextnext = words[j + 2].Text.Trim().ToLower();
-                            }
-                        }
-                        else if (i == length - 2)
-                        {
-                            if (length > 2)
-                            {
-                                pre = words[j - 1].Text.Trim().ToLower();
-                                next = words[j + 1].Text.Trim().ToLower();
-                            }
-                            if (length > 3)
-                                prepre = words[j - 2].Text.Trim().ToLower();
-                        }
-                        else if (i == length - 1)
-                        {
-                            if (length > 1)
-                                pre = words[j - 1].Text.Trim().ToLower();
-                            if (length > 2)
-                                prepre = words[j - 2].Text.Trim().ToLower();
-                        }
-                        string token = tokenRange.Text.Trim().ToLower();
+                        string[] gramAroundIWord = getGramArroundIWord(iWord, words.Count, words);
+                        string prepre = gramAroundIWord[0], pre = gramAroundIWord[1], next = gramAroundIWord[2], nextnext = gramAroundIWord[3];
+
                         if (token.Length > 0)
                         {
                             HashSet<string> items = Candidate.getInstance.selectiveCandidate(prepre, pre, token, next, nextnext);
@@ -164,24 +110,100 @@ namespace Spell
                                 if (!item.ToLower().Equals(token.ToLower()))
                                     if (item.Length > 1)
                                         lstbCandidate.Items.Add(item.Trim());
-                                if(lstbCandidate.Items.Count > 0)
+                                if (lstbCandidate.Items.Count > 0)
                                     lstbCandidate.SetSelected(0, true);
                                 btnChange.Focus();
                             }
                             break;
                         }
 
-                    }
-                }
+                    } //end if compare to find token
+                } // end for
             }
             //}
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="iWord">word thứ i</param>
+        /// <param name="lengthSentence">độ dài câu</param>
+        /// <param name="words">toàn bộ words trong document</param>
+        /// <returns></returns>
+        public string[] getGramArroundIWord(int iWord, int lengthSentence, Word.Words words)
+        {
+            string[] ret = new string[4];
+            //0: prepre
+            //1: pre
+            //2: next
+            //3: nextnexxt
+            string prepre = "", pre = "", next = "", nextnext = "";
+            if (iWord == 1)
+            {
+                if (lengthSentence > 1)
+                    next = words[iWord + 1].Text.Trim().ToLower();
+                if (lengthSentence > 2)
+                    nextnext = words[iWord + 2].Text.Trim().ToLower();
+            }
+            else if (iWord == 2)
+            {
+                if (lengthSentence > 1)
+                    pre = words[iWord - 1].Text.Trim().ToLower();
+                if (lengthSentence > 2)
+                    next = words[iWord + 1].Text.Trim().ToLower();
+                if (lengthSentence > 3)
+                    nextnext = words[iWord + 2].Text.Trim().ToLower();
+            }
+            else if (iWord == 3)
+            {
+                if (lengthSentence > 2)
+                {
+                    prepre = words[iWord - 2].Text.Trim().ToLower();
+                    pre = words[iWord - 1].Text.Trim().ToLower();
+                }
+                if (lengthSentence > 3)
+                    next = words[iWord + 1].Text.Trim().ToLower();
+                if (lengthSentence > 4)
+                    nextnext = words[iWord + 2].Text.Trim().ToLower();
+            }
+            else if (iWord > 3 && iWord < lengthSentence - 1)
+            {
+                if (lengthSentence > 5)
+                {
+                    prepre = words[iWord - 2].Text.Trim().ToLower();
+                    pre = words[iWord - 1].Text.Trim().ToLower();
+                    next = words[iWord + 1].Text.Trim().ToLower();
+                    nextnext = words[iWord + 2].Text.Trim().ToLower();
+                }
+            }
+            else if (iWord == lengthSentence - 1)
+            {
+                if (lengthSentence > 2)
+                {
+                    pre = words[iWord - 1].Text.Trim().ToLower();
+                    next = words[iWord + 1].Text.Trim().ToLower();
+                }
+                if (lengthSentence > 3)
+                    prepre = words[iWord - 2].Text.Trim().ToLower();
+            }
+            else if (iWord == lengthSentence)
+            {
+                if (lengthSentence > 1)
+                    pre = words[iWord - 1].Text.Trim().ToLower();
+                if (lengthSentence > 2)
+                    prepre = words[iWord - 2].Text.Trim().ToLower();
+            }
+            ret[0] = prepre;
+            ret[1] = pre;
+            ret[2] = next;
+            ret[3] = nextnext;
+            return ret;
         }
         /// <summary>
         /// HighLight tất cả những lỗi mà không hiện gợi ý
         /// </summary>
         public void showWrongWithoutSuggest()
         {
-          
+
         }
         /// <summary>
         /// HighLight lỗi hiện tại và hiện gợi ý
@@ -206,15 +228,35 @@ namespace Spell
 
                     for (int i = 0; i < length; i++)
                     {
-                        string word = words[i].Trim();
+                        string token = words[i].Trim().ToLower();
 
                         //Kiểm tra nếu không phải là từ Việt Nam
                         //Thì highLight
-                        if (!VNDictionary.getInstance.isSyllableVN(word))
+                        if (!VNDictionary.getInstance.isSyllableVN(token))
                         {
-                            lstErrorRange.Add((DocumentHandling.Instance.HighLight_Mistake(word, globalWords)));
+                            lstErrorRange.Add((DocumentHandling.Instance.HighLight_MistakeWrongWord(token, globalWords)));
                             isFault = true;
                             break;
+                        }
+                        else
+                        {
+                            for (int iWord = 1; iWord <= globalWords.Count; iWord++)
+                            {
+                                string word = globalWords[iWord].Text.Trim().ToLower();
+                                if (word.Equals(token))
+                                {
+                                    string[] gramAroundIWord = getGramArroundIWord(iWord, globalWords.Count, globalWords);
+                                    string prepre = gramAroundIWord[0], pre = gramAroundIWord[1], next = gramAroundIWord[2], nextnext = gramAroundIWord[3];
+
+                                    if (!RightWordCandidate.getInstance.checkRightWord(prepre, pre, word, next, nextnext))
+                                    {
+                                        lstErrorRange.Add((DocumentHandling.Instance.HighLight_MistakeRightWord(token, globalWords)));
+                                        isFault = true;
+                                        break;
+                                    }
+                                    break;
+                                }
+                            }
                         }
 
 
@@ -298,7 +340,7 @@ namespace Spell
         }
         private void btnChange_KeyDown(object sender, KeyEventArgs e)
         {
-            if(e.KeyCode == Keys.Enter)
+            if (e.KeyCode == Keys.Enter)
             {
                 change();
             }

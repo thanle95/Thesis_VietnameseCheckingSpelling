@@ -21,7 +21,7 @@ namespace Spell
             get { return instance; }
         }
 
-        public Word.Range HighLight_Mistake(string wrongText, Word.Words wordList)
+        public Word.Range HighLight_Mistake(string wrongText, Word.Words wordList, Word.WdColorIndex colorIndex, Word.WdColor color)
         {
             Word.Range range = null;
             Word.Words words = wordList;
@@ -34,13 +34,22 @@ namespace Spell
                     if (words[i].Text.Contains(" "))
                         end--;
                     range = Globals.ThisAddIn.Application.ActiveDocument.Range(start, end);
-                    range.HighlightColorIndex = Word.WdColorIndex.wdRed;
-                    range.Font.Color = Word.WdColor.wdColorYellow;
+                    range.HighlightColorIndex = colorIndex;
+                    range.Font.Color = color;
                     break;
                 }
             }
             return range;
         }
+        public Word.Range HighLight_MistakeWrongWord(string wrongText, Word.Words wordList)
+        {
+            return HighLight_Mistake(wrongText, wordList, Word.WdColorIndex.wdRed, Word.WdColor.wdColorYellow);
+        }
+        public Word.Range HighLight_MistakeRightWord(string wrongText, Word.Words wordList)
+        {
+            return HighLight_Mistake(wrongText, wordList, Word.WdColorIndex.wdYellow, Word.WdColor.wdColorAutomatic);
+        }
+
         public void DeHighLight_All_Mistake(Word.Characters characters)
         {
             //int count = Globals.ThisAddIn.Application.ActiveDocument.Characters.Count;
