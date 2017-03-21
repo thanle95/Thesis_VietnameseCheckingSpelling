@@ -1,2 +1,1 @@
-# Thesis_VietnameseCheckingSpelling
-Luận văn kiểm tra lỗi chính tả tiếng Việt
+#Chuong trinh ap dung tren word 2013 tro len
