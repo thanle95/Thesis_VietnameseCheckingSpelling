@@ -15,7 +15,7 @@ namespace Spell.Algorithm
         }
 
         private static WrongWordCandidate instance = new WrongWordCandidate();
-        public static WrongWordCandidate getInstance
+        public static WrongWordCandidate getInstance    
         {
             get
             {
@@ -26,19 +26,17 @@ namespace Spell.Algorithm
         public HashSet<string> createCandidate(string prepre, string pre, string token, string next, string nextnext, bool isMajuscule)
         {
             HashSet<string> result = new HashSet<string>();
-            HashSet<string> hsetNgramCand = createCandidateByNgram(prepre, pre, token, next, nextnext, isMajuscule);
+            
             Dictionary<string, double> candidatesWithScore = new Dictionary<string, double>(), tempCandidatesWithScore = new Dictionary<string, double>();
-            HashSet<string> hSetXx = VNDictionary.getInstance.findCompoundVNWord_Xx(next);
-            HashSet<string> hSetxX = VNDictionary.getInstance.findCompoundVNWord_xX(pre);
-            HashSet<string> hSetXxx = VNDictionary.getInstance.findCompoundVNWord_Xxx(next, nextnext);
-            HashSet<string> hSetxXx = VNDictionary.getInstance.findCompoundVNWord_xXx(pre, next);
-            HashSet<string> hSetxxX = VNDictionary.getInstance.findCompoundVNWord_xxX(prepre, pre);
             HashSet<string> hSetCandidate = new HashSet<string>();
-            hSetCandidate.UnionWith(hSetXx);
-            hSetCandidate.UnionWith(hSetxX);
-            hSetCandidate.UnionWith(hSetXxx);
-            hSetCandidate.UnionWith(hSetxXx);
-            hSetCandidate.UnionWith(hSetxxX);
+
+            hSetCandidate.UnionWith(createCandidateByNgram(prepre, pre, token, next, nextnext, isMajuscule));
+            hSetCandidate.UnionWith(createCandByCompoundWord(prepre, pre, token, next, nextnext, isMajuscule));
+            //hSetCandidate.UnionWith(hSetxX);
+            //hSetCandidate.UnionWith(hSetXxx);
+            //hSetCandidate.UnionWith(hSetxXx);
+            //hSetCandidate.UnionWith(hSetxxX);
+
             double lamda1 = 0.04;
             double lamda2 = 0.9;
             double lamda3 = 0.06;
@@ -106,18 +104,30 @@ namespace Spell.Algorithm
                 sw.WriteLine("**********************************************************************");
             }
             
-            using (FileStream aFile = new FileStream((@"C:\Users\Kiet\OneDrive\Thesis\testNgramCanđ.txt"), FileMode.Append, FileAccess.Write))
-            using (StreamWriter sw = new StreamWriter(aFile))
-            {
-                foreach(string temp in hsetNgramCand)
-                {
-                    sw.WriteLine(temp);
-                }
+            //using (FileStream aFile = new FileStream((@"C:\Users\Kiet\OneDrive\Thesis\testNgramCanđ.txt"), FileMode.Append, FileAccess.Write))
+            //using (StreamWriter sw = new StreamWriter(aFile))
+            //{
+            //    foreach(string temp in hsetNgramCand)
+            //    {
+            //        sw.WriteLine(temp);
+            //    }
 
-                sw.WriteLine("**********************************************************************");
-            }
+            //    sw.WriteLine("**********************************************************************");
+            //}
             //File.WriteAllText(@"C:\Users\Kiet\OneDrive\Thesis\test.txt", text);
             return result;
+        }
+
+        public HashSet<string> createCandByCompoundWord(string prepre, string pre, string token, string next, string nextnext, bool isMajuscule)
+        {
+            HashSet<string> hset = new HashSet<string>();
+            hset.UnionWith(VNDictionary.getInstance.findCompoundVNWord_Xx(next));
+            hset.UnionWith(VNDictionary.getInstance.findCompoundVNWord_xX(pre));
+            hset.UnionWith(VNDictionary.getInstance.findCompoundVNWord_Xxx(next, nextnext));
+            hset.UnionWith(VNDictionary.getInstance.findCompoundVNWord_xXx(pre, next));
+            hset.UnionWith(VNDictionary.getInstance.findCompoundVNWord_xxX(prepre, pre));
+
+            return hset; 
         }
 
         public HashSet<string> createCandidateByNgram(string prepre, string pre, string token, string next, string nextnext, bool isMajuscule)
