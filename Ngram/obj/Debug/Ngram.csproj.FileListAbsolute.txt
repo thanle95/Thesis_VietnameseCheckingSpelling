@@ -21,3 +21,6 @@ C:\Users\Kiet\OneDrive\Thesis\Thesis\Ngram\bin\Debug\Microsoft.Office.Tools.Word
 C:\Users\Kiet\OneDrive\Thesis\Thesis\Ngram\obj\Debug\Ngram.csprojResolveAssemblyReference.cache
 C:\Users\Kiet\OneDrive\Thesis\Thesis\Ngram\obj\Debug\Ngram.exe
 C:\Users\Kiet\OneDrive\Thesis\Thesis\Ngram\obj\Debug\Ngram.pdb
+E:\Google Drive\Document\luan van\source\github\Thesis_VietnameseCheckingSpelling\Ngram\bin\Debug\Ngram.exe.config
+E:\Google Drive\Document\luan van\source\github\Thesis_VietnameseCheckingSpelling\Ngram\obj\Debug\Ngram.exe
+E:\Google Drive\Document\luan van\source\github\Thesis_VietnameseCheckingSpelling\Ngram\obj\Debug\Ngram.pdb
