@@ -62,16 +62,19 @@ namespace Spell.Algorithm
             //generateTrigram();
 
             //countingNgams();
-           
+
 
             //generateProbabilitySet();
             //writeFileProbability();
             //generateUnigram();
-            readUni(@"Resources\uni.txt");
+            string uniPath = @"Resources\uni.txt";
+            string biPath = @"Resources\bi.txt";
+            string triPath = @"Resources\tri.txt";
+            readUni(uniPath);
             //readUniAmount(@"Resources\uni.txt");
 
-            readBiAmount(@"Resources\bi.txt");
-            readTriAmount(@"Resources\tri.txt");
+            readBiAmount(biPath);
+            readTriAmount(triPath);
             //generateBigram();
             //generateTrigram();
         }

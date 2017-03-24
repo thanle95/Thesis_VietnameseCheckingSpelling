@@ -1,5 +1,0 @@
-chia : 5.3
-qua : 5
-tia : 5
-biển : 4.7
-chịu : 4.7
