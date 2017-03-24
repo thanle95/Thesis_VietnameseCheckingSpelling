@@ -10,7 +10,7 @@ namespace Ngram
     {
         static void Main(string[] args)
         {
-            Ngram.Instance.generateBigram();
+            Ngram.Instance.runFirst();
         }
     }
 }

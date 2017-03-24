@@ -21,3 +21,31 @@ C:\Users\Kiet\OneDrive\Thesis\Thesis\Ngram\bin\Debug\Microsoft.Office.Tools.Word
 C:\Users\Kiet\OneDrive\Thesis\Thesis\Ngram\obj\Debug\Ngram.csprojResolveAssemblyReference.cache
 C:\Users\Kiet\OneDrive\Thesis\Thesis\Ngram\obj\Debug\Ngram.exe
 C:\Users\Kiet\OneDrive\Thesis\Thesis\Ngram\obj\Debug\Ngram.pdb
+E:\Google Drive\Document\luan van\source\github\Thesis_VietnameseCheckingSpelling\Ngram\bin\Debug\Resources\bi.txt
+E:\Google Drive\Document\luan van\source\github\Thesis_VietnameseCheckingSpelling\Ngram\bin\Debug\Resources\compoundWordDict.txt
+E:\Google Drive\Document\luan van\source\github\Thesis_VietnameseCheckingSpelling\Ngram\bin\Debug\Resources\myCompoundWordVnDict.txt
+E:\Google Drive\Document\luan van\source\github\Thesis_VietnameseCheckingSpelling\Ngram\bin\Debug\Resources\myDict.txt
+E:\Google Drive\Document\luan van\source\github\Thesis_VietnameseCheckingSpelling\Ngram\bin\Debug\Resources\mySyllableDict.txt
+E:\Google Drive\Document\luan van\source\github\Thesis_VietnameseCheckingSpelling\Ngram\bin\Debug\Resources\newCompoundWordByViet39K.txt
+E:\Google Drive\Document\luan van\source\github\Thesis_VietnameseCheckingSpelling\Ngram\bin\Debug\Resources\sortedCompoundWordDict.txt
+E:\Google Drive\Document\luan van\source\github\Thesis_VietnameseCheckingSpelling\Ngram\bin\Debug\Resources\sortedNewViet39K.txt
+E:\Google Drive\Document\luan van\source\github\Thesis_VietnameseCheckingSpelling\Ngram\bin\Debug\Resources\SyllableDictByViet39K.txt
+E:\Google Drive\Document\luan van\source\github\Thesis_VietnameseCheckingSpelling\Ngram\bin\Debug\Resources\tri.txt
+E:\Google Drive\Document\luan van\source\github\Thesis_VietnameseCheckingSpelling\Ngram\bin\Debug\Resources\uni.txt
+E:\Google Drive\Document\luan van\source\github\Thesis_VietnameseCheckingSpelling\Ngram\bin\Debug\Ngram.exe.config
+E:\Google Drive\Document\luan van\source\github\Thesis_VietnameseCheckingSpelling\Ngram\bin\Debug\Ngram.exe
+E:\Google Drive\Document\luan van\source\github\Thesis_VietnameseCheckingSpelling\Ngram\bin\Debug\Ngram.pdb
+E:\Google Drive\Document\luan van\source\github\Thesis_VietnameseCheckingSpelling\Ngram\bin\Debug\Spell.dll
+E:\Google Drive\Document\luan van\source\github\Thesis_VietnameseCheckingSpelling\Ngram\bin\Debug\Microsoft.Office.Tools.Common.v4.0.Utilities.dll
+E:\Google Drive\Document\luan van\source\github\Thesis_VietnameseCheckingSpelling\Ngram\bin\Debug\Microsoft.Office.Tools.Common.dll
+E:\Google Drive\Document\luan van\source\github\Thesis_VietnameseCheckingSpelling\Ngram\bin\Debug\Microsoft.VisualStudio.Tools.Applications.Runtime.dll
+E:\Google Drive\Document\luan van\source\github\Thesis_VietnameseCheckingSpelling\Ngram\bin\Debug\Microsoft.Office.Tools.Word.dll
+E:\Google Drive\Document\luan van\source\github\Thesis_VietnameseCheckingSpelling\Ngram\bin\Debug\Microsoft.Office.Tools.dll
+E:\Google Drive\Document\luan van\source\github\Thesis_VietnameseCheckingSpelling\Ngram\bin\Debug\Spell.pdb
+E:\Google Drive\Document\luan van\source\github\Thesis_VietnameseCheckingSpelling\Ngram\bin\Debug\Microsoft.Office.Tools.Common.v4.0.Utilities.xml
+E:\Google Drive\Document\luan van\source\github\Thesis_VietnameseCheckingSpelling\Ngram\bin\Debug\Microsoft.Office.Tools.Common.xml
+E:\Google Drive\Document\luan van\source\github\Thesis_VietnameseCheckingSpelling\Ngram\bin\Debug\Microsoft.VisualStudio.Tools.Applications.Runtime.xml
+E:\Google Drive\Document\luan van\source\github\Thesis_VietnameseCheckingSpelling\Ngram\bin\Debug\Microsoft.Office.Tools.Word.xml
+E:\Google Drive\Document\luan van\source\github\Thesis_VietnameseCheckingSpelling\Ngram\obj\Debug\Ngram.csprojResolveAssemblyReference.cache
+E:\Google Drive\Document\luan van\source\github\Thesis_VietnameseCheckingSpelling\Ngram\obj\Debug\Ngram.exe
+E:\Google Drive\Document\luan van\source\github\Thesis_VietnameseCheckingSpelling\Ngram\obj\Debug\Ngram.pdb

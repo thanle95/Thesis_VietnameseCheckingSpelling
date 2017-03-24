@@ -23,8 +23,11 @@ namespace Ngram
         public Dictionary<string, int> TriGramCount; //chứa tất cả xác suất của trigram
         private int sumUni = 0, sumBi = 0, sumTri = 0;
 
-        private Dictionary<string, int> uniPos = new Dictionary<string, int>(); //Chưa key và position của unigram
-        private Dictionary<string, int> uniAmount = new Dictionary<string, int>(); // Chứa Key và giá trị tần số của unigram
+        public Dictionary<string, int> UniPos { get; set; }
+        public Dictionary<int, string> PosUni { get; set; }//Chưa key và position của unigram
+        public Dictionary<string, int> UniAmount { get; set; }// Chứa Key và giá trị tần số của unigram
+        public Dictionary<string, int> BiAmount { get; set; }// Chứa Key và giá trị tần số của bigram
+        public Dictionary<string, int> TriAmount { get; set; } // Chứa Key và giá trị tần số của trigram
 
         /// <summary>
         /// 
@@ -37,7 +40,14 @@ namespace Ngram
             //this.BiGramCount = new Dictionary<string, int>();
             //this.TriGramCount = new Dictionary<string, int>();
 
+            UniPos = new Dictionary<string, int>();
+            PosUni = new Dictionary<int, string>();
+            UniAmount = new Dictionary<string, int>();
+            BiAmount = new Dictionary<string, int>();
+            TriAmount = new Dictionary<string, int>();
             //runFirst();
+            //generateUnigram();
+
         }
         private static Ngram instance = new Ngram();
         public static Ngram Instance
@@ -48,20 +58,32 @@ namespace Ngram
         /// <summary>
         /// dùng để khởi tạo bộ ngram, và sinh bộ xác suất
         /// </summary>
-        private void runFirst()
+        public void runFirst()
         {
-            readFileCorpus();
-            generateUnigram();
-            generateBigram();
-            generateTrigram();
+            //readFileCorpus();
+            //generateUnigram();
+            //generateBigram();
+            //generateTrigram();
 
-            countingNgams();
-            sumWordInCorpus();
+            //countingNgams();
+            //sumWordInCorpus();
 
             //generateProbabilitySet();
             //writeFileProbability();
-        }
+            //generateUnigram();
+            //readUni(@"E:\Google Drive\Document\luan van\ngram\UniNgram\uni1.txt");
+            //sortUni();
+            //generateBigram();
+            //readBiAmount(@"E:\Google Drive\Document\luan van\ngram\BiNgram\bi.txt");
+            //readTriAmount(@"E:\Google Drive\Document\luan van\ngram\TriGram\tri4.txt");
+            //generateTrigram(@"E:\Google Drive\Document\luan van\ngram\TriGram\tri4.txt");
+            //tachFileTrigam();
+            gopFileTrigram();
 
+
+            //changeToNumber();
+        }
+        #region convert between dec and bin
         private string toInt16(int tokenIndex)
         {
             string s = Convert.ToString(tokenIndex, 2);
@@ -73,9 +95,15 @@ namespace Ngram
         {
             return toInt16(tokenIndex1) + toInt16(tokenIndex2);
         }
+        private string toInt32(string tokenIndex)
+        {
+            string s = Convert.ToString(Int32.Parse(tokenIndex), 2);
+            int missBitNumber = 32 - s.Length;
+            return s.Insert(0, new string('0', missBitNumber));
+        }
         private int convertBinToDec(string number)
         {
-            return Int16.Parse(Convert.ToString(Convert.ToInt32(number, 2), 10));
+            return Convert.ToInt32(number, 2);
         }
         private int getFirstSyllableIndex(string number)
         {
@@ -85,6 +113,7 @@ namespace Ngram
         {
             return convertBinToDec(number.Substring(16, 16));
         }
+        #endregion
         public double calBiNgram(string w1, string w2)
         {
             int MAX = 10;
@@ -148,7 +177,7 @@ namespace Ngram
         /// </summary>
         public void generateUnigram()
         {
-            string folderPath = @"C:\Users\Kiet\OneDrive\Thesis\Ngram\Input\";
+            string folderPath = @"E:\Google Drive\Document\luan van\ngram\input\";
             int count = 1;// da chay toi 5
             Stopwatch stopWatch = new Stopwatch();
             string[] getFile = Directory.GetFiles(folderPath, "*.txt", SearchOption.AllDirectories);
@@ -187,28 +216,44 @@ namespace Ngram
                 string elapseTime = String.Format("{0:00}:{1:00}:{2:00}.{3:00}",
                                     ts.Hours, ts.Minutes, ts.Seconds,
                                     ts.Milliseconds / 10);
-                Console.WriteLine(string.Format("{0}/{1}--------{2}", count++, getFile.Length, elapseTime));
+                Console.WriteLine(string.Format("Creating unigram: {0}/{1}--------{2}", count++, getFile.Length, elapseTime));
             }
             string output = "";
             foreach (KeyValuePair<string, int> temp in uniPos)
-                output += temp.Key + "-" + temp.Value + "-" + uniAmount[temp.Key] + "\n";
-            File.WriteAllText(@"C:\Users\Kiet\OneDrive\Thesis\Ngram\UniGram\uni.txt", output);
+                output += temp.Key + " " + temp.Value + " " + uniAmount[temp.Key] + "\n";
+            File.WriteAllText(@"E:\Google Drive\Document\luan van\ngram\UniNgram\uni.txt", output);
         }
 
         /// <summary>
         /// Đọc dữ liệu của unigram: key và value (vị trí).
         /// </summary>
         /// <param name="path">Đường dẫn tới thư mục</param>
-        public void readUniPos(string path)
+        public void readUni(string path)
         {
             string[] uniGram = File.ReadAllLines(path);
             foreach (string line in uniGram)
             {
-                string[] uni = line.Split('-');
-                uniPos.Add(uni[0], Int32.Parse(uni[1]));
+                string[] uni = line.Split(' ');
+                string key = uni[0];
+                int pos = Int16.Parse(uni[1]);
+                int amount = Int32.Parse(uni[2]);
+                UniPos.Add(key, pos);
+                PosUni.Add(pos, key);
+                UniAmount.Add(key, amount);
             }
         }
-
+        private void sortUni()
+        {
+            List<string> keys = UniPos.Keys.ToList();
+            keys.Sort((key1, key2) => key2.Length.CompareTo(key1.Length)); ;
+            StringBuilder ouput = new StringBuilder();
+            int count = 0;
+            foreach(string key in keys)
+            {
+                ouput.AppendFormat("{0} {1} {2}{3}", key, ++count, UniAmount[key], "\n");
+            }
+            File.WriteAllText(@"E:\Google Drive\Document\luan van\ngram\UniNgram\uni1.txt", ouput.ToString());
+        }
         /// <summary>
         /// Đọc dữ liệu của unigram: key và amount (giá trị tần số).
         /// </summary>
@@ -219,7 +264,7 @@ namespace Ngram
             foreach (string line in uniGram)
             {
                 string[] uni = line.Split('-');
-                uniAmount.Add(uni[0], Int32.Parse(uni[2]));
+                UniAmount.Add(uni[0], Int32.Parse(uni[2]));
             }
         }
         #endregion
@@ -228,14 +273,21 @@ namespace Ngram
         /// <summary>
         /// Gọi hàm khoiTaoBoNgram với tham số là 2 và bộ ngữ liệu
         /// </summary>
+        //ví dụ bigram: máy tính
+        //máy có index trong unigram là 1200
+        //tính có index trong unigram là 1245
+        //chuyển 1200 và 1245 sang int16 dạng bin
+        //cộng 2 chuỗi lại được int32 dạng bin
+        //chuyển sang int32 dạng dec và ghi file
+
+
         public void generateBigram()
         {
             //Dictionary<string, int> biGram = new Dictionary<string, int>();
-            string folderPath = @"C:\Users\Kiet\OneDrive\Thesis\Ngram\Input\";
-            int count = 1;// da chay toi 5
+            string folderPath = @"E:\Google Drive\Document\luan van\ngram\input\";
+            int count = 1;
             Stopwatch stopWatch = new Stopwatch();
             string[] getFile = Directory.GetFiles(folderPath, "*.txt", SearchOption.AllDirectories);
-            Dictionary<string, int> biPos = new Dictionary<string, int>();
             Dictionary<string, int> biAmount = new Dictionary<string, int>();
             int pos = 1;
             int amount = 1;
@@ -254,12 +306,12 @@ namespace Ngram
                 {
                     key = generateEachClusterNgram(words, i, i + n);
                     key = key.ToLower();
-                    if (key.Length > 0)
-                        if (biPos.ContainsKey(key))
+                    string[] sylls = key.Split(' ');
+                    if (sylls[0].Length > 0 && sylls[1].Length > 0)
+                        if (biAmount.ContainsKey(key))
                             biAmount[key] += 1;
                         else
                         {
-                            biPos.Add(key, pos++);
                             biAmount.Add(key, amount);
                         }
                 }
@@ -268,31 +320,246 @@ namespace Ngram
                 string elapseTime = String.Format("{0:00}:{1:00}:{2:00}.{3:00}",
                                     ts.Hours, ts.Minutes, ts.Seconds,
                                     ts.Milliseconds / 10);
-                Console.WriteLine(string.Format("{0}/{1}--------{2}", count++, getFile.Length, elapseTime));
+                Console.WriteLine(string.Format("Creating bigram: {0}/{1}--------{2}", count++, getFile.Length, elapseTime));
             }
-            string output = "";
+            //tổ chức lưu trữ
+
+            StringBuilder output = new StringBuilder();
             count = 1;
-            foreach (KeyValuePair<string, int> temp in biPos)
+            Console.WriteLine(biAmount.Count);
+            foreach (KeyValuePair<string, int> temp in biAmount)
             {
                 count++;
-                
-                output += temp.Key + "-" + temp.Value + "-" + biAmount[temp.Key] + "\n";
-                if (count % 100 == 0)
-                    Console.WriteLine(string.Format("{0}/{1}", count, biPos.Count));
+                string[] sylls = temp.Key.Split(' ');
+                //int firstSyllIndex = _uniPos[sylls[0]];
+                //int secondSyllIndex = _uniPos[sylls[1]];
+                //string index = toInt32(firstSyllIndex, secondSyllIndex);
+                //output += convertBinToDec(index) + "-" + temp.Value + "\n";
+                //output.AppendFormat("{0}_{1}{2}", temp.Key, temp.Value, "\n");
+                output.AppendFormat("{0} {1}_{2}{3}",UniPos[sylls[0]],UniPos[sylls[1]], temp.Value, "\n");
+                if (count % 1000000 == 0 || count == biAmount.Count)
+                    Console.WriteLine(string.Format("Converting bigram: {0}/{1}", count, biAmount.Count));
             }
-
-            File.WriteAllText(@"C:\Users\Kiet\OneDrive\Thesis\Ngram\BiGram\bi.txt", output);
+            File.WriteAllText(@"E:\Google Drive\Document\luan van\ngram\BiNgram\bi1.txt", output.ToString());
+        }
+        //đọc file bigram
+        //chuyển dec sang int32, được 32bit
+        //chuyển 16 bit đầu, và 16 bit sau lần lượt sang int16 dạng hec ---->1200, 1245
+        public void readBiAmount(string path)
+        {
+            string[] biGram = File.ReadAllLines(path); int count = 0;
+            foreach (string line in biGram)
+            {
+                count++;
+                string[] bi = line.Split('_');
+                //string index = toInt32(bi[0]);
+                //string firstSyll = _posUni[getFirstSyllableIndex(index)];
+                //string secondSyll = _posUni[getSecondSyllableIndex(index)];
+                //_biAmount.Add(firstSyll + " " + secondSyll, Int32.Parse(bi[1]));
+                try
+                {
+                    BiAmount.Add(bi[0], Int32.Parse(bi[1]));
+                    if (count % 100000 == 0 || count == biGram.Length)
+                        Console.WriteLine(string.Format("reading bigram: {0}/{1}", count, biGram.Length));
+                }
+                catch
+                {
+                    Console.WriteLine(bi[0] + "-" + bi[1]);
+                }
+            }
         }
         #endregion
 
 
         #region TriGram
+
+       
         /// <summary>
-        /// Gọi hàm khoiTaoBoNgram với tham số là 3 và bộ ngữ liệu
+        /// 
         /// </summary>
-        private void generateTrigram()
+        public void generateTrigram(string desPath)
         {
-            generateNgramSet(3, this.Text);
+            //Dictionary<string, int> biGram = new Dictionary<string, int>();
+            string folderPath = @"E:\Google Drive\Document\luan van\ngram\input\";
+            int count = 1;// da chay toi 5
+            Stopwatch stopWatch = new Stopwatch();
+            string[] getFile = Directory.GetFiles(folderPath, "*.txt", SearchOption.AllDirectories);
+            //Dictionary<string, int> TriAmount = new Dictionary<string, int>();
+            Console.WriteLine("triAmount count[before]: " + this.TriAmount.Count);
+            int pos = 1;
+            int amount = 1;
+            foreach (string file in getFile)
+            {
+                //System.IO.File.Move(file, @"C:\Users\Kiet\OneDrive\Thesis\Filtered\" + ++count + ".txt");
+
+                //continue;
+
+                stopWatch.Start();
+                string input = File.ReadAllText(file);
+                string[] words = new Regex("\\s+|,\\s*|\\.\\s*").Split(input);
+                string key = "";
+                int n = 3; //tri
+                for (int i = 0; i < words.Length - n + 1; i++)
+                {
+                    key = generateEachClusterNgram(words, i, i + n);
+                    key = key.ToLower();
+                    string[] sylls = key.Split(' ');
+                    if (sylls[0].Length > 0 && sylls[1].Length > 0 && sylls[2].Length > 0)
+                        if (TriAmount.ContainsKey(key))
+                            TriAmount[key] += 1;
+                        else
+                        {
+                            TriAmount.Add(key, amount);
+                        }
+                }
+                stopWatch.Stop();
+                TimeSpan ts = stopWatch.Elapsed;
+                string elapseTime = String.Format("{0:00}:{1:00}:{2:00}.{3:00}",
+                                    ts.Hours, ts.Minutes, ts.Seconds,
+                                    ts.Milliseconds / 10);
+                Console.WriteLine(string.Format("Creatting trigram: {0}/{1}--------{2}", count++, getFile.Length, elapseTime));
+            }
+            //tổ chức lưu trữ
+            Console.WriteLine("triAmount count[after]: " + TriAmount.Count);
+            StringBuilder output = new StringBuilder();
+            count = 1;
+            foreach (KeyValuePair<string, int> temp in TriAmount)
+            {
+                count++;
+                //string[] sylls = temp.Key.Split(' ');
+                //int firstSyllIndex = _uniPos[sylls[0]];
+                //int secondSyllIndex = _uniPos[sylls[1]];
+                //ushort lastSyllIndex = (ushort)_uniPos[sylls[2]];
+                //string index = toInt32(firstSyllIndex, secondSyllIndex);
+                output.AppendFormat("{0}_{1}{2}", temp.Key, temp.Value, "\n");
+                if (count % 1000000 == 0 || count == TriAmount.Count)
+                    Console.WriteLine(string.Format("Converting trigram: {0}/{1}", count, TriAmount.Count));
+            }
+
+            File.WriteAllText(desPath, output.ToString());
+        }
+        /// <summary>
+        /// pos in unigram
+        /// </summary>
+        private void changeToNumber()
+        {
+            Dictionary<string, int> tri4 = readTriAmount(@"E:\Google Drive\Document\luan van\ngram\TriGram\tri4.txt");
+            Console.WriteLine("triAmount count[after]: " + tri4.Count);
+            StringBuilder output = new StringBuilder();
+            int count = 1;
+            
+            foreach(string pair in tri4.Keys)
+            {
+                count++;
+                string[] key = pair.Split(' ');
+                output.AppendFormat("{0} {1} {2}_{3}{4}", UniPos[key[0]], UniPos[key[1]], UniPos[key[2]], tri4[pair], "\n");
+                if (count % 1000000 == 0 || count == tri4.Count)
+                    Console.WriteLine(string.Format("Converting trigram: {0}/{1}", count, tri4.Count));
+            }
+            File.WriteAllText(@"E:\Google Drive\Document\luan van\ngram\TriGram\new\tri4.txt", output.ToString());
+        }
+        /// <summary>
+        /// pos in unigram
+        /// </summary>
+       
+        private void tachFileTrigam()
+        {
+            string[] lines = File.ReadAllLines(@"E:\Google Drive\Document\luan van\ngram\TriGram\tri236.txt");
+            StringBuilder builder = new StringBuilder();
+            int length = lines.Length;
+            for(int i = 0; i < length; i++)
+            {
+                builder.AppendLine(lines[i]);
+                if(i == length / 2)
+                {
+                    File.WriteAllText(@"E:\Google Drive\Document\luan van\ngram\TriGram\tri3.txt", builder.ToString());
+                    builder.Remove(0, builder.Length - 1);
+                }
+               
+                if (i % 100000 == 0 || i == length - 1)
+                    Console.WriteLine(string.Format("{0}/{1}", i, length));
+            }
+            File.WriteAllText(@"E:\Google Drive\Document\luan van\ngram\TriGram\tri4.txt", builder.ToString());
+
+        }
+        private void gopFileTrigram()
+        {
+
+            Dictionary<string, int> tri1_1 = readTriAmount(@"E:\Google Drive\Document\luan van\ngram\TriGram\tri1.txt");
+            Dictionary<string, int> tri1_2 = readTriAmount(@"E:\Google Drive\Document\luan van\ngram\TriGram\tri3.txt");
+            //Dictionary<string, int> tri1_3 = readTriAmount(@"E:\Google Drive\Document\luan van\ngram\TriGram\tri5.txt");
+            foreach (var pair in tri1_1)
+            {
+                if (tri1_2.ContainsKey(pair.Key))
+                    tri1_2[pair.Key] += 1;
+                else
+                {
+                    tri1_2.Add(pair.Key, pair.Value);
+                }
+            }
+            //foreach (var pair in tri1_3)
+            //{
+            //    if (tri1_2.ContainsKey(pair.Key))
+            //        tri1_2[pair.Key] += 1;
+            //    else
+            //    {
+            //        tri1_2.Add(pair.Key, pair.Value);
+            //    }
+            //}
+            Console.WriteLine("triAmount count[after]: " + tri1_2.Count);
+            StringBuilder output = new StringBuilder();
+            int count = 1;
+            foreach (KeyValuePair<string, int> temp in tri1_2)
+            {
+                count++;
+                //string[] sylls = temp.Key.Split(' ');
+                //int firstSyllIndex = _uniPos[sylls[0]];
+                //int secondSyllIndex = _uniPos[sylls[1]];
+                //ushort lastSyllIndex = (ushort)_uniPos[sylls[2]];
+                //string index = toInt32(firstSyllIndex, secondSyllIndex);
+                output.AppendFormat("{0}_{1}{2}", temp.Key, temp.Value, "\n");
+                if (count % 1000000 == 0 || count == tri1_2.Count)
+                    Console.WriteLine(string.Format("Converting trigram: {0}/{1}", count, tri1_2.Count));
+            }
+
+            File.WriteAllText(@"E:\Google Drive\Document\luan van\ngram\TriGram\tri13.txt", output.ToString());
+        }
+
+        public Dictionary<string, int> readTriAmount(string path)
+        {
+            Dictionary<string, int> ret = new Dictionary<string, int>();
+
+            string[] triGram = File.ReadAllLines(path);
+            int count = 0;
+            string[] tri;
+            foreach (string line in triGram)
+            {
+                count++;
+                if (line.Length > 0)
+                {
+                    tri = line.Split('_');
+                    //try
+                    //{
+                    ret.Add(tri[0], Int32.Parse(tri[1]));
+                    if (count % 100000 == 0 || count == triGram.Length)
+                        Console.WriteLine(string.Format("reading trigram: {0}/{1}", count, triGram.Length));
+                    //}
+                    //catch(Exception e)
+                    //{
+
+                    //Console.WriteLine(tri[0] + "-" + tri[1]);
+                    //}
+
+                    //string index = toInt32(tri[0]);
+                    //string firstSyll = PosUni[getFirstSyllableIndex(index)];
+                    //string secondSyll = PosUni[getSecondSyllableIndex(index)];
+                    //string lastSyll = PosUni[ushort.Parse( tri[1])];
+                    //TriAmount.Add(firstSyll + " " + secondSyll + " " + lastSyll, Int16.Parse(tri[2]));
+                }
+            }
+            //foreach (var pair in TriAmount)
+            //    ret.Add(pair.Key, pair.Value);
+            return ret;
         }
 
         #endregion
