@@ -377,13 +377,13 @@ namespace Ngram
         /// <summary>
         /// 
         /// </summary>
-        public void generateTrigram(string desPath)
+        public void generateTrigram(string sourcePath,string desPath)
         {
             //Dictionary<string, int> biGram = new Dictionary<string, int>();
             string folderPath = @"E:\Google Drive\Document\luan van\ngram\input\";
             int count = 1;// da chay toi 5
             Stopwatch stopWatch = new Stopwatch();
-            string[] getFile = Directory.GetFiles(folderPath, "*.txt", SearchOption.AllDirectories);
+            string[] getFile = Directory.GetFiles(sourcePath, "*.txt", SearchOption.AllDirectories);
             //Dictionary<string, int> TriAmount = new Dictionary<string, int>();
             Console.WriteLine("triAmount count[before]: " + this.TriAmount.Count);
             int pos = 1;
@@ -464,30 +464,34 @@ namespace Ngram
        
         private void tachFileTrigam()
         {
-            string[] lines = File.ReadAllLines(@"E:\Google Drive\Document\luan van\ngram\TriGram\tri236.txt");
+            string[] lines = File.ReadAllLines(@"E:\Google Drive\Document\luan van\ngram\TriGram\tri24.txt");
             StringBuilder builder = new StringBuilder();
             int length = lines.Length;
             for(int i = 0; i < length; i++)
             {
                 builder.AppendLine(lines[i]);
-                if(i == length / 2)
+                if(i == length / 3)
                 {
-                    File.WriteAllText(@"E:\Google Drive\Document\luan van\ngram\TriGram\tri3.txt", builder.ToString());
+                    File.WriteAllText(@"E:\Google Drive\Document\luan van\ngram\TriGram\tri4.txt", builder.ToString());
                     builder.Remove(0, builder.Length - 1);
                 }
-               
+                if (i == 2*length / 3)
+                {
+                    File.WriteAllText(@"E:\Google Drive\Document\luan van\ngram\TriGram\tri5.txt", builder.ToString());
+                    builder.Remove(0, builder.Length - 1);
+                }
                 if (i % 100000 == 0 || i == length - 1)
                     Console.WriteLine(string.Format("{0}/{1}", i, length));
             }
-            File.WriteAllText(@"E:\Google Drive\Document\luan van\ngram\TriGram\tri4.txt", builder.ToString());
+            File.WriteAllText(@"E:\Google Drive\Document\luan van\ngram\TriGram\tri6.txt", builder.ToString());
 
         }
         private void gopFileTrigram()
         {
 
-            Dictionary<string, int> tri1_1 = readTriAmount(@"E:\Google Drive\Document\luan van\ngram\TriGram\tri1.txt");
+            Dictionary<string, int> tri1_1 = readTriAmount(@"E:\Google Drive\Document\luan van\ngram\TriGram\tri25.txt");
             Dictionary<string, int> tri1_2 = readTriAmount(@"E:\Google Drive\Document\luan van\ngram\TriGram\tri3.txt");
-            //Dictionary<string, int> tri1_3 = readTriAmount(@"E:\Google Drive\Document\luan van\ngram\TriGram\tri5.txt");
+            //Dictionary<string, int> tri1_3 = readTriAmount(@"E:\Google Drive\Document\luan van\ngram\TriGram\tri6.txt");
             foreach (var pair in tri1_1)
             {
                 if (tri1_2.ContainsKey(pair.Key))
@@ -522,7 +526,7 @@ namespace Ngram
                     Console.WriteLine(string.Format("Converting trigram: {0}/{1}", count, tri1_2.Count));
             }
 
-            File.WriteAllText(@"E:\Google Drive\Document\luan van\ngram\TriGram\tri13.txt", output.ToString());
+            File.WriteAllText(@"E:\Google Drive\Document\luan van\ngram\TriGram\tri235.txt", output.ToString());
         }
 
         public Dictionary<string, int> readTriAmount(string path)
