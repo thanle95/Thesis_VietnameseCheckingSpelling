@@ -67,16 +67,18 @@ namespace Spell.Algorithm
             //generateProbabilitySet();
             //writeFileProbability();
             //generateUnigram();
-            string uniPath = @"Resources\uni.txt";
-            string biPath = @"Resources\bi.txt";
-            string triPath = @"Resources\tri.txt";
+            string uniPath = @"E:\Google Drive\Document\luan van\source\github\Thesis_VietnameseCheckingSpelling\Spell\Resources\uni.txt";
+            string biPath = @"E:\Google Drive\Document\luan van\source\github\Thesis_VietnameseCheckingSpelling\Spell\Resources\bi.txt";
             readUni(uniPath);
-            //readUniAmount(@"Resources\uni.txt");
+
 
             readBiAmount(biPath);
-            readTriAmount(triPath);
+            //readTriAmount(triPath);
             //generateBigram();
             //generateTrigram();
+
+            //readUniBySQL();
+            //readBiBySQL();
         }
 
         private string toInt16(int tokenIndex)
@@ -247,7 +249,7 @@ namespace Spell.Algorithm
             string[] uniGram = File.ReadAllLines(path);
             foreach (string line in uniGram)
             {
-                string[] uni = line.Split('-');
+                string[] uni = line.Split(' ');
                 _uniPos.Add(uni[0], Int32.Parse(uni[1]));
                 _posUni.Add(Int32.Parse(uni[1]), uni[0]);
                 _uniAmount.Add(uni[0], Int32.Parse(uni[2]));
@@ -255,20 +257,7 @@ namespace Spell.Algorithm
             }
         }
 
-        /// <summary>
-        /// Đọc dữ liệu của unigram: key và amount (giá trị tần số).
-        /// </summary>
-        /// <param name="path">Đường dẫn tới thư mục</param>
-        public void readUniAmount(string path)
-        {
-            string[] uniGram = File.ReadAllLines(path);
-            foreach (string line in uniGram)
-            {
-                string[] uni = line.Split('-');
-               
-            }
-            
-        }
+     
         #endregion
 
         #region BiGram
@@ -350,11 +339,12 @@ namespace Spell.Algorithm
             string[] biGram = File.ReadAllLines(path);
             foreach (string line in biGram)
             {
-                string[] bi = line.Split('-');
-                string index = toInt32(bi[0]);
-                string firstSyll = _posUni[getFirstSyllableIndex(index)];
-                string secondSyll = _posUni[getSecondSyllableIndex(index)];
-                _biAmount.Add(firstSyll + " " + secondSyll, Int32.Parse(bi[1]));
+                string[] biParts = line.Split('_');
+                string[] sylls = biParts[0].Split(' ');
+                
+                string firstSyll = _posUni[Int16.Parse( sylls[0])];
+                string secondSyll = _posUni[Int16.Parse(sylls[1])];
+                _biAmount.Add(firstSyll + " " + secondSyll, Int32.Parse(biParts[1]));
             }
         }
         #endregion

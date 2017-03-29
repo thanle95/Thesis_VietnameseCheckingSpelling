@@ -25,27 +25,22 @@ namespace Spell.Algorithm
 
         public bool checkRightWord(string prepre, string pre, string token, string next, string nextnext)
         {
-            double calBiGram_PreCand = Ngram.Instance.calBiNgram(pre, token);
-            double calBigram_CandNext = Ngram.Instance.calBiNgram(token, next);
-            double calTrigram1 = Ngram.Instance.calTriNgram(prepre, pre, token);
-            double calTrigram2 = Ngram.Instance.calTriNgram(pre, token, next);
-            double calTrigram3 = Ngram.Instance.calTriNgram(token, next, nextnext);
-            double ret = calBiGram_PreCand + calBigram_CandNext + calTrigram1 + calTrigram2 + calTrigram3;
-
-            using (FileStream aFile = new FileStream((@"C:\Users\Kiet\OneDrive\Thesis\rightWord.txt"), FileMode.Append, FileAccess.Write))
+            double L = WrongWordCandidate.getInstance.calNgram(prepre, pre, token, next, nextnext);
+            string path = @"E:\Google Drive\Document\luan van\source\github\Thesis_VietnameseCheckingSpelling\Spell\Resources\rightWord.txt";
+            using (FileStream aFile = new FileStream((path), FileMode.Append, FileAccess.Write))
             using (StreamWriter sw = new StreamWriter(aFile))
             {
                 //foreach (string temp in hsetNgramCand)
                 //{
                 sw.WriteLine();
-                    sw.WriteLine(token + "-----" +ret);
+                    sw.WriteLine(token + "-----" + L);
                 //}
 
                 sw.WriteLine("**********************************************************************");
             }
             //File.WriteAllText(@"C:\Users\Kiet\OneDrive\Thesis\test.txt", text);
 
-            if (ret >  1)
+            if (L >  0.000001)
                 return true;
             return false;
         }
@@ -67,8 +62,9 @@ namespace Spell.Algorithm
                 L = WrongWordCandidate.getInstance.calNgram(prepre, pre, candidate, next, nextnext);
                 H = WrongWordCandidate.getInstance.calDeviation(token, candidate);
                 D = WrongWordCandidate.getInstance.calMatch_pre_next_compoundWordVNDict(prepre, pre, candidate, next, nextnext);
-                score = D + L +  H;
-                if (H != -1)
+                score = D + L + H;
+                if (H > 13 || L > 0.00001)
+                {
                     if (D == 10)
                     {
                         if (tempCandidatesWithScore.Count < 5)
@@ -99,7 +95,8 @@ namespace Spell.Algorithm
                             candidatesWithScore = sortDict(candidatesWithScore);
                         }
                     }
-                text += String.Format("{0}: [{1};{2};{3}] = {4}", candidate, D, L, H, score) + "\n";
+                    text += String.Format("{0}: [{1};{2};{3}] = {4}", candidate, D, L, H, score) + "\n";
+                }
             }
             if (tempCandidatesWithScore.Count > 0)
                 foreach (string key in tempCandidatesWithScore.Keys)
@@ -108,7 +105,15 @@ namespace Spell.Algorithm
                 foreach (string key in candidatesWithScore.Keys)
                     result.Add(key);
 
-            return hSetCandidate;
+
+            string path = @"E:\Google Drive\Document\luan van\source\github\Thesis_VietnameseCheckingSpelling\Spell\Resources\rightWordCandidate.txt";
+            using (FileStream aFile = new FileStream((path), FileMode.Append, FileAccess.Write))
+            using (StreamWriter sw = new StreamWriter(aFile))
+            {
+                sw.WriteLine(text);
+                sw.WriteLine("**********************************************************************");
+            }
+            return result;
         }
 
         private Dictionary<string, double> sortDict(Dictionary<string, double> dict)

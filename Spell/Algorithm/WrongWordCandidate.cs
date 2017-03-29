@@ -37,9 +37,9 @@ namespace Spell.Algorithm
             //hSetCandidate.UnionWith(hSetxXx);
             //hSetCandidate.UnionWith(hSetxxX);
 
-            double lamda1 = 0.04;
-            double lamda2 = 0.9;
-            double lamda3 = 0.06;
+            double lamda1 = 0.000003;
+            double lamda2 = 0.99999;
+            double lamda3 = 0.000007;
             double score = 0;
             int D = 0;
             double H = 0;
@@ -52,7 +52,8 @@ namespace Spell.Algorithm
                 H = calDeviation(token, candidate);
                 D = calMatch_pre_next_compoundWordVNDict(prepre, pre, candidate, next, nextnext);
                 score = lamda1 * D + lamda2 * L + lamda3 * H;
-                if (H != -1)
+                if (H >= 13 || L > 0.000001)
+                {
                     if (D == 10)
                     {
                         if (tempCandidatesWithScore.Count < 5)
@@ -83,7 +84,8 @@ namespace Spell.Algorithm
                             candidatesWithScore = sortDict(candidatesWithScore);
                         }
                     }
-                text += String.Format("{0}: [{1};{2};{3}] = {4}", candidate, D, L, H, score) + "\n";
+                    text += String.Format("{0}: [{1};{2};{3}] = {4}", candidate, D, L, H, score) + "\n";
+                }
             }
             if (tempCandidatesWithScore.Count > 0)
                 foreach (string key in tempCandidatesWithScore.Keys)
@@ -97,7 +99,8 @@ namespace Spell.Algorithm
             //    result.Add(s);
             //foreach (string s in xoayVong)
             //    result.Add(s);
-            using (FileStream aFile = new FileStream((@"C:\Users\Kiet\OneDrive\Thesis\test.txt"), FileMode.Append, FileAccess.Write))
+            string path = @"E:\Google Drive\Document\luan van\source\github\Thesis_VietnameseCheckingSpelling\Spell\Resources\wrongWord.txt";
+            using (FileStream aFile = new FileStream((path), FileMode.Append, FileAccess.Write))
             using (StreamWriter sw = new StreamWriter(aFile))
             {
                 sw.WriteLine(text);
@@ -134,9 +137,9 @@ namespace Spell.Algorithm
         {
             HashSet<string> lstCandidate = new HashSet<string>();
             List<string> bi = Ngram.Instance._biAmount.Keys.Where(key => key.Contains(pre) || key.Contains(next)).ToList();
-            List<string> tri = Ngram.Instance._triAmount.Keys.Where(key =>( key.Contains(prepre) && key.Contains(pre))
-                                                                    || (key.Contains(next) && key.Contains(nextnext))
-                                                                    || (key.Contains(pre) && key.Contains(next))).ToList();
+            //List<string> tri = Ngram.Instance._triAmount.Keys.Where(key =>( key.Contains(prepre) && key.Contains(pre))
+            //                                                        || (key.Contains(next) && key.Contains(nextnext))
+            //                                                        || (key.Contains(pre) && key.Contains(next))).ToList();
 
             foreach (string key in bi)
             {
@@ -151,23 +154,25 @@ namespace Spell.Algorithm
                 }       
                        
             }
-
-            foreach (string key in Ngram.Instance._triAmount.Keys)
-            {
-                string[] word = key.Split(' ');
-                if (word[0].Equals(prepre) && word[1].Equals(pre) && calDeviation(token, word[2]) > 10)
-                {
-                    lstCandidate.Add(word[2]);
-                }
-                if (word[1].Equals(next) && word[2].Equals(nextnext) && calDeviation(token, word[0]) > 10)
-                {
-                    lstCandidate.Add(word[0]);
-                }
-                if (word[0].Equals(pre) && word[2].Equals(next) && calDeviation(token, word[1]) > 10)
-                {
-                    lstCandidate.Add(word[1]);
-                }
-            }
+            //
+            //bigram
+            //
+            //foreach (string key in Ngram.Instance._triAmount.Keys)
+            //{
+            //    string[] word = key.Split(' ');
+            //    if (word[0].Equals(prepre) && word[1].Equals(pre) && calDeviation(token, word[2]) > 10)
+            //    {
+            //        lstCandidate.Add(word[2]);
+            //    }
+            //    if (word[1].Equals(next) && word[2].Equals(nextnext) && calDeviation(token, word[0]) > 10)
+            //    {
+            //        lstCandidate.Add(word[0]);
+            //    }
+            //    if (word[0].Equals(pre) && word[2].Equals(next) && calDeviation(token, word[1]) > 10)
+            //    {
+            //        lstCandidate.Add(word[1]);
+            //    }
+            //}
 
             return lstCandidate;
         }
@@ -184,10 +189,12 @@ namespace Spell.Algorithm
         {
             double calBiGram_PreCand = Ngram.Instance.calBiNgram(pre, candidate);
             double calBigram_CandNext = Ngram.Instance.calBiNgram(candidate, next);
-            double calTrigram1 = Ngram.Instance.calTriNgram(prepre, pre, candidate);
-            double calTrigram2 = Ngram.Instance.calTriNgram(pre, candidate, next);
-            double calTrigram3 = Ngram.Instance.calTriNgram( candidate, next, nextnext);
-            double ret = calBiGram_PreCand + calBigram_CandNext + calTrigram1 + calTrigram2 + calTrigram3;
+            //double calTrigram1 = Ngram.Instance.calTriNgram(prepre, pre, candidate);
+            //double calTrigram2 = Ngram.Instance.calTriNgram(pre, candidate, next);
+            //double calTrigram3 = Ngram.Instance.calTriNgram( candidate, next, nextnext);
+            double lamda1 = 0.5;
+            double lamda2 = 0.5;
+            double ret = lamda1* calBiGram_PreCand +lamda2* calBigram_CandNext;// + calTrigram1 + calTrigram2 + calTrigram3;
             return ret;
         }
         /// <summary>
@@ -225,7 +232,7 @@ namespace Spell.Algorithm
         /// <returns></returns>
         public double calDeviation(string token, string candidate)
         {
-            int MAX = 10;
+            int MAX = 8;
             token = token.ToLower();
             candidate = candidate.ToLower();
             //dựa trên số lượng ký tự
