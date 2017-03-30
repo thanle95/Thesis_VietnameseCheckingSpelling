@@ -9,7 +9,7 @@ namespace Spell.Algorithm
     public class StringConstant
     {
         private static StringConstant instance = new StringConstant();
-        public static StringConstant getInstance
+        public static StringConstant Instance
         {
             get
             {
@@ -154,6 +154,9 @@ namespace Spell.Algorithm
             {"R", "D", "GI" },
             {"CH", "TR", ""}
         };
+
+        public string patternMiddleSymbol = "[-|/|\\|>|<|\\[|\\]|,|\"|(|)|“|”]";
+        public string patternEndSentenceCharacter = "[.!?;:…]";
 
     }
 }

@@ -22,7 +22,7 @@ namespace Spell.Algorithm
         /// <returns></returns>
         public bool Check_Majuscule(string token)
         {
-            foreach (char c in StringConstant.getInstance.VNAlphabetArr_UpperCase)
+            foreach (char c in StringConstant.Instance.VNAlphabetArr_UpperCase)
                 if (token.Contains(c))
                     return true;
             return false;

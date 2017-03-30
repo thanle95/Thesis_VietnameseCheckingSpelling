@@ -97,17 +97,17 @@ namespace Spell
             {
                 string text = sentences[i].Text;
 
-                string[] phraseArr = new Regex(StringConstant_old.Instance.patternMiddleSymbol).Split(text);
+                string[] phraseArr = new Regex(StringConstant.Instance.patternMiddleSymbol).Split(text);
 
                 foreach (string iPharse in phraseArr)
                 {
-                    Regex r = new Regex(StringConstant_old.Instance.patternEndSentenceCharacter);
+                    Regex r = new Regex(StringConstant.Instance.patternEndSentenceCharacter);
                     Match m = r.Match(iPharse);
                     if (m.Success)
                     //nếu chứa ký tự kết thúc câu
                     {
                         //bỏ dấu, vì dấu ở đằng sau, nên lấy phần tử đầu tiên
-                        string tmp = new Regex(StringConstant_old.Instance.patternEndSentenceCharacter).Split(iPharse.Trim())[0];
+                        string tmp = new Regex(StringConstant.Instance.patternEndSentenceCharacter).Split(iPharse.Trim())[0];
                         if (tmp != "")
                             ret.Add(tmp);
                     }

@@ -332,13 +332,13 @@ namespace Spell.Algorithm
                 //duyệt qua từng cột trong keyboard matrix
                 for (int col = 0; col < StringConstant.MAX_KEYBOARD_COL; col++)
                 {
-                    if (StringConstant.getInstance.KeyBoardMatrix_LowerCase[row, col] == candidate)
+                    if (StringConstant.Instance.KeyBoardMatrix_LowerCase[row, col] == candidate)
                     {
                         iCandidate = row;
                         jCandidate = col;
                         isFound++;
                     }
-                    if (StringConstant.getInstance.KeyBoardMatrix_LowerCase[row, col] == token)
+                    if (StringConstant.Instance.KeyBoardMatrix_LowerCase[row, col] == token)
                     {
                         iToken = row;
                         jToken = col;
@@ -405,11 +405,11 @@ namespace Spell.Algorithm
             char[] vn_AlphabetArr;
             if (isMajuscule)
             {
-                vn_AlphabetArr = StringConstant.getInstance.VNAlphabetArr_UpperCase;
+                vn_AlphabetArr = StringConstant.Instance.VNAlphabetArr_UpperCase;
             }
             else
             {
-                vn_AlphabetArr = StringConstant.getInstance.VNAlphabetArr_LowerCase;
+                vn_AlphabetArr = StringConstant.Instance.VNAlphabetArr_LowerCase;
             }
 
             HashSet<string> result = new HashSet<string>();
@@ -435,13 +435,13 @@ namespace Spell.Algorithm
             string[] VN_Consonant_Arr;
             if (isMajuscule)
             {
-                VN_Consonant_Arr = StringConstant.getInstance.VNConsonantArr_UpperCase;
-                VN_Vowel_Arr = StringConstant.getInstance.VNVowelArr_UpperCase;
+                VN_Consonant_Arr = StringConstant.Instance.VNConsonantArr_UpperCase;
+                VN_Vowel_Arr = StringConstant.Instance.VNVowelArr_UpperCase;
             }
             else
             {
-                VN_Consonant_Arr = StringConstant.getInstance.VNConsonantArr_LowerCase;
-                VN_Vowel_Arr = StringConstant.getInstance.VNVowelArr_LowerCase;
+                VN_Consonant_Arr = StringConstant.Instance.VNConsonantArr_LowerCase;
+                VN_Vowel_Arr = StringConstant.Instance.VNVowelArr_LowerCase;
             }
 
             List<string> consonants = countingConsonant(token, isMajuscule);
@@ -560,14 +560,14 @@ namespace Spell.Algorithm
             char[] VN_VowelWithSign_Arr;
             if (isMajuscule)
             {
-                VN_VowelWithSign_Arr = StringConstant.getInstance.VNVowelWithSignArr_UpperCase;
+                VN_VowelWithSign_Arr = StringConstant.Instance.VNVowelWithSignArr_UpperCase;
             }
             else
             {
-                VN_VowelWithSign_Arr = StringConstant.getInstance.VNVowelWithSignArr_LowerCase;
+                VN_VowelWithSign_Arr = StringConstant.Instance.VNVowelWithSignArr_LowerCase;
             }
 
-            foreach (char c in StringConstant.getInstance.VNVowelWithSignArr_LowerCase)
+            foreach (char c in StringConstant.Instance.VNVowelWithSignArr_LowerCase)
             {
                 if (token.Contains(c))
                     return token.IndexOf(c);
@@ -584,11 +584,11 @@ namespace Spell.Algorithm
             char[,] VN_VowelWithSignMatrix;
             if (isMajuscule)
             {
-                VN_VowelWithSignMatrix = StringConstant.getInstance.VNVowelWithSignMatrix_UpperCase;
+                VN_VowelWithSignMatrix = StringConstant.Instance.VNVowelWithSignMatrix_UpperCase;
             }
             else
             {
-                VN_VowelWithSignMatrix = StringConstant.getInstance.VNVowelWithSignMatrix_LowerCase;
+                VN_VowelWithSignMatrix = StringConstant.Instance.VNVowelWithSignMatrix_LowerCase;
             }
             for (int i = 0; i < StringConstant.MAX_SIGN_NO; i++)
                 for (int j = 0; j < StringConstant.MAX_VOWEL_NO; j++)
@@ -607,13 +607,13 @@ namespace Spell.Algorithm
             char[] VN_Vowel_Arr;
             if (isMajuscule)
             {
-                VN_Vowel_Arr = StringConstant.getInstance.VNVowelArr_UpperCase;
-                VN_VowelWithSignMatrix = StringConstant.getInstance.VNVowelWithSignMatrix_UpperCase;
+                VN_Vowel_Arr = StringConstant.Instance.VNVowelArr_UpperCase;
+                VN_VowelWithSignMatrix = StringConstant.Instance.VNVowelWithSignMatrix_UpperCase;
             }
             else
             {
-                VN_Vowel_Arr = StringConstant.getInstance.VNVowelArr_LowerCase;
-                VN_VowelWithSignMatrix = StringConstant.getInstance.VNVowelWithSignMatrix_LowerCase;
+                VN_Vowel_Arr = StringConstant.Instance.VNVowelArr_LowerCase;
+                VN_VowelWithSignMatrix = StringConstant.Instance.VNVowelWithSignMatrix_LowerCase;
             }
 
             for (int i = 0; i < StringConstant.MAX_SIGN_NO; i++)
@@ -634,13 +634,13 @@ namespace Spell.Algorithm
             char[] VN_Vowel_Arr;
             if (isMajuscule)
             {
-                VN_Vowel_Arr = StringConstant.getInstance.VNVowelArr_UpperCase;
-                VN_VowelWithSignMatrix = StringConstant.getInstance.VNVowelWithSignMatrix_UpperCase;
+                VN_Vowel_Arr = StringConstant.Instance.VNVowelArr_UpperCase;
+                VN_VowelWithSignMatrix = StringConstant.Instance.VNVowelWithSignMatrix_UpperCase;
             }
             else
             {
-                VN_Vowel_Arr = StringConstant.getInstance.VNVowelArr_LowerCase;
-                VN_VowelWithSignMatrix = StringConstant.getInstance.VNVowelWithSignMatrix_LowerCase;
+                VN_Vowel_Arr = StringConstant.Instance.VNVowelArr_LowerCase;
+                VN_VowelWithSignMatrix = StringConstant.Instance.VNVowelWithSignMatrix_LowerCase;
             }
 
             for (int i = 0; i < StringConstant.MAX_VOWEL_NO; i++)
@@ -658,11 +658,11 @@ namespace Spell.Algorithm
             string[] VN_Consonant_Arr;
             if (isMajuscule)
             {
-                VN_Consonant_Arr = StringConstant.getInstance.VNConsonantArr_UpperCase;
+                VN_Consonant_Arr = StringConstant.Instance.VNConsonantArr_UpperCase;
             }
             else
             {
-                VN_Consonant_Arr = StringConstant.getInstance.VNConsonantArr_LowerCase;
+                VN_Consonant_Arr = StringConstant.Instance.VNConsonantArr_LowerCase;
             }
 
             List<string> ret = new List<string>();
@@ -777,15 +777,15 @@ namespace Spell.Algorithm
             char[] VN_Vowel_Arr;
             if (isMajuscule)
             {
-                keyBoardMatrix = StringConstant.getInstance.KeyBoardMatrix_UperCase;
-                VN_Vowel_Arr = StringConstant.getInstance.VNVowelArr_UpperCase;
-                VN_VowelWithSignMatrix = StringConstant.getInstance.VNVowelWithSignMatrix_UpperCase;
+                keyBoardMatrix = StringConstant.Instance.KeyBoardMatrix_UperCase;
+                VN_Vowel_Arr = StringConstant.Instance.VNVowelArr_UpperCase;
+                VN_VowelWithSignMatrix = StringConstant.Instance.VNVowelWithSignMatrix_UpperCase;
             }
             else
             {
-                keyBoardMatrix = StringConstant.getInstance.KeyBoardMatrix_LowerCase;
-                VN_Vowel_Arr = StringConstant.getInstance.VNVowelArr_LowerCase;
-                VN_VowelWithSignMatrix = StringConstant.getInstance.VNVowelWithSignMatrix_LowerCase;
+                keyBoardMatrix = StringConstant.Instance.KeyBoardMatrix_LowerCase;
+                VN_Vowel_Arr = StringConstant.Instance.VNVowelArr_LowerCase;
+                VN_VowelWithSignMatrix = StringConstant.Instance.VNVowelWithSignMatrix_LowerCase;
             }
             HashSet<string> result = new HashSet<string>();
             for (int iToken = 0; iToken < token.Length; iToken++)
@@ -917,11 +917,11 @@ namespace Spell.Algorithm
             string[,] vn_RegionConfusedMatrix;
             if (isMajuscule)
             {
-                vn_RegionConfusedMatrix = StringConstant.getInstance.VNRegion_Confused_Matrix_UperCase;
+                vn_RegionConfusedMatrix = StringConstant.Instance.VNRegion_Confused_Matrix_UperCase;
             }
             else
             {
-                vn_RegionConfusedMatrix = StringConstant.getInstance.VNRegion_Confused_Matrix_LowerCase;
+                vn_RegionConfusedMatrix = StringConstant.Instance.VNRegion_Confused_Matrix_LowerCase;
             }
             HashSet<string> result = new HashSet<string>();
             List<string> listConsonants = countingConsonant(token, isMajuscule);
@@ -973,11 +973,11 @@ namespace Spell.Algorithm
             char[,] keyBoardMatrix;
             if (isMajuscule)
             {
-                keyBoardMatrix = StringConstant.getInstance.KeyBoardMatrix_UperCase;
+                keyBoardMatrix = StringConstant.Instance.KeyBoardMatrix_UperCase;
             }
             else
             {
-                keyBoardMatrix = StringConstant.getInstance.KeyBoardMatrix_LowerCase;
+                keyBoardMatrix = StringConstant.Instance.KeyBoardMatrix_LowerCase;
             }
             for (int i = 0; i < StringConstant.MAX_KEYBOARD_ROW; i++)
             {
@@ -993,11 +993,11 @@ namespace Spell.Algorithm
             char[,] keyBoardMatrix;
             if (isMajuscule)
             {
-                keyBoardMatrix = StringConstant.getInstance.KeyBoardMatrix_UperCase;
+                keyBoardMatrix = StringConstant.Instance.KeyBoardMatrix_UperCase;
             }
             else
             {
-                keyBoardMatrix = StringConstant.getInstance.KeyBoardMatrix_LowerCase;
+                keyBoardMatrix = StringConstant.Instance.KeyBoardMatrix_LowerCase;
             }
 
             for (int i = 0; i < StringConstant.MAX_KEYBOARD_ROW; i++)
