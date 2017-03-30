@@ -155,7 +155,6 @@
   <ItemGroup>
     <Compile Include="Algorithm\Candidate.cs" />
     <Compile Include="Algorithm\CompoundWordVn.cs" />
-    <Compile Include="Algorithm\Range.cs" />
     <Compile Include="Algorithm\RightWordCandidate.cs" />
     <Compile Include="Algorithm\StringConstant.cs" />
     <Compile Include="Algorithm\Ngram.cs" />

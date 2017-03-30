@@ -290,6 +290,7 @@ namespace Spell
 
         private void btnStart_Click(object sender, EventArgs e)
         {
+            MessageBox.Show(Globals.ThisAddIn.Application.Selection.Start + ", " + Globals.ThisAddIn.Application.Selection.End);
             startFindError();
         }
         private void startFindError()

@@ -92,7 +92,7 @@ namespace Spell.Algorithm
                         candidatesWithScore.Add(candidate, score);
                         candidatesWithScore = sortDict(candidatesWithScore);
                     }
-                    text += String.Format("{0}: [{1};{2};{3}] = {4}", candidate, D, L, S, score) + "\n";
+                    text += String.Format("{0}: [{1};{2}] = {3}", candidate, L, S, score) + "\n";
                 }
             }
             foreach (string key in candidatesWithScore.Keys)

@@ -379,12 +379,11 @@ namespace Spell.Algorithm
             string[] triGram = File.ReadAllLines(path);
             foreach (string line in triGram)
             {
-                string[] tri = line.Split('-');
-                string index = toInt32(tri[0]);
-                string firstSyll = _posUni[getFirstSyllableIndex(index)];
-                string secondSyll = _posUni[getSecondSyllableIndex(index)];
-                string lastSyll = _posUni[ushort.Parse( tri[1])];
-                _triAmount.Add(firstSyll + " " + secondSyll + " " + lastSyll, Int16.Parse(tri[2]));
+                string[] tri = line.Split(' ');
+                string firstSyll = _posUni[Int32.Parse( tri[0])];
+                string secondSyll = _posUni[Int32.Parse(tri[1])];
+                string lastSyll = _posUni[Int32.Parse(tri[2])];
+                _triAmount.Add(firstSyll + " " + secondSyll + " " + lastSyll, Int32.Parse(tri[3]));
             }
         }
 
