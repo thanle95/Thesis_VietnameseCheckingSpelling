@@ -10,7 +10,9 @@ namespace Spell.Algorithm
 {
     public class VNDictionary
     {
+        //từ điển âm tiết
         public List<string> SyllableDict;
+        //từ điển từ ghép
         public List<string> CompoundDict;
 
         private VNDictionary()
@@ -36,20 +38,16 @@ namespace Spell.Algorithm
         /// </summary>
         public List<string> readSyllableDict()
         {
-
             List<string> result = new List<string>();
             try
             {
                 //properties vào fileName, chọn copy always
-                string[] tempDict = File.ReadAllLines(@"Resources\SyllableDictByViet39K.txt");
-                foreach (string i in tempDict)
-                {
-                    result.Add(i);
-                }
+                string[] dictArr = File.ReadAllLines(@"Resources\SyllableDictByViet39K.txt");
+                result = dictArr.ToList();
             }
             catch (Exception e)
             {
-                MessageBox.Show("khong doc duoc file");
+                MessageBox.Show(e.Message);
             }
             return result;
         }
@@ -61,15 +59,12 @@ namespace Spell.Algorithm
         {
             List<string> result = new List<string>(); try
             {
-                string[] tempDict = File.ReadAllLines(@"Resources\sortedNewViet39K.txt");
-                foreach (string i in tempDict)
-                {
-                    result.Add(i.ToLower());
-                }
+                string[] dictArr = File.ReadAllLines(@"Resources\newCompoundWordByViet39K.txt");
+                result = dictArr.ToList();
             }
             catch (Exception e)
             {
-                MessageBox.Show("khong doc duoc file");
+                MessageBox.Show(e.Message);
             }
             return result;
         }
@@ -80,24 +75,10 @@ namespace Spell.Algorithm
         /// <returns></returns>
         public bool isSyllableVN(string token)
         {
-            // dung giai thuat tim kiem am tiet 'token' trong tu dien
-            // Neu co am tiet nay thi return true
-
             return this.SyllableDict.BinarySearch(token.ToLower()) >= 0; // Neu am tiet nay ko co trong tu dien 
         }
         /// <summary>
-        /// Kiểm tra một cụm từ có là từ ghép hay không
-        /// </summary>
-        /// <param name="word"></param>
-        /// <returns></returns>
-        //public bool isCompoundVN(string word)
-        //{
-        //    return CompoundWordVN.Instance..BinarySearch((word).ToLower()) >= 0;
-        //}
-
-
-        /// <summary>
-        /// trả về từ ghép liền trước token dạng X X+1
+        /// Tìm X: trả về từ ghép liền trước token dạng X X+1
         /// </summary>
         /// <param name="token"></param>
         /// <returns></returns>
@@ -107,16 +88,13 @@ namespace Spell.Algorithm
             if (token.Length > 0)
                 //duyệt qua tất cả trường hợp, với value là token
                 foreach (KeyValuePair<string, List<string>> pair in CompoundWordVn.Instance.compoundWordVnDict)
-                {
-                    foreach (string i in pair.Value)
-                    {
-                        string[] iArr = i.Trim().Split(' ');
-                        if (iArr.Length == 1 && iArr[0].Equals(token))
+                    //foreach (string i in pair.Value)
+                    //{
+                        //string[] iArr = i.Trim().Split(' ');
+                        //if (iArr.Length == 1 && iArr[0].Equals(token))
+                        if(pair.Value.Contains(token))
                             hSetResult.Add(pair.Key);
-                    }
-                    //if (pair.Value.BinarySearch(token)!= -1)
-                    //    hSetResult.Add(pair.Key);
-                }
+                    //}
             else
                 hSetResult.Add("");
             return hSetResult;

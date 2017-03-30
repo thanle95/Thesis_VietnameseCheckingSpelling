@@ -15,124 +15,143 @@ namespace Spell.Algorithm
         }
 
         private static WrongWordCandidate instance = new WrongWordCandidate();
-        public static WrongWordCandidate getInstance    
+        public static WrongWordCandidate getInstance
         {
             get
             {
                 return instance;
             }
         }
-
+        /// <summary>
+        /// tạo candidate dựa trên từ điển từ ghép và ngữ cảnh
+        /// </summary>
+        /// <param name="prepre"></param>
+        /// <param name="pre"></param>
+        /// <param name="token"></param>
+        /// <param name="next"></param>
+        /// <param name="nextnext"></param>
+        /// <param name="isMajuscule"></param>
+        /// <returns></returns>
         public HashSet<string> createCandidate(string prepre, string pre, string token, string next, string nextnext, bool isMajuscule)
         {
             HashSet<string> result = new HashSet<string>();
-            
-            Dictionary<string, double> candidatesWithScore = new Dictionary<string, double>(), tempCandidatesWithScore = new Dictionary<string, double>();
+            //giữ cặp <candidate, điểm> để so sánh
+            Dictionary<string, double> candidatesWithScore = new Dictionary<string, double>(),
+                //giữ cặp <candidate, điểm> với những candidate là từ ghép 3 âm tiết
+                prioritizedCandidatesWithScore = new Dictionary<string, double>();
+            //candidate chưa chọn lọc dựa vào số điểm
             HashSet<string> hSetCandidate = new HashSet<string>();
 
             hSetCandidate.UnionWith(createCandidateByNgram(prepre, pre, token, next, nextnext, isMajuscule));
             hSetCandidate.UnionWith(createCandByCompoundWord(prepre, pre, token, next, nextnext, isMajuscule));
-            //hSetCandidate.UnionWith(hSetxX);
-            //hSetCandidate.UnionWith(hSetXxx);
-            //hSetCandidate.UnionWith(hSetxXx);
-            //hSetCandidate.UnionWith(hSetxxX);
 
             double lamda1 = 0.000003;
             double lamda2 = 0.99999;
             double lamda3 = 0.000007;
             double score = 0;
+            //Dictionary
             int D = 0;
-            double H = 0;
+            //Language model
             double L = 0.0;
-            //
-            string text = "";
+            //Similarity
+            double S = 0;
+            string text_writeFile = "";
             foreach (string candidate in hSetCandidate)
             {
-                L = calNgram(prepre, pre, candidate, next, nextnext);
-                H = calDeviation(token, candidate);
-                D = calMatch_pre_next_compoundWordVNDict(prepre, pre, candidate, next, nextnext);
-                score = lamda1 * D + lamda2 * L + lamda3 * H;
-                if (H >= 13 || L > 0.000001)
+                D = calScore_CompoundWord(prepre, pre, candidate, next, nextnext);
+                L = calScore_Ngram(prepre, pre, candidate, next, nextnext);
+                S = calScore_Similarity(token, candidate);
+                score = lamda1 * D + lamda2 * L + lamda3 * S;
+                if (S >= 13 || L > 0.000001)
                 {
+                    //là từ ghép 3 âm tiết
                     if (D == 10)
                     {
-                        if (tempCandidatesWithScore.Count < 5)
+                        //nếu số lượng phần tử còn nhỏ hơn 5
+                        if (prioritizedCandidatesWithScore.Count < 5)
                         {
-                            tempCandidatesWithScore.Add(candidate, score);
-                            tempCandidatesWithScore = sortDict(tempCandidatesWithScore);
+                            prioritizedCandidatesWithScore.Add(candidate, score);
+                            prioritizedCandidatesWithScore = sortDict(prioritizedCandidatesWithScore);
                         }
-                        else
-                        if (tempCandidatesWithScore.Last().Value < score)
+                        //nếu phần tử cuối cùng có số điểm thấp hơn candidate hiện tại
+                        else if (prioritizedCandidatesWithScore.Last().Value < score)
                         {
-                            tempCandidatesWithScore.Remove(tempCandidatesWithScore.Last().Key);
-                            tempCandidatesWithScore.Add(candidate, score);
-                            tempCandidatesWithScore = sortDict(tempCandidatesWithScore);
+                            prioritizedCandidatesWithScore.Remove(prioritizedCandidatesWithScore.Last().Key);
+                            prioritizedCandidatesWithScore.Add(candidate, score);
+                            prioritizedCandidatesWithScore = sortDict(prioritizedCandidatesWithScore);
                         }
                     }
+                    //không phải từ ghép 3 âm tiết
                     else
                     {
+                        //nếu số lượng phần tử còn nhỏ hơn 5
                         if (candidatesWithScore.Count < 5)
                         {
                             candidatesWithScore.Add(candidate, score);
                             candidatesWithScore = sortDict(candidatesWithScore);
                         }
-                        else
-                        if (candidatesWithScore.Last().Value < score)
+                        //nếu phần tử cuối cùng có số điểm thấp hơn candidate hiện tại
+                        else if (candidatesWithScore.Last().Value < score)
                         {
                             candidatesWithScore.Remove(candidatesWithScore.Last().Key);
                             candidatesWithScore.Add(candidate, score);
                             candidatesWithScore = sortDict(candidatesWithScore);
                         }
                     }
-                    text += String.Format("{0}: [{1};{2};{3}] = {4}", candidate, D, L, H, score) + "\n";
+                    text_writeFile += String.Format("{0}: [{1};{2};{3}] = {4}", candidate, D, L, S, score) + "\n";
                 }
             }
-            if (tempCandidatesWithScore.Count > 0)
-                foreach (string key in tempCandidatesWithScore.Keys)
+            //nếu có từ ghép 3 âm tiết
+            if (prioritizedCandidatesWithScore.Count > 0)
+                foreach (string key in prioritizedCandidatesWithScore.Keys)
                     result.Add(key);
+            //không có từ ghép 3 âm tiết
             else
                 foreach (string key in candidatesWithScore.Keys)
                     result.Add(key);
-            //HashSet<string> tuanTu = kiemtra_TuanTu(token, isMajuscule);
-            //HashSet<string> xoayVong = kiemtra_XoayVong(token, isMajuscule);
-            //foreach (string s in tuanTu)
-            //    result.Add(s);
-            //foreach (string s in xoayVong)
-            //    result.Add(s);
+
+            //ghi đè file
             string path = @"E:\Google Drive\Document\luan van\source\github\Thesis_VietnameseCheckingSpelling\Spell\Resources\wrongWord.txt";
             using (FileStream aFile = new FileStream((path), FileMode.Append, FileAccess.Write))
             using (StreamWriter sw = new StreamWriter(aFile))
             {
-                sw.WriteLine(text);
+                sw.WriteLine(text_writeFile);
                 sw.WriteLine("**********************************************************************");
             }
-            
-            //using (FileStream aFile = new FileStream((@"C:\Users\Kiet\OneDrive\Thesis\testNgramCanđ.txt"), FileMode.Append, FileAccess.Write))
-            //using (StreamWriter sw = new StreamWriter(aFile))
-            //{
-            //    foreach(string temp in hsetNgramCand)
-            //    {
-            //        sw.WriteLine(temp);
-            //    }
-
-            //    sw.WriteLine("**********************************************************************");
-            //}
-            //File.WriteAllText(@"C:\Users\Kiet\OneDrive\Thesis\test.txt", text);
             return result;
         }
-
+        /// <summary>
+        /// tạo candidate dựa trên từ ghép
+        /// </summary>
+        /// <param name="prepre"></param>
+        /// <param name="pre"></param>
+        /// <param name="token"></param>
+        /// <param name="next"></param>
+        /// <param name="nextnext"></param>
+        /// <param name="isMajuscule"></param>
+        /// <returns></returns>
         public HashSet<string> createCandByCompoundWord(string prepre, string pre, string token, string next, string nextnext, bool isMajuscule)
         {
             HashSet<string> hset = new HashSet<string>();
+            //tìm X
             hset.UnionWith(VNDictionary.getInstance.findCompoundVNWord_Xx(next));
             hset.UnionWith(VNDictionary.getInstance.findCompoundVNWord_xX(pre));
             hset.UnionWith(VNDictionary.getInstance.findCompoundVNWord_Xxx(next, nextnext));
             hset.UnionWith(VNDictionary.getInstance.findCompoundVNWord_xXx(pre, next));
             hset.UnionWith(VNDictionary.getInstance.findCompoundVNWord_xxX(prepre, pre));
 
-            return hset; 
+            return hset;
         }
-
+        /// <summary>
+        /// tạo candidate dựa trên ngữ cảnh
+        /// </summary>
+        /// <param name="prepre"></param>
+        /// <param name="pre"></param>
+        /// <param name="token"></param>
+        /// <param name="next"></param>
+        /// <param name="nextnext"></param>
+        /// <param name="isMajuscule"></param>
+        /// <returns></returns>
         public HashSet<string> createCandidateByNgram(string prepre, string pre, string token, string next, string nextnext, bool isMajuscule)
         {
             HashSet<string> lstCandidate = new HashSet<string>();
@@ -144,15 +163,10 @@ namespace Spell.Algorithm
             foreach (string key in bi)
             {
                 string[] word = key.Split(' ');
-                if (word[0].Equals(pre) && calDeviation(token,word[1]) > 10)
-                {
+                if (word[0].Equals(pre) && calScore_Similarity(token, word[1]) > 10)
                     lstCandidate.Add(word[1]);
-                }
-                if (word[1].Equals(next) && calDeviation(token, word[0]) > 10)
-                {
+                else if (word[1].Equals(next) && calScore_Similarity(token, word[0]) > 10)
                     lstCandidate.Add(word[0]);
-                }       
-                       
             }
             //
             //bigram
@@ -173,10 +187,13 @@ namespace Spell.Algorithm
             //        lstCandidate.Add(word[1]);
             //    }
             //}
-
             return lstCandidate;
         }
-
+        /// <summary>
+        /// sắp xếp candidate dựa trên số điểm, candidate có điểm cao nhất sẽ ở vị trí đầu tiên
+        /// </summary>
+        /// <param name="dict"></param>
+        /// <returns></returns>
         private Dictionary<string, double> sortDict(Dictionary<string, double> dict)
         {
             List<KeyValuePair<string, double>> myList = dict.OrderByDescending(pair => pair.Value).ToList();
@@ -185,7 +202,16 @@ namespace Spell.Algorithm
                 ret.Add(pair.Key, pair.Value);
             return ret;
         }
-        public double calNgram(string prepre, string pre, string candidate, string next, string nextnext)
+        /// <summary>
+        /// tính điểm cho candidate dựa vào ngữ cảnh
+        /// </summary>
+        /// <param name="prepre"></param>
+        /// <param name="pre"></param>
+        /// <param name="candidate"></param>
+        /// <param name="next"></param>
+        /// <param name="nextnext"></param>
+        /// <returns></returns>
+        public double calScore_Ngram(string prepre, string pre, string candidate, string next, string nextnext)
         {
             double calBiGram_PreCand = Ngram.Instance.calBiNgram(pre, candidate);
             double calBigram_CandNext = Ngram.Instance.calBiNgram(candidate, next);
@@ -194,23 +220,25 @@ namespace Spell.Algorithm
             //double calTrigram3 = Ngram.Instance.calTriNgram( candidate, next, nextnext);
             double lamda1 = 0.5;
             double lamda2 = 0.5;
-            double ret = lamda1* calBiGram_PreCand +lamda2* calBigram_CandNext;// + calTrigram1 + calTrigram2 + calTrigram3;
+            double ret = lamda1 * calBiGram_PreCand + lamda2 * calBigram_CandNext;// + calTrigram1 + calTrigram2 + calTrigram3;
             return ret;
         }
         /// <summary>
-        /// 
+        /// tính điểm cho candidate dựa vào từ ghép
         /// </summary>
+        /// <param name="prepre"></param>
+        /// <param name="pre"></param>
         /// <param name="candidate"></param>
-        /// <param name="preCandidate"></param>
-        /// <param name="nextCandidate"></param>
+        /// <param name="next"></param>
+        /// <param name="nextnext"></param>
         /// <returns></returns>
-        public int calMatch_pre_next_compoundWordVNDict(string prepre, string pre, string candidate, string next, string nextnext)
+        public int calScore_CompoundWord(string prepre, string pre, string candidate, string next, string nextnext)
         {
-            string _3SyllComWord1 = (prepre + " " + pre + " " + candidate).Trim().ToLower();
-            string _3SyllComWord2 = (pre + " " + candidate + " " + next).Trim().ToLower();
-            string _3SyllComWord3 = (candidate + " " + next + " " + nextnext).Trim().ToLower();
-            string _2SyllComWord1 = (pre + " " + candidate).Trim().ToLower();
-            string _2SyllComWord2 = (candidate + " " + next).Trim().ToLower();
+            string _3SyllComWord1 = String.Format("{0} {1} {2}", prepre, pre, candidate).Trim().ToLower();
+            string _3SyllComWord2 = String.Format("{0} {1} {2}", prepre, candidate, next).Trim().ToLower();
+            string _3SyllComWord3 = String.Format("{0} {1} {2}", candidate, next, nextnext).Trim().ToLower();
+            string _2SyllComWord1 = String.Format("{0} {1}", pre, candidate).Trim().ToLower();
+            string _2SyllComWord2 = String.Format("{0} {1}", candidate, next).Trim().ToLower();
             if (prepre.Length > 0 && pre.Length > 0 && VNDictionary.getInstance.CompoundDict.Contains(_3SyllComWord1))
                 return 10;
             else if (pre.Length > 0 && next.Length > 0 && VNDictionary.getInstance.CompoundDict.Contains(_3SyllComWord2))
@@ -224,13 +252,13 @@ namespace Spell.Algorithm
             return 0;
         }
         /// <summary>
-        /// tính toán độ lệch giữa token với candidate dựa vào nhầm lẫn bàn phím 
-        /// điểm càng thấp, thì candidate càng tốt
+        /// tính điểm cho Candidate dựa vào độ tương tự với token
+        /// điểm càng cao, thì candidate càng tốt
         /// </summary>
         /// <param name="token"></param>
         /// <param name="candidate"></param>
         /// <returns></returns>
-        public double calDeviation(string token, string candidate)
+        public double calScore_Similarity(string token, string candidate)
         {
             int MAX = 8;
             token = token.ToLower();
@@ -258,8 +286,6 @@ namespace Spell.Algorithm
                 return -1;
             //dựa trên nhầm lẫn bàn phím
             //candidate sẽ được tăng điểm cao nếu candidate có khả năng do nhầm lẫn bàn phím mà tạo thành token
-
-            int iCandidate = -1, iToken = -1, jCandidate = -1, jToken = -1;
             double keyboardScore = 0;
             int regionScore = 0;
 
@@ -268,34 +294,41 @@ namespace Spell.Algorithm
                 for (int i = 0; i < candidate.Length; i++)
                 {
                     if (candidate[i] != token[i])
-                        keyboardScore += calDeviationByKeyBoardMissType(candidate[i], token[i]);
+                        keyboardScore += calScore_Similarity_Keyboard(candidate[i], token[i]);
                 }
             }
-            regionScore += calDeviationByRegionConfuse(candidate, token);
+            //dựa trên nhầm lẫn vùng miền
+            regionScore += calScore_Similarity_Region(candidate, token);
             return deltaLength + diffScore - keyboardScore + regionScore;
         }
         /// <summary>
-        /// tính toán độ lệch giữa token với candidate dựa vào nhầm lẫn vùng miền
+        /// tính toán độ tương tự giữa token với candidate dựa vào nhầm lẫn vùng miền
         /// điểm càng cao, thì candidate càng tốt
         /// </summary>
         /// <param name="candidate"></param>
         /// <param name="token"></param>
         /// <returns></returns>
-        private int calDeviationByRegionConfuse(string candidate, string token)
+        private int calScore_Similarity_Region(string candidate, string token)
         {
             HashSet<string> candidates = create_regionConfusedCandidate(token, false);
             if (candidates.Contains(candidate)) //token là một trường hợp nhầm lẫn vùng miền của candidate
                 return 5;
             return 0;
         }
-
-        public double calDeviationByKeyBoardMissType(char token, char candidate)
+        /// <summary>
+        /// tính độ tương tự giữa token với candidate dựa trên nhầm lẫn bàn phím
+        /// </summary>
+        /// <param name="token"></param>
+        /// <param name="candidate"></param>
+        /// <returns></returns>
+        public double calScore_Similarity_Keyboard(char token, char candidate)
         {
             int isFound = 0;
             int iCandidate = -1, iToken = -1, jCandidate = -1, jToken = -1;
             //duyệt qua từng dòng trong keyboard matrix
             for (int row = 0; row < StringConstant.MAX_KEYBOARD_ROW; row++)
             {
+                //duyệt qua từng cột trong keyboard matrix
                 for (int col = 0; col < StringConstant.MAX_KEYBOARD_COL; col++)
                 {
                     if (StringConstant.getInstance.KeyBoardMatrix_LowerCase[row, col] == candidate)
@@ -653,6 +686,7 @@ namespace Spell.Algorithm
         }
         #endregion
 
+        #region create candidate for error by redundancy (delete case)
         /// <summary>
         /// Sinh candidate cho trường hợp từ bị dư
         /// Ta sẽ lần lượt xóa từng chữ của từ,
@@ -699,7 +733,9 @@ namespace Spell.Algorithm
             }
             return result;
         }
+        #endregion
 
+        #region create candidate for error by permute (permute case)
         /// <summary>
         /// Sinh candidate cho trường hợp từ bị hoán vị (đảo lộn) vị trí các chữ trong từ,
         /// Ta sẽ đảo thứ tự từng cặp chữ cái,
@@ -725,6 +761,7 @@ namespace Spell.Algorithm
             string s = token.Remove(startIndex, 1);
             return s.Insert(startIndex + 1, token[startIndex] + "");
         }
+        #endregion
 
         #region Create candidate for error by gõ nhầm và âm vùng miền ( replace )
         /// <summary>

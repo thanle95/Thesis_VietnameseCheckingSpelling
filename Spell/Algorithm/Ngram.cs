@@ -67,8 +67,8 @@ namespace Spell.Algorithm
             //generateProbabilitySet();
             //writeFileProbability();
             //generateUnigram();
-            string uniPath = @"E:\Google Drive\Document\luan van\source\github\Thesis_VietnameseCheckingSpelling\Spell\Resources\uni.txt";
-            string biPath = @"E:\Google Drive\Document\luan van\source\github\Thesis_VietnameseCheckingSpelling\Spell\Resources\bi.txt";
+            string uniPath = @"Resources\uniExtended.txt";
+            string biPath = @"Resources\biExtended.txt";
             readUni(uniPath);
 
 

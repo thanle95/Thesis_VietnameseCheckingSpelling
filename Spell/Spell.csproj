@@ -221,15 +221,21 @@
     <None Include="Resources\check.PNG" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Resources\biExtended.txt" />
+    <Content Include="Resources\biExtended.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Resources\newCompoundWordByViet39K.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Resources\rightWordCandidate.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resources\triExtended.txt" />
-    <Content Include="Resources\uniExtended.txt" />
+    <Content Include="Resources\triExtended.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\uniExtended.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Resources\wrongWord.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

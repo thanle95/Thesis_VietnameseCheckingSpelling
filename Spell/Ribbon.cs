@@ -16,13 +16,10 @@ namespace Spell
 
         private void Ribbon1_Load(object sender, RibbonUIEventArgs e)
         {
-
-
             myCustomTaskPane = Globals.ThisAddIn.CustomTaskPanes.Add(UserControl.Instance, "Spelling");
             myCustomTaskPane.DockPositionRestrict = Office.MsoCTPDockPositionRestrict.msoCTPDockPositionRestrictNoChange;
             myCustomTaskPane.Width = 300;
             //Ngram.Instance.runFirst();
-            //MessageBox.Show(Ngram.Instance.UniGramCount.ToString());
         }
 
         /// <summary>

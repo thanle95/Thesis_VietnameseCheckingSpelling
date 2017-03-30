@@ -14,20 +14,17 @@ using System.Threading;
 
 namespace Spell
 {
-
+    //phục vụ cho việc thêm vào từ điển
     public enum Position { xxX, xXx, Xxx, xX, Xx, X };
     public partial class UserControl : System.Windows.Forms.UserControl
     {
         private Word.Range curRangeTextShowInTaskPane;
         private List<Word.Range> lstErrorRange = new List<Word.Range>();
         private static UserControl instance = new UserControl();
-        private Dictionary<string, List<string>> globalsCandidates;
         private UserControl()
         {
-            globalsCandidates = new Dictionary<string, List<string>>();
             InitializeComponent();
         }
-
         public static UserControl Instance
         {
             get
@@ -35,53 +32,37 @@ namespace Spell
                 return instance;
             }
         }
-
         private void lstbCandidate_SelectedIndexChanged(object sender, EventArgs e)
         {
             lblFix.Text = lstbCandidate.SelectedItem.ToString();
         }
-
-
         /// <summary>
-        /// hiện gợi ý lên task pane
+        /// hiện gợi ý sửa lỗi lên task pane
         /// </summary>
-        /// <param name="w">từ lỗi</param>
+        /// <param name="prepre"></param>
+        /// <param name="pre"></param>
+        /// <param name="range"></param>
+        /// <param name="next"></param>
+        /// <param name="nextnext"></param>
         public void showCandidateInTaskPane(string prepre, string pre, Word.Range range, string next, string nextnext)
         {
-            //if (Globals.ThisAddIn.Application.Selection.Text.Length > 1)
-            //{
-            //    curRangeTextShowInTaskPane = Globals.ThisAddIn.Application.Selection.Range;
-
-            //    string w = curRangeTextShowInTaskPane.Text.Trim();
-
-            //    if (w.Length > 0)
-            //    {
-            //        List<string> items = NewUtility.Instance.generateCandidatePerWord(w);
-            //        lblWrong.Text = w;
-            //        lstbCandidate.Items.Clear();
-            //        lstbCandidate.Items.Add(w);
-            //        foreach (string item in items)
-            //            if (!item.ToLower().Equals(w.ToLower()))
-            //                if(item.Length > 1)
-            //                lstbCandidate.Items.Add(item);
-            //    }
-            //}
-            //while (true)
-            //{
             string token = range.Text;
             if (token.Length > 0)
             {
+                //chọn ra những ứng cử viên dựa vào ngữ cảnh
                 HashSet<string> items = Candidate.getInstance.selectiveCandidate(prepre, pre, token, next, nextnext);
+                //hiện lỗi lên taskpane và label
                 lblWrong.Text = token;
                 lstbCandidate.Items.Clear();
-                //lstbCandidate.Items.Add(token);
                 foreach (string item in items)
                     if (!item.ToLower().Equals(token.ToLower()))
                         if (item.Length > 1)
                             lstbCandidate.Items.Add(item.Trim());
             }
-            //}
         }
+        /// <summary>
+        /// hiện gợi ý sữa lỗi lên taskpane, tự duyệt ngữ cảnh
+        /// </summary>
         public void showCandidateInTaskPane()
         {
             //hiện lỗi đầu tiên lên task pane
@@ -212,20 +193,23 @@ namespace Spell
         {
             try
             {
-                //while (true)
-                //{
-                globalsCandidates.Clear();
+                //dehightlight tất cả những lỗi trước đó
                 DocumentHandling.Instance.DeHighLight_All_Mistake(Globals.ThisAddIn.Application.ActiveDocument.Characters);
-                Word.Sentences sentences = Globals.ThisAddIn.Application.ActiveDocument.Sentences;
-                List<string> mySentences = DocumentHandling.Instance.getPhrase(sentences);
+                //lấy toàn bộ danh sách các từ trong Active Document, để lấy được ngữ cảnh
                 Word.Words globalWords = Globals.ThisAddIn.Application.ActiveDocument.Words;
+                //lấy những câu trong Active Document
+                Word.Sentences sentences = Globals.ThisAddIn.Application.ActiveDocument.Sentences;
+                //với mỗi câu, tách thành từng cụm có liên quan mật thiết với nhau, như "", (),...
+                List<string> mySentences = DocumentHandling.Instance.getPhrase(sentences);
+                //cờ báo hiệu phát hiện lỗi                
                 bool isFault = false;
                 //Xử lý từng cụm từ, vì mỗi cụm từ có liên quan mật thiết với nhau
-                foreach (string sentence in mySentences)
+                foreach (string mySentence in mySentences)
                 {
-                    string[] words = sentence.Trim().Split(' ');
+                    string[] words = mySentence.Trim().Split(' ');
+                    //số lượng các từ trong cụm
                     int length = words.Length;
-
+                    //duyệt qua từng từ trong cụm
                     for (int i = 0; i < length; i++)
                     {
                         string token = words[i].Trim().ToLower();
@@ -240,15 +224,18 @@ namespace Spell
                         }
                         else
                         {
+                            //tìm vị trí của token trong globalWords để xác định ngữ cảnh
                             for (int iWord = 1; iWord <= globalWords.Count; iWord++)
                             {
                                 string word = globalWords[iWord].Text.Trim().ToLower();
+                                //tìm được vị trí của token
                                 if (word.Equals(token))
                                 {
+                                    //xác định ngữ cảnh
                                     string[] gramAroundIWord = getGramArroundIWord(iWord, globalWords.Count, globalWords);
                                     string prepre = gramAroundIWord[0], pre = gramAroundIWord[1], next = gramAroundIWord[2], nextnext = gramAroundIWord[3];
-
-                                    if (!RightWordCandidate.getInstance.checkRightWord(prepre, pre, word, next, nextnext))
+                                    //kiểm tra token có khả năng sai hay k
+                                    if (!RightWordCandidate.getInstance.checkRightWord(prepre, pre, token, next, nextnext))
                                     {
                                         lstErrorRange.Add((DocumentHandling.Instance.HighLight_MistakeRightWord(token, globalWords)));
                                         isFault = true;
@@ -260,14 +247,10 @@ namespace Spell
                         }
 
 
-                    }//end for
+                    }//end for: duyệt từ từng trong cụm
                     if (isFault)
                         break;
-                }
-                //Thread.Sleep(5000);
-                //}
-                //foreach (Word.Range range in lstErrorRange)
-                //    MessageBox.Show(range.Text + ": " + range.Start);
+                }//end for: duyệt từ cụm
                 showCandidateInTaskPane();
             }
             catch (Exception e)
@@ -298,10 +281,7 @@ namespace Spell
             Ngram.Instance.addToDictionary(lblWrong.Text, null, null, Position.X);
         }
 
-        private void btnTest_Click(object sender, EventArgs e)
-        {
 
-        }
 
         private void UserControl_Load(object sender, EventArgs e)
         {

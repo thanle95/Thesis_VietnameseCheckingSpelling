@@ -25,7 +25,7 @@ namespace Spell.Algorithm
 
         public bool checkRightWord(string prepre, string pre, string token, string next, string nextnext)
         {
-            double L = WrongWordCandidate.getInstance.calNgram(prepre, pre, token, next, nextnext);
+            double L = WrongWordCandidate.getInstance.calScore_Ngram(prepre, pre, token, next, nextnext);
             string path = @"E:\Google Drive\Document\luan van\source\github\Thesis_VietnameseCheckingSpelling\Spell\Resources\rightWord.txt";
             using (FileStream aFile = new FileStream((path), FileMode.Append, FileAccess.Write))
             using (StreamWriter sw = new StreamWriter(aFile))
@@ -59,9 +59,9 @@ namespace Spell.Algorithm
             string text = "";
             foreach (string candidate in hSetCandidate)
             {
-                L = WrongWordCandidate.getInstance.calNgram(prepre, pre, candidate, next, nextnext);
-                H = WrongWordCandidate.getInstance.calDeviation(token, candidate);
-                D = WrongWordCandidate.getInstance.calMatch_pre_next_compoundWordVNDict(prepre, pre, candidate, next, nextnext);
+                L = WrongWordCandidate.getInstance.calScore_Ngram(prepre, pre, candidate, next, nextnext);
+                H = WrongWordCandidate.getInstance.calScore_Similarity(token, candidate);
+                D = WrongWordCandidate.getInstance.calScore_CompoundWord(prepre, pre, candidate, next, nextnext);
                 score = D + L + H;
                 if (H > 13 || L > 0.00001)
                 {
