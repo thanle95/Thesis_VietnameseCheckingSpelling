@@ -12,38 +12,25 @@ namespace Spell.Algorithm
 {
     public class Ngram
     {
+        private int _sumUni = 0, _sumBi = 0;
 
-        //chứa tất cả những cặp (ngram, số lượng) phục vụ cho việc tính xác suất
-        public Dictionary<string, int> DictionaryForNgram { get; set; }
-        public HashSet<string> Dictionary { get; set; } //bộ từ điển, chứa những từ không trùng lắp
-        public string Text { get; set; }//dùng để lưu corpus đọc từ file dna.txt
-
-        public Dictionary<string, int> UniGramCount; //chứa tất cả xác suất của unigram
-        public Dictionary<string, int> BiGramCount; //chứa tất cả xác suất của bigram
-        public Dictionary<string, int> TriGramCount; //chứa tất cả xác suất của trigram
-        private int _sumUni = 0, sumBi = 0, sumTri = 0;
-
-        private Dictionary<string, int> _uniPos = new Dictionary<string, int>(); //Chưa key và position của unigram
-        private Dictionary<int, string> _posUni = new Dictionary<int, string>(); //Chưa key và position của unigram
-        private Dictionary<string, int> _uniAmount = new Dictionary<string, int>(); // Chứa Key và giá trị tần số của unigram
-        public Dictionary<string, int> _biAmount { get; set; } // Chứa Key và giá trị tần số của bigram
-        public Dictionary<string, int> _triAmount { get; set; } // Chứa Key và giá trị tần số của trigram
+        private Dictionary<string, int> _uniPos { get; set; }  //Chứa key và position của unigram
+        private Dictionary<int, string> _posUni { get; set; }  //Chứa position và key của unigram
+        private Dictionary<string, int> _uniAmount { get; set; }  //Chứa Key và giá trị số lượng của unigram
+        public Dictionary<string, int> _biAmount { get; set; } //Chứa Key và giá trị số lượng của bigram
+        public Dictionary<string, int> _triAmount { get; set; } //Chứa Key và giá trị số lượng của trigram
 
         /// <summary>
         /// 
         /// </summary>
         private Ngram()
         {
-            //this.DictionaryForNgram = new Dictionary<string, int>();
-            //this.Text = "";
-            //this.UniGramCount = new Dictionary<string, int>();
-            //this.BiGramCount = new Dictionary<string, int>();
-            //this.TriGramCount = new Dictionary<string, int>();
+            this._uniPos = new Dictionary<string, int>();
+            this._posUni = new Dictionary<int, string>();
+            this._uniAmount = new Dictionary<string, int>();
             this._biAmount = new Dictionary<string, int>();
             this._triAmount = new Dictionary<string, int>();
             runFirst();
-            //generateUnigram();
-
         }
         private static Ngram instance = new Ngram();
         public static Ngram Instance
@@ -56,31 +43,14 @@ namespace Spell.Algorithm
         /// </summary>
         public void runFirst()
         {
-            //readFileCorpus();
-            //generateUnigram();
-            //generateBigram();
-            //generateTrigram();
-
-            //countingNgams();
-
-
-            //generateProbabilitySet();
-            //writeFileProbability();
-            //generateUnigram();
-            string uniPath = @"Resources\uniExtended.txt";
-            string biPath = @"Resources\biExtended.txt";
+            string uniPath = @"E:\Google Drive\Document\luan van\source\github\Thesis_VietnameseCheckingSpelling\Spell\Resources\uniExtended.txt";
+            string biPath = @"E:\Google Drive\Document\luan van\source\github\Thesis_VietnameseCheckingSpelling\Spell\Resources\biExtended.txt";
+            string triPath = @"E:\Google Drive\Document\luan van\source\github\Thesis_VietnameseCheckingSpelling\Spell\Resources\triExtended.txt";
             readUni(uniPath);
-
-
             readBiAmount(biPath);
-            //readTriAmount(triPath);
-            //generateBigram();
-            //generateTrigram();
-
-            //readUniBySQL();
-            //readBiBySQL();
+            readTriAmount(triPath);
         }
-
+        #region convert between bin and dec
         private string toInt16(int tokenIndex)
         {
             string s = Convert.ToString(tokenIndex, 2);
@@ -110,11 +80,14 @@ namespace Spell.Algorithm
         {
             return convertBinToDec(number.Substring(16, 16));
         }
-        public double calBiNgram(string w1, string w2)
+        #endregion
+
+        #region calculate ngram
+        public double calBigram(string w1, string w2)
         {
-            int MAX = 10;
+            //int MAX = 10;
             string key = w1 + " " + w2;
-            int Cw1 = MAX;
+            int Cw1 = 0;
             int Cw1w2 = 0;
             if (_uniAmount.ContainsKey(w1.ToLower()))
                 Cw1 = _uniAmount[w1.ToLower()];
@@ -124,20 +97,20 @@ namespace Spell.Algorithm
             return ret;
         }
 
-        public double calTriNgram(string w1, string w2, string w3)
+        public double calTrigram(string w1, string w2, string w3)
         {
-            int MAX = 10;
+            //int MAX = 10;
             string key = w1 + " " + w2 + " " + w3;
             string bi = w1 + " " + w2;
-            int Cw1w2 = MAX;
+            int Cw1w2 = 0;
             int Cw1w2w3 = 0;
             if (_biAmount.ContainsKey(bi.ToLower()))
                 Cw1w2 = _biAmount[bi.ToLower()];
             if (_triAmount.ContainsKey(key.ToLower()))
                 Cw1w2w3 = _triAmount[key.ToLower()];
-            return (double)(Cw1w2w3 + 1) / (Cw1w2 + sumBi);
+            return (double)(Cw1w2w3 + 1) / (Cw1w2 + _sumBi);
         }
-
+        #endregion
 
         /// <summary>
         /// Đếm tổng số lần xuất hiện của từng từ trong corpus
@@ -150,27 +123,10 @@ namespace Spell.Algorithm
             }
             foreach (KeyValuePair<string, int> temp in _biAmount)
             {
-                sumBi += temp.Value;
+                _sumBi += temp.Value;
             }
         }
-        /// <summary>
-        /// khơi tạo bộ ngram với tham số n và str
-        /// </summary>
-        /// <param name="n">loại ngram muốn tạo</param>
-        /// <param name="str">bộ ngữ liệu để tạo ngram</param>
-        private void generateNgramSet(int n, string str)
-        {
-            string[] words = new Regex("\\s+|,\\s*|\\.\\s*").Split(str);
-            string key = "";
-            for (int i = 0; i < words.Length - n + 1; i++)
-            {
-                key = generateEachClusterNgram(words, i, i + n);
-                key = key.ToLower();
-                if (this.DictionaryForNgram.ContainsKey(key))
-                    this.DictionaryForNgram[key] += 1;
-                else this.DictionaryForNgram.Add(key, 1);
-            }
-        }
+     
         /// <summary>
         /// tạo từng key cho Dictionary
         /// </summary>
@@ -339,12 +295,11 @@ namespace Spell.Algorithm
             string[] biGram = File.ReadAllLines(path);
             foreach (string line in biGram)
             {
-                string[] biParts = line.Split('_');
-                string[] sylls = biParts[0].Split(' ');
+                string[] bi = line.Split(' ');
                 
-                string firstSyll = _posUni[Int16.Parse( sylls[0])];
-                string secondSyll = _posUni[Int16.Parse(sylls[1])];
-                _biAmount.Add(firstSyll + " " + secondSyll, Int32.Parse(biParts[1]));
+                string firstSyll = _posUni[Int16.Parse( bi[0])];
+                string secondSyll = _posUni[Int16.Parse(bi[1])];
+                _biAmount.Add(firstSyll + " " + secondSyll, Int32.Parse(bi[2]));
             }
         }
         #endregion
@@ -438,11 +393,11 @@ namespace Spell.Algorithm
         /// <summary>
         /// đọc từ file dna.txt trong resources và gán giá trị vào Text
         /// </summary>
-        private void readFileCorpus()
+        private void purifyFileCorpus()
         {
 
             string folderPath = @"C:\Users\Kiet\OneDrive\Thesis\Ngram\Input\";
-            int count = 3;// da chay toi 5
+            int count = 3;// da chay toi 3
             Stopwatch stopWatch = new Stopwatch();
             string[] getFile = Directory.GetFiles(folderPath, "*.txt", SearchOption.AllDirectories);
 
@@ -478,140 +433,6 @@ namespace Spell.Algorithm
                                     ts.Milliseconds / 10);
                 Console.WriteLine(count + "------ " + elapseTime);
             }
-
-
-            //try
-            //{
-            //    string[] data = File.ReadAllLines(@"Resources\dna.txt");
-            //    for (int i = 0; i < data.Length; i++)
-            //        this.Text += data[i];
-            //}
-            //catch (IOException e)
-            //{
-            //    Console.WriteLine("Khong doc duoc file" + e);
-            //}
-        }
-        /// <summary>
-        /// ghi 3 file xác suất
-        /// </summary>
-        private void writeFileProbability()
-        {
-            writePartialFileProbability("UniGram-Probability.txt", this.UniGramCount);
-            writePartialFileProbability("BiGram-Probability.txt", this.BiGramCount);
-            writePartialFileProbability("TriGram-Probability.txt", this.TriGramCount);
-        }
-        /// <summary>
-        /// Ghi file xác suất theo yêu cầu
-        /// </summary>
-        /// <param name="fileName">tên file cần ghi</param>
-        /// <param name="ngramPro">loại file</param>
-        private void writePartialFileProbability(string fileName, Dictionary<string, int> ngramPro)
-        {
-            try
-            {
-                string[] data = new string[ngramPro.Count];
-                int i = 0;
-                foreach (KeyValuePair<string, int> pair in ngramPro)
-                    data[i++] = pair.Value + " " + pair.Key;
-                File.WriteAllLines(fileName, data);
-            }
-            catch { }
-        }
-        /// <summary>
-        /// tính xác suất cho unigram
-        /// </summary>
-        /// <param name="w">unigram cần tính</param>
-        /// <returns></returns>
-        private int calProbability(string w)
-        {
-            return calPartialProbability(this.DictionaryForNgram[w], 1);
-        }
-        /// <summary>
-        /// tính xác suất cho bigram
-        /// </summary>
-        /// <param name="w1">gram thứ nhất</param>
-        /// <param name="w2">gram thứ hai cần tính</param>
-        /// <returns></returns>
-        private int calProbability(string w1, string w2)
-        {
-            return calPartialProbability(this.DictionaryForNgram[w1 + " " + w2], 1);
-        }
-        /// <summary>
-        /// tính xác suất cho trigram
-        /// </summary>
-        /// <param name="w1">gram thứ nhất</param>
-        /// <param name="w2">gram thứ hai</param>
-        /// <param name="w3">gram thứ ba cần tính</param>
-        /// <returns></returns>
-        private int calProbability(string w1, string w2, string w3)
-        {
-            return calPartialProbability(this.DictionaryForNgram[w1 + " " + w2 + " " + w3], 1);
-        }
-        /// <summary>
-        /// Mô tả chi tiết việc tính xác suất theo yêu cầu
-        /// </summary>
-        /// <param name="item">ngram cần tính</param>
-        /// <param name="n">loại gram cần tính</param>
-        /// <returns></returns>
-        private int calPartialProbability(Object item, int n)
-        {
-            if (item == null)
-                return 0;
-            int value = (int)item;
-            int sum = 0;
-            if (n == 1)
-                sum = _sumUni;
-            else if (n == 2)
-                sum = sumBi;
-            else if (n == 3)
-                sum = sumTri;
-            return (int)Math.Round(((double)value / (int)sum) * 100000) / 100000;
-        }
-
-        private void countingNgams()
-        {
-            foreach (KeyValuePair<string, int> pair in this.DictionaryForNgram)
-            {
-                string[] tmp = pair.Key.Split(' ');
-                if (tmp.Length == 1)
-                    UniGramCount.Add(pair.Key, pair.Value);
-                else if (tmp.Length == 2)
-                    BiGramCount.Add(pair.Key, pair.Value);
-                else if (tmp.Length == 3)
-                    TriGramCount.Add(pair.Key, pair.Value);
-            }
-        }
-        /// <summary>
-        /// tạo từng bộ xác suất
-        /// </summary>
-        private void generateProbabilitySet()
-        {
-            foreach (KeyValuePair<string, int> pair in this.DictionaryForNgram)
-            {
-                string[] tmp = pair.Key.Split(' ');
-                if (tmp.Length == 1)
-                    UniGramCount.Add(pair.Key, calProbability(pair.Key));
-                else if (tmp.Length == 2)
-                    BiGramCount.Add(pair.Key, calProbability(pair.Key));
-                else if (tmp.Length == 3)
-                    TriGramCount.Add(pair.Key, calProbability(pair.Key));
-            }
-
-            //for (int i = 0; i < tmp.Length; i++)
-            //    if (!tmp[i].Equals(""))
-            //        UniGramPro.Add(tmp[i], calProbability(tmp[i]));
-
-            //for (int i = 0; i < tmp.Length - 1; i++)
-            //    if (!tmp[i].Equals("") && !tmp[i + 1].Equals(""))
-            //        BiGramPro.Add(tmp[i] + " " + tmp[i + 1],
-            //                calProbability(tmp[i], tmp[i + 1]));
-
-            //for (int i = 0; i < tmp.Length - 2; i++)
-            //    if (!tmp[i].Equals("") && !tmp[i + 1].Equals("")
-            //            && !tmp[i + 2].Equals(""))
-            //        TriGramPro.Add(tmp[i] + " " + tmp[i + 1] + " " + tmp[i + 2],
-            //                calProbability(tmp[i], tmp[i + 1], tmp[i + 2]));
-
         }
         /// <summary>
         /// Thêm 1 từ vào từ điển.
@@ -633,7 +454,7 @@ namespace Spell.Algorithm
                 case Position.Xxx:
                     break;
             }
-            return Dictionary.Add(X);
+            return false;
         }
     }
 }

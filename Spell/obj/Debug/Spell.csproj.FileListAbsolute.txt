@@ -305,16 +305,10 @@ C:\Users\Kiet\OneDrive\Thesis\Thesis\Thesis_VietnameseCheckingSpelling\Spell\obj
 C:\Users\Kiet\OneDrive\Thesis\Thesis\Thesis_VietnameseCheckingSpelling\Spell\obj\Debug\Spell.csproj.GenerateResource.Cache
 C:\Users\Kiet\OneDrive\Thesis\Thesis\Thesis_VietnameseCheckingSpelling\Spell\obj\Debug\Spell.dll
 C:\Users\Kiet\OneDrive\Thesis\Thesis\Thesis_VietnameseCheckingSpelling\Spell\obj\Debug\Spell.pdb
-E:\Google Drive\Document\luan van\source\github\Thesis_VietnameseCheckingSpelling\Spell\bin\Debug\Resources\bi.txt
-E:\Google Drive\Document\luan van\source\github\Thesis_VietnameseCheckingSpelling\Spell\bin\Debug\Resources\compoundWordDict.txt
-E:\Google Drive\Document\luan van\source\github\Thesis_VietnameseCheckingSpelling\Spell\bin\Debug\Resources\myCompoundWordVnDict.txt
-E:\Google Drive\Document\luan van\source\github\Thesis_VietnameseCheckingSpelling\Spell\bin\Debug\Resources\myDict.txt
-E:\Google Drive\Document\luan van\source\github\Thesis_VietnameseCheckingSpelling\Spell\bin\Debug\Resources\mySyllableDict.txt
 E:\Google Drive\Document\luan van\source\github\Thesis_VietnameseCheckingSpelling\Spell\bin\Debug\Resources\newCompoundWordByViet39K.txt
 E:\Google Drive\Document\luan van\source\github\Thesis_VietnameseCheckingSpelling\Spell\bin\Debug\Resources\sortedCompoundWordDict.txt
 E:\Google Drive\Document\luan van\source\github\Thesis_VietnameseCheckingSpelling\Spell\bin\Debug\Resources\sortedNewViet39K.txt
 E:\Google Drive\Document\luan van\source\github\Thesis_VietnameseCheckingSpelling\Spell\bin\Debug\Resources\SyllableDictByViet39K.txt
-E:\Google Drive\Document\luan van\source\github\Thesis_VietnameseCheckingSpelling\Spell\bin\Debug\Resources\uni.txt
 E:\Google Drive\Document\luan van\source\github\Thesis_VietnameseCheckingSpelling\Spell\bin\Debug\Spell.dll
 E:\Google Drive\Document\luan van\source\github\Thesis_VietnameseCheckingSpelling\Spell\bin\Debug\Spell.pdb
 E:\Google Drive\Document\luan van\source\github\Thesis_VietnameseCheckingSpelling\Spell\bin\Debug\Spell.dll.manifest
@@ -341,3 +335,6 @@ E:\Google Drive\Document\luan van\source\github\Thesis_VietnameseCheckingSpellin
 E:\Google Drive\Document\luan van\source\github\Thesis_VietnameseCheckingSpelling\Spell\bin\Debug\Resources\rightWord.txt
 E:\Google Drive\Document\luan van\source\github\Thesis_VietnameseCheckingSpelling\Spell\bin\Debug\Resources\wrongWord.txt
 E:\Google Drive\Document\luan van\source\github\Thesis_VietnameseCheckingSpelling\Spell\bin\Debug\Resources\rightWordCandidate.txt
+E:\Google Drive\Document\luan van\source\github\Thesis_VietnameseCheckingSpelling\Spell\bin\Debug\Resources\biExtended.txt
+E:\Google Drive\Document\luan van\source\github\Thesis_VietnameseCheckingSpelling\Spell\bin\Debug\Resources\triExtended.txt
+E:\Google Drive\Document\luan van\source\github\Thesis_VietnameseCheckingSpelling\Spell\bin\Debug\Resources\uniExtended.txt

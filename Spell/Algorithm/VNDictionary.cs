@@ -42,7 +42,7 @@ namespace Spell.Algorithm
             try
             {
                 //properties vào fileName, chọn copy always
-                string[] dictArr = File.ReadAllLines(@"Resources\SyllableDictByViet39K.txt");
+                string[] dictArr = File.ReadAllLines(@"E:\Google Drive\Document\luan van\source\github\Thesis_VietnameseCheckingSpelling\Spell\Resources\SyllableDictByViet39K.txt");
                 result = dictArr.ToList();
             }
             catch (Exception e)
@@ -59,7 +59,7 @@ namespace Spell.Algorithm
         {
             List<string> result = new List<string>(); try
             {
-                string[] dictArr = File.ReadAllLines(@"Resources\newCompoundWordByViet39K.txt");
+                string[] dictArr = File.ReadAllLines(@"E:\Google Drive\Document\luan van\source\github\Thesis_VietnameseCheckingSpelling\Spell\Resources\newCompoundWordByViet39K.txt");
                 result = dictArr.ToList();
             }
             catch (Exception e)
@@ -80,21 +80,18 @@ namespace Spell.Algorithm
         /// <summary>
         /// Tìm X: trả về từ ghép liền trước token dạng X X+1
         /// </summary>
-        /// <param name="token"></param>
+        /// <param name="next"></param>
         /// <returns></returns>
-        public HashSet<string> findCompoundVNWord_Xx(string token)
+        public HashSet<string> findCompoundVNWord_Xx(string next)
         {
             HashSet<string> hSetResult = new HashSet<string>();
-            if (token.Length > 0)
+            if (next.Length > 0)
+            {
                 //duyệt qua tất cả trường hợp, với value là token
                 foreach (KeyValuePair<string, List<string>> pair in CompoundWordVn.Instance.compoundWordVnDict)
-                    //foreach (string i in pair.Value)
-                    //{
-                        //string[] iArr = i.Trim().Split(' ');
-                        //if (iArr.Length == 1 && iArr[0].Equals(token))
-                        if(pair.Value.Contains(token))
-                            hSetResult.Add(pair.Key);
-                    //}
+                    if (pair.Value.Contains(next))
+                        hSetResult.Add(pair.Key);
+            }
             else
                 hSetResult.Add("");
             return hSetResult;
@@ -102,14 +99,14 @@ namespace Spell.Algorithm
         /// <summary>
         /// trả về từ ghép liền sau token dạng X-1 X
         /// </summary>
-        /// <param name="token"></param>
+        /// <param name="pre"></param>
         /// <returns></returns>
-        public HashSet<string> findCompoundVNWord_xX(string token)
+        public HashSet<string> findCompoundVNWord_xX(string pre)
         {
             HashSet<string> hSetResult = new HashSet<string>();
-            if (token.Length > 0 && CompoundWordVn.Instance.compoundWordVnDict.ContainsKey(token.Trim().ToLower()))
+            if (pre.Length > 0 && CompoundWordVn.Instance.compoundWordVnDict.ContainsKey(pre.Trim().ToLower()))
                 //duyệt qua List<string> là value với key là token
-                foreach (string i in CompoundWordVn.Instance.compoundWordVnDict[token.Trim().ToLower()])
+                foreach (string i in CompoundWordVn.Instance.compoundWordVnDict[pre.Trim().ToLower()])
                 {
                     string[] iArr = i.Trim().Split(' ');
                     //từ ghép có 2 âm tiết dạng: token iArr[0]
@@ -125,16 +122,18 @@ namespace Spell.Algorithm
         /// </summary>
         /// <param name="token"></param>
         /// <returns></returns>
-        public HashSet<string> findCompoundVNWord_xxX(string w_2, string w_1)
+        public HashSet<string> findCompoundVNWord_xxX(string prepre, string pre)
         {
             HashSet<string> hSetResult = new HashSet<string>();
-            if (w_2.Length > 0 && w_1.Length > 0 && CompoundWordVn.Instance.compoundWordVnDict.ContainsKey(w_2.Trim().ToLower()))
+            if (prepre.Length > 0 && pre.Length > 0 && CompoundWordVn.Instance.compoundWordVnDict.ContainsKey(prepre.Trim().ToLower()))
                 //duyệt qua List<string> là value với key là token
-                foreach (string i in CompoundWordVn.Instance.compoundWordVnDict[w_2.Trim().ToLower()])
+                foreach (string i in CompoundWordVn.Instance.compoundWordVnDict[prepre.Trim().ToLower()])
                 {
                     string[] iArr = i.Trim().Split(' ');
                     //từ ghép có 3 âm tiết dạng: w_2 w_1 iArr[1]
-                    if (iArr.Length == 2 && iArr[0].Equals(w_1) && iArr[1].Length > 0)
+                    if (iArr.Length == 2
+                        && iArr[0].Equals(pre)
+                        && iArr[1].Length > 0)
                         hSetResult.Add(iArr[1]);
                 }
             else
@@ -147,16 +146,16 @@ namespace Spell.Algorithm
         /// </summary>
         /// <param name="token"></param>
         /// <returns></returns>
-        public HashSet<string> findCompoundVNWord_xXx(string w_1, string _w_1)
+        public HashSet<string> findCompoundVNWord_xXx(string pre, string next)
         {
             HashSet<string> hSetResult = new HashSet<string>();
-            if (_w_1.Length > 0 && w_1.Length > 0 && CompoundWordVn.Instance.compoundWordVnDict.ContainsKey(w_1.Trim().ToLower()))
+            if (next.Length > 0 && pre.Length > 0 && CompoundWordVn.Instance.compoundWordVnDict.ContainsKey(pre.Trim().ToLower()))
                 //duyệt qua List<string> là value với key là token
-                foreach (string i in CompoundWordVn.Instance.compoundWordVnDict[w_1.Trim().ToLower()])
+                foreach (string i in CompoundWordVn.Instance.compoundWordVnDict[pre.Trim().ToLower()])
                 {
                     string[] iArr = i.Trim().Split(' ');
                     //từ ghép có 3 âm tiết dạng: w_1 iArr[0] _w_1
-                    if (iArr.Length == 2 && iArr[1].Equals(_w_1) && iArr[0].Length > 0)
+                    if (iArr.Length == 2 && iArr[1].Equals(next) && iArr[0].Length > 0)
                         hSetResult.Add(iArr[0]);
                 }
             else
@@ -168,22 +167,19 @@ namespace Spell.Algorithm
         /// </summary>
         /// <param name="token"></param>
         /// <returns></returns>
-        public HashSet<string> findCompoundVNWord_Xxx(string _w_1, string _w_2)
+        public HashSet<string> findCompoundVNWord_Xxx(string next, string nextnext)
         {
             HashSet<string> hSetResult = new HashSet<string>();
-            if (_w_1.Length > 0 && _w_2.Length > 0)
+            if (next.Length > 0 && nextnext.Length > 0)
                 //duyệt qua tất cả trường hợp, với value là token
                 foreach (KeyValuePair<string, List<string>> pair in CompoundWordVn.Instance.compoundWordVnDict)
-                {
                     foreach (string i in pair.Value)
                     {
                         string[] iArr = i.Trim().Split(' ');
-                        if (iArr.Length == 2 && iArr[0].Equals(_w_1) && iArr[1].Equals(_w_2))
+                        //từ ghép có 3 âm tiết dạng: key next nextnexxt
+                        if (iArr.Length == 2 && iArr[0].Equals(next) && iArr[1].Equals(nextnext))
                             hSetResult.Add(pair.Key);
                     }
-                    //if (pair.Value.BinarySearch(token)!= -1)
-                    //    hSetResult.Add(pair.Key);
-                }
             else
                 hSetResult.Add("");
             return hSetResult;

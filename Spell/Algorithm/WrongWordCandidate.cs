@@ -44,7 +44,7 @@ namespace Spell.Algorithm
 
             hSetCandidate.UnionWith(createCandidateByNgram(prepre, pre, token, next, nextnext, isMajuscule));
             hSetCandidate.UnionWith(createCandByCompoundWord(prepre, pre, token, next, nextnext, isMajuscule));
-
+            //giá trị lamda có được do thống kê
             double lamda1 = 0.000003;
             double lamda2 = 0.99999;
             double lamda3 = 0.000007;
@@ -62,6 +62,7 @@ namespace Spell.Algorithm
                 L = calScore_Ngram(prepre, pre, candidate, next, nextnext);
                 S = calScore_Similarity(token, candidate);
                 score = lamda1 * D + lamda2 * L + lamda3 * S;
+                //ngưỡng để chọn candidate có được do thống kê
                 if (S >= 13 || L > 0.000001)
                 {
                     //là từ ghép 3 âm tiết
@@ -213,8 +214,8 @@ namespace Spell.Algorithm
         /// <returns></returns>
         public double calScore_Ngram(string prepre, string pre, string candidate, string next, string nextnext)
         {
-            double calBiGram_PreCand = Ngram.Instance.calBiNgram(pre, candidate);
-            double calBigram_CandNext = Ngram.Instance.calBiNgram(candidate, next);
+            double calBiGram_PreCand = Ngram.Instance.calBigram(pre, candidate);
+            double calBigram_CandNext = Ngram.Instance.calBigram(candidate, next);
             //double calTrigram1 = Ngram.Instance.calTriNgram(prepre, pre, candidate);
             //double calTrigram2 = Ngram.Instance.calTriNgram(pre, candidate, next);
             //double calTrigram3 = Ngram.Instance.calTriNgram( candidate, next, nextnext);
