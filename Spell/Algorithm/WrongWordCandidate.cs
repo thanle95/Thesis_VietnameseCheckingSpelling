@@ -15,6 +15,7 @@ namespace Spell.Algorithm
         }
 
         private static WrongWordCandidate instance = new WrongWordCandidate();
+        private string wrongCandPath = @"Resources\wrongWord.txt";
         public static WrongWordCandidate getInstance
         {
             get
@@ -112,8 +113,7 @@ namespace Spell.Algorithm
                     result.Add(key);
 
             //ghi đè file
-            string path = @"E:\Google Drive\Document\luan van\source\github\Thesis_VietnameseCheckingSpelling\Spell\Resources\wrongWord.txt";
-            using (FileStream aFile = new FileStream((path), FileMode.Append, FileAccess.Write))
+            using (FileStream aFile = new FileStream((wrongCandPath), FileMode.Append, FileAccess.Write))
             using (StreamWriter sw = new StreamWriter(aFile))
             {
                 sw.WriteLine(text_writeFile);

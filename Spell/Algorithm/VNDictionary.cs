@@ -14,7 +14,8 @@ namespace Spell.Algorithm
         public List<string> SyllableDict;
         //từ điển từ ghép
         public List<string> CompoundDict;
-
+        private string syllPath = @"Resources\SyllableDictByViet39K.txt";
+        private string compoundPath = @"Resources\newCompoundWordByViet39K.txt";
         private VNDictionary()
         {
             this.SyllableDict = new List<string>();
@@ -42,7 +43,7 @@ namespace Spell.Algorithm
             try
             {
                 //properties vào fileName, chọn copy always
-                string[] dictArr = File.ReadAllLines(@"E:\Google Drive\Document\luan van\source\github\Thesis_VietnameseCheckingSpelling\Spell\Resources\SyllableDictByViet39K.txt");
+                string[] dictArr = File.ReadAllLines(syllPath);
                 result = dictArr.ToList();
             }
             catch (Exception e)
@@ -57,9 +58,10 @@ namespace Spell.Algorithm
         /// <returns></returns>
         public List<string> readCompoundWordDict()
         {
-            List<string> result = new List<string>(); try
+            List<string> result = new List<string>();
+            try
             {
-                string[] dictArr = File.ReadAllLines(@"E:\Google Drive\Document\luan van\source\github\Thesis_VietnameseCheckingSpelling\Spell\Resources\newCompoundWordByViet39K.txt");
+                string[] dictArr = File.ReadAllLines(compoundPath);
                 result = dictArr.ToList();
             }
             catch (Exception e)

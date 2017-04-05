@@ -43,8 +43,8 @@ namespace Spell.Algorithm
         /// </summary>
         public void runFirst()
         {
-            string uniPath = @"E:\Google Drive\Document\luan van\source\github\Thesis_VietnameseCheckingSpelling\Spell\Resources\uniExtended.txt";
-            string biPath = @"E:\Google Drive\Document\luan van\source\github\Thesis_VietnameseCheckingSpelling\Spell\Resources\biShorter.txt";
+            string uniPath = @"Resources\uniExtended.txt";
+            string biPath = @"Resources\biShorter.txt";
             //string triPath = @"E:\Google Drive\Document\luan van\source\github\Thesis_VietnameseCheckingSpelling\Spell\Resources\triExtended.txt";
             readUni(uniPath);
             readBiAmount(biPath);

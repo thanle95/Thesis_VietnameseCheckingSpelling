@@ -14,11 +14,11 @@ namespace Spell.Algorithm
         {
             readCompoundWordVNFile();
         }
+        private string compoundPath = @"Resources\newCompoundWordByViet39K.txt";
         private void readCompoundWordVNFile()
         {
             compoundWordVnDict = new Dictionary<string, List<string>>();
-            string path = @"E:\Google Drive\Document\luan van\source\github\Thesis_VietnameseCheckingSpelling\Spell\Resources\newCompoundWordByViet39K.txt";
-            string[] compoundDictArr = File.ReadAllLines(path);
+            string[] compoundDictArr = File.ReadAllLines(compoundPath);
             string key = "";
             List<string> value;
             foreach(string i in compoundDictArr)

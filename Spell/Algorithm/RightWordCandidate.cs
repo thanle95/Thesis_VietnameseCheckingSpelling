@@ -13,7 +13,8 @@ namespace Spell.Algorithm
         private RightWordCandidate()
         {
         }
-
+        private string rightScorePath = @"Resources\rightWord.txt";
+        private string rightCandPath = @"Resources\rightWordCandidate.txt";
         private static RightWordCandidate instance = new RightWordCandidate();
         public static RightWordCandidate getInstance
         {
@@ -34,8 +35,7 @@ namespace Spell.Algorithm
         public bool checkRightWord(string prepre, string pre, string token, string next, string nextnext)
         {
             double L = WrongWordCandidate.getInstance.calScore_Ngram(prepre, pre, token, next, nextnext);
-            string path = @"E:\Google Drive\Document\luan van\source\github\Thesis_VietnameseCheckingSpelling\Spell\Resources\rightWord.txt";
-            using (FileStream aFile = new FileStream((path), FileMode.Append, FileAccess.Write))
+            using (FileStream aFile = new FileStream((rightScorePath), FileMode.Append, FileAccess.Write))
             using (StreamWriter sw = new StreamWriter(aFile))
             {
                 sw.WriteLine();
@@ -98,8 +98,7 @@ namespace Spell.Algorithm
             foreach (string key in candidatesWithScore.Keys)
                 result.Add(key);
             //ghi đè file
-            string path = @"E:\Google Drive\Document\luan van\source\github\Thesis_VietnameseCheckingSpelling\Spell\Resources\rightWordCandidate.txt";
-            using (FileStream aFile = new FileStream((path), FileMode.Append, FileAccess.Write))
+            using (FileStream aFile = new FileStream((rightCandPath), FileMode.Append, FileAccess.Write))
             using (StreamWriter sw = new StreamWriter(aFile))
             {
                 sw.WriteLine(text);
