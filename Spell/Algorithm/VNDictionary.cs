@@ -42,7 +42,7 @@ namespace Spell.Algorithm
             try
             {
                 //properties vào fileName, chọn copy always
-                string[] dictArr = File.ReadAllLines(@"C:\Users\Kiet\OneDrive\Thesis\Thesis\Thesis_VietnameseCheckingSpelling\Spell\Resources\SyllableDictByViet39K.txt");
+                string[] dictArr = File.ReadAllLines(@"E:\Google Drive\Document\luan van\source\github\Thesis_VietnameseCheckingSpelling\Spell\Resources\SyllableDictByViet39K.txt");
                 result = dictArr.ToList();
             }
             catch (Exception e)
@@ -59,7 +59,7 @@ namespace Spell.Algorithm
         {
             List<string> result = new List<string>(); try
             {
-                string[] dictArr = File.ReadAllLines(@"C:\Users\Kiet\OneDrive\Thesis\Thesis\Thesis_VietnameseCheckingSpelling\Spell\Resources\newCompoundWordByViet39K.txt");
+                string[] dictArr = File.ReadAllLines(@"E:\Google Drive\Document\luan van\source\github\Thesis_VietnameseCheckingSpelling\Spell\Resources\newCompoundWordByViet39K.txt");
                 result = dictArr.ToList();
             }
             catch (Exception e)

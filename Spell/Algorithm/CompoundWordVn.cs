@@ -17,7 +17,7 @@ namespace Spell.Algorithm
         private void readCompoundWordVNFile()
         {
             compoundWordVnDict = new Dictionary<string, List<string>>();
-            string path = @"C:\Users\Kiet\OneDrive\Thesis\Thesis\Thesis_VietnameseCheckingSpelling\Spell\Resources\newCompoundWordByViet39K.txt";
+            string path = @"E:\Google Drive\Document\luan van\source\github\Thesis_VietnameseCheckingSpelling\Spell\Resources\newCompoundWordByViet39K.txt";
             string[] compoundDictArr = File.ReadAllLines(path);
             string key = "";
             List<string> value;

@@ -112,7 +112,7 @@ namespace Spell.Algorithm
                     result.Add(key);
 
             //ghi đè file
-            string path = @"C:\Users\Kiet\OneDrive\Thesis\Thesis\Thesis_VietnameseCheckingSpelling\Spell\Resources\wrongWord.txt";
+            string path = @"E:\Google Drive\Document\luan van\source\github\Thesis_VietnameseCheckingSpelling\Spell\Resources\wrongWord.txt";
             using (FileStream aFile = new FileStream((path), FileMode.Append, FileAccess.Write))
             using (StreamWriter sw = new StreamWriter(aFile))
             {
@@ -221,15 +221,9 @@ namespace Spell.Algorithm
             //double calTrigram3 = Ngram.Instance.calTrigram(candidate, next, nextnext);
             double lamda1 = 0.5;
             double lamda2 = 0.5;
-<<<<<<< HEAD
             //double lamda3 = 0.1;
             //double lamda4 = 0.1;
             //double lamda5 = 0.1;
-=======
-            double lamda3 = 0.03;
-            double lamda4 = 0.03;
-            double lamda5 = 0.03;
->>>>>>> d720d3447d1c68ba3238e552b54b2ff1164bd665
             double ret = lamda1 * calBiGram_PreCand + lamda2 * calBigram_CandNext;// + lamda3 * calTrigram1 + lamda4 * calTrigram2 + lamda5 * calTrigram3;
             return ret;
         }
