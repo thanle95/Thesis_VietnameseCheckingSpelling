@@ -43,9 +43,15 @@ namespace Spell.Algorithm
         /// </summary>
         public void runFirst()
         {
+<<<<<<< HEAD
             string uniPath = @"E:\Google Drive\Document\luan van\source\github\Thesis_VietnameseCheckingSpelling\Spell\Resources\uniExtended.txt";
             string biPath = @"E:\Google Drive\Document\luan van\source\github\Thesis_VietnameseCheckingSpelling\Spell\Resources\biShorter.txt";
             //string triPath = @"E:\Google Drive\Document\luan van\source\github\Thesis_VietnameseCheckingSpelling\Spell\Resources\triExtended.txt";
+=======
+            string uniPath = @"C:\Users\Kiet\OneDrive\Thesis\Thesis\Thesis_VietnameseCheckingSpelling\Spell\Resources\uniExtended.txt";
+            string biPath = @"C:\Users\Kiet\OneDrive\Thesis\Thesis\Thesis_VietnameseCheckingSpelling\Spell\Resources\biExtended.txt";
+            //string triPath = @"C:\Users\Kiet\OneDrive\Thesis\Thesis\Thesis_VietnameseCheckingSpelling\Spell\Resources\triExtended.txt";
+>>>>>>> d720d3447d1c68ba3238e552b54b2ff1164bd665
             readUni(uniPath);
             readBiAmount(biPath);
             //readTriAmount(triPath);
