@@ -49,6 +49,7 @@ namespace Spell.Algorithm
             readUni(uniPath);
             readBiAmount(biPath);
             readTriAmount(triPath);
+            sumWordInCorpus();
         }
         #region convert between bin and dec
         private string toInt16(int tokenIndex)
@@ -108,7 +109,8 @@ namespace Spell.Algorithm
                 Cw1w2 = _biAmount[bi.ToLower()];
             if (_triAmount.ContainsKey(key.ToLower()))
                 Cw1w2w3 = _triAmount[key.ToLower()];
-            return (double)(Cw1w2w3 + 1) / (Cw1w2 + _sumBi);
+            double ret = (double)(Cw1w2w3 + 1) / (Cw1w2 + _sumBi);
+            return ret;
         }
         #endregion
 

@@ -63,14 +63,13 @@ namespace Spell
         /// <summary>
         /// hiện gợi ý sữa lỗi lên taskpane, tự duyệt ngữ cảnh
         /// </summary>
-        public void showCandidateInTaskPane()
+        public void showCandidateInTaskPane(int startIndex)
         {
-            //hiện lỗi đầu tiên lên task pane
             if (lstErrorRange.Count > 0)
             {
                 Word.Words words = Globals.ThisAddIn.Application.ActiveDocument.Words;
 
-                Word.Range tokenRange = lstErrorRange.First(); //0: temp
+                Word.Range tokenRange = findErrorRangeByStartIndex(startIndex);
                 for (int iWord = 1; iWord <= words.Count; iWord++)
                 {
                     string token = tokenRange.Text.Trim().ToLower();
@@ -102,6 +101,22 @@ namespace Spell
                 } // end for
             }
             //}
+        }
+
+        private Word.Range findErrorRangeByStartIndex(int startIndex)
+        {
+            int count = lstErrorRange.Count;
+            for(int i = 0; i < count; i ++)
+            {
+                if (lstErrorRange[i].Start <= startIndex)
+                {
+                    lstErrorRange.Remove(lstErrorRange[i]);
+                    count--;
+                }
+                else
+                    break;
+            }
+            return lstErrorRange.First();
         }
         /// <summary>
         /// 
@@ -189,7 +204,7 @@ namespace Spell
         /// <summary>
         /// HighLight lỗi hiện tại và hiện gợi ý
         /// </summary>
-        public void showWrongWithSuggest()
+        public int showWrongWithSuggest()
         {
             try
             {
@@ -220,7 +235,7 @@ namespace Spell
                         {
                             lstErrorRange.Add((DocumentHandling.Instance.HighLight_MistakeWrongWord(token, globalWords)));
                             isFault = true;
-                            break;
+                            continue;
                         }
                         else
                         {
@@ -239,7 +254,7 @@ namespace Spell
                                     {
                                         lstErrorRange.Add((DocumentHandling.Instance.HighLight_MistakeRightWord(token, globalWords)));
                                         isFault = true;
-                                        break;
+                                        continue;
                                     }
                                     break;
                                 }
@@ -248,15 +263,16 @@ namespace Spell
 
 
                     }//end for: duyệt từ từng trong cụm
-                    if (isFault)
-                        break;
+                    //if (isFault)
+                    //    break;
                 }//end for: duyệt từ cụm
-                showCandidateInTaskPane();
+                //showCandidateInTaskPane();
             }
             catch (Exception e)
             {
                 MessageBox.Show(e.ToString());
             }
+            return lstErrorRange.Count;
         }
 
         //
@@ -290,13 +306,19 @@ namespace Spell
 
         private void btnStart_Click(object sender, EventArgs e)
         {
-            MessageBox.Show(Globals.ThisAddIn.Application.Selection.Start + ", " + Globals.ThisAddIn.Application.Selection.End);
-            startFindError();
+            int startIndex = Globals.ThisAddIn.Application.Selection.Start;
+            startFixError(startIndex);
         }
-        private void startFindError()
+        public void startFixError(int startIndex)
         {
+            showCandidateInTaskPane(startIndex);
+        }
+        public int startFindError()
+        {
+            MessageBox.Show("dang kiem tra loi");
             lstErrorRange = new List<Word.Range>();
-            showWrongWithSuggest();
+            int count = showWrongWithSuggest();
+            return count;
         }
         private void btnChange_Click(object sender, EventArgs e)
         {
@@ -314,7 +336,7 @@ namespace Spell
             curRangeTextShowInTaskPane.Select();
             lstErrorRange.Remove(lstErrorRange.First());
             if (lstErrorRange.Count > 0)
-                showCandidateInTaskPane();
+                //showCandidateInTaskPane();
 
             //------------------
             startFindError();

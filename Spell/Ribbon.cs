@@ -31,42 +31,47 @@ namespace Spell
         /// <param name="e"></param>
         private void tbtnCheck_Click(object sender, RibbonControlEventArgs e)
         {
-            ThreadStart t = new ThreadStart(UserControl.Instance.showWrongWithoutSuggest);
-            Thread threadWithoutSuggest = new Thread(t);
-            ThreadStart t1 = new ThreadStart(UserControl.Instance.showWrongWithSuggest);
-            Thread threadWithSuggest = new Thread(t1);
+            //ThreadStart t = new ThreadStart(UserControl.Instance.showWrongWithoutSuggest);
+            //Thread threadWithoutSuggest = new Thread(t);
+            //ThreadStart t1 = new ThreadStart(UserControl.Instance.showWrongWithSuggest);
+            //Thread threadWithSuggest = new Thread(t1);
             //nút check được checked
             if (tbtnCheck.Checked)
                 //mode1: hiện gợi ý sửa lỗi
                 if (chkSuggest.Checked)
                 {
-                    myCustomTaskPane.Visible = true;
+                    //MessageBox.Show("da tick");
+                    int count = UserControl.Instance.startFindError();
+                    if (count > 0)
+                        myCustomTaskPane.Visible = true;
+                    else
+                        MessageBox.Show("Khong co loi");
                     //threadWithSuggest.Start();
                 }
                 //mode2: không hiện gợi ý 
                 else {
                     myCustomTaskPane.Visible = false;
-                    threadWithSuggest.Abort();
+                    //threadWithSuggest.Abort();
                     //threadWithoutSuggest.Start();
                 }
             else
             {
-                threadWithSuggest.Abort();
-                threadWithoutSuggest.Abort();
+                //threadWithSuggest.Abort();
+                //threadWithoutSuggest.Abort();
                 DocumentHandling.Instance.DeHighLight_All_Mistake(Globals.ThisAddIn.Application.ActiveDocument.Characters);
             }
         }
         private void chkSuggest_Click(object sender, RibbonControlEventArgs e)
         {
-            if (chkSuggest.Checked)
-            {
-                myCustomTaskPane.Visible = true;
-                //UserControl1.Instance.showCandidates();
-            }
-            else {
-                myCustomTaskPane.Visible = false;
-                DocumentHandling.Instance.DeHighLight_All_Mistake(Globals.ThisAddIn.Application.ActiveDocument.Characters);
-            }
+            //if (chkSuggest.Checked)
+            //{
+            //    myCustomTaskPane.Visible = true;
+            //    //UserControl1.Instance.showCandidates();
+            //}
+            //else {
+            //    myCustomTaskPane.Visible = false;
+            //    DocumentHandling.Instance.DeHighLight_All_Mistake(Globals.ThisAddIn.Application.ActiveDocument.Characters);
+            //}
 
         }
     }

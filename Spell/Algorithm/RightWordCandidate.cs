@@ -42,7 +42,7 @@ namespace Spell.Algorithm
                 sw.WriteLine(token + "-----" + L);
                 sw.WriteLine("**********************************************************************");
             }
-            if (L > 0.000001)
+            if (L > 1E-9)
                 return true;
             return false;
         }
@@ -77,7 +77,7 @@ namespace Spell.Algorithm
                 S = WrongWordCandidate.getInstance.calScore_Similarity(token, candidate);
                 score = lamda1 * L + lamda2 * S;
                 //ngưỡng để chọn candidate có được do thống kê
-                if (S > 13 || L > 0.00001)
+                if (S > 13 || L > 1E-5)
                 {
                     //nếu số lượng phần tử còn nhỏ hơn 5
                     if (candidatesWithScore.Count < 5)
