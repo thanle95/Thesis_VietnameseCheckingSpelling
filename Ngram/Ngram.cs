@@ -42,7 +42,7 @@ namespace Ngram
             UniAmount = new Dictionary<string, int>();
             BiAmount = new Dictionary<string, int>();
             TriAmount = new Dictionary<string, int>();
-            //runFirst();
+            runFirst();
             //generateUnigram();
 
         }
@@ -57,7 +57,7 @@ namespace Ngram
         /// </summary>
         public void runFirst()
         {
-            //readUni(@"E:\Google Drive\Document\luan van\ngram\UniNgram\uniExtended.txt");
+            readUni(@"E:\Google Drive\Document\luan van\ngram\UniNgram\uniExtended.txt");
             //convertFileBigram(@"E:\Google Drive\Document\luan van\ngram\BiNgram\bi.txt");
             //sortUni();
             //generateBigram();
@@ -65,12 +65,12 @@ namespace Ngram
             //readTriAmount(@"E:\Google Drive\Document\luan van\ngram\TriGram\tri4.txt");
             //generateTrigram(@"E:\Google Drive\Document\luan van\ngram\TriGram\tri4.txt");
             //tachFileTrigam();
-            gopFileTrigram();
+            //gopFileTrigram();
 
 
             //changeToNumber();
             //chonLocFileUniGram();
-            //chonLocFileBiGram();
+            chonLocFileBiGram();
             //chonLocFileTriGram();
         }
 
@@ -95,7 +95,7 @@ namespace Ngram
         }
         private void chonLocFileBiGram()
         {
-            string[] biArr = File.ReadAllLines("Resources\\bi2.txt");
+            string[] biArr = File.ReadAllLines(@"E:\Google Drive\Document\luan van\ngram\BiNgram\bi.txt");
             StringBuilder builder = new StringBuilder();
             int n = 0;
             int length = biArr.Length;
@@ -104,16 +104,17 @@ namespace Ngram
 
                 string[] biParts = bi.Split('_');
                 string[] sylls = biParts[0].Split(' ');
-                if (PosUni.ContainsKey(Int16.Parse(sylls[0])) 
-                    && PosUni.ContainsKey(Int16.Parse(sylls[1])) 
-                    && Int32.Parse(biParts[1]) > 15)
+                if (UniPos.ContainsKey(sylls[0]) 
+                    && UniPos.ContainsKey(sylls[1]) 
+                    && Int32.Parse(biParts[1]) > 100)
                 {
                     n++;
                     builder.AppendFormat("{0} {1} {2}{3}", sylls[0], sylls[1], biParts[1], "\n");
+                    if(n%10000==0 || n == length - 1)
                     Console.WriteLine(string.Format("{0}/{1} = {2}%", n, length, Math.Round((double)n * 100 / length, 2)));
                 }
             }
-            File.WriteAllText(@"E:\Google Drive\Document\luan van\ngram\BiNgram\biExtended.txt", builder.ToString());
+            File.WriteAllText(@"E:\Google Drive\Document\luan van\ngram\BiNgram\biShorter.txt", builder.ToString());
         }
         private void chonLocFileTriGram()
         {
@@ -284,9 +285,14 @@ namespace Ngram
                     continue;
                 int pos = Int16.Parse(uni[1]);
                 int amount = Int32.Parse(uni[2]);
-                UniPos.Add(key, pos);
-                PosUni.Add(pos, key);
-                UniAmount.Add(key, amount);
+                if (!UniPos.ContainsKey(key))
+                {
+                    UniPos.Add(key, pos);
+                    PosUni.Add(pos, key);
+                    UniAmount.Add(key, amount);
+                }
+                else
+                    UniAmount[key] += amount;
                 builer.AppendFormat("{0} {1} {2}{3}", key, pos, amount, "\n");
             }
             File.WriteAllText(@"E:\Google Drive\Document\luan van\ngram\UniNgram\newuni.txt", builer.ToString());

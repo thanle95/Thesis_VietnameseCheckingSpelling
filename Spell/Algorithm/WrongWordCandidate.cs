@@ -172,22 +172,22 @@ namespace Spell.Algorithm
             //
             //bigram
             //
-            foreach (string key in Ngram.Instance._triAmount.Keys)
-            {
-                string[] word = key.Split(' ');
-                if (word[0].Equals(prepre) && word[1].Equals(pre) && calScore_Similarity(token, word[2]) > 10)
-                {
-                    lstCandidate.Add(word[2]);
-                }
-                if (word[1].Equals(next) && word[2].Equals(nextnext) && calScore_Similarity(token, word[0]) > 10)
-                {
-                    lstCandidate.Add(word[0]);
-                }
-                if (word[0].Equals(pre) && word[2].Equals(next) && calScore_Similarity(token, word[1]) > 10)
-                {
-                    lstCandidate.Add(word[1]);
-                }
-            }
+            //foreach (string key in Ngram.Instance._triAmount.Keys)
+            //{
+            //    string[] word = key.Split(' ');
+            //    if (word[0].Equals(prepre) && word[1].Equals(pre) && calScore_Similarity(token, word[2]) > 10)
+            //    {
+            //        lstCandidate.Add(word[2]);
+            //    }
+            //    if (word[1].Equals(next) && word[2].Equals(nextnext) && calScore_Similarity(token, word[0]) > 10)
+            //    {
+            //        lstCandidate.Add(word[0]);
+            //    }
+            //    if (word[0].Equals(pre) && word[2].Equals(next) && calScore_Similarity(token, word[1]) > 10)
+            //    {
+            //        lstCandidate.Add(word[1]);
+            //    }
+            //}
             return lstCandidate;
         }
         /// <summary>
@@ -216,15 +216,15 @@ namespace Spell.Algorithm
         {
             double calBiGram_PreCand = Ngram.Instance.calBigram(pre, candidate);
             double calBigram_CandNext = Ngram.Instance.calBigram(candidate, next);
-            double calTrigram1 = Ngram.Instance.calTrigram(prepre, pre, candidate);
-            double calTrigram2 = Ngram.Instance.calTrigram(pre, candidate, next);
-            double calTrigram3 = Ngram.Instance.calTrigram(candidate, next, nextnext);
-            double lamda1 = 0.35;
-            double lamda2 = 0.35;
-            double lamda3 = 0.1;
-            double lamda4 = 0.1;
-            double lamda5 = 0.1;
-            double ret = lamda1 * calBiGram_PreCand + lamda2 * calBigram_CandNext + lamda3 * calTrigram1 + lamda4 * calTrigram2 + lamda5 * calTrigram3;
+            //double calTrigram1 = Ngram.Instance.calTrigram(prepre, pre, candidate);
+            //double calTrigram2 = Ngram.Instance.calTrigram(pre, candidate, next);
+            //double calTrigram3 = Ngram.Instance.calTrigram(candidate, next, nextnext);
+            double lamda1 = 0.5;
+            double lamda2 = 0.5;
+            //double lamda3 = 0.1;
+            //double lamda4 = 0.1;
+            //double lamda5 = 0.1;
+            double ret = lamda1 * calBiGram_PreCand + lamda2 * calBigram_CandNext;// + lamda3 * calTrigram1 + lamda4 * calTrigram2 + lamda5 * calTrigram3;
             return ret;
         }
         /// <summary>

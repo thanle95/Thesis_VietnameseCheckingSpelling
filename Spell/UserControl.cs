@@ -105,18 +105,21 @@ namespace Spell
 
         private Word.Range findErrorRangeByStartIndex(int startIndex)
         {
-            int count = lstErrorRange.Count;
+            List<Word.Range> temp = new List<Word.Range>();
+            temp.AddRange(lstErrorRange);
+            int count = temp.Count;
             for(int i = 0; i < count; i ++)
             {
-                if (lstErrorRange[i].Start <= startIndex)
+                if (temp[i].Start <= startIndex)
                 {
-                    lstErrorRange.Remove(lstErrorRange[i]);
+                    temp.Remove(temp[i]);
                     count--;
+                    i--;
                 }
                 else
                     break;
             }
-            return lstErrorRange.First();
+            return temp.First();
         }
         /// <summary>
         /// 
@@ -326,20 +329,32 @@ namespace Spell
         }
         private void change()
         {
-            curRangeTextShowInTaskPane = lstErrorRange.First();
+            //lstErrorRange.Remove(lstErrorRange.Where(x => x.Text.Equals(lblWrong.Text.ToLower())).Single());
+            int startIndex = 0;
+            int endIndex = 0;
+            foreach(Word.Range range in lstErrorRange)
+                if(range.Text.Equals(lblWrong.Text.ToLower()))
+                {
+                    startIndex = range.Start;
+                    curRangeTextShowInTaskPane = range;
+                    lstErrorRange.Remove(range);
+                    break;
+                }
+            
             curRangeTextShowInTaskPane.Text = lstbCandidate.SelectedItem.ToString();
+            endIndex = startIndex + curRangeTextShowInTaskPane.Text.Length;
             lblWrong.Text = "\"Wrong Text\"";
             lblFix.Text = "\"Fix Text\"";
             lstbCandidate.Items.Clear();
-            DocumentHandling.Instance.DeHighLight_All_Mistake(Globals.ThisAddIn.Application.ActiveDocument.Characters);
+            DocumentHandling.Instance.DeHighLight_Mistake(startIndex, endIndex);
             //Globals.ThisAddIn.Application.Selection.GoTo(Word.WdGoToItem.wdGoToLine, Word.WdGoToDirection.wdGoToAbsolute, 3);
             curRangeTextShowInTaskPane.Select();
-            lstErrorRange.Remove(lstErrorRange.First());
-            if (lstErrorRange.Count > 0)
+            //lstErrorRange.Remove(lstErrorRange.First());
+            //if (lstErrorRange.Count > 0)
                 //showCandidateInTaskPane();
 
             //------------------
-            startFindError();
+            //startFindError();
         }
         private void btnChange_KeyDown(object sender, KeyEventArgs e)
         {

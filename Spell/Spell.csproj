@@ -218,9 +218,7 @@
     <None Include="Resources\check.PNG" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Resources\biExtended.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    <Content Include="Resources\biShorter.txt" />
     <Content Include="Resources\newCompoundWordByViet39K.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

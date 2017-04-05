@@ -44,11 +44,11 @@ namespace Spell.Algorithm
         public void runFirst()
         {
             string uniPath = @"E:\Google Drive\Document\luan van\source\github\Thesis_VietnameseCheckingSpelling\Spell\Resources\uniExtended.txt";
-            string biPath = @"E:\Google Drive\Document\luan van\source\github\Thesis_VietnameseCheckingSpelling\Spell\Resources\biExtended.txt";
-            string triPath = @"E:\Google Drive\Document\luan van\source\github\Thesis_VietnameseCheckingSpelling\Spell\Resources\triExtended.txt";
+            string biPath = @"E:\Google Drive\Document\luan van\source\github\Thesis_VietnameseCheckingSpelling\Spell\Resources\biShorter.txt";
+            //string triPath = @"E:\Google Drive\Document\luan van\source\github\Thesis_VietnameseCheckingSpelling\Spell\Resources\triExtended.txt";
             readUni(uniPath);
             readBiAmount(biPath);
-            readTriAmount(triPath);
+            //readTriAmount(triPath);
             sumWordInCorpus();
         }
         #region convert between bin and dec
@@ -299,8 +299,8 @@ namespace Spell.Algorithm
             {
                 string[] bi = line.Split(' ');
                 
-                string firstSyll = _posUni[Int16.Parse( bi[0])];
-                string secondSyll = _posUni[Int16.Parse(bi[1])];
+                string firstSyll = bi[0];
+                string secondSyll = bi[1];
                 _biAmount.Add(firstSyll + " " + secondSyll, Int32.Parse(bi[2]));
             }
         }

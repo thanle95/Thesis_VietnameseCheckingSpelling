@@ -58,7 +58,12 @@ namespace Spell
             range.HighlightColorIndex = Word.WdColorIndex.wdNoHighlight;
             range.Font.Color = Word.WdColor.wdColorAutomatic;
         }
-
+        public void DeHighLight_Mistake(int startIndex, int endIndex)
+        {
+            Word.Range range = Globals.ThisAddIn.Application.ActiveDocument.Range(startIndex, endIndex);
+            range.HighlightColorIndex = Word.WdColorIndex.wdNoHighlight;
+            range.Font.Color = Word.WdColor.wdColorAutomatic;
+        }
 
 
         public string getActiveDocument(Word.Words words, int start, int end)
