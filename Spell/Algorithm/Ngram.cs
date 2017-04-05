@@ -43,12 +43,12 @@ namespace Spell.Algorithm
         /// </summary>
         public void runFirst()
         {
-            string uniPath = @"E:\Google Drive\Document\luan van\source\github\Thesis_VietnameseCheckingSpelling\Spell\Resources\uniExtended.txt";
-            string biPath = @"E:\Google Drive\Document\luan van\source\github\Thesis_VietnameseCheckingSpelling\Spell\Resources\biExtended.txt";
-            string triPath = @"E:\Google Drive\Document\luan van\source\github\Thesis_VietnameseCheckingSpelling\Spell\Resources\triExtended.txt";
+            string uniPath = @"C:\Users\Kiet\OneDrive\Thesis\Thesis\Thesis_VietnameseCheckingSpelling\Spell\Resources\uniExtended.txt";
+            string biPath = @"C:\Users\Kiet\OneDrive\Thesis\Thesis\Thesis_VietnameseCheckingSpelling\Spell\Resources\biExtended.txt";
+            //string triPath = @"C:\Users\Kiet\OneDrive\Thesis\Thesis\Thesis_VietnameseCheckingSpelling\Spell\Resources\triExtended.txt";
             readUni(uniPath);
             readBiAmount(biPath);
-            readTriAmount(triPath);
+            //readTriAmount(triPath);
             sumWordInCorpus();
         }
         #region convert between bin and dec

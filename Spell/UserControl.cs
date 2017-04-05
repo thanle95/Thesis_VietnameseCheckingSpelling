@@ -112,6 +112,7 @@ namespace Spell
                 {
                     lstErrorRange.Remove(lstErrorRange[i]);
                     count--;
+                    i--;
                 }
                 else
                     break;

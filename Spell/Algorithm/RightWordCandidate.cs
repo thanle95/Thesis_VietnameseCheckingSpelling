@@ -34,7 +34,7 @@ namespace Spell.Algorithm
         public bool checkRightWord(string prepre, string pre, string token, string next, string nextnext)
         {
             double L = WrongWordCandidate.getInstance.calScore_Ngram(prepre, pre, token, next, nextnext);
-            string path = @"E:\Google Drive\Document\luan van\source\github\Thesis_VietnameseCheckingSpelling\Spell\Resources\rightWord.txt";
+            string path = @"C:\Users\Kiet\OneDrive\Thesis\Thesis\Thesis_VietnameseCheckingSpelling\Spell\Resources\rightWord.txt";
             using (FileStream aFile = new FileStream((path), FileMode.Append, FileAccess.Write))
             using (StreamWriter sw = new StreamWriter(aFile))
             {
@@ -42,7 +42,7 @@ namespace Spell.Algorithm
                 sw.WriteLine(token + "-----" + L);
                 sw.WriteLine("**********************************************************************");
             }
-            if (L > 1E-9)
+            if (L > 2.0045E-9)
                 return true;
             return false;
         }
@@ -77,7 +77,7 @@ namespace Spell.Algorithm
                 S = WrongWordCandidate.getInstance.calScore_Similarity(token, candidate);
                 score = lamda1 * L + lamda2 * S;
                 //ngưỡng để chọn candidate có được do thống kê
-                if (S > 13 || L > 1E-5)
+                if (S >= 11 || L > 1E-9)
                 {
                     //nếu số lượng phần tử còn nhỏ hơn 5
                     if (candidatesWithScore.Count < 5)
@@ -98,7 +98,7 @@ namespace Spell.Algorithm
             foreach (string key in candidatesWithScore.Keys)
                 result.Add(key);
             //ghi đè file
-            string path = @"E:\Google Drive\Document\luan van\source\github\Thesis_VietnameseCheckingSpelling\Spell\Resources\rightWordCandidate.txt";
+            string path = @"C:\Users\Kiet\OneDrive\Thesis\Thesis\Thesis_VietnameseCheckingSpelling\Spell\Resources\rightWordCandidate.txt";
             using (FileStream aFile = new FileStream((path), FileMode.Append, FileAccess.Write))
             using (StreamWriter sw = new StreamWriter(aFile))
             {

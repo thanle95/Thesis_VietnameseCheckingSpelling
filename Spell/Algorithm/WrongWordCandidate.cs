@@ -63,7 +63,7 @@ namespace Spell.Algorithm
                 S = calScore_Similarity(token, candidate);
                 score = lamda1 * D + lamda2 * L + lamda3 * S;
                 //ngưỡng để chọn candidate có được do thống kê
-                if (S >= 13|| L > 1E-7)
+                if (S >= 13|| L > 1E-6)
                 {
                     //là từ ghép 3 âm tiết
                     if (D == 10)
@@ -112,7 +112,7 @@ namespace Spell.Algorithm
                     result.Add(key);
 
             //ghi đè file
-            string path = @"E:\Google Drive\Document\luan van\source\github\Thesis_VietnameseCheckingSpelling\Spell\Resources\wrongWord.txt";
+            string path = @"C:\Users\Kiet\OneDrive\Thesis\Thesis\Thesis_VietnameseCheckingSpelling\Spell\Resources\wrongWord.txt";
             using (FileStream aFile = new FileStream((path), FileMode.Append, FileAccess.Write))
             using (StreamWriter sw = new StreamWriter(aFile))
             {
@@ -216,15 +216,15 @@ namespace Spell.Algorithm
         {
             double calBiGram_PreCand = Ngram.Instance.calBigram(pre, candidate);
             double calBigram_CandNext = Ngram.Instance.calBigram(candidate, next);
-            double calTrigram1 = Ngram.Instance.calTrigram(prepre, pre, candidate);
-            double calTrigram2 = Ngram.Instance.calTrigram(pre, candidate, next);
-            double calTrigram3 = Ngram.Instance.calTrigram(candidate, next, nextnext);
-            double lamda1 = 0.35;
-            double lamda2 = 0.35;
-            double lamda3 = 0.1;
-            double lamda4 = 0.1;
-            double lamda5 = 0.1;
-            double ret = lamda1 * calBiGram_PreCand + lamda2 * calBigram_CandNext + lamda3 * calTrigram1 + lamda4 * calTrigram2 + lamda5 * calTrigram3;
+            //double calTrigram1 = Ngram.Instance.calTrigram(prepre, pre, candidate);
+            //double calTrigram2 = Ngram.Instance.calTrigram(pre, candidate, next);
+            //double calTrigram3 = Ngram.Instance.calTrigram(candidate, next, nextnext);
+            double lamda1 = 0.5;
+            double lamda2 = 0.5;
+            double lamda3 = 0.03;
+            double lamda4 = 0.03;
+            double lamda5 = 0.03;
+            double ret = lamda1 * calBiGram_PreCand + lamda2 * calBigram_CandNext;// + lamda3 * calTrigram1 + lamda4 * calTrigram2 + lamda5 * calTrigram3;
             return ret;
         }
         /// <summary>
