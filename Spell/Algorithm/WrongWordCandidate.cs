@@ -10,18 +10,19 @@ namespace Spell.Algorithm
 {
     public class WrongWordCandidate
     {
-        private WrongWordCandidate()
-        {
-        }
-
         private static WrongWordCandidate instance = new WrongWordCandidate();
-        private string wrongCandPath = @"Resources\wrongWord.txt";
+        private string wrongWord = @"\Resources\wrongWord.txt";
+        private string wrongCandPath;
         public static WrongWordCandidate getInstance
         {
             get
             {
                 return instance;
             }
+        }
+        private WrongWordCandidate()
+        {
+            wrongCandPath = Environment.CurrentDirectory + wrongWord;
         }
         /// <summary>
         /// tạo candidate dựa trên từ điển từ ghép và ngữ cảnh
@@ -64,7 +65,7 @@ namespace Spell.Algorithm
                 S = calScore_Similarity(token, candidate);
                 score = lamda1 * D + lamda2 * L + lamda3 * S;
                 //ngưỡng để chọn candidate có được do thống kê
-                if (S >= 13|| L > 1E-6)
+                if (S >= 13 || L > 1E-6)
                 {
                     //là từ ghép 3 âm tiết
                     if (D == 10)

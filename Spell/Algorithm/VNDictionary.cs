@@ -14,10 +14,15 @@ namespace Spell.Algorithm
         public List<string> SyllableDict;
         //từ điển từ ghép
         public List<string> CompoundDict;
-        private string syllPath = @"Resources\SyllableDictByViet39K.txt";
-        private string compoundPath = @"Resources\newCompoundWordByViet39K.txt";
+        private  string compound = @"\Resources\newCompoundWordByViet39K.txt";
+        private  string syll = @"\Resources\SyllableDictByViet39K.txt";
+        private string syllPath;
+        private string compoundPath;
         private VNDictionary()
         {
+            syllPath = Environment.CurrentDirectory + syll;
+            compoundPath = Environment.CurrentDirectory + compound;
+
             this.SyllableDict = new List<string>();
             this.SyllableDict = readSyllableDict();
             this.CompoundDict = new List<string>();

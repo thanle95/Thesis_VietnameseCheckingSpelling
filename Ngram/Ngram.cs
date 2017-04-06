@@ -12,13 +12,10 @@ namespace Ngram
 {
     public class Ngram
     {
-
-
-
         public Dictionary<string, int> UniGramCount; //chứa tất cả xác suất của unigram
         public Dictionary<string, int> BiGramCount; //chứa tất cả xác suất của bigram
         public Dictionary<string, int> TriGramCount; //chứa tất cả xác suất của trigram
-        private int sumUni = 0, sumBi = 0, sumTri = 0;
+        private int sumUni = 0;
 
         public Dictionary<string, int> UniPos { get; set; }
         public Dictionary<int, string> PosUni { get; set; }//Chưa key và position của unigram

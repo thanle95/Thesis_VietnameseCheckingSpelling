@@ -10,12 +10,17 @@ namespace Spell.Algorithm
 {
     public class RightWordCandidate
     {
+        
+        private  string rightScore = @"\Resources\rightWord.txt";
+        private  string rightCand = @"\Resources\rightWordCandidate.txt";
+        private string rightScorePath;
+        private string rightCandPath;
+        private static RightWordCandidate instance = new RightWordCandidate();
         private RightWordCandidate()
         {
+            rightScorePath = Environment.CurrentDirectory + rightScore;
+            rightCand = Environment.CurrentDirectory + rightCand;
         }
-        private string rightScorePath = @"Resources\rightWord.txt";
-        private string rightCandPath = @"Resources\rightWordCandidate.txt";
-        private static RightWordCandidate instance = new RightWordCandidate();
         public static RightWordCandidate getInstance
         {
             get

@@ -20,11 +20,17 @@ namespace Spell.Algorithm
         public Dictionary<string, int> _biAmount { get; set; } //Chứa Key và giá trị số lượng của bigram
         public Dictionary<string, int> _triAmount { get; set; } //Chứa Key và giá trị số lượng của trigram
 
+        private  string uni = @"\Resources\uniExtended.txt";
+        private  string bi = @"\Resources\biShorter.txt";
+        private string uniPath;
+        private string biPath;
         /// <summary>
         /// 
         /// </summary>
         private Ngram()
         {
+            uniPath = Environment.CurrentDirectory + uni;
+            biPath = Environment.CurrentDirectory + bi;
             this._uniPos = new Dictionary<string, int>();
             this._posUni = new Dictionary<int, string>();
             this._uniAmount = new Dictionary<string, int>();
@@ -43,8 +49,8 @@ namespace Spell.Algorithm
         /// </summary>
         public void runFirst()
         {
-            string uniPath = @"Resources\uniExtended.txt";
-            string biPath = @"Resources\biShorter.txt";
+
+
             //string triPath = @"E:\Google Drive\Document\luan van\source\github\Thesis_VietnameseCheckingSpelling\Spell\Resources\triExtended.txt";
             readUni(uniPath);
             readBiAmount(biPath);
@@ -128,7 +134,7 @@ namespace Spell.Algorithm
                 _sumBi += temp.Value;
             }
         }
-     
+
         /// <summary>
         /// tạo từng key cho Dictionary
         /// </summary>
@@ -215,7 +221,7 @@ namespace Spell.Algorithm
             }
         }
 
-     
+
         #endregion
 
         #region BiGram
@@ -298,7 +304,7 @@ namespace Spell.Algorithm
             foreach (string line in biGram)
             {
                 string[] bi = line.Split(' ');
-                
+
                 string firstSyll = bi[0];
                 string secondSyll = bi[1];
                 _biAmount.Add(firstSyll + " " + secondSyll, Int32.Parse(bi[2]));
@@ -382,7 +388,7 @@ namespace Spell.Algorithm
             foreach (string line in triGram)
             {
                 string[] tri = line.Split(' ');
-                string firstSyll = _posUni[Int32.Parse( tri[0])];
+                string firstSyll = _posUni[Int32.Parse(tri[0])];
                 string secondSyll = _posUni[Int32.Parse(tri[1])];
                 string lastSyll = _posUni[Int32.Parse(tri[2])];
                 _triAmount.Add(firstSyll + " " + secondSyll + " " + lastSyll, Int32.Parse(tri[3]));
