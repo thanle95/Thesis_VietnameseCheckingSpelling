@@ -219,8 +219,6 @@ namespace Spell
                 Word.Sentences sentences = Globals.ThisAddIn.Application.ActiveDocument.Sentences;
                 //với mỗi câu, tách thành từng cụm có liên quan mật thiết với nhau, như "", (),...
                 List<string> mySentences = DocumentHandling.Instance.getPhrase(sentences);
-                //cờ báo hiệu phát hiện lỗi                
-                bool isFault = false;
                 //Xử lý từng cụm từ, vì mỗi cụm từ có liên quan mật thiết với nhau
                 foreach (string mySentence in mySentences)
                 {
@@ -237,7 +235,6 @@ namespace Spell
                         if (!VNDictionary.getInstance.isSyllableVN(token))
                         {
                             lstErrorRange.Add((DocumentHandling.Instance.HighLight_MistakeWrongWord(token, globalWords)));
-                            isFault = true;
                             continue;
                         }
                         else
@@ -256,7 +253,6 @@ namespace Spell
                                     if (!RightWordCandidate.getInstance.checkRightWord(prepre, pre, token, next, nextnext))
                                     {
                                         lstErrorRange.Add((DocumentHandling.Instance.HighLight_MistakeRightWord(token, globalWords)));
-                                        isFault = true;
                                         continue;
                                     }
                                     break;

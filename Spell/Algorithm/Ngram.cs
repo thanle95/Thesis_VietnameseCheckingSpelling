@@ -244,7 +244,6 @@ namespace Spell.Algorithm
             Stopwatch stopWatch = new Stopwatch();
             string[] getFile = Directory.GetFiles(folderPath, "*.txt", SearchOption.AllDirectories);
             Dictionary<string, int> biAmount = new Dictionary<string, int>();
-            int pos = 1;
             int amount = 1;
             foreach (string file in getFile)
             {
@@ -325,7 +324,6 @@ namespace Spell.Algorithm
             Stopwatch stopWatch = new Stopwatch();
             string[] getFile = Directory.GetFiles(folderPath, "*.txt", SearchOption.AllDirectories);
             Dictionary<string, int> triAmount = new Dictionary<string, int>();
-            int pos = 1;
             int amount = 1;
             foreach (string file in getFile)
             {

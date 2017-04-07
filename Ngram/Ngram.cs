@@ -341,7 +341,6 @@ namespace Ngram
             Stopwatch stopWatch = new Stopwatch();
             string[] getFile = Directory.GetFiles(folderPath, "*.txt", SearchOption.AllDirectories);
             Dictionary<string, int> biAmount = new Dictionary<string, int>();
-            int pos = 1;
             int amount = 1;
             foreach (string file in getFile)
             {
@@ -453,13 +452,11 @@ namespace Ngram
         public void generateTrigram(string sourcePath, string desPath)
         {
             //Dictionary<string, int> biGram = new Dictionary<string, int>();
-            string folderPath = @"E:\Google Drive\Document\luan van\ngram\input\";
             int count = 1;// da chay toi 5
             Stopwatch stopWatch = new Stopwatch();
             string[] getFile = Directory.GetFiles(sourcePath, "*.txt", SearchOption.AllDirectories);
             //Dictionary<string, int> TriAmount = new Dictionary<string, int>();
             Console.WriteLine("triAmount count[before]: " + this.TriAmount.Count);
-            int pos = 1;
             int amount = 1;
             foreach (string file in getFile)
             {

@@ -14,8 +14,9 @@ namespace Spell.Algorithm
         public List<string> SyllableDict;
         //từ điển từ ghép
         public List<string> CompoundDict;
-        private  string compound = @"\Resources\newCompoundWordByViet39K.txt";
-        private  string syll = @"\Resources\SyllableDictByViet39K.txt";
+        //dùng từ điển chưa có key
+        private string compound = @"\Resources\sortedNewViet39K.txt";
+        private string syll = @"\Resources\SyllableDictByViet39K.txt";
         private string syllPath;
         private string compoundPath;
         private VNDictionary()
@@ -53,7 +54,7 @@ namespace Spell.Algorithm
             }
             catch (Exception e)
             {
-                MessageBox.Show(e.Message);
+                MessageBox.Show(e.ToString());
             }
             return result;
         }
@@ -71,7 +72,7 @@ namespace Spell.Algorithm
             }
             catch (Exception e)
             {
-                MessageBox.Show(e.Message);
+                MessageBox.Show(e.ToString());
             }
             return result;
         }

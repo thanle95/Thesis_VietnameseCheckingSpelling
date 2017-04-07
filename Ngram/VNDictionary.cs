@@ -46,7 +46,7 @@ namespace Ngram
                     result.Add(i);
                 }
             }
-            catch (Exception e)
+            catch
             {
             }
             return result;

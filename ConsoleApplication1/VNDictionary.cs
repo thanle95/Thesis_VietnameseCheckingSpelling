@@ -46,7 +46,7 @@ namespace ConsoleApplication1
                     result.Add(i);
                 }
             }
-            catch (Exception e)
+            catch
             {
             }
             return result;
@@ -65,7 +65,7 @@ namespace ConsoleApplication1
                     result.Add(i.ToLower());
                 }
             }
-            catch (Exception e)
+            catch
             {
             }
             return result;

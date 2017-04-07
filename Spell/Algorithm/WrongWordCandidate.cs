@@ -13,6 +13,20 @@ namespace Spell.Algorithm
         private static WrongWordCandidate instance = new WrongWordCandidate();
         private string wrongWord = @"\Resources\wrongWord.txt";
         private string wrongCandPath;
+        public double LIM_SIMILARITY
+        {
+            get
+            {
+                return 3.5;
+            }
+        }
+        public double LIM_LANGUAGEMODEL
+        {
+            get
+            {
+                return 1E-6;
+            }
+        }
         public static WrongWordCandidate getInstance
         {
             get
@@ -60,48 +74,52 @@ namespace Spell.Algorithm
             string text_writeFile = "";
             foreach (string candidate in hSetCandidate)
             {
-                D = calScore_CompoundWord(prepre, pre, candidate, next, nextnext);
-                L = calScore_Ngram(prepre, pre, candidate, next, nextnext);
                 S = calScore_Similarity(token, candidate);
-                score = lamda1 * D + lamda2 * L + lamda3 * S;
-                //ngưỡng để chọn candidate có được do thống kê
-                if (S >= 13 || L > 1E-6)
+                if (S > LIM_SIMILARITY)
                 {
-                    //là từ ghép 3 âm tiết
-                    if (D == 10)
+                    D = calScore_CompoundWord(prepre, pre, candidate, next, nextnext);
+                    L = calScore_Ngram(prepre, pre, candidate, next, nextnext);
+
+                    score = lamda1 * D + lamda2 * L + lamda3 * S;
+                    //ngưỡng để chọn candidate có được do thống kê
+                    if (S >= LIM_SIMILARITY || L > LIM_LANGUAGEMODEL)
                     {
-                        //nếu số lượng phần tử còn nhỏ hơn 5
-                        if (prioritizedCandidatesWithScore.Count < 5)
+                        //là từ ghép 3 âm tiết
+                        if (D == 10)
                         {
-                            prioritizedCandidatesWithScore.Add(candidate, score);
-                            prioritizedCandidatesWithScore = sortDict(prioritizedCandidatesWithScore);
+                            //nếu số lượng phần tử còn nhỏ hơn 5
+                            if (prioritizedCandidatesWithScore.Count < 5)
+                            {
+                                prioritizedCandidatesWithScore.Add(candidate, score);
+                                prioritizedCandidatesWithScore = sortDict(prioritizedCandidatesWithScore);
+                            }
+                            //nếu phần tử cuối cùng có số điểm thấp hơn candidate hiện tại
+                            else if (prioritizedCandidatesWithScore.Last().Value < score)
+                            {
+                                prioritizedCandidatesWithScore.Remove(prioritizedCandidatesWithScore.Last().Key);
+                                prioritizedCandidatesWithScore.Add(candidate, score);
+                                prioritizedCandidatesWithScore = sortDict(prioritizedCandidatesWithScore);
+                            }
                         }
-                        //nếu phần tử cuối cùng có số điểm thấp hơn candidate hiện tại
-                        else if (prioritizedCandidatesWithScore.Last().Value < score)
+                        //không phải từ ghép 3 âm tiết
+                        else
                         {
-                            prioritizedCandidatesWithScore.Remove(prioritizedCandidatesWithScore.Last().Key);
-                            prioritizedCandidatesWithScore.Add(candidate, score);
-                            prioritizedCandidatesWithScore = sortDict(prioritizedCandidatesWithScore);
+                            //nếu số lượng phần tử còn nhỏ hơn 5
+                            if (candidatesWithScore.Count < 5)
+                            {
+                                candidatesWithScore.Add(candidate, score);
+                                candidatesWithScore = sortDict(candidatesWithScore);
+                            }
+                            //nếu phần tử cuối cùng có số điểm thấp hơn candidate hiện tại
+                            else if (candidatesWithScore.Last().Value < score)
+                            {
+                                candidatesWithScore.Remove(candidatesWithScore.Last().Key);
+                                candidatesWithScore.Add(candidate, score);
+                                candidatesWithScore = sortDict(candidatesWithScore);
+                            }
                         }
+                        text_writeFile += String.Format("{0}: [{1};{2};{3}] = {4}", candidate, D, L, S, score) + "\n";
                     }
-                    //không phải từ ghép 3 âm tiết
-                    else
-                    {
-                        //nếu số lượng phần tử còn nhỏ hơn 5
-                        if (candidatesWithScore.Count < 5)
-                        {
-                            candidatesWithScore.Add(candidate, score);
-                            candidatesWithScore = sortDict(candidatesWithScore);
-                        }
-                        //nếu phần tử cuối cùng có số điểm thấp hơn candidate hiện tại
-                        else if (candidatesWithScore.Last().Value < score)
-                        {
-                            candidatesWithScore.Remove(candidatesWithScore.Last().Key);
-                            candidatesWithScore.Add(candidate, score);
-                            candidatesWithScore = sortDict(candidatesWithScore);
-                        }
-                    }
-                    text_writeFile += String.Format("{0}: [{1};{2};{3}] = {4}", candidate, D, L, S, score) + "\n";
                 }
             }
             //nếu có từ ghép 3 âm tiết
@@ -165,9 +183,9 @@ namespace Spell.Algorithm
             foreach (string key in bi)
             {
                 string[] word = key.Split(' ');
-                if (word[0].Equals(pre) && calScore_Similarity(token, word[1]) > 10)
+                if (word[0].Equals(pre) && calScore_Similarity(token, word[1]) > LIM_SIMILARITY)
                     lstCandidate.Add(word[1]);
-                else if (word[1].Equals(next) && calScore_Similarity(token, word[0]) > 10)
+                else if (word[1].Equals(next) && calScore_Similarity(token, word[0]) > LIM_SIMILARITY)
                     lstCandidate.Add(word[0]);
             }
             //
@@ -240,7 +258,7 @@ namespace Spell.Algorithm
         public int calScore_CompoundWord(string prepre, string pre, string candidate, string next, string nextnext)
         {
             string _3SyllComWord1 = String.Format("{0} {1} {2}", prepre, pre, candidate).Trim().ToLower();
-            string _3SyllComWord2 = String.Format("{0} {1} {2}", prepre, candidate, next).Trim().ToLower();
+            string _3SyllComWord2 = String.Format("{0} {1} {2}", pre, candidate, next).Trim().ToLower();
             string _3SyllComWord3 = String.Format("{0} {1} {2}", candidate, next, nextnext).Trim().ToLower();
             string _2SyllComWord1 = String.Format("{0} {1}", pre, candidate).Trim().ToLower();
             string _2SyllComWord2 = String.Format("{0} {1}", candidate, next).Trim().ToLower();
@@ -304,7 +322,12 @@ namespace Spell.Algorithm
             }
             //dựa trên nhầm lẫn vùng miền
             regionScore += calScore_Similarity_Region(candidate, token);
-            return deltaLength + diffScore - keyboardScore + regionScore;
+            double lamda1 = 0.35;
+            double lamda2 = 0.35;
+            double lamda3 = 0.1;
+            double lamda4 = 0.2;
+            double ret = lamda1 * deltaLength + lamda2 * diffScore - lamda3 * keyboardScore + lamda4 * regionScore;
+            return ret;
         }
         /// <summary>
         /// tính toán độ tương tự giữa token với candidate dựa vào nhầm lẫn vùng miền

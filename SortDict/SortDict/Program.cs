@@ -22,7 +22,7 @@ namespace SortDict
                     result.Add(i.ToLower());
                 }
             }
-            catch (Exception e)
+            catch
             {
                 Console.WriteLine("khong doc duoc file");
             }
@@ -40,7 +40,7 @@ namespace SortDict
                     tempDict[i] = tempDict[i].ToLower();
                 }
             }
-            catch (Exception e)
+            catch
             {
                 Console.WriteLine("khong doc duoc file");
             }
