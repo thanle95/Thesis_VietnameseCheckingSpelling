@@ -39,7 +39,7 @@ namespace Spell.Algorithm
         /// <returns></returns>
         public bool checkRightWord(string prepre, string pre, string token, string next, string nextnext)
         {
-            double L = WrongWordCandidate.getInstance.calScore_Ngram(prepre, pre, token, next, nextnext);
+            double L = Candidate.getInstance.calScore_Ngram(prepre, pre, token, next, nextnext);
             using (FileStream aFile = new FileStream((rightScorePath), FileMode.Append, FileAccess.Write))
             using (StreamWriter sw = new StreamWriter(aFile))
             {
@@ -47,7 +47,7 @@ namespace Spell.Algorithm
                 sw.WriteLine(token + "-----" + L);
                 sw.WriteLine("**********************************************************************");
             }
-            if (L > WrongWordCandidate.getInstance.LIM_LANGUAGEMODEL)
+            if (L > Candidate.getInstance.LIM_LANGUAGEMODEL)
                 return true;
             return false;
         }
@@ -66,8 +66,8 @@ namespace Spell.Algorithm
             HashSet<string> hSetCandidate = new HashSet<string>();
             Dictionary<string, double> candidatesWithScore = new Dictionary<string, double>(), tempCandidatesWithScore = new Dictionary<string, double>();
             HashSet<string> result = new HashSet<string>();
-            hSetCandidate.UnionWith(WrongWordCandidate.getInstance.createCandidateByNgram(prepre, pre, token, next, nextnext, isMajuscule));
-            hSetCandidate.UnionWith(WrongWordCandidate.getInstance.createCandByCompoundWord(prepre, pre, token, next, nextnext, isMajuscule));
+            hSetCandidate.UnionWith(Candidate.getInstance.createCandidateByNgram(prepre, pre, token, next, nextnext, isMajuscule));
+            hSetCandidate.UnionWith(Candidate.getInstance.createCandByCompoundWord(prepre, pre, token, next, nextnext, isMajuscule));
             int D = 0;
             double S = 0;
             double L = 0.0;
@@ -78,27 +78,27 @@ namespace Spell.Algorithm
             double lamda3 = 0.000007;
             foreach (string candidate in hSetCandidate)
             {
-                S = WrongWordCandidate.getInstance.calScore_Similarity(token, candidate);
-                if (S > WrongWordCandidate.getInstance.LIM_SIMILARITY)
+                S = Candidate.getInstance.calScore_Similarity(token, candidate);
+                if (S > Candidate.getInstance.LIM_SIMILARITY)
                 {
-                    L = WrongWordCandidate.getInstance.calScore_Ngram(prepre, pre, candidate, next, nextnext);
+                    L = Candidate.getInstance.calScore_Ngram(prepre, pre, candidate, next, nextnext);
 
-                    D = WrongWordCandidate.getInstance.calScore_CompoundWord(prepre, pre, candidate, next, nextnext);
+                    D = Candidate.getInstance.calScore_CompoundWord(prepre, pre, candidate, next, nextnext);
                     score = lamda1 * D + lamda2 * L + lamda3 * S;
-                    if (S > WrongWordCandidate.getInstance.LIM_SIMILARITY || L > WrongWordCandidate.getInstance.LIM_LANGUAGEMODEL)
+                    if (S > Candidate.getInstance.LIM_SIMILARITY || L > Candidate.getInstance.LIM_LANGUAGEMODEL)
                     {
                         //nếu số lượng phần tử còn nhỏ hơn 5
                         if (candidatesWithScore.Count < 5)
                         {
                             candidatesWithScore.Add(candidate, score);
-                            candidatesWithScore = sortDict(candidatesWithScore);
+                            candidatesWithScore = Candidate.getInstance.sortDict(candidatesWithScore);
                         }
                         //nếu phần tử cuối cùng có điểm thấp hơn candidate hiện tại
                         else if (candidatesWithScore.Last().Value < score)
                         {
                             candidatesWithScore.Remove(candidatesWithScore.Last().Key);
                             candidatesWithScore.Add(candidate, score);
-                            candidatesWithScore = sortDict(candidatesWithScore);
+                            candidatesWithScore = Candidate.getInstance.sortDict(candidatesWithScore);
                         }
                         text += String.Format("{0}: [{1};{2},{3}] = {3}", candidate, L, S, D, score) + "\n";
                     }
@@ -115,18 +115,6 @@ namespace Spell.Algorithm
             }
             return result;
         }
-        /// <summary>
-        /// sắp xếp candidate dựa trên số điểm, candidate có điểm cao nhất sẽ ở vị trí đầu tiên
-        /// </summary>
-        /// <param name="dict"></param>
-        /// <returns></returns>
-        private Dictionary<string, double> sortDict(Dictionary<string, double> dict)
-        {
-            List<KeyValuePair<string, double>> myList = dict.OrderByDescending(pair => pair.Value).ToList();
-            Dictionary<string, double> ret = new Dictionary<string, double>();
-            foreach (KeyValuePair<string, double> pair in myList)
-                ret.Add(pair.Key, pair.Value);
-            return ret;
-        }
+        
     }
 }
