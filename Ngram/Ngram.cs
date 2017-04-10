@@ -50,14 +50,50 @@ namespace Ngram
         /// </summary>
         public void runFirst()
         {
+            readUni(@"C:\Users\Kiet\OneDrive\Thesis\Thesis\Thesis_VietnameseCheckingSpelling\filterdUni.txt");
             //generateUnigram();
-            generateBigram();
+            //filter_uni();
+            filter_bi();
+            //generateBigram();
             //sortUni(uniPath);
             //string triPath = @"E:\Google Drive\Document\luan van\source\github\Thesis_VietnameseCheckingSpelling\Spell\Resources\triExtended.txt";
 
             //readBiAmount(biPath);
             //readTriAmount(triPath);
             //sumWordInCorpus();
+        }
+
+        /// <summary>
+        /// loc file uni gram
+        /// </summary>
+        public void filter_uni()
+        {
+            StringBuilder filterdUni = new StringBuilder();
+            string[] uni_file = File.ReadAllLines(@"C:\Users\Kiet\OneDrive\Thesis\Thesis\Thesis_VietnameseCheckingSpelling\uni.txt");
+            foreach(string line in uni_file)
+            {
+                string[] uni = line.Split('-');
+                if (Int32.Parse(uni[2]) > 250)
+                    filterdUni.AppendFormat("{0} {1} {2}{3}",uni[0], uni[1], uni[2], "\n");
+            }
+            File.WriteAllText(@"C:\Users\Kiet\OneDrive\Thesis\Thesis\Thesis_VietnameseCheckingSpelling\filterdUni.txt", filterdUni.ToString());
+        }
+
+
+        /// <summary>
+        /// loc file bi gram
+        /// </summary>
+        public void filter_bi()
+        {
+            StringBuilder filterdBi = new StringBuilder();
+            string[] bi_file = File.ReadAllLines(@"C:\Users\Kiet\OneDrive\Thesis\Thesis\Thesis_VietnameseCheckingSpelling\bi.txt");
+            foreach (string line in bi_file)
+            {
+                string[] bi = line.Split(' ');
+                if (Int32.Parse(bi[2]) > 50 && _uniAmount.ContainsKey(bi[0]) && _uniAmount.ContainsKey(bi[1]))
+                    filterdBi.AppendFormat("{0} {1} {2}{3}", bi[0], bi[1], bi[2], "\n");
+            }
+            File.WriteAllText(@"C:\Users\Kiet\OneDrive\Thesis\Thesis\Thesis_VietnameseCheckingSpelling\filterdBi.txt", filterdBi.ToString());
         }
 
         private void sortUni(string uniPath)
@@ -217,7 +253,7 @@ namespace Ngram
             string output = "";
             foreach (KeyValuePair<string, int> pair in uniPos)
                 if (uniAmount[pair.Key] > 100)
-                    output += pair.Key + "-" + pair.Value + "-" + uniAmount[pair.Key] + "\n";
+                    output += pair.Key + " " + pair.Value + " " + uniAmount[pair.Key] + "\n";
             File.WriteAllText(@"C:\Users\Kiet\OneDrive\Thesis\Ngram\uni.txt", output);
         }
 
@@ -234,7 +270,7 @@ namespace Ngram
                 try
                 {
                     count ++;
-                    string[] uni = line.Split('-');
+                    string[] uni = line.Split(' ');
                     _uniPos.Add(uni[0], Int32.Parse(uni[1]));
                     _posUni.Add(Int32.Parse(uni[1]), uni[0]);
                     _uniAmount.Add(uni[0], Int32.Parse(uni[2]));
