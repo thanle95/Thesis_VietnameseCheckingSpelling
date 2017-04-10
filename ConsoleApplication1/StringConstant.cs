@@ -154,6 +154,9 @@ namespace ConsoleApplication1
             {"R", "D", "GI" },
             {"CH", "TR", ""}
         };
-
+        
+        public string patternMiddleSymbol = "[-|/|\\|>|<|\\[|\\]|,|\"|(|)|“|”]";
+        public string patternEndSentenceCharacter = "[.!?;:…]";
+        public string patternGetSentenceCharacter = "[-|/|\\|\\[|\\]|,|\"|(|)|“|”|.|!|?|;|:|…]";
     }
 }
