@@ -1,1 +1,2 @@
 C:\Users\Kiet\OneDrive\Thesis\Thesis\SortDict\SortDict\bin\Debug\SortDict.exe.config
+C:\Users\Kiet\OneDrive\Thesis\Thesis\Thesis_VietnameseCheckingSpelling\SortDict\SortDict\bin\Debug\SortDict.exe.config
