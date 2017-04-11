@@ -32,6 +32,20 @@ namespace Spell
                 return instance;
             }
         }
+        public static string StartSent
+        {
+            get
+            {
+                return "<s>";
+            }
+        }
+        public static string EndSent
+        {
+            get
+            {
+                return "</s>";
+            }
+        }
         private void lstbCandidate_SelectedIndexChanged(object sender, EventArgs e)
         {
             lblFix.Text = lstbCandidate.SelectedItem.ToString();
@@ -138,6 +152,7 @@ namespace Spell
             string prepre = "", pre = "", next = "", nextnext = "";
             if (iWord == 1)
             {
+                pre = StartSent;
                 if (lengthSentence > 1)
                     next = words[iWord + 1].Text.Trim().ToLower();
                 if (lengthSentence > 2)
@@ -186,6 +201,7 @@ namespace Spell
             }
             else if (iWord == lengthSentence)
             {
+                next = EndSent;
                 if (lengthSentence > 1)
                     pre = words[iWord - 1].Text.Trim().ToLower();
                 if (lengthSentence > 2)
@@ -220,27 +236,28 @@ namespace Spell
                 //với mỗi câu, tách thành từng cụm có liên quan mật thiết với nhau, như "", (),...
                 List<string> mySentences = DocumentHandling.Instance.getPhrase(sentences);
                 //Xử lý từng cụm từ, vì mỗi cụm từ có liên quan mật thiết với nhau
+                int countWord = 0;
                 foreach (string mySentence in mySentences)
                 {
-                    string[] words = mySentence.Trim().Split(' ');
+                    string[] words =mySentence.Trim().Split(' ');
                     //số lượng các từ trong cụm
                     int length = words.Length;
                     //duyệt qua từng từ trong cụm
                     for (int i = 0; i < length; i++)
                     {
                         string token = words[i].Trim().ToLower();
-
+                        countWord++;
                         //Kiểm tra nếu không phải là từ Việt Nam
                         //Thì highLight
                         if (!VNDictionary.getInstance.isSyllableVN(token))
                         {
-                            lstErrorRange.Add((DocumentHandling.Instance.HighLight_MistakeWrongWord(token, globalWords)));
+                            lstErrorRange.Add((DocumentHandling.Instance.HighLight_MistakeWrongWord(token, globalWords, countWord)));
                             continue;
                         }
                         else
                         {
                             //tìm vị trí của token trong globalWords để xác định ngữ cảnh
-                            for (int iWord = 1; iWord <= globalWords.Count; iWord++)
+                            for (int iWord = countWord; iWord <= globalWords.Count; iWord++)
                             {
                                 string word = globalWords[iWord].Text.Trim().ToLower();
                                 //tìm được vị trí của token
@@ -249,17 +266,26 @@ namespace Spell
                                     //xác định ngữ cảnh
                                     string[] gramAroundIWord = getGramArroundIWord(iWord, globalWords.Count, globalWords);
                                     string prepre = gramAroundIWord[0], pre = gramAroundIWord[1], next = gramAroundIWord[2], nextnext = gramAroundIWord[3];
+                                    if (i == 0)
+                                    {
+                                        pre = StartSent;
+                                        prepre = "";
+                                    }
+                                    if (i == length - 1)
+                                    {
+                                        next = EndSent;
+                                        nextnext = "";
+                                    }
                                     //kiểm tra token có khả năng sai hay k
                                     if (!RightWordCandidate.getInstance.checkRightWord(prepre, pre, token, next, nextnext))
                                     {
-                                        lstErrorRange.Add((DocumentHandling.Instance.HighLight_MistakeRightWord(token, globalWords)));
+                                        lstErrorRange.Add((DocumentHandling.Instance.HighLight_MistakeRightWord(token, globalWords, countWord)));
                                         continue;
                                     }
                                     break;
                                 }
                             }
                         }
-
 
                     }//end for: duyệt từ từng trong cụm
                     //if (isFault)

@@ -65,54 +65,92 @@ namespace Spell.Algorithm
         /// <returns></returns>
         public HashSet<string> createCandidate(string prepre, string pre, string token, string next, string nextnext, bool isMajuscule)
         {
-            HashSet<string> hSetCandidate = new HashSet<string>();
-            Dictionary<string, double> candidatesWithScore = new Dictionary<string, double>(), tempCandidatesWithScore = new Dictionary<string, double>();
             HashSet<string> result = new HashSet<string>();
+            //giữ cặp <candidate, điểm> để so sánh
+            Dictionary<string, double> candidatesWithScore = new Dictionary<string, double>(),
+                //giữ cặp <candidate, điểm> với những candidate là từ ghép 3 âm tiết
+                prioritizedCandidatesWithScore = new Dictionary<string, double>();
+            //candidate chưa chọn lọc dựa vào số điểm
+            HashSet<string> hSetCandidate = new HashSet<string>();
+
             hSetCandidate.UnionWith(Candidate.getInstance.createCandidateByNgram(prepre, pre, token, next, nextnext, isMajuscule));
             hSetCandidate.UnionWith(Candidate.getInstance.createCandByCompoundWord(prepre, pre, token, next, nextnext, isMajuscule));
-            double D = 0;
-            double S = 0;
-            double L = 0.0;
+            //giá trị lamda có được do thống kê
+            double lamda1 = 0.3;
+            double lamda2 = 0.4;
+            double lamda3 = 0.3;
             double score = 0;
-            string text = "";
-            double lamda1 = 0.000003;
-            double lamda2 = 0.99999;
-            double lamda3 = 0.000007;
+            //Dictionary
+            double D = 0;
+            //Language model
+            double L = 0.0;
+            //Similarity
+            double S = 0;
+            string text_writeFile = "";
             foreach (string candidate in hSetCandidate)
             {
                 S = Candidate.getInstance.calScore_Similarity(token, candidate);
                 if (S > Candidate.getInstance.LIM_SIMILARITY)
                 {
+                    D = Candidate.getInstance.calScore_CompoundWord(prepre, pre, candidate, next, nextnext);
                     L = Candidate.getInstance.calScore_Ngram(prepre, pre, candidate, next, nextnext);
 
-                    D = Candidate.getInstance.calScore_CompoundWord(prepre, pre, candidate, next, nextnext);
                     score = lamda1 * D + lamda2 * L + lamda3 * S;
-                    if (S > Candidate.getInstance.LIM_SIMILARITY || L > Candidate.getInstance.LIM_LANGUAGEMODEL)
+                    //ngưỡng để chọn candidate có được do thống kê
+                    if (L > Candidate.getInstance.LIM_LANGUAGEMODEL)
                     {
-                        //nếu số lượng phần tử còn nhỏ hơn 5
-                        if (candidatesWithScore.Count < 5)
+                        //là từ ghép 3 âm tiết
+                        if (D == Candidate.getInstance.MAX_SCORE)
                         {
-                            candidatesWithScore.Add(candidate, score);
-                            candidatesWithScore = Candidate.getInstance.sortDict(candidatesWithScore);
+                            //nếu số lượng phần tử còn nhỏ hơn 5
+                            if (prioritizedCandidatesWithScore.Count < 5)
+                            {
+                                prioritizedCandidatesWithScore.Add(candidate, score);
+                                prioritizedCandidatesWithScore = Candidate.getInstance.sortDict(prioritizedCandidatesWithScore);
+                            }
+                            //nếu phần tử cuối cùng có số điểm thấp hơn candidate hiện tại
+                            else if (prioritizedCandidatesWithScore.Last().Value < score)
+                            {
+                                prioritizedCandidatesWithScore.Remove(prioritizedCandidatesWithScore.Last().Key);
+                                prioritizedCandidatesWithScore.Add(candidate, score);
+                                prioritizedCandidatesWithScore = Candidate.getInstance.sortDict(prioritizedCandidatesWithScore);
+                            }
                         }
-                        //nếu phần tử cuối cùng có điểm thấp hơn candidate hiện tại
-                        else if (candidatesWithScore.Last().Value < score)
+                        //không phải từ ghép 3 âm tiết
+                        else
                         {
-                            candidatesWithScore.Remove(candidatesWithScore.Last().Key);
-                            candidatesWithScore.Add(candidate, score);
-                            candidatesWithScore = Candidate.getInstance.sortDict(candidatesWithScore);
+                            //nếu số lượng phần tử còn nhỏ hơn 5
+                            if (candidatesWithScore.Count < 5)
+                            {
+                                candidatesWithScore.Add(candidate, score);
+                                candidatesWithScore = Candidate.getInstance.sortDict(candidatesWithScore);
+                            }
+                            //nếu phần tử cuối cùng có số điểm thấp hơn candidate hiện tại
+                            else if (candidatesWithScore.Last().Value < score)
+                            {
+                                candidatesWithScore.Remove(candidatesWithScore.Last().Key);
+                                candidatesWithScore.Add(candidate, score);
+                                candidatesWithScore = Candidate.getInstance.sortDict(candidatesWithScore);
+                            }
                         }
-                        text += String.Format("{0}: [{1};{2},{3}] = {3}", candidate, L, S, D, score) + "\n";
+                        text_writeFile += String.Format("{0}: [{1};{2};{3}] = {4}", candidate, D, L, S, score) + "\n";
                     }
                 }
             }
-            foreach (string key in candidatesWithScore.Keys)
-                result.Add(key);
+            //nếu có từ ghép 3 âm tiết
+            if (prioritizedCandidatesWithScore.Count > 0)
+                foreach (string key in prioritizedCandidatesWithScore.Keys)
+                    result.Add(key);
+            //không có từ ghép 3 âm tiết
+            else
+                foreach (string key in candidatesWithScore.Keys)
+                    result.Add(key);
+
             //ghi đè file
             using (FileStream aFile = new FileStream((rightCandPath), FileMode.Append, FileAccess.Write))
             using (StreamWriter sw = new StreamWriter(aFile))
             {
-                sw.WriteLine(text);
+                sw.WriteLine(text_writeFile);
                 sw.WriteLine("**********************************************************************");
             }
             return result;

@@ -20,8 +20,8 @@ namespace Spell.Algorithm
         public Dictionary<string, int> _biAmount { get; set; } //Chứa Key và giá trị số lượng của bigram
         public Dictionary<string, int> _triAmount { get; set; } //Chứa Key và giá trị số lượng của trigram
 
-        private  string uni = @"\Resources\uniExtended.txt";
-        private  string bi = @"\Resources\biShorter.txt";
+        private  string uni = @"\Resources\filteredUni.txt";
+        private  string bi = @"\Resources\filteredBi.txt";
         private string uniPath;
         private string biPath;
         /// <summary>
@@ -302,11 +302,17 @@ namespace Spell.Algorithm
             string[] biGram = File.ReadAllLines(path);
             foreach (string line in biGram)
             {
-                string[] bi = line.Split(' ');
+                try {
+                    string[] bi = line.Split(' ');
 
-                string firstSyll = bi[0];
-                string secondSyll = bi[1];
-                _biAmount.Add(firstSyll + " " + secondSyll, Int32.Parse(bi[2]));
+                    string firstSyll = bi[0];
+                    string secondSyll = bi[1];
+                    _biAmount.Add(firstSyll + " " + secondSyll, Int32.Parse(bi[2]));
+                }
+                catch
+                {
+
+                }
             }
         }
         #endregion

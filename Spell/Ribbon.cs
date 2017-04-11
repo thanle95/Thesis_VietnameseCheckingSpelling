@@ -41,10 +41,12 @@ namespace Spell
                 if (chkSuggest.Checked)
                 {
                     //MessageBox.Show("da tick");
+                    myCustomTaskPane.Visible = true;
                     int count = UserControl.Instance.startFindError();
                     if (count > 0)
-                        myCustomTaskPane.Visible = true;
-                    else
+                        MessageBox.Show(String.Format("Có {0} lỗi", count));
+                    //    myCustomTaskPane.Visible = true;
+                    if(count == 0)
                         MessageBox.Show("Khong co loi");
                     //threadWithSuggest.Start();
                 }

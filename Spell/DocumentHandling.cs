@@ -21,11 +21,11 @@ namespace Spell
             get { return instance; }
         }
 
-        public Word.Range HighLight_Mistake(string wrongText, Word.Words wordList, Word.WdColorIndex colorIndex, Word.WdColor color)
+        public Word.Range HighLight_Mistake(string wrongText, Word.Words wordList, Word.WdColorIndex colorIndex, Word.WdColor color, int countWord)
         {
             Word.Range range = null;
             Word.Words words = wordList;
-            for (int i = 1; i <= words.Count; i++)
+            for (int i = countWord; i <= words.Count; i++)
             {
                 if (words[i].Text.ToLower().Trim().Equals(wrongText.Trim().ToLower()))
                 {
@@ -41,13 +41,13 @@ namespace Spell
             }
             return range;
         }
-        public Word.Range HighLight_MistakeWrongWord(string wrongText, Word.Words wordList)
+        public Word.Range HighLight_MistakeWrongWord(string wrongText, Word.Words wordList, int countWord)
         {
-            return HighLight_Mistake(wrongText, wordList, Word.WdColorIndex.wdRed, Word.WdColor.wdColorYellow);
+            return HighLight_Mistake(wrongText, wordList, Word.WdColorIndex.wdRed, Word.WdColor.wdColorYellow, countWord);
         }
-        public Word.Range HighLight_MistakeRightWord(string wrongText, Word.Words wordList)
+        public Word.Range HighLight_MistakeRightWord(string wrongText, Word.Words wordList, int countWord)
         {
-            return HighLight_Mistake(wrongText, wordList, Word.WdColorIndex.wdYellow, Word.WdColor.wdColorAutomatic);
+            return HighLight_Mistake(wrongText, wordList, Word.WdColorIndex.wdYellow, Word.WdColor.wdColorAutomatic,countWord);
         }
 
         public void DeHighLight_All_Mistake(Word.Characters characters)

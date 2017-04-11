@@ -11,7 +11,7 @@ namespace Spell.Algorithm
     public class VNDictionary
     {
         //từ điển âm tiết
-        public List<string> SyllableDict;
+        public Dictionary<string, string> SyllableDict;
         //từ điển từ ghép
         public List<string> CompoundDict;
         //dùng từ điển chưa có key
@@ -24,7 +24,7 @@ namespace Spell.Algorithm
             syllPath = Environment.CurrentDirectory + syll;
             compoundPath = Environment.CurrentDirectory + compound;
 
-            this.SyllableDict = new List<string>();
+            this.SyllableDict = new Dictionary<string, string>();
             this.SyllableDict = readSyllableDict();
             this.CompoundDict = new List<string>();
             this.CompoundDict = readCompoundWordDict();
@@ -43,14 +43,14 @@ namespace Spell.Algorithm
         /// <summary>
         /// Đọc từ điển tiếng âm tiết lên
         /// </summary>
-        public List<string> readSyllableDict()
+        public Dictionary<string, string> readSyllableDict()
         {
-            List<string> result = new List<string>();
+            Dictionary<string, string> result = new Dictionary<string, string>();
             try
             {
                 //properties vào fileName, chọn copy always
                 string[] dictArr = File.ReadAllLines(syllPath);
-                result = dictArr.ToList();
+                result = dictArr.ToDictionary(x => x, x => "");
             }
             catch (Exception e)
             {
@@ -83,7 +83,7 @@ namespace Spell.Algorithm
         /// <returns></returns>
         public bool isSyllableVN(string token)
         {
-            return this.SyllableDict.BinarySearch(token.ToLower()) >= 0; // Neu am tiet nay ko co trong tu dien 
+            return this.SyllableDict.ContainsKey(token.ToLower()); // Neu am tiet nay ko co trong tu dien 
         }
         /// <summary>
         /// Tìm X: trả về từ ghép liền trước token dạng X X+1

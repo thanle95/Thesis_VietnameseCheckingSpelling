@@ -13,7 +13,7 @@ namespace Spell.Algorithm
         {
             get
             {
-                return 0.5;
+                return 0.7;
             }
         }
         public double LIM_LANGUAGEMODEL
@@ -159,7 +159,7 @@ namespace Spell.Algorithm
             candidate = candidate.ToLower();
             double simScore = calStringSim(token, candidate);
             double diffScore = calScore_StringDiff(token, candidate);
-            score = 0.5 * simScore + 0.5 * diffScore;
+            score = /*0.5 * simScore + 0.5 **/ diffScore;
             if (score > MAX_SCORE)
                 return MAX_SCORE;
             if (score < MIN_SCORE)
@@ -240,7 +240,7 @@ namespace Spell.Algorithm
                     diffScore -= 0.1;
                 }
                 else if (x == longerWord.IndexOf(shorterWord[i], i) - i)
-                    diffScore -= 0.05 * x;
+                    diffScore += 0.05;
                 else {
                     //nếu shorterWord[i] ~bàn phím~ longerWord[i]
                     //--------------------------------------lệch n ---> trừ nE-2
@@ -470,11 +470,7 @@ namespace Spell.Algorithm
         public HashSet<string> createCandidateByNgram(string prepre, string pre, string token, string next, string nextnext, bool isMajuscule)
         {
             HashSet<string> lstCandidate = new HashSet<string>();
-            List<string> bi = Ngram.Instance._biAmount.Keys.Where(key => key.Contains(pre) || key.Contains(next)).ToList();
-            List<string> tri = Ngram.Instance._triAmount.Keys.Where(key => (key.Contains(prepre) && key.Contains(pre))
-                                                                    || (key.Contains(next) && key.Contains(nextnext))
-                                                                    || (key.Contains(pre) && key.Contains(next))).ToList();
-
+            List<string> bi = Ngram.Instance._biAmount.Keys.Where(key =>  key.Contains(pre) || key.Contains(next)).ToList();
             foreach (string key in bi)
             {
                 string[] word = key.Split(' ');
@@ -483,25 +479,6 @@ namespace Spell.Algorithm
                 else if (word[1].Equals(next) && calScore_Similarity(token, word[0]) > LIM_SIMILARITY)
                     lstCandidate.Add(word[0]);
             }
-            //
-            //bigram
-            //
-            //foreach (string key in Ngram.Instance._triAmount.Keys)
-            //{
-            //    string[] word = key.Split(' ');
-            //    if (word[0].Equals(prepre) && word[1].Equals(pre) && calScore_Similarity(token, word[2]) > 10)
-            //    {
-            //        lstCandidate.Add(word[2]);
-            //    }
-            //    if (word[1].Equals(next) && word[2].Equals(nextnext) && calScore_Similarity(token, word[0]) > 10)
-            //    {
-            //        lstCandidate.Add(word[0]);
-            //    }
-            //    if (word[0].Equals(pre) && word[2].Equals(next) && calScore_Similarity(token, word[1]) > 10)
-            //    {
-            //        lstCandidate.Add(word[1]);
-            //    }
-            //}
             return lstCandidate;
         }
     }
