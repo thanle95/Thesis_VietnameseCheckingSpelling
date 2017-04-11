@@ -54,7 +54,7 @@ namespace Spell.Algorithm
             double lamda3 = 0.000007;
             double score = 0;
             //Dictionary
-            int D = 0;
+            double D = 0;
             //Language model
             double L = 0.0;
             //Similarity

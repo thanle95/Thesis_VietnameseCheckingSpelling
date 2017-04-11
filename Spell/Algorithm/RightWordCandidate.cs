@@ -52,6 +52,8 @@ namespace Spell.Algorithm
             return false;
         }
         /// <summary>
+        /// +
+        /// n
         /// tạo những candidate dựa trên ngữ cảnh và độ tương tự
         /// </summary>
         /// <param name="prepre"></param>
@@ -68,7 +70,7 @@ namespace Spell.Algorithm
             HashSet<string> result = new HashSet<string>();
             hSetCandidate.UnionWith(Candidate.getInstance.createCandidateByNgram(prepre, pre, token, next, nextnext, isMajuscule));
             hSetCandidate.UnionWith(Candidate.getInstance.createCandByCompoundWord(prepre, pre, token, next, nextnext, isMajuscule));
-            int D = 0;
+            double D = 0;
             double S = 0;
             double L = 0.0;
             double score = 0;

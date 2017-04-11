@@ -15,8 +15,8 @@ namespace Spell.Algorithm
             {
                 return instance;
             }
-           
-        } 
+
+        }
         private StringConstant()
         {
 
@@ -71,20 +71,23 @@ namespace Spell.Algorithm
             'á', 'ắ', 'ấ', 'é', 'ế',
             'ó','ố', 'ớ', 'í',
             'ú','ứ', 'ý', // thanh sắc
-            'à', 'ằ', 'ầ', 'è', 'ề', 
+            'à', 'ằ', 'ầ', 'è', 'ề',
             'ò','ồ', 'ờ','ì',
             'ù','ừ', 'ỳ', // thanh huyền
-            'ả', 'ẳ', 'ẩ', 'ẻ', 'ể', 
+            'ả', 'ẳ', 'ẩ', 'ẻ', 'ể',
             'ỏ','ổ', 'ở','ỉ',
             'ủ','ử', 'ỷ', // thanh hỏi
-            'ã', 'ẵ', 'ẫ', 'ẽ', 'ễ', 
+            'ã', 'ẵ', 'ẫ', 'ẽ', 'ễ',
             'õ','ỗ', 'ỡ','ĩ',
             'ũ','ữ', 'ỹ', // thanh ngã
-            'ạ', 'ặ', 'ậ', 'ẹ', 'ệ', 
+            'ạ', 'ặ', 'ậ', 'ẹ', 'ệ',
             'ọ','ộ', 'ợ','ị',
             'ụ','ự', 'ỵ' // thanh nặng
         };
+        public string source = "àảãáạằẳẵắặầẩẫấậèẻẽéẹềểễếệìỉĩíịòỏõóọồổỗốộờởỡớợùủũúụừửữứựỳỷỹýỵ";
 
+        public string dest = "aaaaaăăăăăâââââeeeeeêêêêêiiiiioooooôôôôôơơơơơuuuuuưưưưưyyyyy";
+        public string VNSign = "frxsj";
         public char[] VNVowelWithSignArr_UpperCase = new char[]
         {
             'Á', 'Ắ', 'Ấ', 'É', 'Ế','Ó','Ố', 'Ớ', 'Í','Ú','Ứ', 'Ý', // thanh sắc
@@ -112,13 +115,17 @@ namespace Spell.Algorithm
             { 'Ạ', 'Ặ', 'Ậ', 'Ẹ', 'Ệ', 'Ọ','Ộ', 'Ợ','Ị','Ụ','Ự', 'Ỵ' } // thanh nặng
         };
 
-        
+
         //nguyên âm mang dấu phụ
         public char[] subVNVowelArr_LowerCase = new char[]
         {
            'ă', 'â', 'ê','ô', 'ơ','ư'
         };
-
+        public string vnCharacter = "ăâêôơưđ";
+        public string[] vnCharacter_Telex = new string[]
+        {
+            "aw", "aa", "ee", "oo", "ow", "uw", "dd"
+        };
         public char[] subVNVowelArr_UpperCase = new char[]
         {
            'Ă', 'Â', 'Ê','Ô', 'Ơ','Ư'
