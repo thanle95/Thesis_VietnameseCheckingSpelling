@@ -28,6 +28,7 @@ namespace ConsoleApplication1
             //WebUtility.HtmlDecode(htmlDocument, myWriter);
             //File.WriteAllText(@"E:\Google Drive\Document\luan van\1.txt", myWriter.ToString());
 
+<<<<<<< HEAD
             //string folderPath = @"C:\Users\Kiet\OneDrive\Thesis\normalizedDocs\";
             //int count = 349 ;// da chay toi 349
             //Stopwatch stopWatch = new Stopwatch();
@@ -86,6 +87,84 @@ namespace ConsoleApplication1
             }
             //Console.WriteLine(extractSignVN("ộng"));
         }
+=======
+            string folderPath = @"C:\Users\Kiet\OneDrive\Thesis\normalizedDocs\";
+            int count = 151;// da chay toi 349
+            Stopwatch stopWatch = new Stopwatch();
+            
+            string[] getFile = Directory.GetFiles(folderPath, "*.txt", SearchOption.AllDirectories);
+            StringBuilder output = new StringBuilder();
+            bool flag = false;
+            foreach (string file in getFile)
+            {
+                stopWatch.Start();
+                List<string> lstPhrase = getPhrase(purifyText(File.ReadAllText(file)));
+                Console.WriteLine(lstPhrase.Count);
+                foreach (string phrase in lstPhrase)
+                {
+                    if (phrase.Trim().Length > 0)
+                    {
+                        string[] wordArr = phrase.Split(' ');
+                        foreach (string word in wordArr)
+                            if (VNDictionary.getInstance.isSyllableVN(word.Trim()))
+                            {
+                                output.Append(word.Trim() + " ");
+                                flag = true;
+                            }
+                        if (flag)
+                        {
+                            output.Append("\n");
+                            flag = false;
+
+                        }
+                    }
+                }
+                File.WriteAllText(string.Format(@"C:\Users\Kiet\OneDrive\Thesis\NewCorpus\{0}.txt", ++count), output.ToString());
+                System.IO.File.Move(file, @"C:\Users\Kiet\OneDrive\Thesis\NewFiltered\" + file.Substring(folderPath.Length, file.Length - folderPath.Length - ".txt".Length) + ".txt");
+                stopWatch.Stop();
+                TimeSpan ts = stopWatch.Elapsed;
+                string elapseTime = String.Format("{0:00}:{1:00}:{2:00}.{3:00}",
+                                    ts.Hours, ts.Minutes, ts.Seconds,
+                                    ts.Milliseconds / 10);
+                Console.WriteLine(count + "------ " + elapseTime);
+                output.Remove(0, output.Length);
+            }
+
+            //foreach (string file in getFile)
+            //{
+            //    //System.IO.File.Move(file, @"C:\Users\Kiet\OneDrive\Thesis\Filtered\" + ++count + ".txt");
+
+            //    //continue;
+
+            //    stopWatch.Start();
+            //    string input = purifyText(File.ReadAllText(file));
+            //    //string inputPurified = purifyText(input);
+            //    //File.WriteAllText(@"E:\Google Drive\Document\luan van\normalizedDocs\0 - 1000(1).txt", purifyText(input));
+            //    string[] inputArr = input.Split('\n');
+            //    //dựa trên từ điển âm tiết
+            //    string output = "";
+            //    foreach (string s in inputArr)
+            //    {
+            //        string[] sArr = s.Split(' ');
+            //        foreach (string iSArr in sArr)
+            //        {
+            //            if (VNDictionary.getInstance.isSyllableVN(iSArr))
+            //                output += iSArr + " ";
+            //        }
+            //        output += "\n";
+            //    }
+            //    File.WriteAllText(string.Format(@"C:\Users\Kiet\OneDrive\Thesis\normalizedDocs\{0}.txt", ++count), output);
+            //    //System.IO.File.Move(file, @"C:\Users\Kiet\OneDrive\Thesis\Filtered\" +file.Substring(folderPath.Length, file.Length -folderPath.Length - ".txt".Length)  + ".txt");
+            //    stopWatch.Stop();
+            //    TimeSpan ts = stopWatch.Elapsed;
+            //    string elapseTime = String.Format("{0:00}:{1:00}:{2:00}.{3:00}",
+            //                        ts.Hours, ts.Minutes, ts.Seconds,
+            //                        ts.Milliseconds / 10);
+            //    Console.WriteLine(count + "------ " + elapseTime);
+            //}
+        }
+
+>>>>>>> 2554cb3a447e4c9cd2cb9714a60371e8e98bac5b
         public static string toInt16(int tokenIndex)
         {
             string s = Convert.ToString(tokenIndex, 2);
@@ -114,11 +193,13 @@ namespace ConsoleApplication1
         {
             string reporterName = @"Ảnh: \w+";
             //string tag = @"<<\w|/\w>>|»"; //(\A<<t(\w|\W)+/t>>\z)|
+            //string clean = @"\s*[a|c|t]\s";
             string tag = @"<<t[^>>]+/t>>|<<\w|/\w>>|»";
             string comment = @"<!--.*?-->";
             string link = @"\b(?:https?://|(www)\.)\S+\b";
             string date = @"(\d{1,2})[\/ ]\s*(\d{1,2})(?:/|, )(\d{2,4})";
             string res = Regex.Replace(text, reporterName + "|" + tag + "|" + comment + "|" + link + "|" + date, "");
+<<<<<<< HEAD
             return res.Trim();
         }
         public static int levenshtein(string a, string b)
@@ -351,6 +432,16 @@ namespace ConsoleApplication1
             if (sign != ' ')
                 ret += sign;
             return ret;
+=======
+            //string res = Regex.Replace(text, reporterName + "|" + tag + "|" + link + "|" + date, ""); "|" + clean +
+            return res.Trim();
+        }
+
+        public static List<string> getPhrase(string text)
+        {
+            string[] phraseArr = new Regex(StringConstant.getInstance.patternGetSentenceCharacter).Split(text);
+            return phraseArr.ToList();
+>>>>>>> 2554cb3a447e4c9cd2cb9714a60371e8e98bac5b
         }
     }
 }

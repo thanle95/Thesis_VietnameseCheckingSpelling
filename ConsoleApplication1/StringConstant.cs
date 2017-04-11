@@ -161,9 +161,16 @@ namespace ConsoleApplication1
             {"R", "D", "GI" },
             {"CH", "TR", ""}
         };
+<<<<<<< HEAD
 
         public string patternMiddleSymbol = "[-|/|\\|>|<|\\[|\\]|,|\"|(|)|“|”]";
         public string patternEndSentenceCharacter = "[.!?;:…]";
 
+=======
+        
+        public string patternMiddleSymbol = "[-|/|\\|>|<|\\[|\\]|,|\"|(|)|“|”]";
+        public string patternEndSentenceCharacter = "[.!?;:…]";
+        public string patternGetSentenceCharacter = "[-|/|\\|\\[|\\]|,|\"|(|)|“|”|.|!|?|;|:|…]";
+>>>>>>> 2554cb3a447e4c9cd2cb9714a60371e8e98bac5b
     }
 }
