@@ -32,20 +32,7 @@ namespace Spell
                 return instance;
             }
         }
-        public static string StartSent
-        {
-            get
-            {
-                return "<s>";
-            }
-        }
-        public static string EndSent
-        {
-            get
-            {
-                return "</s>";
-            }
-        }
+       
         private void lstbCandidate_SelectedIndexChanged(object sender, EventArgs e)
         {
             lblFix.Text = lstbCandidate.SelectedItem.ToString();
@@ -152,7 +139,7 @@ namespace Spell
             string prepre = "", pre = "", next = "", nextnext = "";
             if (iWord == 1)
             {
-                pre = StartSent;
+                pre = Ngram.Instance.START_STRING;
                 if (lengthSentence > 1)
                     next = words[iWord + 1].Text.Trim().ToLower();
                 if (lengthSentence > 2)
@@ -201,7 +188,7 @@ namespace Spell
             }
             else if (iWord == lengthSentence)
             {
-                next = EndSent;
+                next = Ngram.Instance.END_STRING;
                 if (lengthSentence > 1)
                     pre = words[iWord - 1].Text.Trim().ToLower();
                 if (lengthSentence > 2)
@@ -268,12 +255,12 @@ namespace Spell
                                     string prepre = gramAroundIWord[0], pre = gramAroundIWord[1], next = gramAroundIWord[2], nextnext = gramAroundIWord[3];
                                     if (i == 0)
                                     {
-                                        pre = StartSent;
+                                        pre = Ngram.Instance.START_STRING;
                                         prepre = "";
                                     }
                                     if (i == length - 1)
                                     {
-                                        next = EndSent;
+                                        next = Ngram.Instance.END_STRING;
                                         nextnext = "";
                                     }
                                     //kiểm tra token có khả năng sai hay k
@@ -288,8 +275,6 @@ namespace Spell
                         }
 
                     }//end for: duyệt từ từng trong cụm
-                    //if (isFault)
-                    //    break;
                 }//end for: duyệt từ cụm
                 //showCandidateInTaskPane();
             }

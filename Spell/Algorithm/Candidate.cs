@@ -37,20 +37,7 @@ namespace Spell.Algorithm
                 return 0;
             }
         }
-        public string START_STRING
-        {
-            get
-            {
-                return "<s>";
-            }
-        }
-        public string END_STRING
-        {
-            get
-            {
-                return "<s>";
-            }
-        }
+       
         private Candidate()
         {
 
@@ -491,7 +478,7 @@ namespace Spell.Algorithm
             List<string> bi = Ngram.Instance._biAmount.Keys.Where(key => key.Contains(pre) || key.Contains(next)).ToList();
             foreach (string key in bi)
             {
-                if (key.Contains(START_STRING) || key.Contains(END_STRING))
+                if (key.Contains(Ngram.Instance.START_STRING) || key.Contains(Ngram.Instance.END_STRING))
                     continue;
                 string[] word = key.Split(' ');
                 if (word[0].Equals(pre) && calScore_Similarity(token, word[1]) > LIM_SIMILARITY)
