@@ -107,19 +107,30 @@ namespace Spell
         private Word.Range findErrorRangeByStartIndex(int startIndex)
         {
             List<Word.Range> temp = new List<Word.Range>();
-            temp.AddRange(lstErrorRange);
-            int count = temp.Count;
-            for (int i = 0; i < count; i++)
+            //temp.AddRange(lstErrorRange);
+            //int count = temp.Count;
+            //for (int i = 0; i < count; i++)
+            //{
+            //    if (temp[i].Start <= startIndex)
+            //    {
+            //        temp.Remove(temp[i]);
+            //        count--;
+            //        i--;
+            //    }
+            //    else
+            //        break;
+            //}
+
+            foreach (Word.Range range in lstErrorRange)
             {
-                if (temp[i].Start <= startIndex)
+                if (range.Start <= startIndex && startIndex <= range.End)
                 {
-                    temp.Remove(temp[i]);
-                    count--;
-                    i--;
-                }
-                else
+                    temp.Add(range);
                     break;
+                }
             }
+            if (temp.Count == 0)
+                temp.Add(lstErrorRange.First());
             return temp.First();
         }
         /// <summary>
