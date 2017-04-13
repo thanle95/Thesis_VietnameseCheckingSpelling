@@ -20,7 +20,7 @@ namespace Spell.Algorithm
         {
             get
             {
-                return 1E-6;
+                return 1E-1;
             }
         }
         public double MAX_SCORE
@@ -37,6 +37,7 @@ namespace Spell.Algorithm
                 return 0;
             }
         }
+       
         private Candidate()
         {
 
@@ -71,7 +72,7 @@ namespace Spell.Algorithm
             return ret;
         }
 
-        /// <summary>
+        /// <summary>region
         /// Sinh candidate cho token
         /// </summary>
         public HashSet<string> createCandidate(string prepre, string pre, string token, string next, string nextnext)
@@ -114,7 +115,10 @@ namespace Spell.Algorithm
         {
             double calBiGram_PreCand = Ngram.Instance.calBigram(pre, candidate);
             double calBigram_CandNext = Ngram.Instance.calBigram(candidate, next);
-            double ret = calBiGram_PreCand + calBigram_CandNext;
+            double ret = (calBiGram_PreCand + calBigram_CandNext)*1E5;
+            //tang gia tri ngram
+            if (ret > MAX_SCORE)
+                return MAX_SCORE;
             return ret;
         }
         /// <summary>
@@ -140,9 +144,9 @@ namespace Spell.Algorithm
             else if (next.Length > 0 && nextnext.Length > 0 && VNDictionary.getInstance.CompoundDict.Contains(_3SyllComWord3))
                 return MAX_SCORE;
             else if (pre.Length > 0 && VNDictionary.getInstance.CompoundDict.Contains(_2SyllComWord1))
-                return 0.7;
+                return 0.5;
             else if (next.Length > 0 && VNDictionary.getInstance.CompoundDict.Contains(_2SyllComWord2))
-                return 0.7;
+                return 0.5;
             return MIN_SCORE;
         }
         /// <summary>
@@ -241,20 +245,21 @@ namespace Spell.Algorithm
                 }
                 else if (x == longerWord.IndexOf(shorterWord[i], i) - i)
                     diffScore += 0.05;
-                else {
+                else
+                {
                     //nếu shorterWord[i] ~bàn phím~ longerWord[i]
                     //--------------------------------------lệch n ---> trừ nE-2
                     diffScore -= calScore_Similarity_Keyboard(shorterWord[i], longerWord[i]);
                     x = 0;
                 }
             }
-            //diffScore -= calScore_Similarity_Region(shorterWord, longerWord
+            diffScore += calScore_Similarity_Region(shorterWord, longerWord);
             int deltaLength = longerWord.Length - shorterWord.Length;
             if (deltaLength > shorterWord.Length)
                 diffScore -= (deltaLength + shorterWord.Length) * 0.1;
             else
                 diffScore -= deltaLength * 0.1;
-            if (diffScore <MIN_SCORE)
+            if (diffScore < MIN_SCORE)
                 return MIN_SCORE;
             return diffScore;
         }
@@ -391,8 +396,8 @@ namespace Spell.Algorithm
         {
             HashSet<string> candidates = WrongWordCandidate.getInstance.create_regionConfusedCandidate(token, false);
             if (candidates.Contains(candidate)) //token là một trường hợp nhầm lẫn vùng miền của candidate
-                return MIN_SCORE;
-            return MAX_SCORE;
+                return 0.1;
+            return MIN_SCORE;
         }
         /// <summary>
         /// tính độ tương tự giữa token với candidate dựa trên nhầm lẫn bàn phím
@@ -470,9 +475,11 @@ namespace Spell.Algorithm
         public HashSet<string> createCandidateByNgram(string prepre, string pre, string token, string next, string nextnext, bool isMajuscule)
         {
             HashSet<string> lstCandidate = new HashSet<string>();
-            List<string> bi = Ngram.Instance._biAmount.Keys.Where(key =>  key.Contains(pre) || key.Contains(next)).ToList();
+            List<string> bi = Ngram.Instance._biAmount.Keys.Where(key => key.Contains(pre) || key.Contains(next)).ToList();
             foreach (string key in bi)
             {
+                if (key.Contains(Ngram.Instance.START_STRING) || key.Contains(Ngram.Instance.END_STRING))
+                    continue;
                 string[] word = key.Split(' ');
                 if (word[0].Equals(pre) && calScore_Similarity(token, word[1]) > LIM_SIMILARITY)
                     lstCandidate.Add(word[1]);

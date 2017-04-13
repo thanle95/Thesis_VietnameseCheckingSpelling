@@ -109,9 +109,9 @@ namespace Spell
             List<Word.Range> temp = new List<Word.Range>();
             temp.AddRange(lstErrorRange);
             int count = temp.Count;
-            for(int i = 0; i < count; i ++)
+            for (int i = 0; i < count; i++)
             {
-                if (temp[i].End >= startIndex)
+                if (temp[i].Start <= startIndex)
                 {
                     temp.Remove(temp[i]);
                     count--;
@@ -139,7 +139,7 @@ namespace Spell
             string prepre = "", pre = "", next = "", nextnext = "";
             if (iWord == 1)
             {
-                pre = StartSent;
+                pre = Ngram.Instance.START_STRING;
                 if (lengthSentence > 1)
                     next = words[iWord + 1].Text.Trim().ToLower();
                 if (lengthSentence > 2)
@@ -188,7 +188,7 @@ namespace Spell
             }
             else if (iWord == lengthSentence)
             {
-                next = EndSent;
+                next = Ngram.Instance.END_STRING;
                 if (lengthSentence > 1)
                     pre = words[iWord - 1].Text.Trim().ToLower();
                 if (lengthSentence > 2)
@@ -226,7 +226,7 @@ namespace Spell
                 int countWord = 0;
                 foreach (string mySentence in mySentences)
                 {
-                    string[] words =mySentence.Trim().Split(' ');
+                    string[] words = mySentence.Trim().Split(' ');
                     //số lượng các từ trong cụm
                     int length = words.Length;
                     //duyệt qua từng từ trong cụm
@@ -255,12 +255,12 @@ namespace Spell
                                     string prepre = gramAroundIWord[0], pre = gramAroundIWord[1], next = gramAroundIWord[2], nextnext = gramAroundIWord[3];
                                     if (i == 0)
                                     {
-                                        pre = StartSent;
+                                        pre = Ngram.Instance.START_STRING;
                                         prepre = "";
                                     }
                                     if (i == length - 1)
                                     {
-                                        next = EndSent;
+                                        next = Ngram.Instance.END_STRING;
                                         nextnext = "";
                                     }
                                     //kiểm tra token có khả năng sai hay k
@@ -275,8 +275,6 @@ namespace Spell
                         }
 
                     }//end for: duyệt từ từng trong cụm
-                    //if (isFault)
-                    //    break;
                 }//end for: duyệt từ cụm
                 //showCandidateInTaskPane();
             }
@@ -341,15 +339,15 @@ namespace Spell
             //lstErrorRange.Remove(lstErrorRange.Where(x => x.Text.Equals(lblWrong.Text.ToLower())).Single());
             int startIndex = 0;
             int endIndex = 0;
-            foreach(Word.Range range in lstErrorRange)
-                if(range.Text.Equals(lblWrong.Text.ToLower()))
+            foreach (Word.Range range in lstErrorRange)
+                if (range.Text.Equals(lblWrong.Text.ToLower()))
                 {
                     startIndex = range.Start;
                     curRangeTextShowInTaskPane = range;
                     lstErrorRange.Remove(range);
                     break;
                 }
-            
+
             curRangeTextShowInTaskPane.Text = lstbCandidate.SelectedItem.ToString();
             endIndex = startIndex + curRangeTextShowInTaskPane.Text.Length;
             lblWrong.Text = "\"Wrong Text\"";
@@ -360,7 +358,7 @@ namespace Spell
             curRangeTextShowInTaskPane.Select();
             //lstErrorRange.Remove(lstErrorRange.First());
             //if (lstErrorRange.Count > 0)
-                //showCandidateInTaskPane();
+            //showCandidateInTaskPane();
 
             //------------------
             //startFindError();

@@ -24,6 +24,20 @@ namespace Spell.Algorithm
         private  string bi = @"\Resources\filteredBi.txt";
         private string uniPath;
         private string biPath;
+        public string START_STRING
+        {
+            get
+            {
+                return "<s>";
+            }
+        }
+        public string END_STRING
+        {
+            get
+            {
+                return "<s>";
+            }
+        }
         /// <summary>
         /// 
         /// </summary>

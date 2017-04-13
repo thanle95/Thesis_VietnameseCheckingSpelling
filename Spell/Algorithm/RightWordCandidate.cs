@@ -76,9 +76,9 @@ namespace Spell.Algorithm
             hSetCandidate.UnionWith(Candidate.getInstance.createCandidateByNgram(prepre, pre, token, next, nextnext, isMajuscule));
             hSetCandidate.UnionWith(Candidate.getInstance.createCandByCompoundWord(prepre, pre, token, next, nextnext, isMajuscule));
             //giá trị lamda có được do thống kê
-            double lamda1 = 0.3;
+            double lamda1 = 0.2;
             double lamda2 = 0.4;
-            double lamda3 = 0.3;
+            double lamda3 = 0.4;
             double score = 0;
             //Dictionary
             double D = 0;
@@ -96,11 +96,13 @@ namespace Spell.Algorithm
                     L = Candidate.getInstance.calScore_Ngram(prepre, pre, candidate, next, nextnext);
 
                     score = lamda1 * D + lamda2 * L + lamda3 * S;
+                    if (score > Candidate.getInstance.MAX_SCORE)
+                        score = Candidate.getInstance.MAX_SCORE;
                     //ngưỡng để chọn candidate có được do thống kê
                     if (L > Candidate.getInstance.LIM_LANGUAGEMODEL)
                     {
-                        //là từ ghép 3 âm tiết
-                        if (D == Candidate.getInstance.MAX_SCORE)
+                        //là từ ghép 3 âm tiết, hoặc rất giống với token
+                        if (D == Candidate.getInstance.MAX_SCORE || S == Candidate.getInstance.MAX_SCORE)
                         {
                             //nếu số lượng phần tử còn nhỏ hơn 5
                             if (prioritizedCandidatesWithScore.Count < 5)
