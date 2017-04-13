@@ -33,7 +33,7 @@ namespace Spell
                 return instance;
             }
         }
-       
+
         private void lstbCandidate_SelectedIndexChanged(object sender, EventArgs e)
         {
             lblFix.Text = lstbCandidate.SelectedItem.ToString();
@@ -108,19 +108,30 @@ namespace Spell
         private Word.Range findErrorRangeByStartIndex(int startIndex)
         {
             List<Word.Range> temp = new List<Word.Range>();
-            temp.AddRange(lstErrorRange);
-            int count = temp.Count;
-            for(int i = 0; i < count; i ++)
+            //temp.AddRange(lstErrorRange);
+            //int count = temp.Count;
+            //for (int i = 0; i < count; i++)
+            //{
+            //    if (temp[i].Start <= startIndex)
+            //    {
+            //        temp.Remove(temp[i]);
+            //        count--;
+            //        i--;
+            //    }
+            //    else
+            //        break;
+            //}
+
+            foreach (Word.Range range in lstErrorRange)
             {
-                if (temp[i].Start <= startIndex)
+                if (range.Start <= startIndex && startIndex <= range.End)
                 {
-                    temp.Remove(temp[i]);
-                    count--;
-                    i--;
-                }
-                else
+                    temp.Add(range);
                     break;
+                }
             }
+            if (temp.Count == 0)
+                temp.Add(lstErrorRange.First());
             return temp.First();
         }
         /// <summary>
@@ -351,15 +362,15 @@ namespace Spell
             //lstErrorRange.Remove(lstErrorRange.Where(x => x.Text.Equals(lblWrong.Text.ToLower())).Single());
             int startIndex = 0;
             int endIndex = 0;
-            foreach(Word.Range range in lstErrorRange)
-                if(range.Text.Equals(lblWrong.Text.ToLower()))
+            foreach (Word.Range range in lstErrorRange)
+                if (range.Text.Equals(lblWrong.Text.ToLower()))
                 {
                     startIndex = range.Start;
                     curRangeTextShowInTaskPane = range;
                     lstErrorRange.Remove(range);
                     break;
                 }
-            
+
             curRangeTextShowInTaskPane.Text = lstbCandidate.SelectedItem.ToString();
             endIndex = startIndex + curRangeTextShowInTaskPane.Text.Length;
             lblWrong.Text = "\"Wrong Text\"";
@@ -370,7 +381,7 @@ namespace Spell
             curRangeTextShowInTaskPane.Select();
             //lstErrorRange.Remove(lstErrorRange.First());
             //if (lstErrorRange.Count > 0)
-                //showCandidateInTaskPane();
+            //showCandidateInTaskPane();
 
             //------------------
             //startFindError();
