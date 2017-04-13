@@ -237,7 +237,7 @@ namespace Spell.Algorithm
                 if (shorterWord[i] == longerWord[i])
                     continue;
                 //nếu shorterWord[i...k] == longerWord[i + x...k + x] ---> trừ 0.1
-                //ví dụ: nawngs với nhuwngs
+                //ví dụ: nawngs với nhuwngx
                 if (x == 0)
                 {
                     x = longerWord.IndexOf(shorterWord[i], i) - i;
@@ -254,6 +254,7 @@ namespace Spell.Algorithm
                 }
             }
             diffScore += calScore_Similarity_Region(shorterWord, longerWord);
+            //ví dụ: nhi với nhiên
             int deltaLength = longerWord.Length - shorterWord.Length;
             if (deltaLength > shorterWord.Length)
                 diffScore -= (deltaLength + shorterWord.Length) * 0.1;
