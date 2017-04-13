@@ -32,20 +32,7 @@ namespace Spell
                 return instance;
             }
         }
-        public static string StartSent
-        {
-            get
-            {
-                return "<s>";
-            }
-        }
-        public static string EndSent
-        {
-            get
-            {
-                return "</s>";
-            }
-        }
+
         private void lstbCandidate_SelectedIndexChanged(object sender, EventArgs e)
         {
             lblFix.Text = lstbCandidate.SelectedItem.ToString();
@@ -124,7 +111,7 @@ namespace Spell
             int count = temp.Count;
             for(int i = 0; i < count; i ++)
             {
-                if (temp[i].Start <= startIndex)
+                if (temp[i].End >= startIndex)
                 {
                     temp.Remove(temp[i]);
                     count--;
