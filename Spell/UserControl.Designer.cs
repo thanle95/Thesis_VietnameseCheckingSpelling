@@ -106,7 +106,7 @@
             this.btnUndo.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnUndo.ForeColor = System.Drawing.SystemColors.ControlText;
             this.btnUndo.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnUndo.Location = new System.Drawing.Point(205, 268);
+            this.btnUndo.Location = new System.Drawing.Point(205, 266);
             this.btnUndo.Name = "btnUndo";
             this.btnUndo.Size = new System.Drawing.Size(56, 27);
             this.btnUndo.TabIndex = 15;
@@ -117,11 +117,11 @@
             // 
             this.btnStart.BackColor = System.Drawing.Color.White;
             this.btnStart.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnStart.Location = new System.Drawing.Point(18, 270);
+            this.btnStart.Location = new System.Drawing.Point(18, 268);
             this.btnStart.Name = "btnStart";
-            this.btnStart.Size = new System.Drawing.Size(75, 23);
+            this.btnStart.Size = new System.Drawing.Size(84, 25);
             this.btnStart.TabIndex = 18;
-            this.btnStart.Text = "Bắt đầu";
+            this.btnStart.Text = "Xem gợi ý";
             this.btnStart.UseVisualStyleBackColor = false;
             this.btnStart.Click += new System.EventHandler(this.btnStart_Click);
             // 

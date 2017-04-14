@@ -42,7 +42,9 @@ namespace Spell
                 {
                     //MessageBox.Show("da tick");
                     myCustomTaskPane.Visible = true;
-                    int count = UserControl.Instance.startFindError();
+                    int startIndex = Globals.ThisAddIn.Application.Selection.Start;
+                    int endIndex = Globals.ThisAddIn.Application.Selection.End;
+                    int count = UserControl.Instance.startFindError(startIndex, endIndex);
                     if (count > 0)
                         MessageBox.Show(String.Format("Có {0} lỗi", count));
                     //    myCustomTaskPane.Visible = true;
