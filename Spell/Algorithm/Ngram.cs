@@ -20,8 +20,8 @@ namespace Spell.Algorithm
         public Dictionary<string, int> _biAmount { get; set; } //Chứa Key và giá trị số lượng của bigram
         public Dictionary<string, int> _triAmount { get; set; } //Chứa Key và giá trị số lượng của trigram
 
-        private  string uni = @"\Resources\filteredUni.txt";
-        private  string bi = @"\Resources\filteredBi.txt";
+        private  string uni = @"Resources\filteredUni.txt";
+        private  string bi = @"Resources\filteredBi.txt";
         private string uniPath;
         private string biPath;
         public string START_STRING
@@ -43,8 +43,8 @@ namespace Spell.Algorithm
         /// </summary>
         private Ngram()
         {
-            uniPath = Environment.CurrentDirectory + uni;
-            biPath = Environment.CurrentDirectory + bi;
+            uniPath = AppDomain.CurrentDomain.BaseDirectory + uni;
+            biPath = AppDomain.CurrentDomain.BaseDirectory + bi;
             this._uniPos = new Dictionary<string, int>();
             this._posUni = new Dictionary<int, string>();
             this._uniAmount = new Dictionary<string, int>();
