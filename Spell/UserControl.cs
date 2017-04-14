@@ -34,7 +34,13 @@ namespace Spell
                 return instance;
             }
         }
-
+        public static string WRONG_TEXT
+        {
+            get
+            {
+                return "\"Wrong text\"";
+            }
+        }
         private void lstbCandidate_SelectedIndexChanged(object sender, EventArgs e)
         {
             lblFix.Text = lstbCandidate.SelectedItem.ToString();
@@ -221,14 +227,20 @@ namespace Spell
 
         }
         /// <summary>
-        /// HighLight lỗi hiện tại và hiện gợi ý
+        /// HighLight những lỗi hiện tại và đưa vào danh sách lỗi
         /// </summary>
+        /// <param name="startIndex"></param>
+        /// <param name="endIndex"></param>
+        /// <returns></returns>
         public int showWrongWithSuggest(int startIndex, int endIndex)
         {
             try
             {
                 //dehightlight tất cả những lỗi trước đó
                 DocumentHandling.Instance.DeHighLight_All_Mistake(Globals.ThisAddIn.Application.ActiveDocument.Characters);
+                lblWrong.Text = WRONG_TEXT;
+                lstbCandidate.Items.Clear();
+                lstErrorRange.Clear();
                 //lấy toàn bộ danh sách các từ trong Active Document, để lấy được ngữ cảnh
                 Word.Words globalWords = Globals.ThisAddIn.Application.ActiveDocument.Words;
                 //lấy những câu trong Active Document
@@ -362,7 +374,6 @@ namespace Spell
         }
         public int startFindError(int startInex, int endIndex)
         {
-            MessageBox.Show("dang kiem tra loi");
             lstErrorRange = new List<Word.Range>();
             int count = showWrongWithSuggest(startInex, endIndex);
             return count;
@@ -416,7 +427,6 @@ namespace Spell
                 change();
             }
         }
-
 
 
         //

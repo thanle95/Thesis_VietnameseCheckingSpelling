@@ -441,7 +441,6 @@ namespace ConsoleApplication1
         {
             string[] phraseArr = new Regex(StringConstant.getInstance.patternGetSentenceCharacter).Split(text);
             return phraseArr.ToList();
->>>>>>> 2554cb3a447e4c9cd2cb9714a60371e8e98bac5b
         }
     }
 }
