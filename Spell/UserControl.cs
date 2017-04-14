@@ -11,6 +11,7 @@ using Spell.Algorithm;
 using Word = Microsoft.Office.Interop.Word;
 using Office = Microsoft.Office.Core;
 using System.Threading;
+using System.Text.RegularExpressions;
 
 namespace Spell
 {
@@ -245,49 +246,60 @@ namespace Spell
                     {
                         string token = words[i].Trim().ToLower();
                         countWord++;
-                        //Kiểm tra nếu không phải là từ Việt Nam
-                        //Thì highLight
-                        if (!VNDictionary.getInstance.isSyllableVN(token))
+                        //Kiểm tra các kí tự đặc biệt, mail, số, tên riêng, viết tắt
+                        // string[] phraseArr = new Regex(StringConstant.Instance.patternCheckWord).Split(text);
+
+                        //foreach (string iPharse in phraseArr)
+                        //{
+                        Regex r = new Regex(StringConstant.Instance.patternCheckWord);
+                        Match m = r.Match(token);
+                        if (!m.Success)
                         {
-                            lstErrorRange.Add((DocumentHandling.Instance.HighLight_MistakeWrongWord(token, globalWords, countWord)));
-                            continue;
-                        }
-                        else
-                        {
-                            //tìm vị trí của token trong globalWords để xác định ngữ cảnh
-                            for (int iWord = countWord; iWord <= globalWords.Count; iWord++)
+                            //Kiểm tra nếu không phải là từ Việt Nam
+                            //Thì highLight
+                            if (!VNDictionary.getInstance.isSyllableVN(token))
                             {
-                                string word = globalWords[iWord].Text.Trim().ToLower();
-                                //tìm được vị trí của token
-                                if (word.Equals(token))
+                                lstErrorRange.Add((DocumentHandling.Instance.HighLight_MistakeWrongWord(token, globalWords, countWord)));
+                                continue;
+                            }
+                            else
+                            {
+                                //tìm vị trí của token trong globalWords để xác định ngữ cảnh
+                                for (int iWord = countWord; iWord <= globalWords.Count; iWord++)
                                 {
-                                    //xác định ngữ cảnh
-                                    string[] gramAroundIWord = getGramArroundIWord(iWord, globalWords.Count, globalWords);
-                                    string prepre = gramAroundIWord[0], pre = gramAroundIWord[1], next = gramAroundIWord[2], nextnext = gramAroundIWord[3];
-                                    if (i == 0)
+                                    string word = globalWords[iWord].Text.Trim().ToLower();
+                                    //tìm được vị trí của token
+                                    if (word.Equals(token))
                                     {
-                                        pre = Ngram.Instance.START_STRING;
-                                        prepre = "";
+                                        //xác định ngữ cảnh
+                                        string[] gramAroundIWord = getGramArroundIWord(iWord, globalWords.Count, globalWords);
+                                        string prepre = gramAroundIWord[0], pre = gramAroundIWord[1], next = gramAroundIWord[2], nextnext = gramAroundIWord[3];
+                                        if (i == 0)
+                                        {
+                                            pre = Ngram.Instance.START_STRING;
+                                            prepre = "";
+                                        }
+                                        if (i == length - 1)
+                                        {
+                                            next = Ngram.Instance.END_STRING;
+                                            nextnext = "";
+                                        }
+                                        //kiểm tra token có khả năng sai hay k
+                                        if (!RightWordCandidate.getInstance.checkRightWord(prepre, pre, token, next, nextnext))
+                                        {
+                                            lstErrorRange.Add((DocumentHandling.Instance.HighLight_MistakeRightWord(token, globalWords, countWord)));
+                                            continue;
+                                        }
+                                        break;
                                     }
-                                    if (i == length - 1)
-                                    {
-                                        next = Ngram.Instance.END_STRING;
-                                        nextnext = "";
-                                    }
-                                    //kiểm tra token có khả năng sai hay k
-                                    if (!RightWordCandidate.getInstance.checkRightWord(prepre, pre, token, next, nextnext))
-                                    {
-                                        lstErrorRange.Add((DocumentHandling.Instance.HighLight_MistakeRightWord(token, globalWords, countWord)));
-                                        continue;
-                                    }
-                                    break;
                                 }
                             }
-                        }
 
-                    }//end for: duyệt từ từng trong cụm
-                }//end for: duyệt từ cụm
-                //showCandidateInTaskPane();
+                        }
+                        //end for: duyệt từ từng trong cụm
+                    }//end for: duyệt từ cụm
+                     //showCandidateInTaskPane();
+                }
             }
             catch (Exception e)
             {
