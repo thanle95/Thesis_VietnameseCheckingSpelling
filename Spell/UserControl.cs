@@ -116,7 +116,7 @@ namespace Spell
             //        temp.Remove(temp[i]);
             //        count--;
             //        i--;
-            //    }
+            //    }i
             //    else
             //        break;
             //}
@@ -309,7 +309,17 @@ namespace Spell
 
         private void ignore()
         {
-            DocumentHandling.Instance.DeHighLight_All_Mistake(curRangeTextShowInTaskPane.Start, curRangeTextShowInTaskPane.End);
+            int startIndex = 0;
+            int endIndex = 0;
+            foreach (Word.Range range in lstErrorRange)
+                if (range.Text.Equals(lblWrong.Text.ToLower()))
+                {
+                    startIndex = range.Start;
+                    endIndex = range.End;
+                    lstErrorRange.Remove(range);
+                    break;
+                }
+            DocumentHandling.Instance.DeHighLight_Mistake(startIndex, endIndex);
         }
 
         private void btnAdd_Click(object sender, EventArgs e)
