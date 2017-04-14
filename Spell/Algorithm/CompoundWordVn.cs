@@ -11,13 +11,13 @@ namespace Spell.Algorithm
     public class CompoundWordVn
     {
        
-        private string compound = @"\Resources\newCompoundWordByViet39K.txt";
+        private string compound = @"Resources\newCompoundWordByViet39K.txt";
 
         private string compoundPath;
 
         private CompoundWordVn()
         {
-            compoundPath = Environment.CurrentDirectory + compound;
+            compoundPath = AppDomain.CurrentDomain.BaseDirectory + compound;
             readCompoundWordVNFile();
         }
         private void readCompoundWordVNFile()

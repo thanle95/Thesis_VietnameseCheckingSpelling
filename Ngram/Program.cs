@@ -11,6 +11,7 @@ namespace Ngram
         static void Main(string[] args)
         {
             Ngram.Instance.runFirst();
+            
         }
     }
 }
