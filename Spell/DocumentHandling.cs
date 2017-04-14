@@ -89,7 +89,18 @@ namespace Spell
         //
         //---Kiet End
         //
-
+        public List<string> getSentence(int startIndex, int endIndex, Word.Sentences sentences)
+        {
+            List<string> ret = new List<string>();
+            for(int i = 1; i <= sentences.Count; i ++)
+            {
+                if (sentences[i].Start <= endIndex && sentences[i].End >= startIndex)
+                {
+                    ret.Add(sentences[i].Text);
+                }
+            }
+            return ret;
+        }
         /// <summary>
         /// trả về danh sách câu hiện hành
         /// </summary>
@@ -101,6 +112,35 @@ namespace Spell
             for (int i = 1; i <= sentences.Count; i++)
             {
                 string text = sentences[i].Text;
+
+                string[] phraseArr = new Regex(StringConstant.Instance.patternMiddleSymbol).Split(text);
+
+                foreach (string iPharse in phraseArr)
+                {
+                    Regex r = new Regex(StringConstant.Instance.patternEndSentenceCharacter);
+                    Match m = r.Match(iPharse);
+                    if (m.Success)
+                    //nếu chứa ký tự kết thúc câu
+                    {
+                        //bỏ dấu, vì dấu ở đằng sau, nên lấy phần tử đầu tiên
+                        string tmp = new Regex(StringConstant.Instance.patternEndSentenceCharacter).Split(iPharse.Trim())[0];
+                        if (tmp != "")
+                            ret.Add(tmp);
+                    }
+                    else
+                    {
+                        ret.Add(iPharse);
+                    }
+                }
+            }
+            return ret;
+        }
+        public List<string> getPhrase(List<string> sentences)
+        {
+            List<string> ret = new List<string>();
+            for (int i = 0; i < sentences.Count; i++)
+            {
+                string text = sentences[i];
 
                 string[] phraseArr = new Regex(StringConstant.Instance.patternMiddleSymbol).Split(text);
 

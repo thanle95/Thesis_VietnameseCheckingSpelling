@@ -12,6 +12,7 @@ using Word = Microsoft.Office.Interop.Word;
 using Office = Microsoft.Office.Core;
 using System.Threading;
 using System.Text.RegularExpressions;
+using System.IO;
 
 namespace Spell
 {
@@ -222,7 +223,7 @@ namespace Spell
         /// <summary>
         /// HighLight lỗi hiện tại và hiện gợi ý
         /// </summary>
-        public int showWrongWithSuggest()
+        public int showWrongWithSuggest(int startIndex, int endIndex)
         {
             try
             {
@@ -232,10 +233,13 @@ namespace Spell
                 Word.Words globalWords = Globals.ThisAddIn.Application.ActiveDocument.Words;
                 //lấy những câu trong Active Document
                 Word.Sentences sentences = Globals.ThisAddIn.Application.ActiveDocument.Sentences;
+                //lấy danh sách câu dựa trên vùng được bôi đen
+                List<string> sentencesGetByRange = DocumentHandling.Instance.getSentence(startIndex, endIndex, sentences);
                 //với mỗi câu, tách thành từng cụm có liên quan mật thiết với nhau, như "", (),...
-                List<string> mySentences = DocumentHandling.Instance.getPhrase(sentences);
+                List<string> mySentences = DocumentHandling.Instance.getPhrase(sentencesGetByRange);
                 //Xử lý từng cụm từ, vì mỗi cụm từ có liên quan mật thiết với nhau
                 int countWord = 0;
+                
                 foreach (string mySentence in mySentences)
                 {
                     string[] words = mySentence.Trim().Split(' ');
@@ -356,11 +360,11 @@ namespace Spell
         {
             showCandidateInTaskPane(startIndex);
         }
-        public int startFindError()
+        public int startFindError(int startInex, int endIndex)
         {
             MessageBox.Show("dang kiem tra loi");
             lstErrorRange = new List<Word.Range>();
-            int count = showWrongWithSuggest();
+            int count = showWrongWithSuggest(startInex, endIndex);
             return count;
         }
         private void btnChange_Click(object sender, EventArgs e)
