@@ -21,11 +21,11 @@ namespace Spell
             get { return instance; }
         }
 
-        public Word.Range HighLight_Mistake(string wrongText, Word.Words wordList, Word.WdColorIndex colorIndex, Word.WdColor color, int countWord)
+        public Word.Range HighLight_Mistake(string wrongText, Word.Words wordList, Word.WdColorIndex colorIndex, Word.WdColor color)
         {
             Word.Range range = null;
             Word.Words words = wordList;
-            for (int i = countWord; i <= words.Count; i++)
+            for (int i = 1; i <= words.Count; i++)
             {
                 if (words[i].Text.ToLower().Trim().Equals(wrongText.Trim().ToLower()))
                 {
@@ -41,13 +41,47 @@ namespace Spell
             }
             return range;
         }
-        public Word.Range HighLight_MistakeWrongWord(string wrongText, Word.Words wordList, int countWord)
+        public Word.Range HighLight_Mistake(string wrongText, Word.Sentences sentencesList, Word.WdColorIndex colorIndex, Word.WdColor color)
         {
-            return HighLight_Mistake(wrongText, wordList, Word.WdColorIndex.wdRed, Word.WdColor.wdColorYellow, countWord);
+            Word.Range range = null;
+            Word.Sentences sentences = sentencesList;
+            for (int i = 1; i <= sentences.Count; i++)
+            {
+                string[] words = sentences[i].Text.Trim().Split(' ');
+                int start = sentences[i].Start;
+                int end = start;
+                foreach (string word in words)
+                {
+                    end += word.Length;
+                    if (word.ToLower().Trim().Equals(wrongText.Trim().ToLower()))
+                    {
+                        if (word.Contains(" "))
+                            end--;
+                        range = Globals.ThisAddIn.Application.ActiveDocument.Range(start, end);
+                        range.HighlightColorIndex = colorIndex;
+                        range.Font.Color = color;
+                        return range;
+                    }
+                    start = end;
+                }
+            }
+            return range;
         }
-        public Word.Range HighLight_MistakeRightWord(string wrongText, Word.Words wordList, int countWord)
+        public Word.Range HighLight_MistakeWrongWord(string wrongText, Word.Words wordList)
         {
-            return HighLight_Mistake(wrongText, wordList, Word.WdColorIndex.wdYellow, Word.WdColor.wdColorAutomatic,countWord);
+            return HighLight_Mistake(wrongText, wordList, Word.WdColorIndex.wdRed, Word.WdColor.wdColorYellow);
+        }
+        public Word.Range HighLight_MistakeWrongWord(string wrongText, Word.Sentences sentencesList)
+        {
+            return HighLight_Mistake(wrongText, sentencesList, Word.WdColorIndex.wdRed, Word.WdColor.wdColorYellow);
+        }
+        public Word.Range HighLight_MistakeRightWord(string wrongText, Word.Words wordList)
+        {
+            return HighLight_Mistake(wrongText, wordList, Word.WdColorIndex.wdYellow, Word.WdColor.wdColorAutomatic);
+        }
+        public Word.Range HighLight_MistakeRightWord(string wrongText, Word.Sentences sentencesList)
+        {
+            return HighLight_Mistake(wrongText, sentencesList, Word.WdColorIndex.wdYellow, Word.WdColor.wdColorAutomatic);
         }
 
         public void DeHighLight_All_Mistake(Word.Characters characters)
@@ -92,7 +126,7 @@ namespace Spell
         public List<string> getSentence(int startIndex, int endIndex, Word.Sentences sentences)
         {
             List<string> ret = new List<string>();
-            for(int i = 1; i <= sentences.Count; i ++)
+            for (int i = 1; i <= sentences.Count; i++)
             {
                 if (sentences[i].Start <= endIndex && sentences[i].End >= startIndex)
                 {
