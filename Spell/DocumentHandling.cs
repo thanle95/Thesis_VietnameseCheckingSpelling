@@ -44,25 +44,24 @@ namespace Spell
         public Word.Range HighLight_Mistake(string wrongText, Word.Sentences sentencesList, Word.WdColorIndex colorIndex, Word.WdColor color)
         {
             Word.Range range = null;
+            
             Word.Sentences sentences = sentencesList;
             for (int i = 1; i <= sentences.Count; i++)
             {
                 string[] words = sentences[i].Text.Trim().Split(' ');
                 int start = sentences[i].Start;
-                int end = start;
+                int end = 0;
                 foreach (string word in words)
                 {
-                    end += word.Length;
+                    end = start + word.Length;
                     if (word.ToLower().Trim().Equals(wrongText.Trim().ToLower()))
                     {
-                        if (word.Contains(" "))
-                            end--;
                         range = Globals.ThisAddIn.Application.ActiveDocument.Range(start, end);
                         range.HighlightColorIndex = colorIndex;
                         range.Font.Color = color;
                         return range;
                     }
-                    start = end;
+                    start = end + 1; // bỏ qua khoảng trắng
                 }
             }
             return range;
@@ -176,24 +175,12 @@ namespace Spell
             {
                 string text = sentences[i];
 
-                string[] phraseArr = new Regex(StringConstant.Instance.patternMiddleSymbol).Split(text);
+                string[] phraseArr = new Regex(StringConstant.Instance.patternSignSentence).Split(text);
 
                 foreach (string iPharse in phraseArr)
                 {
-                    Regex r = new Regex(StringConstant.Instance.patternEndSentenceCharacter);
-                    Match m = r.Match(iPharse);
-                    if (m.Success)
-                    //nếu chứa ký tự kết thúc câu
-                    {
-                        //bỏ dấu, vì dấu ở đằng sau, nên lấy phần tử đầu tiên
-                        string tmp = new Regex(StringConstant.Instance.patternEndSentenceCharacter).Split(iPharse.Trim())[0];
-                        if (tmp != "")
-                            ret.Add(tmp);
-                    }
-                    else
-                    {
+                    if(iPharse.Trim().Length > 0)
                         ret.Add(iPharse);
-                    }
                 }
             }
             return ret;

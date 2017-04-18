@@ -164,7 +164,7 @@ namespace Spell.Algorithm
 
         public string patternMiddleSymbol = "[-|/|\\|>|<|\\[|\\]|,|\"|(|)|“|”]";
         public string patternEndSentenceCharacter = "[.!?;:…]";
-
+        public string patternSignSentence = "[-|/|\\|>|<|\\[|\\]|,|\"|(|)|“|”|.!?;:…]";
         public string patternCheckWord = "[-|\\/|\\|>|<|\\[|\\]|,|\"|(|)|“|”|@|#|$|%|^|&|\\*|\\d]";
     }
 }
