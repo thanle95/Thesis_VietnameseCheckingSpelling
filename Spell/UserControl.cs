@@ -221,6 +221,9 @@ namespace Spell
                     //duyệt qua từng từ trong cụm
                     for (int i = 0; i < length; i++)
                     {
+                        string token = words[i].Trim().ToLower();
+                        if (token.Length < 1)
+                            continue;
                         //Kiểm tra các kí tự đặc biệt, mail, số, tên riêng, viết tắt
                         // string[] phraseArr = new Regex(StringConstant.Instance.patternCheckWord).Split(text);
 
@@ -229,7 +232,7 @@ namespace Spell
                         Regex r = new Regex(StringConstant.Instance.patternCheckSpecialChar);
                         Match m = r.Match(token);
                         // !(char.IsUpper(token[0])) | DocumentHandling.Instance.checkEng(token)
-                        if (m.Success | char.IsUpper(words[i].Trim()[0]) )
+                        if (m.Success | char.IsUpper(words[i].Trim()[0]))
                             continue;
                         else
                         {
