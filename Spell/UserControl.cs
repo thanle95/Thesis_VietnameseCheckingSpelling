@@ -239,25 +239,31 @@ namespace Spell
                 List<string> mySentences = DocumentHandling.Instance.getPhrase(sentencesGetByRange);
                 //Xử lý từng cụm từ, vì mỗi cụm từ có liên quan mật thiết với nhau
                 int countWord = 0;
-                
+
                 foreach (string mySentence in mySentences)
                 {
                     string[] words = mySentence.Trim().Split(' ');
+
                     //số lượng các từ trong cụm
                     int length = words.Length;
                     //duyệt qua từng từ trong cụm
                     for (int i = 0; i < length; i++)
                     {
-                        string token = words[i].Trim().ToLower();
+                        string token = words[i].Trim().ToLower();                        
                         countWord++;
+                        if (token.Length < 1)
+                            continue;
                         //Kiểm tra các kí tự đặc biệt, mail, số, tên riêng, viết tắt
                         // string[] phraseArr = new Regex(StringConstant.Instance.patternCheckWord).Split(text);
 
                         //foreach (string iPharse in phraseArr)
                         //{
-                        Regex r = new Regex(StringConstant.Instance.patternCheckWord);
+                        Regex r = new Regex(StringConstant.Instance.patternCheckSpecialChar);
                         Match m = r.Match(token);
-                        if (!m.Success)
+                        // !(char.IsUpper(token[0])) | DocumentHandling.Instance.checkEng(token)
+                        if (m.Success | char.IsUpper(words[i].Trim()[0]) )
+                            continue;
+                        else
                         {
                             //Kiểm tra nếu không phải là từ Việt Nam
                             //Thì highLight
@@ -288,10 +294,15 @@ namespace Spell
                                             next = Ngram.Instance.END_STRING;
                                             nextnext = "";
                                         }
+
                                         //kiểm tra token có khả năng sai hay k
                                         if (!RightWordCandidate.getInstance.checkRightWord(prepre, pre, token, next, nextnext))
                                         {
                                             lstErrorRange.Add((DocumentHandling.Instance.HighLight_MistakeRightWord(token, globalWords, countWord)));
+                                            continue;
+                                        }
+                                        else
+                                        {
                                             continue;
                                         }
                                         break;
@@ -303,6 +314,7 @@ namespace Spell
                         //end for: duyệt từ từng trong cụm
                     }//end for: duyệt từ cụm
                      //showCandidateInTaskPane();
+
                 }
             }
             catch (Exception e)

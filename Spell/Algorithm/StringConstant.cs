@@ -165,6 +165,12 @@ namespace Spell.Algorithm
         public string patternMiddleSymbol = "[-|/|\\|>|<|\\[|\\]|,|\"|(|)|“|”]";
         public string patternEndSentenceCharacter = "[.!?;:…]";
 
-        public string patternCheckWord = "[-|\\/|\\|>|<|\\[|\\]|,|\"|(|)|“|”|@|#|$|%|^|&|\\*|\\d]";
+        public string patternCheckSpecialChar = "[-|\\/|\\|>|<|\\[|\\]|,|\"|(|)|“|”|@|#|$|%|^|&|\\*|\\d|\\s]";
+
+        public string[] VNAcronym = new string[]
+        {
+            "CHXHCNVN", "MTDTGPMNVN", "QDND","QLVNCH","VNQDĐ","VNQDD","VNCH","VNDCCH",
+            "ĐH","TS", "PGS", "clb", "đh", "ts",
+        };
     }
 }

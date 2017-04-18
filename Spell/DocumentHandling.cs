@@ -173,6 +173,18 @@ namespace Spell
             return ret;
         }
 
+        public bool checkEng(string token)
+        {
+            string extractedToken = Candidate.getInstance.extractSignVN(token);
+            bool result = false;
+            if (!VNDictionary.getInstance.isSyllableVN(token))
+                foreach(char sign in StringConstant.Instance.VNSign)
+                {
+                    if (!extractedToken.Contains(sign))
+                        result = true;
+                }
+            return result;
+        }
 
     }
 }
