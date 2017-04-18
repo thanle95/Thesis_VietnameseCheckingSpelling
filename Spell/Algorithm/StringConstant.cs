@@ -1,4 +1,5 @@
 ﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -172,5 +173,7 @@ namespace Spell.Algorithm
             "CHXHCNVN", "MTDTGPMNVN", "QDND","QLVNCH","VNQDĐ","VNQDD","VNCH","VNDCCH",
             "ĐH","TS", "PGS", "clb", "đh", "ts",
         };
+        public string patternSignSentence = "[-|/|\\|>|<|\\[|\\]|,|\"|(|)|“|”|.!?;:…]";
+        public string patternCheckWord = "[-|\\/|\\|>|<|\\[|\\]|,|\"|(|)|“|”|@|#|$|%|^|&|\\*|\\d]";
     }
 }

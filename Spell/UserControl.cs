@@ -21,6 +21,7 @@ namespace Spell
     public partial class UserControl : System.Windows.Forms.UserControl
     {
         private Word.Range curRangeTextShowInTaskPane;
+        private Word.Sentences curSentences;
         private List<Word.Range> lstErrorRange = new List<Word.Range>();
         private static UserControl instance = new UserControl();
         private UserControl()
@@ -34,7 +35,13 @@ namespace Spell
                 return instance;
             }
         }
-
+        public static string WRONG_TEXT
+        {
+            get
+            {
+                return "\"Wrong text\"";
+            }
+        }
         private void lstbCandidate_SelectedIndexChanged(object sender, EventArgs e)
         {
             lblFix.Text = lstbCandidate.SelectedItem.ToString();
@@ -70,36 +77,39 @@ namespace Spell
         {
             if (lstErrorRange.Count > 0)
             {
-                Word.Words words = Globals.ThisAddIn.Application.ActiveDocument.Words;
 
                 Word.Range tokenRange = findErrorRangeByStartIndex(startIndex);
-                for (int iWord = 1; iWord <= words.Count; iWord++)
+                string token = tokenRange.Text.Trim().ToLower();
+                for (int iWord = 1; iWord <= curSentences.Count; iWord++)
                 {
-                    string token = tokenRange.Text.Trim().ToLower();
-                    string word = words[iWord].Text.Trim().ToLower();
-                    if (word.Equals(token))
+                    string[] words = curSentences[iWord].Text.Trim().Split(' ');
+                    int i = 0;
+                    foreach (string word in words)
                     {
-                        string[] gramAroundIWord = getGramArroundIWord(iWord, words.Count, words);
-                        string prepre = gramAroundIWord[0], pre = gramAroundIWord[1], next = gramAroundIWord[2], nextnext = gramAroundIWord[3];
-
-                        if (token.Length > 0)
+                        if (word.Trim().ToLower().Equals(token))
                         {
-                            HashSet<string> items = Candidate.getInstance.selectiveCandidate(prepre, pre, token, next, nextnext);
-                            lblWrong.Text = token;
-                            lstbCandidate.Items.Clear();
-                            //lstbCandidate.Items.Add(token);
-                            foreach (string item in items)
-                            {
-                                if (!item.ToLower().Equals(token.ToLower()))
-                                    if (item.Length > 1)
-                                        lstbCandidate.Items.Add(item.Trim());
-                                if (lstbCandidate.Items.Count > 0)
-                                    lstbCandidate.SetSelected(0, true);
-                                btnChange.Focus();
-                            }
-                            break;
-                        }
+                            string[] gramAroundIWord = getGramArroundIWord(i, words);
+                            string prepre = gramAroundIWord[0], pre = gramAroundIWord[1], next = gramAroundIWord[2], nextnext = gramAroundIWord[3];
 
+                            if (token.Length > 0)
+                            {
+                                HashSet<string> items = Candidate.getInstance.selectiveCandidate(prepre, pre, token, next, nextnext);
+                                lblWrong.Text = token;
+                                lstbCandidate.Items.Clear();
+                                //lstbCandidate.Items.Add(token);
+                                foreach (string item in items)
+                                {
+                                    if (!item.ToLower().Equals(token.ToLower()))
+                                        if (item.Length > 1)
+                                            lstbCandidate.Items.Add(item.Trim());
+                                    if (lstbCandidate.Items.Count > 0)
+                                        lstbCandidate.SetSelected(0, true);
+                                    btnChange.Focus();
+                                }
+                                break;
+                            }
+                        }
+                        i++;
                     } //end if compare to find token
                 } // end for
             }
@@ -125,11 +135,12 @@ namespace Spell
 
             foreach (Word.Range range in lstErrorRange)
             {
-                if (range.Start <= startIndex && startIndex <= range.End)
-                {
-                    temp.Add(range);
-                    break;
-                }
+                if (range != null)
+                    if (range.Start <= startIndex && startIndex <= range.End)
+                    {
+                        temp.Add(range);
+                        break;
+                    }
             }
             if (temp.Count == 0)
                 temp.Add(lstErrorRange.First());
@@ -142,7 +153,7 @@ namespace Spell
         /// <param name="lengthSentence">độ dài câu</param>
         /// <param name="words">toàn bộ words trong document</param>
         /// <returns></returns>
-        public string[] getGramArroundIWord(int iWord, int lengthSentence, Word.Words words)
+        public string[] getGramArroundIWord(int iWord, string[] words)
         {
             string[] ret = new string[4];
             //0: prepre
@@ -150,63 +161,19 @@ namespace Spell
             //2: next
             //3: nextnexxt
             string prepre = "", pre = "", next = "", nextnext = "";
-            if (iWord == 1)
-            {
+            int length = words.Length;
+            if (iWord == 0)
                 pre = Ngram.Instance.START_STRING;
-                if (lengthSentence > 1)
-                    next = words[iWord + 1].Text.Trim().ToLower();
-                if (lengthSentence > 2)
-                    nextnext = words[iWord + 2].Text.Trim().ToLower();
-            }
-            else if (iWord == 2)
-            {
-                if (lengthSentence > 1)
-                    pre = words[iWord - 1].Text.Trim().ToLower();
-                if (lengthSentence > 2)
-                    next = words[iWord + 1].Text.Trim().ToLower();
-                if (lengthSentence > 3)
-                    nextnext = words[iWord + 2].Text.Trim().ToLower();
-            }
-            else if (iWord == 3)
-            {
-                if (lengthSentence > 2)
-                {
-                    prepre = words[iWord - 2].Text.Trim().ToLower();
-                    pre = words[iWord - 1].Text.Trim().ToLower();
-                }
-                if (lengthSentence > 3)
-                    next = words[iWord + 1].Text.Trim().ToLower();
-                if (lengthSentence > 4)
-                    nextnext = words[iWord + 2].Text.Trim().ToLower();
-            }
-            else if (iWord > 3 && iWord < lengthSentence - 1)
-            {
-                if (lengthSentence > 5)
-                {
-                    prepre = words[iWord - 2].Text.Trim().ToLower();
-                    pre = words[iWord - 1].Text.Trim().ToLower();
-                    next = words[iWord + 1].Text.Trim().ToLower();
-                    nextnext = words[iWord + 2].Text.Trim().ToLower();
-                }
-            }
-            else if (iWord == lengthSentence - 1)
-            {
-                if (lengthSentence > 2)
-                {
-                    pre = words[iWord - 1].Text.Trim().ToLower();
-                    next = words[iWord + 1].Text.Trim().ToLower();
-                }
-                if (lengthSentence > 3)
-                    prepre = words[iWord - 2].Text.Trim().ToLower();
-            }
-            else if (iWord == lengthSentence)
-            {
+            if (iWord > 0)
+                pre = words[iWord - 1];
+            if (iWord > 1)
+                prepre = words[iWord - 2];
+            if (iWord == length - 1)
                 next = Ngram.Instance.END_STRING;
-                if (lengthSentence > 1)
-                    pre = words[iWord - 1].Text.Trim().ToLower();
-                if (lengthSentence > 2)
-                    prepre = words[iWord - 2].Text.Trim().ToLower();
-            }
+            if (iWord < length - 1)
+                next = words[iWord + 1];
+            if (iWord < length - 2)
+                nextnext = words[iWord + 2];
             ret[0] = prepre;
             ret[1] = pre;
             ret[2] = next;
@@ -221,24 +188,29 @@ namespace Spell
 
         }
         /// <summary>
-        /// HighLight lỗi hiện tại và hiện gợi ý
+        /// HighLight những lỗi hiện tại và đưa vào danh sách lỗi
         /// </summary>
+        /// <param name="startIndex"></param>
+        /// <param name="endIndex"></param>
+        /// <returns></returns>
         public int showWrongWithSuggest(int startIndex, int endIndex)
         {
             try
             {
                 //dehightlight tất cả những lỗi trước đó
                 DocumentHandling.Instance.DeHighLight_All_Mistake(Globals.ThisAddIn.Application.ActiveDocument.Characters);
+                lblWrong.Text = WRONG_TEXT;
+                lstbCandidate.Items.Clear();
+                lstErrorRange.Clear();
                 //lấy toàn bộ danh sách các từ trong Active Document, để lấy được ngữ cảnh
                 Word.Words globalWords = Globals.ThisAddIn.Application.ActiveDocument.Words;
                 //lấy những câu trong Active Document
-                Word.Sentences sentences = Globals.ThisAddIn.Application.ActiveDocument.Sentences;
+                curSentences = Globals.ThisAddIn.Application.Selection.Sentences;
                 //lấy danh sách câu dựa trên vùng được bôi đen
-                List<string> sentencesGetByRange = DocumentHandling.Instance.getSentence(startIndex, endIndex, sentences);
+                List<string> sentencesGetByRange = DocumentHandling.Instance.getSentence(startIndex, endIndex, curSentences);
                 //với mỗi câu, tách thành từng cụm có liên quan mật thiết với nhau, như "", (),...
                 List<string> mySentences = DocumentHandling.Instance.getPhrase(sentencesGetByRange);
                 //Xử lý từng cụm từ, vì mỗi cụm từ có liên quan mật thiết với nhau
-                int countWord = 0;
 
                 foreach (string mySentence in mySentences)
                 {
@@ -249,10 +221,6 @@ namespace Spell
                     //duyệt qua từng từ trong cụm
                     for (int i = 0; i < length; i++)
                     {
-                        string token = words[i].Trim().ToLower();                        
-                        countWord++;
-                        if (token.Length < 1)
-                            continue;
                         //Kiểm tra các kí tự đặc biệt, mail, số, tên riêng, viết tắt
                         // string[] phraseArr = new Regex(StringConstant.Instance.patternCheckWord).Split(text);
 
@@ -269,52 +237,23 @@ namespace Spell
                             //Thì highLight
                             if (!VNDictionary.getInstance.isSyllableVN(token))
                             {
-                                lstErrorRange.Add((DocumentHandling.Instance.HighLight_MistakeWrongWord(token, globalWords, countWord)));
+                                lstErrorRange.Add((DocumentHandling.Instance.HighLight_MistakeWrongWord(token, curSentences)));
                                 continue;
                             }
                             else
                             {
                                 //tìm vị trí của token trong globalWords để xác định ngữ cảnh
-                                for (int iWord = countWord; iWord <= globalWords.Count; iWord++)
+                                string[] gramAroundIWord = getGramArroundIWord(i, words);
+                                string prepre = gramAroundIWord[0], pre = gramAroundIWord[1], next = gramAroundIWord[2], nextnext = gramAroundIWord[3];
+                                //kiểm tra token có khả năng sai hay k
+                                if (!RightWordCandidate.getInstance.checkRightWord(prepre, pre, token, next, nextnext))
                                 {
-                                    string word = globalWords[iWord].Text.Trim().ToLower();
-                                    //tìm được vị trí của token
-                                    if (word.Equals(token))
-                                    {
-                                        //xác định ngữ cảnh
-                                        string[] gramAroundIWord = getGramArroundIWord(iWord, globalWords.Count, globalWords);
-                                        string prepre = gramAroundIWord[0], pre = gramAroundIWord[1], next = gramAroundIWord[2], nextnext = gramAroundIWord[3];
-                                        if (i == 0)
-                                        {
-                                            pre = Ngram.Instance.START_STRING;
-                                            prepre = "";
-                                        }
-                                        if (i == length - 1)
-                                        {
-                                            next = Ngram.Instance.END_STRING;
-                                            nextnext = "";
-                                        }
-
-                                        //kiểm tra token có khả năng sai hay k
-                                        if (!RightWordCandidate.getInstance.checkRightWord(prepre, pre, token, next, nextnext))
-                                        {
-                                            lstErrorRange.Add((DocumentHandling.Instance.HighLight_MistakeRightWord(token, globalWords, countWord)));
-                                            continue;
-                                        }
-                                        else
-                                        {
-                                            continue;
-                                        }
-                                        break;
-                                    }
+                                    lstErrorRange.Add((DocumentHandling.Instance.HighLight_MistakeRightWord(token, curSentences)));
+                                    continue;
                                 }
                             }
-
-                        }
-                        //end for: duyệt từ từng trong cụm
+                        }//end for: duyệt từ từng trong cụm
                     }//end for: duyệt từ cụm
-                     //showCandidateInTaskPane();
-
                 }
             }
             catch (Exception e)
@@ -374,7 +313,6 @@ namespace Spell
         }
         public int startFindError(int startInex, int endIndex)
         {
-            MessageBox.Show("dang kiem tra loi");
             lstErrorRange = new List<Word.Range>();
             int count = showWrongWithSuggest(startInex, endIndex);
             return count;
@@ -428,7 +366,6 @@ namespace Spell
                 change();
             }
         }
-
 
 
         //

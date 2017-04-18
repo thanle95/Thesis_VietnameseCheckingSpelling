@@ -40,7 +40,6 @@ namespace Spell
                 //mode1: hiện gợi ý sửa lỗi
                 if (chkSuggest.Checked)
                 {
-                    //MessageBox.Show("da tick");
                     myCustomTaskPane.Visible = true;
                     int startIndex = Globals.ThisAddIn.Application.Selection.Start;
                     int endIndex = Globals.ThisAddIn.Application.Selection.End;
@@ -67,16 +66,6 @@ namespace Spell
         }
         private void chkSuggest_Click(object sender, RibbonControlEventArgs e)
         {
-            //if (chkSuggest.Checked)
-            //{
-            //    myCustomTaskPane.Visible = true;
-            //    //UserControl1.Instance.showCandidates();
-            //}
-            //else {
-            //    myCustomTaskPane.Visible = false;
-            //    DocumentHandling.Instance.DeHighLight_All_Mistake(Globals.ThisAddIn.Application.ActiveDocument.Characters);
-            //}
-
         }
     }
 }
