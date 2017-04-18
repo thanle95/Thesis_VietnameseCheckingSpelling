@@ -76,9 +76,9 @@ namespace Spell.Algorithm
             hSetCandidate.UnionWith(Candidate.getInstance.createCandidateByNgram(prepre, pre, token, next, nextnext, isMajuscule));
             hSetCandidate.UnionWith(Candidate.getInstance.createCandByCompoundWord(prepre, pre, token, next, nextnext, isMajuscule));
             //giá trị lamda có được do thống kê
-            double lamda1 = 0.2;
-            double lamda2 = 0.4;
-            double lamda3 = 0.4;
+            double lamda1 = 0.3;
+            double lamda2 = 0.1;
+            double lamda3 = 0.6;
             double score = 0;
             //Dictionary
             double D = 0;

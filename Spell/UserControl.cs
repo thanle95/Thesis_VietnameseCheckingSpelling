@@ -174,6 +174,41 @@ namespace Spell
                 next = words[iWord + 1];
             if (iWord < length - 2)
                 nextnext = words[iWord + 2];
+            Regex r = new Regex(StringConstant.Instance.patternCheckSpecialChar);
+            if (pre.Length > 0 && iWord != 1) //pre không phải từ đầu câu
+            {
+                Match m = r.Match(pre);
+                if (m.Success | char.IsUpper(pre.Trim()[0]))
+                {
+                    pre = Ngram.Instance.START_STRING;
+                    prepre = "";
+                }
+            }
+            if (next.Length > 0)
+            {
+                Match m = r.Match(next);
+                if (m.Success | char.IsUpper(next.Trim()[0]))
+                {
+                    next = Ngram.Instance.END_STRING;
+                    nextnext = "";
+                }
+            }
+            if (prepre.Length > 0)
+            {
+                Match m = r.Match(prepre);
+                if (m.Success | char.IsUpper(prepre.Trim()[0]))
+                {
+                    prepre = "";
+                }
+            }
+            if (nextnext.Length > 0)
+            {
+                Match m = r.Match(nextnext);
+                if (m.Success | char.IsUpper(nextnext.Trim()[0]))
+                {
+                    nextnext = "";
+                }
+            }
             ret[0] = prepre;
             ret[1] = pre;
             ret[2] = next;
@@ -232,17 +267,14 @@ namespace Spell
                         Regex r = new Regex(StringConstant.Instance.patternCheckSpecialChar);
                         Match m = r.Match(token);
                         // !(char.IsUpper(token[0])) | DocumentHandling.Instance.checkEng(token)
-                        if (m.Success | char.IsUpper(words[i].Trim()[0]))
+                        if (m.Success || (char.IsUpper(words[i].Trim()[0]) && i != 0))
                             continue;
                         else
                         {
                             //Kiểm tra nếu không phải là từ Việt Nam
                             //Thì highLight
                             if (!VNDictionary.getInstance.isSyllableVN(token))
-                            {
                                 lstErrorRange.Add((DocumentHandling.Instance.HighLight_MistakeWrongWord(token, curSentences)));
-                                continue;
-                            }
                             else
                             {
                                 //tìm vị trí của token trong globalWords để xác định ngữ cảnh
@@ -250,10 +282,7 @@ namespace Spell
                                 string prepre = gramAroundIWord[0], pre = gramAroundIWord[1], next = gramAroundIWord[2], nextnext = gramAroundIWord[3];
                                 //kiểm tra token có khả năng sai hay k
                                 if (!RightWordCandidate.getInstance.checkRightWord(prepre, pre, token, next, nextnext))
-                                {
                                     lstErrorRange.Add((DocumentHandling.Instance.HighLight_MistakeRightWord(token, curSentences)));
-                                    continue;
-                                }
                             }
                         }//end for: duyệt từ từng trong cụm
                     }//end for: duyệt từ cụm
