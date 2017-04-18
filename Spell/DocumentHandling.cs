@@ -53,15 +53,17 @@ namespace Spell
                 int end = 0;
                 foreach (string word in words)
                 {
-                    end = start + word.Length;
-                    if (word.ToLower().Trim().Equals(wrongText.Trim().ToLower()))
+                    string wordInArr = Regex.Replace(word, StringConstant.Instance.patternSignSentence, "");
+
+                    end = start + wordInArr.Length;
+                    if (wordInArr.ToLower().Trim().Equals(wrongText.Trim().ToLower()))
                     {
                         range = Globals.ThisAddIn.Application.ActiveDocument.Range(start, end);
                         range.HighlightColorIndex = colorIndex;
                         range.Font.Color = color;
                         return range;
                     }
-                    start = end + 1; // bỏ qua khoảng trắng
+                    start = end + 1 + Math.Abs(wordInArr.Length - word.Length); // bỏ qua khoảng trắng
                 }
             }
             return range;
