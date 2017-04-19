@@ -213,6 +213,31 @@ namespace Spell.Algorithm
                 ret += sign;
             return ret;
         }
+        public string extractSignVNNotFully(string word)
+        {
+            string ret = "";
+            int iSource = 0;
+            char sign = ' ';
+            char vnChar;
+            foreach (char c in word)
+            {
+                iSource = StringConstant.Instance.source.IndexOf(c);
+                //không mang dấu tiếng việt
+                if (iSource == -1)
+                {
+                    ret += c;
+                }
+                else
+                {
+                    vnChar = StringConstant.Instance.dest[iSource];
+                    sign = StringConstant.Instance.VNSign[iSource % 5];
+                    ret += vnChar;
+                }
+            }
+            if (sign != ' ')
+                ret += sign;
+            return ret;
+        }
         /// <summary>
         /// tính điểm cho những ký tự khác nhau trong token và candidate
         /// điểm càng cao candidate càng giống với token
@@ -223,54 +248,77 @@ namespace Spell.Algorithm
         public double calScore_StringDiff(string token, string candidate)
         {
             double diffScore = 1;
-            string extToken = extractSignVN(token);
-            string extCandidate = extractSignVN(candidate);
-            string shorterWord = "";
-            string longerWord = "";
-            if (extToken.Length > extCandidate.Length)
+            string extToken = extractSignVNNotFully(token);
+            string extCandidate = extractSignVNNotFully(candidate);
+            int lenghtExtToken = extToken.Length;
+            int lenghToken = token.Length;
+            int lenghExtCandidate = extCandidate.Length;
+            int lenghtCandidate = candidate.Length;
+            int mau = lenghtExtToken + lenghExtCandidate;
+            double tu = 0;
+            bool tokenhasSign = false;
+            bool candhasSign = false;
+            if (lenghtExtToken - lenghToken > 0)
+                tokenhasSign = true;
+            if (lenghExtCandidate - lenghtCandidate > 0)
+                candhasSign = true;
+
+            for (int i = 0; i < lenghtExtToken; i++)
             {
-                longerWord = extToken;
-                shorterWord = extCandidate;
-            }
-            else
-            {
-                longerWord = extCandidate;
-                shorterWord = extToken;
-            }
-            int x = 0;
-            for (int i = 0; i < shorterWord.Length; i++)
-            {
-                //nếu shorterWord[i] == longerWord[i] ---> bỏ qua
-                if (shorterWord[i] == longerWord[i])
-                    continue;
-                //nếu shorterWord[i...k] == longerWord[i + x...k + x] ---> trừ 0.1
-                //ví dụ: nawngs với nhuwngx
-                if (x == 0)
+                //if (i != lenghtExtToken - 1 )
                 {
-                    x = longerWord.IndexOf(shorterWord[i], i) - i;
-                    diffScore -= 0.1;
-                }
-                else if (x == longerWord.IndexOf(shorterWord[i], i) - i)
-                    diffScore += 0.05;
-                else
-                {
-                    //nếu shorterWord[i] ~bàn phím~ longerWord[i]
-                    //--------------------------------------lệch n ---> trừ nE-2
-                    diffScore -= calScore_Similarity_Keyboard(shorterWord[i], longerWord[i]);
-                    x = 0;
+
+                    if (i < lenghExtCandidate)
+                    {
+                        if (extToken[i] == extCandidate[i])
+                            continue;
+                        if (isRegion(extToken[i], extCandidate[i]))
+                            tu += 0.1;
+                        if (isGanGiongNhau(extToken[i], extCandidate[i]))
+                            tu += 0.3;
+                        else tu += 1;
+                    }
+                    else
+                        tu += 1;
                 }
             }
-            diffScore += calScore_Similarity_Region(shorterWord, longerWord);
-            //ví dụ: nhi với nhiên
-            int deltaLength = Math.Abs(token.Length - candidate.Length);
-            //if (deltaLength > shorterWord.Length)
-            //    diffScore -= (deltaLength + shorterWord.Length) * 0.1;
-            //else
-            diffScore -= deltaLength * 0.1;
+            diffScore = 1 - 2*tu / mau;
             if (diffScore < MIN_SCORE)
                 return MIN_SCORE;
             return diffScore;
         }
+
+        private bool isGanGiongNhau(char v1, char v2)
+        {
+            return false;
+        }
+
+        private bool isRegion(char c1, char c2)
+        {
+            bool findC1 = false;
+            for (int i = 0; i < StringConstant.MAXGROUP_REGION_CONFUSED; i++)
+            {
+
+                for (int j = 0; j < StringConstant.MAXCASE_REGION_CONFUSED; j++)
+                {
+                    if (!findC1)
+                    {
+                        if (StringConstant.Instance.VNRegion_Confused_Matrix_LowerCase[i, j].Contains(c1))
+                        {
+                            findC1 = true;
+                            j = 0;
+                        }
+                    }
+                    else
+                    {
+                        if (StringConstant.Instance.VNRegion_Confused_Matrix_LowerCase[i, j].Contains(c2))
+                            return true;
+                    }
+                }
+            }
+            return false;
+        }
+
         /// <summary>
         /// đo độ tương tự chuỗi, điểm càng cao, càng giống nhau
         /// </summary>
