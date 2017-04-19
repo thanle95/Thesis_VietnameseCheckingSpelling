@@ -155,7 +155,6 @@
             this.Controls.Add(this.btnIgnore);
             this.Name = "UserControl";
             this.Size = new System.Drawing.Size(280, 430);
-            this.Load += new System.EventHandler(this.UserControl_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

@@ -239,12 +239,10 @@ namespace Spell
                 lstErrorRange.Clear();
                 //lấy toàn bộ danh sách các từ trong Active Document, để lấy được ngữ cảnh
                 Word.Words globalWords = Globals.ThisAddIn.Application.ActiveDocument.Words;
-                //lấy những câu trong Active Document
-                curSentences = Globals.ThisAddIn.Application.Selection.Sentences;
                 //lấy danh sách câu dựa trên vùng được bôi đen
-                List<string> sentencesGetByRange = DocumentHandling.Instance.getSentence(startIndex, endIndex, curSentences);
+                curSentences = Globals.ThisAddIn.Application.Selection.Sentences;
                 //với mỗi câu, tách thành từng cụm có liên quan mật thiết với nhau, như "", (),...
-                List<string> mySentences = DocumentHandling.Instance.getPhrase(sentencesGetByRange);
+                List<string> mySentences = DocumentHandling.Instance.getPhrase(curSentences);
                 //Xử lý từng cụm từ, vì mỗi cụm từ có liên quan mật thiết với nhau
                 int countWord = 0;
                 foreach (string mySentence in mySentences)
@@ -261,13 +259,8 @@ namespace Spell
                         if (token.Length < 1)
                             continue;
                         //Kiểm tra các kí tự đặc biệt, mail, số, tên riêng, viết tắt
-                        // string[] phraseArr = new Regex(StringConstant.Instance.patternCheckWord).Split(text);
-
-                        //foreach (string iPharse in phraseArr)
-                        //{
                         Regex r = new Regex(StringConstant.Instance.patternCheckSpecialChar);
                         Match m = r.Match(token);
-                        // !(char.IsUpper(token[0])) | DocumentHandling.Instance.checkEng(token)
                         if (m.Success || (char.IsUpper(words[i].Trim()[0]) && i != 0))
                             continue;
                         else
@@ -285,9 +278,10 @@ namespace Spell
                                 if (!RightWordCandidate.getInstance.checkRightWord(prepre, pre, token, next, nextnext))
                                     lstErrorRange.Add((DocumentHandling.Instance.HighLight_MistakeRightWord(token, curSentences, countWord)));
                             }
-                        }//end for: duyệt từ từng trong cụm
-                    }//end for: duyệt từ cụm
-                }
+                        }
+                    }//end for: duyệt từ từng trong cụm
+                }//end for: duyệt từ cụm
+
             }
             catch (Exception e)
             {
@@ -296,9 +290,6 @@ namespace Spell
             return lstErrorRange.Count;
         }
 
-        //
-        //---Kiet Start
-        //
 
         // button Ignore
         // unhighlight all word 
@@ -328,13 +319,6 @@ namespace Spell
             Ngram.Instance.addToDictionary(lblWrong.Text, null, null, Position.X);
         }
 
-
-
-        private void UserControl_Load(object sender, EventArgs e)
-        {
-
-        }
-
         private void btnStart_Click(object sender, EventArgs e)
         {
             int startIndex = Globals.ThisAddIn.Application.Selection.Start;
@@ -356,7 +340,6 @@ namespace Spell
         }
         private void change()
         {
-            //lstErrorRange.Remove(lstErrorRange.Where(x => x.Text.Equals(lblWrong.Text.ToLower())).Single());
             int startIndex = 0;
             int endIndex = 0;
             foreach (Word.Range range in lstErrorRange)
@@ -374,14 +357,7 @@ namespace Spell
             lblFix.Text = "\"Fix Text\"";
             lstbCandidate.Items.Clear();
             DocumentHandling.Instance.DeHighLight_Mistake(startIndex, endIndex);
-            //Globals.ThisAddIn.Application.Selection.GoTo(Word.WdGoToItem.wdGoToLine, Word.WdGoToDirection.wdGoToAbsolute, 3);
             curRangeTextShowInTaskPane.Select();
-            //lstErrorRange.Remove(lstErrorRange.First());
-            //if (lstErrorRange.Count > 0)
-            //showCandidateInTaskPane();
-
-            //------------------
-            //startFindError();
         }
         private void btnChange_KeyDown(object sender, KeyEventArgs e)
         {
@@ -400,9 +376,5 @@ namespace Spell
             }
         }
 
-
-        //
-        //---Kiet End
-        //
     }
 }

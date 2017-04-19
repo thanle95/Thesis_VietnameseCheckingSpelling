@@ -21,26 +21,7 @@ namespace Spell
             get { return instance; }
         }
 
-        public Word.Range HighLight_Mistake(string wrongText, Word.Words wordList, Word.WdColorIndex colorIndex, Word.WdColor color)
-        {
-            Word.Range range = null;
-            Word.Words words = wordList;
-            for (int i = 1; i <= words.Count; i++)
-            {
-                if (words[i].Text.ToLower().Trim().Equals(wrongText.Trim().ToLower()))
-                {
-                    int start = words[i].Start;
-                    int end = words[i].End;
-                    if (words[i].Text.Contains(" "))
-                        end--;
-                    range = Globals.ThisAddIn.Application.ActiveDocument.Range(start, end);
-                    range.HighlightColorIndex = colorIndex;
-                    range.Font.Color = color;
-                    break;
-                }
-            }
-            return range;
-        }
+        
         public Word.Range HighLight_Mistake(string wrongText, Word.Sentences sentencesList, int countWord, Word.WdColorIndex colorIndex, Word.WdColor color)
         {
             Word.Range range = null;
@@ -74,18 +55,12 @@ namespace Spell
             }
             return range;
         }
-        public Word.Range HighLight_MistakeWrongWord(string wrongText, Word.Words wordList)
-        {
-            return HighLight_Mistake(wrongText, wordList, Word.WdColorIndex.wdRed, Word.WdColor.wdColorYellow);
-        }
+        
         public Word.Range HighLight_MistakeWrongWord(string wrongText, Word.Sentences sentencesList, int countWord)
         {
             return HighLight_Mistake(wrongText, sentencesList, countWord, Word.WdColorIndex.wdRed, Word.WdColor.wdColorYellow);
         }
-        public Word.Range HighLight_MistakeRightWord(string wrongText, Word.Words wordList)
-        {
-            return HighLight_Mistake(wrongText, wordList, Word.WdColorIndex.wdYellow, Word.WdColor.wdColorAutomatic);
-        }
+       
         public Word.Range HighLight_MistakeRightWord(string wrongText, Word.Sentences sentencesList, int countWord)
         {
             return HighLight_Mistake(wrongText, sentencesList, countWord, Word.WdColorIndex.wdYellow, Word.WdColor.wdColorAutomatic);
@@ -154,35 +129,6 @@ namespace Spell
             {
                 string text = sentences[i].Text;
 
-                string[] phraseArr = new Regex(StringConstant.Instance.patternMiddleSymbol).Split(text);
-
-                foreach (string iPharse in phraseArr)
-                {
-                    Regex r = new Regex(StringConstant.Instance.patternEndSentenceCharacter);
-                    Match m = r.Match(iPharse);
-                    if (m.Success)
-                    //nếu chứa ký tự kết thúc câu
-                    {
-                        //bỏ dấu, vì dấu ở đằng sau, nên lấy phần tử đầu tiên
-                        string tmp = new Regex(StringConstant.Instance.patternEndSentenceCharacter).Split(iPharse.Trim())[0];
-                        if (tmp != "")
-                            ret.Add(tmp);
-                    }
-                    else
-                    {
-                        ret.Add(iPharse);
-                    }
-                }
-            }
-            return ret;
-        }
-        public List<string> getPhrase(List<string> sentences)
-        {
-            List<string> ret = new List<string>();
-            for (int i = 0; i < sentences.Count; i++)
-            {
-                string text = sentences[i];
-
                 string[] phraseArr = new Regex(StringConstant.Instance.patternSignSentence).Split(text);
 
                 foreach (string iPharse in phraseArr)
@@ -193,7 +139,7 @@ namespace Spell
             }
             return ret;
         }
-
+       
         public List<string> getWords(Word.Words words)
         {
             List<string> ret = new List<string>();
