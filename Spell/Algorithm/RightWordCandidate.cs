@@ -103,7 +103,7 @@ namespace Spell.Algorithm
                     if (L >= Candidate.getInstance.LIM_LANGUAGEMODEL || D >= Candidate.getInstance.LIM_COMPOUNDWORD)
                     {
                         //là từ ghép 3 âm tiết, hoặc rất giống với token
-                        if (D == Candidate.getInstance.MAX_SCORE || S == Candidate.getInstance.MAX_SCORE)
+                        if (S == Candidate.getInstance.MAX_SCORE)
                         {
                             //nếu số lượng phần tử còn nhỏ hơn 5
                             if (prioritizedCandidatesWithScore.Count < 5)

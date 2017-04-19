@@ -44,7 +44,7 @@ namespace Spell.Algorithm
                 return 0;
             }
         }
-       
+
         private Candidate()
         {
 
@@ -122,7 +122,7 @@ namespace Spell.Algorithm
         {
             double calBiGram_PreCand = Ngram.Instance.calBigram(pre, candidate);
             double calBigram_CandNext = Ngram.Instance.calBigram(candidate, next);
-            double ret = (calBiGram_PreCand + calBigram_CandNext)*1E5;
+            double ret = (calBiGram_PreCand + calBigram_CandNext) * 1E5;
             //tang gia tri ngram
             if (ret > MAX_SCORE)
                 return MAX_SCORE;
@@ -262,11 +262,11 @@ namespace Spell.Algorithm
             }
             diffScore += calScore_Similarity_Region(shorterWord, longerWord);
             //ví dụ: nhi với nhiên
-            int deltaLength = longerWord.Length - shorterWord.Length;
-            if (deltaLength > shorterWord.Length)
-                diffScore -= (deltaLength + shorterWord.Length) * 0.1;
-            else
-                diffScore -= deltaLength * 0.1;
+            int deltaLength = Math.Abs(token.Length - candidate.Length);
+            //if (deltaLength > shorterWord.Length)
+            //    diffScore -= (deltaLength + shorterWord.Length) * 0.1;
+            //else
+            diffScore -= deltaLength * 0.1;
             if (diffScore < MIN_SCORE)
                 return MIN_SCORE;
             return diffScore;

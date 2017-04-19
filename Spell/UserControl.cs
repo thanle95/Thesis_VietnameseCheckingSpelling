@@ -23,7 +23,7 @@ namespace Spell
         private Word.Range curRangeTextShowInTaskPane;
         private Word.Sentences curSentences;
         private List<string> mySentences;
-        private List<Word.Range> lstErrorRange = new List<Word.Range>();
+        private Dictionary<int, Word.Range> lstErrorRange = new Dictionary<int, Word.Range>();
         private static UserControl instance = new UserControl();
         private UserControl()
         {
@@ -81,35 +81,41 @@ namespace Spell
 
                 Word.Range tokenRange = findErrorRangeByStartIndex(startIndex);
                 string token = tokenRange.Text.Trim().ToLower();
-                Regex regexEndSentenceChar =new Regex(StringConstant.Instance.patternSignSentence);
+                Regex regexEndSentenceChar = new Regex(StringConstant.Instance.patternSignSentence);
+                int countWord = lstErrorRange.First(kvp => kvp.Value == tokenRange).Key;
+                int count = 0;
                 foreach (string mySentence in mySentences)
                 {
                     string[] words = mySentence.Trim().Split(' ');
                     int i = 0;
                     foreach (string word in words)
                     {
-                        string wordInWords = regexEndSentenceChar.Replace(word, "");
-                        if (wordInWords.Trim().ToLower().Equals(token))
+                        count++;
+                        if (countWord == count)
                         {
-                            string[] gramAroundIWord = getGramArroundIWord(i, words);
-                            string prepre = gramAroundIWord[0], pre = gramAroundIWord[1], next = gramAroundIWord[2], nextnext = gramAroundIWord[3];
-
-                            if (token.Length > 0)
+                            string wordInWords = regexEndSentenceChar.Replace(word, "");
+                            if (wordInWords.Trim().ToLower().Equals(token))
                             {
-                                HashSet<string> items = Candidate.getInstance.selectiveCandidate(prepre, pre, token, next, nextnext);
-                                lblWrong.Text = token;
-                                lstbCandidate.Items.Clear();
-                                //lstbCandidate.Items.Add(token);
-                                foreach (string item in items)
+                                string[] gramAroundIWord = getGramArroundIWord(i, words);
+                                string prepre = gramAroundIWord[0], pre = gramAroundIWord[1], next = gramAroundIWord[2], nextnext = gramAroundIWord[3];
+
+                                if (token.Length > 0)
                                 {
-                                    if (!item.ToLower().Equals(token.ToLower()))
-                                        if (item.Length > 1)
-                                            lstbCandidate.Items.Add(item.Trim());
-                                    if (lstbCandidate.Items.Count > 0)
-                                        lstbCandidate.SetSelected(0, true);
-                                    btnChange.Focus();
+                                    HashSet<string> items = Candidate.getInstance.selectiveCandidate(prepre, pre, token, next, nextnext);
+                                    lblWrong.Text = token;
+                                    lstbCandidate.Items.Clear();
+                                    //lstbCandidate.Items.Add(token);
+                                    foreach (string item in items)
+                                    {
+                                        if (!item.ToLower().Equals(token.ToLower()))
+                                            if (item.Length > 1)
+                                                lstbCandidate.Items.Add(item.Trim());
+                                        if (lstbCandidate.Items.Count > 0)
+                                            lstbCandidate.SetSelected(0, true);
+                                        btnChange.Focus();
+                                    }
+                                    break;
                                 }
-                                break;
                             }
                         }
                         i++;
@@ -136,7 +142,7 @@ namespace Spell
             //        break;
             //}
 
-            foreach (Word.Range range in lstErrorRange)
+            foreach (Word.Range range in lstErrorRange.Values)
             {
                 if (range != null)
                     if (range.Start <= startIndex && startIndex <= range.End)
@@ -146,7 +152,7 @@ namespace Spell
                     }
             }
             if (temp.Count == 0)
-                temp.Add(lstErrorRange.First());
+                temp.Add(lstErrorRange.Values.First());
             return temp.First();
         }
         /// <summary>
@@ -175,11 +181,11 @@ namespace Spell
                 prepre = words[iWord - 2];
             if (iWord == length - 1)
                 next = Ngram.Instance.END_STRING;
-            if (iWord < length - 1) 
-                next = regexEndSentenceChar.Replace(words[iWord + 1],"");
+            if (iWord < length - 1)
+                next = regexEndSentenceChar.Replace(words[iWord + 1], "");
             if (iWord < length - 2)
-                nextnext = regexEndSentenceChar.Replace(words[iWord + 2],"");
-            
+                nextnext = regexEndSentenceChar.Replace(words[iWord + 2], "");
+
             if (pre.Length > 0 && iWord != 1) //pre không phải từ đầu câu
             {
                 Match m = regexSpecialChar.Match(pre);
@@ -197,7 +203,7 @@ namespace Spell
                     next = Ngram.Instance.END_STRING;
                     nextnext = "";
                 }
-                
+
             }
             if (prepre.Length > 0)
             {
@@ -274,7 +280,7 @@ namespace Spell
                             //Kiểm tra nếu không phải là từ Việt Nam
                             //Thì highLight
                             if (!VNDictionary.getInstance.isSyllableVN(token))
-                                lstErrorRange.Add((DocumentHandling.Instance.HighLight_MistakeWrongWord(token, curSentences, countWord)));
+                                lstErrorRange.Add(countWord, (DocumentHandling.Instance.HighLight_MistakeWrongWord(token, curSentences, countWord)));
                             else
                             {
                                 //tìm vị trí của token trong globalWords để xác định ngữ cảnh
@@ -282,7 +288,7 @@ namespace Spell
                                 string prepre = gramAroundIWord[0], pre = gramAroundIWord[1], next = gramAroundIWord[2], nextnext = gramAroundIWord[3];
                                 //kiểm tra token có khả năng sai hay k
                                 if (!RightWordCandidate.getInstance.checkRightWord(prepre, pre, token, next, nextnext))
-                                    lstErrorRange.Add((DocumentHandling.Instance.HighLight_MistakeRightWord(token, curSentences, countWord)));
+                                    lstErrorRange.Add(countWord, (DocumentHandling.Instance.HighLight_MistakeRightWord(token, curSentences, countWord)));
                             }
                         }
                     }//end for: duyệt từ từng trong cụm
@@ -308,14 +314,18 @@ namespace Spell
         {
             int startIndex = 0;
             int endIndex = 0;
-            foreach (Word.Range range in lstErrorRange)
-                if (range.Text.Equals(lblWrong.Text.ToLower()))
+
+            foreach (Word.Range range in lstErrorRange.Values)
+                if (range.Text.Trim().ToLower().Equals(lblWrong.Text.ToLower()))
                 {
                     startIndex = range.Start;
                     endIndex = range.End;
-                    lstErrorRange.Remove(range);
+                    var item = lstErrorRange.First(kvp => kvp.Value == range);
+
+                    lstErrorRange.Remove(item.Key);
                     break;
                 }
+
             DocumentHandling.Instance.DeHighLight_Mistake(startIndex, endIndex);
         }
 
@@ -336,7 +346,7 @@ namespace Spell
         }
         public int startFindError(int startInex, int endIndex)
         {
-            lstErrorRange = new List<Word.Range>();
+            lstErrorRange = new Dictionary<int, Word.Range>();
             int count = showWrongWithSuggest(startInex, endIndex);
             return count;
         }
@@ -348,12 +358,14 @@ namespace Spell
         {
             int startIndex = 0;
             int endIndex = 0;
-            foreach (Word.Range range in lstErrorRange)
+            foreach (Word.Range range in lstErrorRange.Values)
                 if (range.Text.Equals(lblWrong.Text.ToLower()))
                 {
                     startIndex = range.Start;
                     curRangeTextShowInTaskPane = range;
-                    lstErrorRange.Remove(range);
+                    var item = lstErrorRange.First(kvp => kvp.Value == range);
+
+                    lstErrorRange.Remove(item.Key);
                     break;
                 }
 
