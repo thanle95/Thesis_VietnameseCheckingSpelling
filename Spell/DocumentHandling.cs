@@ -41,11 +41,12 @@ namespace Spell
             }
             return range;
         }
-        public Word.Range HighLight_Mistake(string wrongText, Word.Sentences sentencesList, Word.WdColorIndex colorIndex, Word.WdColor color)
+        public Word.Range HighLight_Mistake(string wrongText, Word.Sentences sentencesList, int countWord, Word.WdColorIndex colorIndex, Word.WdColor color)
         {
             Word.Range range = null;
-            
+
             Word.Sentences sentences = sentencesList;
+            int count = 0;
             for (int i = 1; i <= sentences.Count; i++)
             {
                 string[] words = sentences[i].Text.Trim().Split(' ');
@@ -53,15 +54,20 @@ namespace Spell
                 int end = 0;
                 foreach (string word in words)
                 {
+                    count++;
+
                     string wordInArr = Regex.Replace(word, StringConstant.Instance.patternSignSentence, "");
 
                     end = start + wordInArr.Length;
-                    if (wordInArr.ToLower().Trim().Equals(wrongText.Trim().ToLower()))
+                    if (count == countWord)
                     {
-                        range = Globals.ThisAddIn.Application.ActiveDocument.Range(start, end);
-                        range.HighlightColorIndex = colorIndex;
-                        range.Font.Color = color;
-                        return range;
+                        if (wordInArr.ToLower().Trim().Equals(wrongText.Trim().ToLower()))
+                        {
+                            range = Globals.ThisAddIn.Application.ActiveDocument.Range(start, end);
+                            range.HighlightColorIndex = colorIndex;
+                            range.Font.Color = color;
+                            return range;
+                        }
                     }
                     start = end + 1 + Math.Abs(wordInArr.Length - word.Length); // bỏ qua khoảng trắng
                 }
@@ -72,17 +78,17 @@ namespace Spell
         {
             return HighLight_Mistake(wrongText, wordList, Word.WdColorIndex.wdRed, Word.WdColor.wdColorYellow);
         }
-        public Word.Range HighLight_MistakeWrongWord(string wrongText, Word.Sentences sentencesList)
+        public Word.Range HighLight_MistakeWrongWord(string wrongText, Word.Sentences sentencesList, int countWord)
         {
-            return HighLight_Mistake(wrongText, sentencesList, Word.WdColorIndex.wdRed, Word.WdColor.wdColorYellow);
+            return HighLight_Mistake(wrongText, sentencesList, countWord, Word.WdColorIndex.wdRed, Word.WdColor.wdColorYellow);
         }
         public Word.Range HighLight_MistakeRightWord(string wrongText, Word.Words wordList)
         {
             return HighLight_Mistake(wrongText, wordList, Word.WdColorIndex.wdYellow, Word.WdColor.wdColorAutomatic);
         }
-        public Word.Range HighLight_MistakeRightWord(string wrongText, Word.Sentences sentencesList)
+        public Word.Range HighLight_MistakeRightWord(string wrongText, Word.Sentences sentencesList, int countWord)
         {
-            return HighLight_Mistake(wrongText, sentencesList, Word.WdColorIndex.wdYellow, Word.WdColor.wdColorAutomatic);
+            return HighLight_Mistake(wrongText, sentencesList, countWord, Word.WdColorIndex.wdYellow, Word.WdColor.wdColorAutomatic);
         }
 
         public void DeHighLight_All_Mistake(Word.Characters characters)
@@ -181,7 +187,7 @@ namespace Spell
 
                 foreach (string iPharse in phraseArr)
                 {
-                    if(iPharse.Trim().Length > 0)
+                    if (iPharse.Trim().Length > 0)
                         ret.Add(iPharse);
                 }
             }
@@ -201,7 +207,7 @@ namespace Spell
             string extractedToken = Candidate.getInstance.extractSignVN(token);
             bool result = false;
             if (!VNDictionary.getInstance.isSyllableVN(token))
-                foreach(char sign in StringConstant.Instance.VNSign)
+                foreach (char sign in StringConstant.Instance.VNSign)
                 {
                     if (!extractedToken.Contains(sign))
                         result = true;

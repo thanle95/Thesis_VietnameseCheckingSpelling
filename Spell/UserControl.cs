@@ -246,7 +246,7 @@ namespace Spell
                 //với mỗi câu, tách thành từng cụm có liên quan mật thiết với nhau, như "", (),...
                 List<string> mySentences = DocumentHandling.Instance.getPhrase(sentencesGetByRange);
                 //Xử lý từng cụm từ, vì mỗi cụm từ có liên quan mật thiết với nhau
-
+                int countWord = 0;
                 foreach (string mySentence in mySentences)
                 {
                     string[] words = mySentence.Trim().Split(' ');
@@ -256,6 +256,7 @@ namespace Spell
                     //duyệt qua từng từ trong cụm
                     for (int i = 0; i < length; i++)
                     {
+                        countWord++;
                         string token = words[i].Trim().ToLower();
                         if (token.Length < 1)
                             continue;
@@ -274,7 +275,7 @@ namespace Spell
                             //Kiểm tra nếu không phải là từ Việt Nam
                             //Thì highLight
                             if (!VNDictionary.getInstance.isSyllableVN(token))
-                                lstErrorRange.Add((DocumentHandling.Instance.HighLight_MistakeWrongWord(token, curSentences)));
+                                lstErrorRange.Add((DocumentHandling.Instance.HighLight_MistakeWrongWord(token, curSentences, countWord)));
                             else
                             {
                                 //tìm vị trí của token trong globalWords để xác định ngữ cảnh
@@ -282,7 +283,7 @@ namespace Spell
                                 string prepre = gramAroundIWord[0], pre = gramAroundIWord[1], next = gramAroundIWord[2], nextnext = gramAroundIWord[3];
                                 //kiểm tra token có khả năng sai hay k
                                 if (!RightWordCandidate.getInstance.checkRightWord(prepre, pre, token, next, nextnext))
-                                    lstErrorRange.Add((DocumentHandling.Instance.HighLight_MistakeRightWord(token, curSentences)));
+                                    lstErrorRange.Add((DocumentHandling.Instance.HighLight_MistakeRightWord(token, curSentences, countWord)));
                             }
                         }//end for: duyệt từ từng trong cụm
                     }//end for: duyệt từ cụm

@@ -35,7 +35,7 @@ namespace Spell.Algorithm
         {
             get
             {
-                return "<s>";
+                return "</s>";
             }
         }
         /// <summary>
