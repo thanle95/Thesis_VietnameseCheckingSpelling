@@ -213,29 +213,30 @@ namespace Spell.Algorithm
                 ret += sign;
             return ret;
         }
-        public string extractSignVNNotFully(string word)
+        public string[] extractSignVNNotFully(string word)
         {
-            string ret = "";
+            string extWord = "";
+            string[] ret = new string[2];
             int iSource = 0;
-            char sign = ' ';
             char vnChar;
+            string sign = "";
             foreach (char c in word)
             {
                 iSource = StringConstant.Instance.source.IndexOf(c);
                 //không mang dấu tiếng việt
                 if (iSource == -1)
                 {
-                    ret += c;
+                    extWord += c;
                 }
                 else
                 {
                     vnChar = StringConstant.Instance.dest[iSource];
-                    sign = StringConstant.Instance.VNSign[iSource % 5];
-                    ret += vnChar;
+                    sign = StringConstant.Instance.VNSign[iSource % 5] + "";
+                    extWord += vnChar;
                 }
             }
-            if (sign != ' ')
-                ret += sign;
+            ret[0] = extWord;
+            ret[1] = sign;
             return ret;
         }
         /// <summary>
@@ -247,42 +248,50 @@ namespace Spell.Algorithm
         /// <returns></returns>
         public double calScore_StringDiff(string token, string candidate)
         {
-            double diffScore = 1;
-            string extToken = extractSignVNNotFully(token);
-            string extCandidate = extractSignVNNotFully(candidate);
-            int lenghtExtToken = extToken.Length;
-            int lenghToken = token.Length;
-            int lenghExtCandidate = extCandidate.Length;
-            int lenghtCandidate = candidate.Length;
-            int mau = lenghtExtToken + lenghExtCandidate;
-            double tu = 0;
-            bool tokenhasSign = false;
-            bool candhasSign = false;
-            if (lenghtExtToken - lenghToken > 0)
-                tokenhasSign = true;
-            if (lenghExtCandidate - lenghtCandidate > 0)
-                candhasSign = true;
-
-            for (int i = 0; i < lenghtExtToken; i++)
+            double diffScore;
+            string[] extTokenArr = extractSignVNNotFully(token);
+            string[] extCandidateArr = extractSignVNNotFully(candidate);
+            string extToken = extTokenArr[0];
+            string signToken = extTokenArr[1];
+            string extCandidate = extCandidateArr[0];
+            string signCandidate = extCandidateArr[1];
+            int lengthExtToken = extToken.Length;
+            int lengthExtCandidate = extCandidate.Length;
+            int lengthSignToken = signToken.Length;
+            int lengthSignCandidate = signCandidate.Length;
+            int denominator = lengthExtToken + lengthSignToken + lengthExtCandidate + lengthSignCandidate;
+            double numerator = 0;
+            int index;
+            for (int i = 0; i < lengthExtToken; i++)
             {
                 //if (i != lenghtExtToken - 1 )
                 {
 
-                    if (i < lenghExtCandidate)
+                    if (i < lengthExtCandidate)
                     {
                         if (extToken[i] == extCandidate[i])
                             continue;
-                        if (isRegion(extToken[i], extCandidate[i]))
-                            tu += 0.1;
-                        if (isGanGiongNhau(extToken[i], extCandidate[i]))
-                            tu += 0.3;
-                        else tu += 1;
+                        else {
+                            index = extCandidate.IndexOf(extToken[i]);
+                            //bị lệch đi 1 chỉ số
+                            if (Math.Abs(index - i) == 1)
+                            {
+                                numerator += 0.3;
+                            }
+                            else {
+                                if (isRegion(extToken[i], extCandidate[i]))
+                                    numerator += 0.1;
+                                if (isGanGiongNhau(extToken[i], extCandidate[i]))
+                                    numerator += 0.3;
+                                else numerator += 1;
+                            }
+                        }
                     }
                     else
-                        tu += 1;
+                        numerator += 1;
                 }
             }
-            diffScore = 1 - 2*tu / mau;
+            diffScore = 1 - 2 * numerator / denominator;
             if (diffScore < MIN_SCORE)
                 return MIN_SCORE;
             return diffScore;
