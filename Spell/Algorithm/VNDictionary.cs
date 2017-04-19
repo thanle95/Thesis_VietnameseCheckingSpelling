@@ -15,7 +15,7 @@ namespace Spell.Algorithm
         //từ điển từ ghép
         public List<string> CompoundDict;
         //dùng từ điển chưa có key
-        private string compound = @"Resources\sortedNewViet39K.txt";
+        private string compound = @"Resources\sortedCompoundWordDict.txt";
         private string syll = @"Resources\SyllableDictByViet39K.txt";
         private string syllPath;
         private string compoundPath;

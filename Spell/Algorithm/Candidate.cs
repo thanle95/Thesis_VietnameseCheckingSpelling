@@ -20,7 +20,14 @@ namespace Spell.Algorithm
         {
             get
             {
-                return 1E-1;
+                return 0.09;
+            }
+        }
+        public double LIM_COMPOUNDWORD
+        {
+            get
+            {
+                return 0.7;
             }
         }
         public double MAX_SCORE
@@ -144,9 +151,9 @@ namespace Spell.Algorithm
             else if (next.Length > 0 && nextnext.Length > 0 && VNDictionary.getInstance.CompoundDict.Contains(_3SyllComWord3))
                 return MAX_SCORE;
             else if (pre.Length > 0 && VNDictionary.getInstance.CompoundDict.Contains(_2SyllComWord1))
-                return 0.5;
+                return 0.7;
             else if (next.Length > 0 && VNDictionary.getInstance.CompoundDict.Contains(_2SyllComWord2))
-                return 0.5;
+                return 0.7;
             return MIN_SCORE;
         }
         /// <summary>

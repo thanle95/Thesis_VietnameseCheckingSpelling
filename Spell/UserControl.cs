@@ -22,6 +22,7 @@ namespace Spell
     {
         private Word.Range curRangeTextShowInTaskPane;
         private Word.Sentences curSentences;
+        private List<string> mySentences;
         private List<Word.Range> lstErrorRange = new List<Word.Range>();
         private static UserControl instance = new UserControl();
         private UserControl()
@@ -80,13 +81,15 @@ namespace Spell
 
                 Word.Range tokenRange = findErrorRangeByStartIndex(startIndex);
                 string token = tokenRange.Text.Trim().ToLower();
-                for (int iWord = 1; iWord <= curSentences.Count; iWord++)
+                Regex regexEndSentenceChar =new Regex(StringConstant.Instance.patternSignSentence);
+                foreach (string mySentence in mySentences)
                 {
-                    string[] words = curSentences[iWord].Text.Trim().Split(' ');
+                    string[] words = mySentence.Trim().Split(' ');
                     int i = 0;
                     foreach (string word in words)
                     {
-                        if (word.Trim().ToLower().Equals(token))
+                        string wordInWords = regexEndSentenceChar.Replace(word, "");
+                        if (wordInWords.Trim().ToLower().Equals(token))
                         {
                             string[] gramAroundIWord = getGramArroundIWord(i, words);
                             string prepre = gramAroundIWord[0], pre = gramAroundIWord[1], next = gramAroundIWord[2], nextnext = gramAroundIWord[3];
@@ -161,6 +164,8 @@ namespace Spell
             //2: next
             //3: nextnexxt
             string prepre = "", pre = "", next = "", nextnext = "";
+            Regex regexSpecialChar = new Regex(StringConstant.Instance.patternCheckSpecialChar);
+            Regex regexEndSentenceChar = new Regex(StringConstant.Instance.patternEndSentenceCharacter);
             int length = words.Length;
             if (iWord == 0)
                 pre = Ngram.Instance.START_STRING;
@@ -170,14 +175,14 @@ namespace Spell
                 prepre = words[iWord - 2];
             if (iWord == length - 1)
                 next = Ngram.Instance.END_STRING;
-            if (iWord < length - 1)
-                next = words[iWord + 1];
+            if (iWord < length - 1) 
+                next = regexEndSentenceChar.Replace(words[iWord + 1],"");
             if (iWord < length - 2)
-                nextnext = words[iWord + 2];
-            Regex r = new Regex(StringConstant.Instance.patternCheckSpecialChar);
+                nextnext = regexEndSentenceChar.Replace(words[iWord + 2],"");
+            
             if (pre.Length > 0 && iWord != 1) //pre không phải từ đầu câu
             {
-                Match m = r.Match(pre);
+                Match m = regexSpecialChar.Match(pre);
                 if (m.Success | char.IsUpper(pre.Trim()[0]))
                 {
                     pre = Ngram.Instance.START_STRING;
@@ -186,16 +191,17 @@ namespace Spell
             }
             if (next.Length > 0)
             {
-                Match m = r.Match(next);
-                if (m.Success | char.IsUpper(next.Trim()[0]))
+                Match m = regexSpecialChar.Match(next);
+                if (m.Success)
                 {
                     next = Ngram.Instance.END_STRING;
                     nextnext = "";
                 }
+                
             }
             if (prepre.Length > 0)
             {
-                Match m = r.Match(prepre);
+                Match m = regexSpecialChar.Match(prepre);
                 if (m.Success | char.IsUpper(prepre.Trim()[0]))
                 {
                     prepre = "";
@@ -203,8 +209,8 @@ namespace Spell
             }
             if (nextnext.Length > 0)
             {
-                Match m = r.Match(nextnext);
-                if (m.Success | char.IsUpper(nextnext.Trim()[0]))
+                Match m = regexSpecialChar.Match(nextnext);
+                if (m.Success)
                 {
                     nextnext = "";
                 }
@@ -242,7 +248,7 @@ namespace Spell
                 //lấy danh sách câu dựa trên vùng được bôi đen
                 curSentences = Globals.ThisAddIn.Application.Selection.Sentences;
                 //với mỗi câu, tách thành từng cụm có liên quan mật thiết với nhau, như "", (),...
-                List<string> mySentences = DocumentHandling.Instance.getPhrase(curSentences);
+                mySentences = DocumentHandling.Instance.getPhrase(curSentences);
                 //Xử lý từng cụm từ, vì mỗi cụm từ có liên quan mật thiết với nhau
                 int countWord = 0;
                 foreach (string mySentence in mySentences)
