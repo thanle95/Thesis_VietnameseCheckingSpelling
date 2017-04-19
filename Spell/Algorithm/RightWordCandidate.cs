@@ -102,40 +102,21 @@ namespace Spell.Algorithm
                     //ngưỡng để chọn candidate có được do thống kê
                     if (L >= Candidate.getInstance.LIM_LANGUAGEMODEL || D >= Candidate.getInstance.LIM_COMPOUNDWORD)
                     {
-                        //là từ ghép 3 âm tiết, hoặc rất giống với token
-                        if (S == Candidate.getInstance.MAX_SCORE)
+
+                        //nếu số lượng phần tử còn nhỏ hơn 5
+                        if (candidatesWithScore.Count < 5)
                         {
-                            //nếu số lượng phần tử còn nhỏ hơn 5
-                            if (prioritizedCandidatesWithScore.Count < 5)
-                            {
-                                prioritizedCandidatesWithScore.Add(candidate, score);
-                                prioritizedCandidatesWithScore = Candidate.getInstance.sortDict(prioritizedCandidatesWithScore);
-                            }
-                            //nếu phần tử cuối cùng có số điểm thấp hơn candidate hiện tại
-                            else if (prioritizedCandidatesWithScore.Last().Value < score)
-                            {
-                                prioritizedCandidatesWithScore.Remove(prioritizedCandidatesWithScore.Last().Key);
-                                prioritizedCandidatesWithScore.Add(candidate, score);
-                                prioritizedCandidatesWithScore = Candidate.getInstance.sortDict(prioritizedCandidatesWithScore);
-                            }
+                            candidatesWithScore.Add(candidate, score);
+                            candidatesWithScore = Candidate.getInstance.sortDict(candidatesWithScore);
                         }
-                        //không phải từ ghép 3 âm tiết
-                        else
+                        //nếu phần tử cuối cùng có số điểm thấp hơn candidate hiện tại
+                        else if (candidatesWithScore.Last().Value < score)
                         {
-                            //nếu số lượng phần tử còn nhỏ hơn 5
-                            if (candidatesWithScore.Count < 5)
-                            {
-                                candidatesWithScore.Add(candidate, score);
-                                candidatesWithScore = Candidate.getInstance.sortDict(candidatesWithScore);
-                            }
-                            //nếu phần tử cuối cùng có số điểm thấp hơn candidate hiện tại
-                            else if (candidatesWithScore.Last().Value < score)
-                            {
-                                candidatesWithScore.Remove(candidatesWithScore.Last().Key);
-                                candidatesWithScore.Add(candidate, score);
-                                candidatesWithScore = Candidate.getInstance.sortDict(candidatesWithScore);
-                            }
+                            candidatesWithScore.Remove(candidatesWithScore.Last().Key);
+                            candidatesWithScore.Add(candidate, score);
+                            candidatesWithScore = Candidate.getInstance.sortDict(candidatesWithScore);
                         }
+
                         text_writeFile += String.Format("{0}: [{1};{2};{3}] = {4}", candidate, D, L, S, score) + "\n";
                     }
                 }
@@ -158,6 +139,6 @@ namespace Spell.Algorithm
             }
             return result;
         }
-        
+
     }
 }
