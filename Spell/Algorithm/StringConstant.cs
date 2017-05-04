@@ -1,5 +1,4 @@
 ﻿using System;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -30,6 +29,8 @@ namespace Spell.Algorithm
         public const int TILDE = 3;
         public const int MAX_VOWEL_NO = 12;
         public const int MAX_SIGN_NO = 5;
+        public const int MAXGROUP_VNCHARMATRIX = 5;
+        public const int MAXCASE_VNCHARMATRIX= 3;
         public char[,] KeyBoardMatrix_LowerCase = new char[MAX_KEYBOARD_ROW, MAX_KEYBOARD_COL]  {
             {'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p' },
             {'a', 's', 'd', 'f', 'g', 'h', 'j', 'k' ,'l', ';' },
@@ -121,6 +122,14 @@ namespace Spell.Algorithm
         public char[] subVNVowelArr_LowerCase = new char[]
         {
            'ă', 'â', 'ê','ô', 'ơ','ư'
+        };
+        public char[,] vnCharacterMatrix = new char[,]
+        {
+            {'d','đ', ' '},
+            {'e','ê', ' '},
+            {'a','ă','â'},
+            {'o','ô', 'ơ'},
+            {'u','ư', ' '},
         };
         public string vnCharacter = "ăâêôơưđ";
         public string[] vnCharacter_Telex = new string[]

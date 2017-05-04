@@ -13,14 +13,14 @@ namespace Spell.Algorithm
         {
             get
             {
-                return 0.7;
+                return 0.9;
             }
         }
         public double LIM_LANGUAGEMODEL
         {
             get
             {
-                return 0.09;
+                return 0.01;
             }
         }
         public double LIM_COMPOUNDWORD
@@ -248,83 +248,137 @@ namespace Spell.Algorithm
         /// <returns></returns>
         public double calScore_StringDiff(string token, string candidate)
         {
+
             double diffScore;
+            //tách dấu ---> tachs dâus
             string[] extTokenArr = extractSignVNNotFully(token);
             string[] extCandidateArr = extractSignVNNotFully(candidate);
+
             string extToken = extTokenArr[0];
             string signToken = extTokenArr[1];
+
             string extCandidate = extCandidateArr[0];
             string signCandidate = extCandidateArr[1];
-            int lengthExtToken = extToken.Length;
-            int lengthExtCandidate = extCandidate.Length;
-            int lengthSignToken = signToken.Length;
-            int lengthSignCandidate = signCandidate.Length;
-            int denominator = lengthExtToken + lengthSignToken + lengthExtCandidate + lengthSignCandidate;
-            double numerator = 0;
-            int index;
-            for (int i = 0; i < lengthExtToken; i++)
-            {
-                //if (i != lenghtExtToken - 1 )
-                {
 
-                    if (i < lengthExtCandidate)
-                    {
-                        if (extToken[i] == extCandidate[i])
-                            continue;
-                        else {
-                            index = extCandidate.IndexOf(extToken[i]);
-                            //bị lệch đi 1 chỉ số
-                            if (Math.Abs(index - i) == 1)
-                            {
-                                numerator += 0.3;
-                            }
-                            else {
-                                if (isRegion(extToken[i], extCandidate[i]))
-                                    numerator += 0.1;
-                                if (isGanGiongNhau(extToken[i], extCandidate[i]))
-                                    numerator += 0.3;
-                                else numerator += 1;
-                            }
-                        }
-                    }
-                    else
-                        numerator += 1;
-                }
-            }
-            diffScore = 1 - 2 * numerator / denominator;
+            int denominator = calDenominatorForStringDiff(extToken, signToken, extCandidate, signCandidate);
+            double numerator = calNumeratorForStringDiff(extToken, extCandidate) + calNumeratorForStringDiff(extCandidate, extToken)
+                + calNumeratorForStringDiff(signToken, signCandidate) + calNumeratorForStringDiff(signCandidate, signToken);
+            //tử số, khác nhau càng nhiều, điểm càng cao
+
+            diffScore = 1 - numerator / denominator;
             if (diffScore < MIN_SCORE)
                 return MIN_SCORE;
             return diffScore;
         }
 
-        private bool isGanGiongNhau(char v1, char v2)
+        private int calDenominatorForStringDiff(string extToken, string signToken, string extCandidate, string signCandidate)
         {
+            return extToken.Length + signToken.Length + extCandidate.Length + signCandidate.Length;
+        }
+
+        private double calNumeratorForStringDiff(string extX, string extY)
+        {
+            double numerator = 0;
+            int lengthExtX = extX.Length;
+            int lengthExtY = extY.Length;
+            for (int i = 0; i < lengthExtX; i++)
+                if (i < lengthExtY)
+                {
+                    if (extX[i] == extY[i])
+                        continue;
+                    else if (isRegionMistake(extX[i], extY[i]))
+                        numerator += 0.1;
+                    else if (isKeyboardMistake(extX[i], extY[i]))
+                        numerator += 0.3;
+                    else if (isVowelVNMistake(extX[i], extY[i]))
+                        numerator += 0.3;
+                    else numerator += 1;
+                }
+                else
+                    numerator += 1;
+            return numerator;
+        }
+
+        private bool isVowelVNMistake(char c1, char c2)
+        {
+            int iC1 = -1, iC2 = -1;
+            bool isFoundC1 = false, isFoundC2 = false;
+            for (int i = 0; i < StringConstant.MAXGROUP_VNCHARMATRIX; i++)
+                for (int j = 0; j < StringConstant.MAXCASE_VNCHARMATRIX; j++)
+                {
+                    if (!isFoundC1)
+                        if (StringConstant.Instance.vnCharacterMatrix[i, j] == c1)
+                        {
+                            isFoundC1 = true;
+                            iC1 = i;
+                        }
+                    if (!isFoundC2)
+                        if (StringConstant.Instance.vnCharacterMatrix[i, j] == c2)
+                        {
+                            isFoundC2 = true;
+                            iC2 = i;
+                        }
+                    if (isFoundC1 && isFoundC2)
+                        if (iC1 == iC2)
+                            return true;
+                        else return false;
+                }
             return false;
         }
 
-        private bool isRegion(char c1, char c2)
+        private bool isKeyboardMistake(char c1, char c2)
         {
-            bool findC1 = false;
-            for (int i = 0; i < StringConstant.MAXGROUP_REGION_CONFUSED; i++)
-            {
+            int iC1 = -1, iC2 = -1, jC1 = -1, jC2 = -1;
+            bool isFoundC1 = false, isFoundC2 = false;
+            for (int i = 0; i < StringConstant.MAX_KEYBOARD_ROW; i++)
+                for (int j = 0; j < StringConstant.MAX_KEYBOARD_COL; j++)
+                {
+                    if (!isFoundC1)
+                        if (StringConstant.Instance.KeyBoardMatrix_LowerCase[i, j] == c1)
+                        {
+                            isFoundC1 = true;
+                            iC1 = i;
+                            jC1 = j;
+                        }
+                    if (!isFoundC2)
+                        if (StringConstant.Instance.KeyBoardMatrix_LowerCase[i, j] == c2)
+                        {
+                            isFoundC2 = true;
+                            iC2 = i;
+                            jC2 = j;
+                        }
+                    if (isFoundC1 && isFoundC2)
+                        if (Math.Abs(iC1 - iC2) <= 1 && Math.Abs(jC1 - jC2) <= 1)
+                            return true;
+                        else return false;
+                }
+            return false;
+        }
 
+        private bool isRegionMistake(char c1, char c2)
+        {
+            int iC1 = -1, iC2 = -1;
+            bool isFoundC1 = false, isFoundC2 = false;
+            for (int i = 0; i < StringConstant.MAXGROUP_REGION_CONFUSED; i++)
                 for (int j = 0; j < StringConstant.MAXCASE_REGION_CONFUSED; j++)
                 {
-                    if (!findC1)
-                    {
+                    if (!isFoundC1)
                         if (StringConstant.Instance.VNRegion_Confused_Matrix_LowerCase[i, j].Contains(c1))
                         {
-                            findC1 = true;
-                            j = 0;
+                            isFoundC1 = true;
+                            iC1 = i;
                         }
-                    }
-                    else
-                    {
+                    if (!isFoundC2)
                         if (StringConstant.Instance.VNRegion_Confused_Matrix_LowerCase[i, j].Contains(c2))
+                        {
+                            isFoundC2 = true;
+                            iC2 = i;
+                        }
+                    if (isFoundC1 && isFoundC2)
+                        if (iC1 == iC2)
                             return true;
-                    }
+                        else return false;
                 }
-            }
             return false;
         }
 
