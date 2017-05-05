@@ -13,7 +13,7 @@ namespace Spell.Algorithm
         {
             get
             {
-                return 0.9;
+                return 0.8;
             }
         }
         public double LIM_LANGUAGEMODEL
@@ -28,6 +28,13 @@ namespace Spell.Algorithm
             get
             {
                 return 0.7;
+            }
+        }
+        public double LIM_SCORE
+        {
+            get
+            {
+                return 0.65;
             }
         }
         public double MAX_SCORE
@@ -51,6 +58,8 @@ namespace Spell.Algorithm
         }
         private static Candidate instance = new Candidate();
         public static Candidate getInstance { get { return instance; } }
+
+
         /// <summary>
         /// Kiểm tra token là in hoa hay thường
         /// </summary>
@@ -250,6 +259,8 @@ namespace Spell.Algorithm
         {
 
             double diffScore;
+            if (candidate.Equals("chói"))
+                diffScore = 0;
             //tách dấu ---> tachs dâus
             string[] extTokenArr = extractSignVNNotFully(token);
             string[] extCandidateArr = extractSignVNNotFully(candidate);
@@ -262,13 +273,22 @@ namespace Spell.Algorithm
 
             int denominator = calDenominatorForStringDiff(extToken, signToken, extCandidate, signCandidate);
             double numerator = calNumeratorForStringDiff(extToken, extCandidate) + calNumeratorForStringDiff(extCandidate, extToken)
-                + calNumeratorForStringDiff(signToken, signCandidate) + calNumeratorForStringDiff(signCandidate, signToken);
+                + calNumeratorForStringDiff_Sign(signToken, signCandidate) + calNumeratorForStringDiff_Sign(signCandidate, signToken);
             //tử số, khác nhau càng nhiều, điểm càng cao
 
             diffScore = 1 - numerator / denominator;
             if (diffScore < MIN_SCORE)
                 return MIN_SCORE;
             return diffScore;
+        }
+
+        private double calNumeratorForStringDiff_Sign(string signToken, string signCandidate)
+        {
+            if (signToken.Length == 0 && signCandidate.Length == 0)
+                return 0;
+            if (signToken.Equals("s") && signCandidate.Equals("x") || signToken.Equals("x") && signCandidate.Equals("s"))
+                return 0.1;
+            return 0.3;
         }
 
         private int calDenominatorForStringDiff(string extToken, string signToken, string extCandidate, string signCandidate)
@@ -286,12 +306,23 @@ namespace Spell.Algorithm
                 {
                     if (extX[i] == extY[i])
                         continue;
-                    else if (isRegionMistake(extX[i], extY[i]))
+                    else if (i + 1 < lengthExtX && i + 1 < lengthExtY)
+                    {
+                        if (isRegionMistake(extX[i], extX[i + 1], extY[i], extY[i + 1]))
+                        {
+                            numerator += 0.1;
+                            i++;
+                            continue;
+                        }
+
+                    }
+                    if (isRegionMistake(extX[i], extY[i]))
                         numerator += 0.1;
                     else if (isKeyboardMistake(extX[i], extY[i]))
                         numerator += 0.3;
                     else if (isVowelVNMistake(extX[i], extY[i]))
                         numerator += 0.3;
+
                     else numerator += 1;
                 }
                 else
@@ -354,7 +385,6 @@ namespace Spell.Algorithm
                 }
             return false;
         }
-
         private bool isRegionMistake(char c1, char c2)
         {
             int iC1 = -1, iC2 = -1;
@@ -375,6 +405,34 @@ namespace Spell.Algorithm
                             iC2 = i;
                         }
                     if (isFoundC1 && isFoundC2)
+                        if (iC1 == iC2)
+                            return true;
+                        else return false;
+                }
+            return false;
+        }
+        private bool isRegionMistake(char c1, char c12, char c2, char c22)
+        {
+            int iC1 = -1, iC2 = -1;
+            bool isFoundC1_12 = false, isFoundC2_22 = false;
+            for (int i = 0; i < StringConstant.MAXGROUP_REGION_CONFUSED; i++)
+                for (int j = 0; j < StringConstant.MAXCASE_REGION_CONFUSED; j++)
+                {
+
+                    if (!isFoundC1_12)
+                        if (StringConstant.Instance.VNRegion_Confused_Matrix_LowerCase[i, j].Equals(c1 + "" + c12))
+                        {
+                            isFoundC1_12 = true;
+                            iC1 = i;
+                        }
+                    if (!isFoundC2_22)
+                        if (StringConstant.Instance.VNRegion_Confused_Matrix_LowerCase[i, j].Equals(c2 + "" + c22))
+                        {
+                            isFoundC2_22 = true;
+                            iC2 = i;
+                        }
+                    //tr ~ ch, d ~ gi
+                    if (isFoundC1_12 && isFoundC2_22)
                         if (iC1 == iC2)
                             return true;
                         else return false;
@@ -600,9 +658,9 @@ namespace Spell.Algorithm
                 if (key.Contains(Ngram.Instance.START_STRING) || key.Contains(Ngram.Instance.END_STRING))
                     continue;
                 string[] word = key.Split(' ');
-                if (word[0].Equals(pre) && calScore_Similarity(token, word[1]) > LIM_SIMILARITY)
+                if (word[0].Equals(pre)/* && calScore_Similarity(token, word[1]) > LIM_SIMILARITY*/)
                     lstCandidate.Add(word[1]);
-                else if (word[1].Equals(next) && calScore_Similarity(token, word[0]) > LIM_SIMILARITY)
+                else if (word[1].Equals(next) /*&& calScore_Similarity(token, word[0]) > LIM_SIMILARITY*/)
                     lstCandidate.Add(word[0]);
             }
             return lstCandidate;

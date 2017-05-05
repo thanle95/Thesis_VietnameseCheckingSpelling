@@ -100,7 +100,8 @@ namespace Spell.Algorithm
                     if (score > Candidate.getInstance.MAX_SCORE)
                         score = Candidate.getInstance.MAX_SCORE;
                     //ngưỡng để chọn candidate có được do thống kê
-                    if (L >= Candidate.getInstance.LIM_LANGUAGEMODEL || D >= Candidate.getInstance.LIM_COMPOUNDWORD)
+                    //if (L >= Candidate.getInstance.LIM_LANGUAGEMODEL || D >= Candidate.getInstance.LIM_COMPOUNDWORD)
+                    if (score >= Candidate.getInstance.LIM_SCORE)
                     {
 
                         //nếu số lượng phần tử còn nhỏ hơn 5
@@ -117,10 +118,11 @@ namespace Spell.Algorithm
                             candidatesWithScore = Candidate.getInstance.sortDict(candidatesWithScore);
                         }
 
-                        
+
                     }
                     text_writeFile += String.Format("{0}: [{1};{2};{3}] = {4}", candidate, D, L, S, score) + "\n";
                 }
+
             }
             //nếu có từ ghép 3 âm tiết
             if (prioritizedCandidatesWithScore.Count > 0)
