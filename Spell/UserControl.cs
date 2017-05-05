@@ -25,6 +25,7 @@ namespace Spell
         private List<string> mySentences;
         private Dictionary<int, Word.Range> lstErrorRange = new Dictionary<int, Word.Range>();
         private static UserControl instance = new UserControl();
+        private const string ERROR_SPACE = "\"Lỗi dư khoảng trắng\"";
         private UserControl()
         {
             InitializeComponent();
@@ -81,6 +82,13 @@ namespace Spell
 
                 Word.Range tokenRange = findErrorRangeByStartIndex(startIndex);
                 string token = tokenRange.Text.Trim().ToLower();
+                if(token.Length == 0)
+                {
+                    lblWrong.Text = ERROR_SPACE;
+                    lstbCandidate.Items.Add("");
+                    return;
+                }
+                
                 Regex regexEndSentenceChar = new Regex(StringConstant.Instance.patternSignSentence);
                 int countWord = lstErrorRange.First(kvp => kvp.Value == tokenRange).Key;
                 int count = 0;
@@ -98,24 +106,20 @@ namespace Spell
                             {
                                 string[] gramAroundIWord = getGramArroundIWord(i, words);
                                 string prepre = gramAroundIWord[0], pre = gramAroundIWord[1], next = gramAroundIWord[2], nextnext = gramAroundIWord[3];
-
-                                if (token.Length > 0)
+                                HashSet<string> items = Candidate.getInstance.selectiveCandidate(prepre, pre, token, next, nextnext);
+                                lblWrong.Text = token;
+                                lstbCandidate.Items.Clear();
+                                //lstbCandidate.Items.Add(token);
+                                foreach (string item in items)
                                 {
-                                    HashSet<string> items = Candidate.getInstance.selectiveCandidate(prepre, pre, token, next, nextnext);
-                                    lblWrong.Text = token;
-                                    lstbCandidate.Items.Clear();
-                                    //lstbCandidate.Items.Add(token);
-                                    foreach (string item in items)
-                                    {
-                                        if (!item.ToLower().Equals(token.ToLower()))
-                                            if (item.Length > 1)
-                                                lstbCandidate.Items.Add(item.Trim());
-                                        if (lstbCandidate.Items.Count > 0)
-                                            lstbCandidate.SetSelected(0, true);
-                                        btnChange.Focus();
-                                    }
-                                    break;
+                                    if (!item.ToLower().Equals(token.ToLower()))
+                                        if (item.Length > 1)
+                                            lstbCandidate.Items.Add(item.Trim());
+                                    if (lstbCandidate.Items.Count > 0)
+                                        lstbCandidate.SetSelected(0, true);
+                                    btnChange.Focus();
                                 }
+                                break;
                             }
                         }
                         i++;
@@ -269,7 +273,10 @@ namespace Spell
                         countWord++;
                         string token = words[i].Trim().ToLower();
                         if (token.Length < 1)
+                        {
+                            lstErrorRange.Add(countWord, (DocumentHandling.Instance.HighLight_MistakeWrongWord(token, curSentences, countWord)));
                             continue;
+                        }
                         //Kiểm tra các kí tự đặc biệt, mail, số, tên riêng, viết tắt
                         Regex r = new Regex(StringConstant.Instance.patternCheckSpecialChar);
                         Match m = r.Match(token);
@@ -358,8 +365,11 @@ namespace Spell
         {
             int startIndex = 0;
             int endIndex = 0;
+            string wrongText = lblWrong.Text.ToLower();
+            if (lblWrong.Text.Equals(ERROR_SPACE))
+                wrongText = " ";
             foreach (Word.Range range in lstErrorRange.Values)
-                if (range.Text.Equals(lblWrong.Text.ToLower()))
+                if (range.Text.Equals(wrongText))
                 {
                     startIndex = range.Start;
                     curRangeTextShowInTaskPane = range;
