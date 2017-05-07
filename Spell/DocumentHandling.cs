@@ -37,13 +37,19 @@ namespace Spell
                 int end = 0;
                 foreach (string word in words)
                 {
+                    
                     count++;
 
                     string wordInArr = Regex.Replace(word, StringConstant.Instance.patternSignSentence, "");
 
                     end = start + wordInArr.Length;
                     if (word.Length == 0)
+                        count--;
+                    if (word.Length != 0 && wordInArr.Length == 0)
+                    {
                         end += 1;
+                        count--;
+                    }
                     if (count == countWord)
                     {
                         if (wordInArr.ToLower().Trim().Equals(wrongText.Trim().ToLower()))
@@ -55,7 +61,7 @@ namespace Spell
                         }
                     }
                     start = end + 1 + Math.Abs(wordInArr.Length - word.Length); // bỏ qua khoảng trắng
-                    if (word.Length == 0)
+                    if (word.Length != 0 && wordInArr.Length == 0)
                         start -= 1;
                 }
             }

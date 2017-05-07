@@ -274,7 +274,8 @@ namespace Spell
                         string token = words[i].Trim().ToLower();
                         if (token.Length < 1)
                         {
-                            lstErrorRange.Add(countWord, (DocumentHandling.Instance.HighLight_MistakeWrongWord(token, curSentences, countWord)));
+                            //lstErrorRange.Add(countWord, (DocumentHandling.Instance.HighLight_MistakeWrongWord(token, curSentences, countWord)));
+                            countWord--;
                             continue;
                         }
                         //Kiểm tra các kí tự đặc biệt, mail, số, tên riêng, viết tắt
