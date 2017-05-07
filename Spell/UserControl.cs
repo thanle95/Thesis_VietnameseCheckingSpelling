@@ -1,18 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using Spell.Algorithm;
 using Word = Microsoft.Office.Interop.Word;
-using Office = Microsoft.Office.Core;
-using System.Threading;
 using System.Text.RegularExpressions;
-using System.IO;
 
 namespace Spell
 {
@@ -77,18 +69,20 @@ namespace Spell
         /// </summary>
         public void showCandidateInTaskPane(int startIndex)
         {
+            //nếu có lỗi trong danh sách
             if (lstErrorRange.Count > 0)
             {
-
+                //lấy lỗi đầu tiên tìm được với startIndex
                 Word.Range tokenRange = findErrorRangeByStartIndex(startIndex);
                 string token = tokenRange.Text.Trim().ToLower();
-                if(token.Length == 0)
-                {
-                    lblWrong.Text = ERROR_SPACE;
-                    lstbCandidate.Items.Add("");
-                    return;
-                }
-                
+
+                //if(token.Length == 0)
+                //{
+                //    lblWrong.Text = ERROR_SPACE;
+                //    lstbCandidate.Items.Add("");
+                //    return;
+                //}
+
                 Regex regexEndSentenceChar = new Regex(StringConstant.Instance.patternSignSentence);
                 int countWord = lstErrorRange.First(kvp => kvp.Value == tokenRange).Key;
                 int count = 0;
@@ -98,6 +92,7 @@ namespace Spell
                     int i = 0;
                     foreach (string word in words)
                     {
+                        if(word.Length > 0)
                         count++;
                         if (countWord == count)
                         {
@@ -109,7 +104,6 @@ namespace Spell
                                 HashSet<string> items = Candidate.getInstance.selectiveCandidate(prepre, pre, token, next, nextnext);
                                 lblWrong.Text = token;
                                 lstbCandidate.Items.Clear();
-                                //lstbCandidate.Items.Add(token);
                                 foreach (string item in items)
                                 {
                                     if (!item.ToLower().Equals(token.ToLower()))
@@ -126,7 +120,6 @@ namespace Spell
                     } //end if compare to find token
                 } // end for
             }
-            //}
         }
 
         private Word.Range findErrorRangeByStartIndex(int startIndex)
@@ -285,18 +278,37 @@ namespace Spell
                             continue;
                         else
                         {
+                            //xác định ngữ cảnh
+                            string[] gramAroundIWord = getGramArroundIWord(i, words);
+                            string prepre = gramAroundIWord[0], pre = gramAroundIWord[1], next = gramAroundIWord[2], nextnext = gramAroundIWord[3];
+
                             //Kiểm tra nếu không phải là từ Việt Nam
                             //Thì highLight
                             if (!VNDictionary.getInstance.isSyllableVN(token))
+                            {
                                 lstErrorRange.Add(countWord, (DocumentHandling.Instance.HighLight_MistakeWrongWord(token, curSentences, countWord)));
+                                HashSet<string> hsetCand = Candidate.getInstance.selectiveCandidate(prepre, pre, token, next, nextnext);
+                                if (hsetCand.Count > 0)
+                                    //tự động thay thế bằng candidate tốt nhất
+                                    //tránh làm sai những gram phía sau
+                                    words[i] = hsetCand.ElementAt(0); 
+                            }
                             else
                             {
-                                //tìm vị trí của token trong globalWords để xác định ngữ cảnh
-                                string[] gramAroundIWord = getGramArroundIWord(i, words);
-                                string prepre = gramAroundIWord[0], pre = gramAroundIWord[1], next = gramAroundIWord[2], nextnext = gramAroundIWord[3];
-                                //kiểm tra token có khả năng sai hay k
+                                //kiểm tra token có khả năng sai ngữ cảnh hay k
+                                HashSet<string> hsetCandNext = Candidate.getInstance.selectiveCandidate("", token, next, nextnext, "");
+                                string tmpNext = "";
+                                if (hsetCandNext.Count > 0)
+                                    next = hsetCandNext.ElementAt(0);
                                 if (!RightWordCandidate.getInstance.checkRightWord(prepre, pre, token, next, nextnext))
+                                {
                                     lstErrorRange.Add(countWord, (DocumentHandling.Instance.HighLight_MistakeRightWord(token, curSentences, countWord)));
+                                    HashSet<string> hsetCand = Candidate.getInstance.selectiveCandidate(prepre, pre, token, next, nextnext);
+                                    if (hsetCand.Count > 0)
+                                        //tự động thay thế bằng candidate tốt nhất
+                                        //tránh làm sai những gram phía sau
+                                        words[i] = hsetCand.ElementAt(0); 
+                                }
                             }
                         }
                     }//end for: duyệt từ từng trong cụm
