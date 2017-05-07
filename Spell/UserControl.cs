@@ -296,18 +296,22 @@ namespace Spell
                             else
                             {
                                 //kiểm tra token có khả năng sai ngữ cảnh hay k
-                                HashSet<string> hsetCandNext = Candidate.getInstance.selectiveCandidate("", token, next, nextnext, "");
-                                string tmpNext = "";
-                                if (hsetCandNext.Count > 0)
-                                    next = hsetCandNext.ElementAt(0);
+
                                 if (!RightWordCandidate.getInstance.checkRightWord(prepre, pre, token, next, nextnext))
                                 {
-                                    lstErrorRange.Add(countWord, (DocumentHandling.Instance.HighLight_MistakeRightWord(token, curSentences, countWord)));
-                                    HashSet<string> hsetCand = Candidate.getInstance.selectiveCandidate(prepre, pre, token, next, nextnext);
-                                    if (hsetCand.Count > 0)
-                                        //tự động thay thế bằng candidate tốt nhất
-                                        //tránh làm sai những gram phía sau
-                                        words[i] = hsetCand.ElementAt(0); 
+                                    HashSet<string> hsetCandNext = Candidate.getInstance.selectiveCandidate("", token, next, nextnext, "");
+                                    string tmpNext = "";
+                                    if (hsetCandNext.Count > 0)
+                                        tmpNext = hsetCandNext.ElementAt(0);
+                                    if (!RightWordCandidate.getInstance.checkRightWord(prepre, pre, token, tmpNext, nextnext))
+                                    {
+                                        lstErrorRange.Add(countWord, (DocumentHandling.Instance.HighLight_MistakeRightWord(token, curSentences, countWord)));
+                                        HashSet<string> hsetCand = Candidate.getInstance.selectiveCandidate(prepre, pre, token, next, nextnext);
+                                        if (hsetCand.Count > 0)
+                                            //tự động thay thế bằng candidate tốt nhất
+                                            //tránh làm sai những gram phía sau
+                                            words[i] = hsetCand.ElementAt(0);
+                                    }
                                 }
                             }
                         }
