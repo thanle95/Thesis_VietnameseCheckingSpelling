@@ -34,11 +34,16 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Ribbon));
+            Microsoft.Office.Tools.Ribbon.RibbonDropDownItem ribbonDropDownItemImpl1 = this.Factory.CreateRibbonDropDownItem();
+            Microsoft.Office.Tools.Ribbon.RibbonDropDownItem ribbonDropDownItemImpl2 = this.Factory.CreateRibbonDropDownItem();
             this.tab1 = this.Factory.CreateRibbonTab();
             this.group1 = this.Factory.CreateRibbonGroup();
             this.box1 = this.Factory.CreateRibbonBox();
-            this.chkSuggest = this.Factory.CreateRibbonCheckBox();
             this.tbtnCheck = this.Factory.CreateRibbonToggleButton();
+            this.chkSuggest = this.Factory.CreateRibbonCheckBox();
+            this.separator1 = this.Factory.CreateRibbonSeparator();
+            this.dropTypeFindError = this.Factory.CreateRibbonDropDown();
             this.tab1.SuspendLayout();
             this.group1.SuspendLayout();
             this.box1.SuspendLayout();
@@ -54,6 +59,8 @@
             // group1
             // 
             this.group1.Items.Add(this.box1);
+            this.group1.Items.Add(this.separator1);
+            this.group1.Items.Add(this.dropTypeFindError);
             this.group1.Label = "Spell checking";
             this.group1.Name = "group1";
             // 
@@ -64,24 +71,36 @@
             this.box1.Items.Add(this.chkSuggest);
             this.box1.Name = "box1";
             // 
-            // chkSuggest
-            // 
-            this.chkSuggest.Label = "Fix";
-            this.chkSuggest.Name = "chkSuggest";
-            this.chkSuggest.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.chkSuggest_Click);
-            // 
             // tbtnCheck
             // 
             this.tbtnCheck.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
-            this.tbtnCheck.Image = global::Spell.Properties.Resources.check;
+            this.tbtnCheck.Image = ((System.Drawing.Image)(resources.GetObject("tbtnCheck.Image")));
             this.tbtnCheck.Label = "Check spelling";
             this.tbtnCheck.Name = "tbtnCheck";
             this.tbtnCheck.ShowImage = true;
             this.tbtnCheck.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.tbtnCheck_Click);
             // 
-            // Ribbon1
+            // chkSuggest
             // 
-            this.Name = "Ribbon1";
+            this.chkSuggest.Label = "Hiện gợi ý";
+            this.chkSuggest.Name = "chkSuggest";
+            // 
+            // separator1
+            // 
+            this.separator1.Name = "separator1";
+            // 
+            // dropTypeFindError
+            // 
+            ribbonDropDownItemImpl1.Label = "Toàn bộ văn bản";
+            ribbonDropDownItemImpl2.Label = "Bôi đen đoạn văn bản";
+            this.dropTypeFindError.Items.Add(ribbonDropDownItemImpl1);
+            this.dropTypeFindError.Items.Add(ribbonDropDownItemImpl2);
+            this.dropTypeFindError.Label = "Kiểu kiểm lỗi";
+            this.dropTypeFindError.Name = "dropTypeFindError";
+            // 
+            // Ribbon
+            // 
+            this.Name = "Ribbon";
             this.RibbonType = "Microsoft.Word.Document";
             this.Tabs.Add(this.tab1);
             this.Load += new Microsoft.Office.Tools.Ribbon.RibbonUIEventHandler(this.Ribbon1_Load);
@@ -102,6 +121,8 @@
         internal Microsoft.Office.Tools.Ribbon.RibbonBox box1;
         internal Microsoft.Office.Tools.Ribbon.RibbonCheckBox chkSuggest;
         internal Microsoft.Office.Tools.Ribbon.RibbonToggleButton tbtnCheck;
+        internal Microsoft.Office.Tools.Ribbon.RibbonSeparator separator1;
+        internal Microsoft.Office.Tools.Ribbon.RibbonDropDown dropTypeFindError;
     }
 
     partial class ThisRibbonCollection

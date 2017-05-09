@@ -38,7 +38,6 @@ namespace Spell
         }
         private void lstbCandidate_SelectedIndexChanged(object sender, EventArgs e)
         {
-            lblFix.Text = lstbCandidate.SelectedItem.ToString();
         }
         /// <summary>
         /// hiện gợi ý sửa lỗi lên task pane
@@ -92,8 +91,8 @@ namespace Spell
                     int i = 0;
                     foreach (string word in words)
                     {
-                        if(word.Length > 0)
-                        count++;
+                        if (word.Length > 0)
+                            count++;
                         if (countWord == count)
                         {
                             string wordInWords = regexEndSentenceChar.Replace(word, "");
@@ -237,7 +236,7 @@ namespace Spell
         /// <param name="startIndex"></param>
         /// <param name="endIndex"></param>
         /// <returns></returns>
-        public int showWrongWithSuggest(int startIndex, int endIndex)
+        public int showWrongWithSuggest(int typeFindError)
         {
             try
             {
@@ -246,12 +245,18 @@ namespace Spell
                 lblWrong.Text = WRONG_TEXT;
                 lstbCandidate.Items.Clear();
                 lstErrorRange.Clear();
-                //lấy toàn bộ danh sách các từ trong Active Document, để lấy được ngữ cảnh
-                Word.Words globalWords = Globals.ThisAddIn.Application.ActiveDocument.Words;
+
+                ////lấy toàn bộ danh sách các từ trong Active Document, để lấy được ngữ cảnh
+                //Word.Words globalWords = Globals.ThisAddIn.Application.ActiveDocument.Words;
                 //lấy danh sách câu dựa trên vùng được bôi đen
-                curSentences = Globals.ThisAddIn.Application.Selection.Sentences;
+                if (typeFindError == 0)
+                    curSentences = Globals.ThisAddIn.Application.ActiveDocument.Sentences;
+                else
+                    curSentences = Globals.ThisAddIn.Application.Selection.Sentences;
+                List<Word.Sentences> curSentenceList = new List<Word.Sentences>();
+                curSentenceList.Add(curSentences);
                 //với mỗi câu, tách thành từng cụm có liên quan mật thiết với nhau, như "", (),...
-                mySentences = DocumentHandling.Instance.getPhrase(curSentences);
+                mySentences = DocumentHandling.Instance.getPhrase(curSentenceList.ElementAt(0));
                 //Xử lý từng cụm từ, vì mỗi cụm từ có liên quan mật thiết với nhau
                 int countWord = 0;
                 foreach (string mySentence in mySentences)
@@ -286,12 +291,12 @@ namespace Spell
                             //Thì highLight
                             if (!VNDictionary.getInstance.isSyllableVN(token))
                             {
-                                lstErrorRange.Add(countWord, (DocumentHandling.Instance.HighLight_MistakeWrongWord(token, curSentences, countWord)));
+                                lstErrorRange.Add(countWord, (DocumentHandling.Instance.HighLight_MistakeWrongWord(token, curSentenceList.ElementAt(0), countWord)));
                                 HashSet<string> hsetCand = Candidate.getInstance.selectiveCandidate(prepre, pre, token, next, nextnext);
                                 if (hsetCand.Count > 0)
                                     //tự động thay thế bằng candidate tốt nhất
                                     //tránh làm sai những gram phía sau
-                                    words[i] = hsetCand.ElementAt(0); 
+                                    words[i] = hsetCand.ElementAt(0);
                             }
                             else
                             {
@@ -305,7 +310,7 @@ namespace Spell
                                         tmpNext = hsetCandNext.ElementAt(0);
                                     if (!RightWordCandidate.getInstance.checkRightWord(prepre, pre, token, tmpNext, nextnext))
                                     {
-                                        lstErrorRange.Add(countWord, (DocumentHandling.Instance.HighLight_MistakeRightWord(token, curSentences, countWord)));
+                                        lstErrorRange.Add(countWord, (DocumentHandling.Instance.HighLight_MistakeRightWord(token, curSentenceList.ElementAt(0), countWord)));
                                         HashSet<string> hsetCand = Candidate.getInstance.selectiveCandidate(prepre, pre, token, next, nextnext);
                                         if (hsetCand.Count > 0)
                                             //tự động thay thế bằng candidate tốt nhất
@@ -368,10 +373,10 @@ namespace Spell
         {
             showCandidateInTaskPane(startIndex);
         }
-        public int startFindError(int startInex, int endIndex)
+        public int startFindError(int typeFindError)
         {
             lstErrorRange = new Dictionary<int, Word.Range>();
-            int count = showWrongWithSuggest(startInex, endIndex);
+            int count = showWrongWithSuggest(typeFindError);
             return count;
         }
         private void btnChange_Click(object sender, EventArgs e)
@@ -399,7 +404,6 @@ namespace Spell
             curRangeTextShowInTaskPane.Text = lstbCandidate.SelectedItem.ToString();
             endIndex = startIndex + curRangeTextShowInTaskPane.Text.Length;
             lblWrong.Text = "\"Wrong Text\"";
-            lblFix.Text = "\"Fix Text\"";
             lstbCandidate.Items.Clear();
             DocumentHandling.Instance.DeHighLight_Mistake(startIndex, endIndex);
             curRangeTextShowInTaskPane.Select();

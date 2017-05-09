@@ -33,7 +33,6 @@
             this.btnAdd = new System.Windows.Forms.Button();
             this.lblWrong = new System.Windows.Forms.Label();
             this.lstbCandidate = new System.Windows.Forms.ListBox();
-            this.lblFix = new System.Windows.Forms.Label();
             this.btnUndo = new System.Windows.Forms.Button();
             this.btnStart = new System.Windows.Forms.Button();
             this.btnChange = new System.Windows.Forms.Button();
@@ -89,20 +88,10 @@
             this.lstbCandidate.SelectedIndexChanged += new System.EventHandler(this.lstbCandidate_SelectedIndexChanged);
             this.lstbCandidate.KeyDown += new System.Windows.Forms.KeyEventHandler(this.lstbCandidate_KeyDown);
             // 
-            // lblFix
-            // 
-            this.lblFix.AutoSize = true;
-            this.lblFix.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblFix.ForeColor = System.Drawing.Color.Black;
-            this.lblFix.Location = new System.Drawing.Point(18, 225);
-            this.lblFix.Name = "lblFix";
-            this.lblFix.Size = new System.Drawing.Size(84, 21);
-            this.lblFix.TabIndex = 13;
-            this.lblFix.Text = "\"Fix Text\"";
-            // 
             // btnUndo
             // 
             this.btnUndo.BackColor = System.Drawing.Color.White;
+            this.btnUndo.Enabled = false;
             this.btnUndo.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnUndo.ForeColor = System.Drawing.SystemColors.ControlText;
             this.btnUndo.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -117,7 +106,7 @@
             // 
             this.btnStart.BackColor = System.Drawing.Color.White;
             this.btnStart.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnStart.Location = new System.Drawing.Point(18, 268);
+            this.btnStart.Location = new System.Drawing.Point(18, 225);
             this.btnStart.Name = "btnStart";
             this.btnStart.Size = new System.Drawing.Size(84, 25);
             this.btnStart.TabIndex = 18;
@@ -148,7 +137,6 @@
             this.Controls.Add(this.btnChange);
             this.Controls.Add(this.btnStart);
             this.Controls.Add(this.btnUndo);
-            this.Controls.Add(this.lblFix);
             this.Controls.Add(this.lstbCandidate);
             this.Controls.Add(this.lblWrong);
             this.Controls.Add(this.btnAdd);
@@ -166,7 +154,6 @@
         private System.Windows.Forms.Button btnAdd;
         private System.Windows.Forms.Label lblWrong;
         private System.Windows.Forms.ListBox lstbCandidate;
-        private System.Windows.Forms.Label lblFix;
         private System.Windows.Forms.Button btnUndo;
         private System.Windows.Forms.Button btnStart;
         private System.Windows.Forms.Button btnChange;

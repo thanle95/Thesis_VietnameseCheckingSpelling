@@ -21,28 +21,36 @@ namespace Spell
             get { return instance; }
         }
 
-        
+
         public Word.Range HighLight_Mistake(string wrongText, Word.Sentences sentencesList, int countWord, Word.WdColorIndex colorIndex, Word.WdColor color)
         {
             Word.Range range = null;
-
+            //Word.Lines lines = Globals.ThisAddIn.Application.ActiveDocument.Words.l;
             Word.Sentences sentences = sentencesList;
+            //đếm số thứ tự từ hiện tại
             int count = 0;
+
+            //start và end để chọn range highLight cho từ bị lỗi.
+            int start = 0;
+            int end = 0;
+
             for (int i = 1; i <= sentences.Count; i++)
             {
                 string[] words = sentences[i].Text.Trim().Split(' ');
-                int start = sentences[i].Start;
+                start = sentences[i].Start;
                 //if (sentences[i].Text.Length < sentences[i].Text.TrimEnd().Length)
                 //    start++;
-                int end = 0;
+                end = 0;
                 foreach (string word in words)
                 {
-                    
                     count++;
 
+                    //nếu từ có chứa những ký tự đặc biệt thì loại bỏ ký tự đó
                     string wordInArr = Regex.Replace(word, StringConstant.Instance.patternSignSentence, "");
 
                     end = start + wordInArr.Length;
+
+                    //trường hợp dư khoảng trắng
                     if (word.Length == 0)
                         count--;
                     if (word.Length != 0 && wordInArr.Length == 0)
@@ -57,22 +65,27 @@ namespace Spell
                             range = Globals.ThisAddIn.Application.ActiveDocument.Range(start, end);
                             range.HighlightColorIndex = colorIndex;
                             range.Font.Color = color;
+                            //Globals.ThisAddIn.Application.Selection.GoTo(Word.WdGoToItem.wdGoToLine, null, countWord, null);
+                            range.Select();
                             return range;
                         }
                     }
+                    
                     start = end + 1 + Math.Abs(wordInArr.Length - word.Length); // bỏ qua khoảng trắng
                     if (word.Length != 0 && wordInArr.Length == 0)
                         start -= 1;
+                    
                 }
+                
             }
             return range;
         }
-        
+
         public Word.Range HighLight_MistakeWrongWord(string wrongText, Word.Sentences sentencesList, int countWord)
         {
             return HighLight_Mistake(wrongText, sentencesList, countWord, Word.WdColorIndex.wdRed, Word.WdColor.wdColorYellow);
         }
-       
+
         public Word.Range HighLight_MistakeRightWord(string wrongText, Word.Sentences sentencesList, int countWord)
         {
             return HighLight_Mistake(wrongText, sentencesList, countWord, Word.WdColorIndex.wdYellow, Word.WdColor.wdColorAutomatic);
@@ -151,7 +164,7 @@ namespace Spell
             }
             return ret;
         }
-       
+
         public List<string> getWords(Word.Words words)
         {
             List<string> ret = new List<string>();
