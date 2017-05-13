@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using Spell.Algorithm;
 using Word = Microsoft.Office.Interop.Word;
-using System.Text.RegularExpressions;
 
 namespace Spell
 {
@@ -32,9 +30,6 @@ namespace Spell
             {
                 return "\"Wrong text\"";
             }
-        }
-        private void lstbCandidate_SelectedIndexChanged(object sender, EventArgs e)
-        {
         }
         /// <summary>
         /// hiện gợi ý sữa lỗi lên taskpane, tự duyệt ngữ cảnh
@@ -110,6 +105,11 @@ namespace Spell
                 }
 
             DocumentHandling.Instance.DeHighLight_Mistake(startIndex, endIndex);
+            //
+            //sửa lỗi tiếp theo
+            //
+            FindError.Instance.FirstError_CountWord = FindError.Instance.lstErrorRange.First().Key;
+            showCandidateInTaskPaneWithCountWord();
         }
 
         private void btnAdd_Click(object sender, EventArgs e)

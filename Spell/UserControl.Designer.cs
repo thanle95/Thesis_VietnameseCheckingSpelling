@@ -85,7 +85,6 @@
             this.lstbCandidate.Name = "lstbCandidate";
             this.lstbCandidate.Size = new System.Drawing.Size(243, 100);
             this.lstbCandidate.TabIndex = 4;
-            this.lstbCandidate.SelectedIndexChanged += new System.EventHandler(this.lstbCandidate_SelectedIndexChanged);
             this.lstbCandidate.KeyDown += new System.Windows.Forms.KeyEventHandler(this.lstbCandidate_KeyDown);
             // 
             // btnUndo
