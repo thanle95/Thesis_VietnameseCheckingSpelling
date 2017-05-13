@@ -83,7 +83,7 @@
             this.lstbCandidate.ItemHeight = 16;
             this.lstbCandidate.Location = new System.Drawing.Point(18, 68);
             this.lstbCandidate.Name = "lstbCandidate";
-            this.lstbCandidate.Size = new System.Drawing.Size(243, 148);
+            this.lstbCandidate.Size = new System.Drawing.Size(243, 100);
             this.lstbCandidate.TabIndex = 4;
             this.lstbCandidate.SelectedIndexChanged += new System.EventHandler(this.lstbCandidate_SelectedIndexChanged);
             this.lstbCandidate.KeyDown += new System.Windows.Forms.KeyEventHandler(this.lstbCandidate_KeyDown);
@@ -95,7 +95,7 @@
             this.btnUndo.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnUndo.ForeColor = System.Drawing.SystemColors.ControlText;
             this.btnUndo.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnUndo.Location = new System.Drawing.Point(205, 266);
+            this.btnUndo.Location = new System.Drawing.Point(205, 223);
             this.btnUndo.Name = "btnUndo";
             this.btnUndo.Size = new System.Drawing.Size(56, 27);
             this.btnUndo.TabIndex = 15;
@@ -106,7 +106,7 @@
             // 
             this.btnStart.BackColor = System.Drawing.Color.White;
             this.btnStart.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnStart.Location = new System.Drawing.Point(18, 225);
+            this.btnStart.Location = new System.Drawing.Point(18, 182);
             this.btnStart.Name = "btnStart";
             this.btnStart.Size = new System.Drawing.Size(84, 25);
             this.btnStart.TabIndex = 18;
@@ -120,7 +120,7 @@
             this.btnChange.BackColor = System.Drawing.Color.White;
             this.btnChange.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnChange.ForeColor = System.Drawing.Color.Black;
-            this.btnChange.Location = new System.Drawing.Point(184, 224);
+            this.btnChange.Location = new System.Drawing.Point(184, 181);
             this.btnChange.Name = "btnChange";
             this.btnChange.Size = new System.Drawing.Size(77, 27);
             this.btnChange.TabIndex = 19;
@@ -141,8 +141,9 @@
             this.Controls.Add(this.lblWrong);
             this.Controls.Add(this.btnAdd);
             this.Controls.Add(this.btnIgnore);
+            this.MinimumSize = new System.Drawing.Size(300, 350);
             this.Name = "UserControl";
-            this.Size = new System.Drawing.Size(280, 430);
+            this.Size = new System.Drawing.Size(300, 350);
             this.ResumeLayout(false);
             this.PerformLayout();
 

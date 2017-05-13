@@ -25,6 +25,7 @@ namespace Spell
         public Word.Range HighLight_Mistake(string wrongText, Word.Sentences sentencesList, int countWord, Word.WdColorIndex colorIndex, Word.WdColor color)
         {
             Word.Range range = null;
+            Word.Range endRange = null;
             //Word.Lines lines = Globals.ThisAddIn.Application.ActiveDocument.Words.l;
             Word.Sentences sentences = sentencesList;
             //đếm số thứ tự từ hiện tại
@@ -33,18 +34,24 @@ namespace Spell
             //start và end để chọn range highLight cho từ bị lỗi.
             int start = 0;
             int end = 0;
-
+            int countWordInSentence = 0;
             for (int i = 1; i <= sentences.Count; i++)
             {
                 string[] words = sentences[i].Text.Trim().Split(' ');
+                countWordInSentence += words.Length;
                 start = sentences[i].Start;
                 //if (sentences[i].Text.Length < sentences[i].Text.TrimEnd().Length)
                 //    start++;
                 end = 0;
                 foreach (string word in words)
                 {
-                    count++;
 
+                    count++;
+                    //if (count == countWordInSentence - 1)
+                    //{
+                    //    endRange = Globals.ThisAddIn.Application.ActiveDocument.Range(start, start);
+                    //    endRange.Select();
+                    //}
                     //nếu từ có chứa những ký tự đặc biệt thì loại bỏ ký tự đó
                     string wordInArr = Regex.Replace(word, StringConstant.Instance.patternSignSentence, "");
 
@@ -65,18 +72,17 @@ namespace Spell
                             range = Globals.ThisAddIn.Application.ActiveDocument.Range(start, end);
                             range.HighlightColorIndex = colorIndex;
                             range.Font.Color = color;
-                            //Globals.ThisAddIn.Application.Selection.GoTo(Word.WdGoToItem.wdGoToLine, null, countWord, null);
                             range.Select();
                             return range;
                         }
                     }
-                    
+
                     start = end + 1 + Math.Abs(wordInArr.Length - word.Length); // bỏ qua khoảng trắng
                     if (word.Length != 0 && wordInArr.Length == 0)
                         start -= 1;
-                    
+
                 }
-                
+
             }
             return range;
         }
