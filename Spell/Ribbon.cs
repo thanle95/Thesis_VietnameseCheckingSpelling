@@ -14,6 +14,13 @@ namespace Spell
     {
         Microsoft.Office.Tools.CustomTaskPane myCustomTaskPane;
         private int typeFindError = 0;
+        private const int LIFE_CORPUS = 0;
+        private const int POLITIC_CORPUS = 1;
+        private const int LITERRATY_CORPUS = 2;
+
+        private const int WHOLE_DOCUMENT_SELECTION = 0;
+        private const int APART_DOCUMENT_SELECTION = 1;
+
         private void Ribbon1_Load(object sender, RibbonUIEventArgs e)
         {
             myCustomTaskPane = Globals.ThisAddIn.CustomTaskPanes.Add(UserControl.Instance, "Spelling");
@@ -35,6 +42,7 @@ namespace Spell
         /// <param name="e"></param>
         private void tbtnCheck_Click(object sender, RibbonControlEventArgs e)
         {
+            
             //ThreadStart t = new ThreadStart(UserControl.Instance.showWrongWithoutSuggest);
             //Thread threadWithoutSuggest = new Thread(t);
             //ThreadStart t1 = new ThreadStart(UserControl.Instance.showWrongWithSuggest);
@@ -54,8 +62,8 @@ namespace Spell
                     if (count > 0)
                     {
 
-                        string message = string.Format("Có {0} lỗi. Bạn có muốn bắt đầu sửa lỗi ngay?", count);
-                        string caption = "Microsoft Word Spelling";
+                        string message = SysMessage.Instance.Message_Notify_Fix_Error(count);
+                        string caption = SysMessage.Instance.Caption_Notify_Fix_Error;
                         MessageBoxButtons buttons = MessageBoxButtons.YesNo;
                         DialogResult result;
 
@@ -71,7 +79,7 @@ namespace Spell
                     }
                     //    myCustomTaskPane.Visible = true;
                     if (count == 0)
-                        MessageBox.Show("Khong co loi");
+                        MessageBox.Show(SysMessage.Instance.No_error);
                     //threadWithSuggest.Start();
                 }
                 //mode2: không hiện gợi ý 
@@ -105,5 +113,27 @@ namespace Spell
             }
         }
 
+        private void dropCorpus_SelectionChanged(object sender, RibbonControlEventArgs e)
+        {
+            if (dropCorpus.SelectedItemIndex == POLITIC_CORPUS)
+            {
+                MessageBox.Show(SysMessage.Instance.Feature_is_updating);
+                dropCorpus.SelectedItemIndex = LIFE_CORPUS;
+            }
+            else if (dropCorpus.SelectedItemIndex == LITERRATY_CORPUS)
+            {
+                MessageBox.Show(SysMessage.Instance.Feature_is_updating);
+                dropCorpus.SelectedItemIndex = LIFE_CORPUS;
+            }
+        }
+
+        private void dropTypeFindError_SelectionChanged(object sender, RibbonControlEventArgs e)
+        {
+            if (dropTypeFindError.SelectedItemIndex == APART_DOCUMENT_SELECTION)
+            {
+                MessageBox.Show(SysMessage.Instance.Feature_is_updating);
+                dropTypeFindError.SelectedItemIndex = WHOLE_DOCUMENT_SELECTION;
+            }
+        }
     }
 }

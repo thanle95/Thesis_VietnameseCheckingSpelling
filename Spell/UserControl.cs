@@ -28,7 +28,7 @@ namespace Spell
         {
             get
             {
-                return "\"Wrong text\"";
+                return "\"Lỗi\"";
             }
         }
         /// <summary>
