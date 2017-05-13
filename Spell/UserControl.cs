@@ -177,5 +177,14 @@ namespace Spell
                 change();
             }
         }
+
+        private void UserControl_Move(object sender, EventArgs e)
+        {
+            MessageBox.Show("move");
+        }
+
+        private void UserControl_Resize(object sender, EventArgs e)
+        {
+        }
     }
 }

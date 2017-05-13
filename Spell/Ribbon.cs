@@ -17,7 +17,10 @@ namespace Spell
         private void Ribbon1_Load(object sender, RibbonUIEventArgs e)
         {
             myCustomTaskPane = Globals.ThisAddIn.CustomTaskPanes.Add(UserControl.Instance, "Spelling");
-            //myCustomTaskPane.DockPositionRestrict = Office.MsoCTPDockPositionRestrict.msoCTPDockPositionRestrictNoChange;
+            myCustomTaskPane.DockPosition = Office.MsoCTPDockPosition.msoCTPDockPositionFloating;
+            myCustomTaskPane.Width = 300;
+            myCustomTaskPane.Height = 350;
+            myCustomTaskPane.DockPosition = Office.MsoCTPDockPosition.msoCTPDockPositionRight;
             myCustomTaskPane.Width = 300;
             typeFindError = dropTypeFindError.SelectedItemIndex;
             //Ngram.Instance.runFirst();
@@ -52,7 +55,7 @@ namespace Spell
                     {
 
                         string message = string.Format("Có {0} lỗi. Bạn có muốn bắt đầu sửa lỗi ngay?", count);
-                        string caption = "No Server Name Specified";
+                        string caption = "Microsoft Word Spelling";
                         MessageBoxButtons buttons = MessageBoxButtons.YesNo;
                         DialogResult result;
 
@@ -82,6 +85,23 @@ namespace Spell
                 //threadWithSuggest.Abort();
                 //threadWithoutSuggest.Abort();
                 DocumentHandling.Instance.DeHighLight_All_Mistake(Globals.ThisAddIn.Application.ActiveDocument.Characters);
+            }
+        }
+
+        private void dropDockPosition_SelectionChanged(object sender, RibbonControlEventArgs e)
+        {
+            if (dropDockPosition.SelectedItemIndex == 0)
+                myCustomTaskPane.DockPosition = Office.MsoCTPDockPosition.msoCTPDockPositionRight;
+            else if (dropDockPosition.SelectedItemIndex == 1)
+                myCustomTaskPane.DockPosition = Office.MsoCTPDockPosition.msoCTPDockPositionLeft;
+            else {
+                myCustomTaskPane.DockPosition = Office.MsoCTPDockPosition.msoCTPDockPositionFloating;
+                Office.CommandBar cb = Globals.ThisAddIn.Application.CommandBars[myCustomTaskPane.Title];
+                MessageBox.Show(cb.Left + " " + cb.Top);
+                
+                cb.Left = 700;
+                cb.Top = 500;
+                MessageBox.Show(cb.Left + " " + cb.Top);
             }
         }
 

@@ -36,6 +36,9 @@
         {
             Microsoft.Office.Tools.Ribbon.RibbonDropDownItem ribbonDropDownItemImpl1 = this.Factory.CreateRibbonDropDownItem();
             Microsoft.Office.Tools.Ribbon.RibbonDropDownItem ribbonDropDownItemImpl2 = this.Factory.CreateRibbonDropDownItem();
+            Microsoft.Office.Tools.Ribbon.RibbonDropDownItem ribbonDropDownItemImpl3 = this.Factory.CreateRibbonDropDownItem();
+            Microsoft.Office.Tools.Ribbon.RibbonDropDownItem ribbonDropDownItemImpl4 = this.Factory.CreateRibbonDropDownItem();
+            Microsoft.Office.Tools.Ribbon.RibbonDropDownItem ribbonDropDownItemImpl5 = this.Factory.CreateRibbonDropDownItem();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Ribbon));
             this.tab1 = this.Factory.CreateRibbonTab();
             this.group1 = this.Factory.CreateRibbonGroup();
@@ -43,6 +46,8 @@
             this.chkSuggest = this.Factory.CreateRibbonCheckBox();
             this.separator1 = this.Factory.CreateRibbonSeparator();
             this.dropTypeFindError = this.Factory.CreateRibbonDropDown();
+            this.separator2 = this.Factory.CreateRibbonSeparator();
+            this.dropDockPosition = this.Factory.CreateRibbonDropDown();
             this.tbtnCheck = this.Factory.CreateRibbonToggleButton();
             this.tab1.SuspendLayout();
             this.group1.SuspendLayout();
@@ -61,6 +66,8 @@
             this.group1.Items.Add(this.box1);
             this.group1.Items.Add(this.separator1);
             this.group1.Items.Add(this.dropTypeFindError);
+            this.group1.Items.Add(this.separator2);
+            this.group1.Items.Add(this.dropDockPosition);
             this.group1.Label = "Spell checking";
             this.group1.Name = "group1";
             // 
@@ -89,6 +96,22 @@
             this.dropTypeFindError.Items.Add(ribbonDropDownItemImpl2);
             this.dropTypeFindError.Label = "Kiểu kiểm lỗi";
             this.dropTypeFindError.Name = "dropTypeFindError";
+            // 
+            // separator2
+            // 
+            this.separator2.Name = "separator2";
+            // 
+            // dropDockPosition
+            // 
+            ribbonDropDownItemImpl3.Label = "Bên phải";
+            ribbonDropDownItemImpl4.Label = "Bên trái";
+            ribbonDropDownItemImpl5.Label = "Không neo";
+            this.dropDockPosition.Items.Add(ribbonDropDownItemImpl3);
+            this.dropDockPosition.Items.Add(ribbonDropDownItemImpl4);
+            this.dropDockPosition.Items.Add(ribbonDropDownItemImpl5);
+            this.dropDockPosition.Label = "Vị trí neo";
+            this.dropDockPosition.Name = "dropDockPosition";
+            this.dropDockPosition.SelectionChanged += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.dropDockPosition_SelectionChanged);
             // 
             // tbtnCheck
             // 
@@ -124,6 +147,8 @@
         internal Microsoft.Office.Tools.Ribbon.RibbonToggleButton tbtnCheck;
         internal Microsoft.Office.Tools.Ribbon.RibbonSeparator separator1;
         internal Microsoft.Office.Tools.Ribbon.RibbonDropDown dropTypeFindError;
+        internal Microsoft.Office.Tools.Ribbon.RibbonSeparator separator2;
+        internal Microsoft.Office.Tools.Ribbon.RibbonDropDown dropDockPosition;
     }
 
     partial class ThisRibbonCollection

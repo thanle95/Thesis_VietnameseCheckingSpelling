@@ -42,7 +42,6 @@ namespace Spell.Algorithm
                 lstErrorRange.Clear();
 
                 ////lấy toàn bộ danh sách các từ trong Active Document, để lấy được ngữ cảnh
-                //Word.Words globalWords = Globals.ThisAddIn.Application.ActiveDocument.Words;
                 //lấy danh sách câu dựa trên vùng được bôi đen
                 if (typeFindError == 0)
                     curSentences = Globals.ThisAddIn.Application.ActiveDocument.Sentences;
@@ -74,7 +73,7 @@ namespace Spell.Algorithm
                         //Kiểm tra các kí tự đặc biệt, mail, số, tên riêng, viết tắt
                         Regex r = new Regex(StringConstant.Instance.patternCheckSpecialChar);
                         Match m = r.Match(token);
-                        if (m.Success || (char.IsUpper(words[i].Trim()[0]) && i != 0))
+                        if (m.Success || (char.IsUpper(words[i].Trim()[0]) /*&& i != 0*/))
                             continue;
                         else
                         {
