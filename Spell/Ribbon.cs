@@ -50,7 +50,20 @@ namespace Spell
                     //int count = UserControl.Instance.startFindError(typeFindError);
                     if (count > 0)
                     {
-                        MessageBox.Show(String.Format("Có {0} lỗi", count));
+
+                        string message = string.Format("Có {0} lỗi. Bạn có muốn bắt đầu sửa lỗi ngay?", count);
+                        string caption = "No Server Name Specified";
+                        MessageBoxButtons buttons = MessageBoxButtons.YesNo;
+                        DialogResult result;
+
+                        // Displays the MessageBox.
+
+                        result = MessageBox.Show(message, caption, buttons);
+
+                        if (result == System.Windows.Forms.DialogResult.Yes)
+                        {
+                            UserControl.Instance.showCandidateInTaskPaneWithCountWord();
+                        }
                         myCustomTaskPane.Visible = true;
                     }
                     //    myCustomTaskPane.Visible = true;
@@ -71,6 +84,6 @@ namespace Spell
                 DocumentHandling.Instance.DeHighLight_All_Mistake(Globals.ThisAddIn.Application.ActiveDocument.Characters);
             }
         }
-       
+
     }
 }

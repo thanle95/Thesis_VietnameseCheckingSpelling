@@ -15,6 +15,7 @@ namespace Spell.Algorithm
         {
             get; set;
         }
+        public int FirstError_CountWord { get; set; }
         private static FindError instance = new FindError();
         private FindError()
         {
@@ -37,7 +38,7 @@ namespace Spell.Algorithm
         {
             try
             {
-                
+                FirstError_CountWord = -1;
                 lstErrorRange.Clear();
 
                 ////lấy toàn bộ danh sách các từ trong Active Document, để lấy được ngữ cảnh
@@ -85,6 +86,8 @@ namespace Spell.Algorithm
                             //Thì highLight
                             if (!VNDictionary.getInstance.isSyllableVN(token))
                             {
+                                if (FirstError_CountWord == -1)
+                                    FirstError_CountWord = countWord;
                                 lstErrorRange.Add(countWord, (DocumentHandling.Instance.HighLight_MistakeWrongWord(token, curSentenceList.ElementAt(0), countWord)));
                                 HashSet<string> hsetCand = Candidate.getInstance.selectiveCandidate(prepre, pre, token, next, nextnext);
                                 if (hsetCand.Count > 0)
@@ -104,6 +107,8 @@ namespace Spell.Algorithm
                                         tmpNext = hsetCandNext.ElementAt(0);
                                     if (!RightWordCandidate.getInstance.checkRightWord(prepre, pre, token, tmpNext, nextnext))
                                     {
+                                        if (FirstError_CountWord == -1)
+                                            FirstError_CountWord = countWord;
                                         lstErrorRange.Add(countWord, (DocumentHandling.Instance.HighLight_MistakeRightWord(token, curSentenceList.ElementAt(0), countWord)));
                                         HashSet<string> hsetCand = Candidate.getInstance.selectiveCandidate(prepre, pre, token, next, nextnext);
                                         if (hsetCand.Count > 0)

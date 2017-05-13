@@ -41,7 +41,24 @@ namespace Spell
         /// </summary>
         public void showCandidateInTaskPane(int startIndex)
         {
-            FixError fixError = new FixError(startIndex, FindError.Instance.lstErrorRange, FindError.Instance.MySentences);
+            FixError fixError = new FixError();
+            fixError.getCandidatesWithStartIndex(startIndex, FindError.Instance.lstErrorRange, FindError.Instance.MySentences);
+            lblWrong.Text = fixError.Token;
+            lstbCandidate.Items.Clear();
+            foreach (string item in fixError.hSetCandidate)
+            {
+                if (!item.ToLower().Equals(fixError.Token.ToLower()))
+                    if (item.Length > 1)
+                        lstbCandidate.Items.Add(item.Trim());
+                if (lstbCandidate.Items.Count > 0)
+                    lstbCandidate.SetSelected(0, true);
+                btnChange.Focus();
+            }
+        }
+        public void showCandidateInTaskPaneWithCountWord()
+        {
+            FixError fixError = new FixError();
+            fixError.getCandidatesWithCountWord(FindError.Instance.FirstError_CountWord, FindError.Instance.lstErrorRange, FindError.Instance.MySentences);
             lblWrong.Text = fixError.Token;
             lstbCandidate.Items.Clear();
             foreach (string item in fixError.hSetCandidate)
@@ -138,6 +155,11 @@ namespace Spell
             lstbCandidate.Items.Clear();
             DocumentHandling.Instance.DeHighLight_Mistake(startIndex, endIndex);
             curRangeTextShowInTaskPane.Select();
+            //
+            //sửa lỗi tiếp theo
+            //
+            FindError.Instance.FirstError_CountWord = FindError.Instance.lstErrorRange.First().Key;
+            showCandidateInTaskPaneWithCountWord();
         }
         private void btnChange_KeyDown(object sender, KeyEventArgs e)
         {
