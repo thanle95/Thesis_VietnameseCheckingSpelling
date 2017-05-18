@@ -56,7 +56,7 @@ namespace Spell.Algorithm
                             if (wordInWords.Trim().ToLower().Equals(Token))
                             {
                                 Context context = new Context(i, words);
-                                hSetCandidate= Candidate.getInstance.selectiveCandidate(context.PREPRE, context.PRE, Token, context.NEXT, context.NEXTNEXT);
+                                hSetCandidate= Candidate.getInstance.selectiveCandidate(context);
                                 return;
                             }
                         }
@@ -97,7 +97,7 @@ namespace Spell.Algorithm
                             if (wordInWords.Trim().ToLower().Equals(Token))
                             {
                                 Context context = new Context(i, words);
-                                hSetCandidate = Candidate.getInstance.selectiveCandidate(context.PREPRE, context.PRE, Token, context.NEXT, context.NEXTNEXT);
+                                hSetCandidate = Candidate.getInstance.selectiveCandidate(context);
                                 return;
                             }
                         }

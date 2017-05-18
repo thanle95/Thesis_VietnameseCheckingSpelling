@@ -37,6 +37,8 @@ namespace Spell
             int countWordInSentence = 0;
             for (int i = 1; i <= sentences.Count; i++)
             {
+                if (!sentences[i].Text.Contains(wrongText))
+                    continue;
                 string[] words = sentences[i].Text.Trim().Split(' ');
                 countWordInSentence += words.Length;
                 start = sentences[i].Start;
@@ -65,7 +67,7 @@ namespace Spell
                         end += 1;
                         count--;
                     }
-                    if (count == countWord)
+                    if (count == countWord || word.Equals(wrongText))
                     {
                         if (wordInArr.ToLower().Trim().Equals(wrongText.Trim().ToLower()))
                         {

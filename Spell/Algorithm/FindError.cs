@@ -80,7 +80,6 @@ namespace Spell.Algorithm
                             //xác định ngữ cảnh
                             Context context = new Context(i, words);
                             string prepre = context.PREPRE, pre = context.PRE, next = context.NEXT, nextnext = context.NEXTNEXT;
-
                             //Kiểm tra nếu không phải là từ Việt Nam
                             //Thì highLight
                             if (!VNDictionary.getInstance.isSyllableVN(token))
@@ -88,7 +87,7 @@ namespace Spell.Algorithm
                                 if (FirstError_CountWord == -1)
                                     FirstError_CountWord = countWord;
                                 lstErrorRange.Add(countWord, (DocumentHandling.Instance.HighLight_MistakeWrongWord(token, curSentenceList.ElementAt(0), countWord)));
-                                HashSet<string> hsetCand = Candidate.getInstance.selectiveCandidate(prepre, pre, token, next, nextnext);
+                                HashSet<string> hsetCand = WrongWordCandidate.getInstance.createCandidate(context, false);
                                 if (hsetCand.Count > 0)
                                     //tự động thay thế bằng candidate tốt nhất
                                     //tránh làm sai những gram phía sau
@@ -98,25 +97,32 @@ namespace Spell.Algorithm
                             {
                                 //kiểm tra token có khả năng sai ngữ cảnh hay k
 
-                                if (!RightWordCandidate.getInstance.checkRightWord(prepre, pre, token, next, nextnext))
+                                if (!RightWordCandidate.getInstance.checkRightWord(context))
                                 {
-                                    HashSet<string> hsetCandNext = Candidate.getInstance.selectiveCandidate("", token, next, nextnext, "");
+                                    context.PRE = token;
+                                    context.TOKEN = next;
+                                    context.NEXT = nextnext;
+                                    HashSet<string> hsetCandNext = Candidate.getInstance.selectiveCandidate(context);
                                     string tmpNext = "";
                                     if (hsetCandNext.Count > 0)
                                         tmpNext = hsetCandNext.ElementAt(0);
-                                    if (!RightWordCandidate.getInstance.checkRightWord(prepre, pre, token, tmpNext, nextnext))
+                                    context.PRE = pre;
+                                    context.TOKEN = token;
+                                    context.NEXT = tmpNext;
+
+                                    if (!RightWordCandidate.getInstance.checkRightWord(context))
                                     {
                                         if (FirstError_CountWord == -1)
                                             FirstError_CountWord = countWord;
                                         lstErrorRange.Add(countWord, (DocumentHandling.Instance.HighLight_MistakeRightWord(token, curSentenceList.ElementAt(0), countWord)));
-                                        HashSet<string> hsetCand = Candidate.getInstance.selectiveCandidate(prepre, pre, token, next, nextnext);
+                                        HashSet<string> hsetCand = Candidate.getInstance.selectiveCandidate(context);
                                         if (hsetCand.Count > 0)
                                             //tự động thay thế bằng candidate tốt nhất
                                             //tránh làm sai những gram phía sau
                                             words[i] = hsetCand.ElementAt(0);
                                     }
                                 }
-                            }
+                            }// end else right word
                         }
                     }//end for: duyệt từ từng trong cụm
                 }//end for: duyệt từ cụm

@@ -36,12 +36,12 @@
         {
             Microsoft.Office.Tools.Ribbon.RibbonDropDownItem ribbonDropDownItemImpl1 = this.Factory.CreateRibbonDropDownItem();
             Microsoft.Office.Tools.Ribbon.RibbonDropDownItem ribbonDropDownItemImpl2 = this.Factory.CreateRibbonDropDownItem();
-            Microsoft.Office.Tools.Ribbon.RibbonDropDownItem ribbonDropDownItemImpl6 = this.Factory.CreateRibbonDropDownItem();
-            Microsoft.Office.Tools.Ribbon.RibbonDropDownItem ribbonDropDownItemImpl7 = this.Factory.CreateRibbonDropDownItem();
-            Microsoft.Office.Tools.Ribbon.RibbonDropDownItem ribbonDropDownItemImpl8 = this.Factory.CreateRibbonDropDownItem();
             Microsoft.Office.Tools.Ribbon.RibbonDropDownItem ribbonDropDownItemImpl3 = this.Factory.CreateRibbonDropDownItem();
             Microsoft.Office.Tools.Ribbon.RibbonDropDownItem ribbonDropDownItemImpl4 = this.Factory.CreateRibbonDropDownItem();
             Microsoft.Office.Tools.Ribbon.RibbonDropDownItem ribbonDropDownItemImpl5 = this.Factory.CreateRibbonDropDownItem();
+            Microsoft.Office.Tools.Ribbon.RibbonDropDownItem ribbonDropDownItemImpl6 = this.Factory.CreateRibbonDropDownItem();
+            Microsoft.Office.Tools.Ribbon.RibbonDropDownItem ribbonDropDownItemImpl7 = this.Factory.CreateRibbonDropDownItem();
+            Microsoft.Office.Tools.Ribbon.RibbonDropDownItem ribbonDropDownItemImpl8 = this.Factory.CreateRibbonDropDownItem();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Ribbon));
             this.tab1 = this.Factory.CreateRibbonTab();
             this.group1 = this.Factory.CreateRibbonGroup();
@@ -49,10 +49,12 @@
             this.chkSuggest = this.Factory.CreateRibbonCheckBox();
             this.separator1 = this.Factory.CreateRibbonSeparator();
             this.dropTypeFindError = this.Factory.CreateRibbonDropDown();
+            this.dropCorpus = this.Factory.CreateRibbonDropDown();
             this.separator2 = this.Factory.CreateRibbonSeparator();
             this.dropDockPosition = this.Factory.CreateRibbonDropDown();
-            this.dropCorpus = this.Factory.CreateRibbonDropDown();
             this.tbtnCheck = this.Factory.CreateRibbonToggleButton();
+            this.btnDeleteFormat = this.Factory.CreateRibbonButton();
+            this.btnShowLength = this.Factory.CreateRibbonButton();
             this.tab1.SuspendLayout();
             this.group1.SuspendLayout();
             this.box1.SuspendLayout();
@@ -81,6 +83,8 @@
             this.box1.BoxStyle = Microsoft.Office.Tools.Ribbon.RibbonBoxStyle.Vertical;
             this.box1.Items.Add(this.tbtnCheck);
             this.box1.Items.Add(this.chkSuggest);
+            this.box1.Items.Add(this.btnDeleteFormat);
+            this.box1.Items.Add(this.btnShowLength);
             this.box1.Name = "box1";
             // 
             // chkSuggest
@@ -103,6 +107,18 @@
             this.dropTypeFindError.Name = "dropTypeFindError";
             this.dropTypeFindError.SelectionChanged += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.dropTypeFindError_SelectionChanged);
             // 
+            // dropCorpus
+            // 
+            ribbonDropDownItemImpl3.Label = "Đời sống";
+            ribbonDropDownItemImpl4.Label = "Chính trị";
+            ribbonDropDownItemImpl5.Label = "Văn học";
+            this.dropCorpus.Items.Add(ribbonDropDownItemImpl3);
+            this.dropCorpus.Items.Add(ribbonDropDownItemImpl4);
+            this.dropCorpus.Items.Add(ribbonDropDownItemImpl5);
+            this.dropCorpus.Label = "Loại ngữ liệu";
+            this.dropCorpus.Name = "dropCorpus";
+            this.dropCorpus.SelectionChanged += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.dropCorpus_SelectionChanged);
+            // 
             // separator2
             // 
             this.separator2.Name = "separator2";
@@ -119,18 +135,6 @@
             this.dropDockPosition.Name = "dropDockPosition";
             this.dropDockPosition.SelectionChanged += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.dropDockPosition_SelectionChanged);
             // 
-            // dropCorpus
-            // 
-            ribbonDropDownItemImpl3.Label = "Đời sống";
-            ribbonDropDownItemImpl4.Label = "Chính trị";
-            ribbonDropDownItemImpl5.Label = "Văn học";
-            this.dropCorpus.Items.Add(ribbonDropDownItemImpl3);
-            this.dropCorpus.Items.Add(ribbonDropDownItemImpl4);
-            this.dropCorpus.Items.Add(ribbonDropDownItemImpl5);
-            this.dropCorpus.Label = "Loại ngữ liệu";
-            this.dropCorpus.Name = "dropCorpus";
-            this.dropCorpus.SelectionChanged += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.dropCorpus_SelectionChanged);
-            // 
             // tbtnCheck
             // 
             this.tbtnCheck.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
@@ -139,6 +143,18 @@
             this.tbtnCheck.Name = "tbtnCheck";
             this.tbtnCheck.ShowImage = true;
             this.tbtnCheck.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.tbtnCheck_Click);
+            // 
+            // btnDeleteFormat
+            // 
+            this.btnDeleteFormat.Label = "Xóa đánh dấu lỗi";
+            this.btnDeleteFormat.Name = "btnDeleteFormat";
+            this.btnDeleteFormat.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.btnDeleteFormat_Click);
+            // 
+            // btnShowLength
+            // 
+            this.btnShowLength.Label = "Xem độ dài câu";
+            this.btnShowLength.Name = "btnShowLength";
+            this.btnShowLength.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.btnShowLength_Click);
             // 
             // Ribbon
             // 
@@ -168,6 +184,8 @@
         internal Microsoft.Office.Tools.Ribbon.RibbonSeparator separator2;
         internal Microsoft.Office.Tools.Ribbon.RibbonDropDown dropDockPosition;
         internal Microsoft.Office.Tools.Ribbon.RibbonDropDown dropCorpus;
+        internal Microsoft.Office.Tools.Ribbon.RibbonButton btnDeleteFormat;
+        internal Microsoft.Office.Tools.Ribbon.RibbonButton btnShowLength;
     }
 
     partial class ThisRibbonCollection

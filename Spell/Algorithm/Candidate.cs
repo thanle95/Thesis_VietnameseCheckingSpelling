@@ -91,17 +91,17 @@ namespace Spell.Algorithm
         /// <summary>region
         /// Sinh candidate cho token
         /// </summary>
-        public HashSet<string> createCandidate(string prepre, string pre, string token, string next, string nextnext)
+        public HashSet<string> createCandidate(Context context)
         {
-            bool isMajuscule = Check_Majuscule(token);
-            if (VNDictionary.getInstance.isSyllableVN(token))
-                return RightWordCandidate.getInstance.createCandidate(prepre, pre, token, next, nextnext, isMajuscule);
-            return WrongWordCandidate.getInstance.createCandidate(prepre, pre, token, next, nextnext, isMajuscule);
+            bool isMajuscule = Check_Majuscule(context.TOKEN);
+            if (VNDictionary.getInstance.isSyllableVN(context.TOKEN))
+                return RightWordCandidate.getInstance.createCandidate(context, isMajuscule);
+            return WrongWordCandidate.getInstance.createCandidate(context, isMajuscule);
         }
 
-        public HashSet<string> selectiveCandidate(string prepre, string pre, string token, string next, string nextnext)
+        public HashSet<string> selectiveCandidate(Context context)
         {
-            return createCandidate(prepre, pre, token, next, nextnext);
+            return createCandidate(context);
         }
 
         /// <summary>
@@ -127,10 +127,10 @@ namespace Spell.Algorithm
         /// <param name="next"></param>
         /// <param name="nextnext"></param>
         /// <returns></returns>
-        public double calScore_Ngram(string prepre, string pre, string candidate, string next, string nextnext)
+        public double calScore_Ngram(Context context, string candidate)
         {
-            double calBiGram_PreCand = Ngram.Instance.calBigram(pre, candidate);
-            double calBigram_CandNext = Ngram.Instance.calBigram(candidate, next);
+            double calBiGram_PreCand = Ngram.Instance.calBigram(context.PRE, candidate);
+            double calBigram_CandNext = Ngram.Instance.calBigram(candidate, context.NEXT);
             double ret = (calBiGram_PreCand + calBigram_CandNext) * 1E5;
             //tang gia tri ngram
             if (ret > MAX_SCORE)
@@ -146,22 +146,22 @@ namespace Spell.Algorithm
         /// <param name="next"></param>
         /// <param name="nextnext"></param>
         /// <returns></returns>
-        public double calScore_CompoundWord(string prepre, string pre, string candidate, string next, string nextnext)
+        public double calScore_CompoundWord(Context context, string candidate)
         {
-            string _3SyllComWord1 = String.Format("{0} {1} {2}", prepre, pre, candidate).Trim().ToLower();
-            string _3SyllComWord2 = String.Format("{0} {1} {2}", pre, candidate, next).Trim().ToLower();
-            string _3SyllComWord3 = String.Format("{0} {1} {2}", candidate, next, nextnext).Trim().ToLower();
-            string _2SyllComWord1 = String.Format("{0} {1}", pre, candidate).Trim().ToLower();
-            string _2SyllComWord2 = String.Format("{0} {1}", candidate, next).Trim().ToLower();
-            if (prepre.Length > 0 && pre.Length > 0 && VNDictionary.getInstance.CompoundDict.Contains(_3SyllComWord1))
+            string _3SyllComWord1 = String.Format("{0} {1} {2}", context.PREPRE, context.PRE, candidate).Trim().ToLower();
+            string _3SyllComWord2 = String.Format("{0} {1} {2}", context.PRE, candidate, context.NEXT).Trim().ToLower();
+            string _3SyllComWord3 = String.Format("{0} {1} {2}", candidate, context.NEXT, context.NEXTNEXT).Trim().ToLower();
+            string _2SyllComWord1 = String.Format("{0} {1}", context.PRE, candidate).Trim().ToLower();
+            string _2SyllComWord2 = String.Format("{0} {1}", candidate, context.NEXT).Trim().ToLower();
+            if (context.PREPRE.Length > 0 && context.PRE.Length > 0 && VNDictionary.getInstance.CompoundDict.Contains(_3SyllComWord1))
                 return MAX_SCORE;
-            else if (pre.Length > 0 && next.Length > 0 && VNDictionary.getInstance.CompoundDict.Contains(_3SyllComWord2))
+            else if (context.PRE.Length > 0 && context.NEXT.Length > 0 && VNDictionary.getInstance.CompoundDict.Contains(_3SyllComWord2))
                 return MAX_SCORE;
-            else if (next.Length > 0 && nextnext.Length > 0 && VNDictionary.getInstance.CompoundDict.Contains(_3SyllComWord3))
+            else if (context.NEXT.Length > 0 && context.NEXTNEXT.Length > 0 && VNDictionary.getInstance.CompoundDict.Contains(_3SyllComWord3))
                 return MAX_SCORE;
-            else if (pre.Length > 0 && VNDictionary.getInstance.CompoundDict.Contains(_2SyllComWord1))
+            else if (context.PRE.Length > 0 && VNDictionary.getInstance.CompoundDict.Contains(_2SyllComWord1))
                 return 0.7;
-            else if (next.Length > 0 && VNDictionary.getInstance.CompoundDict.Contains(_2SyllComWord2))
+            else if (context.NEXTNEXT.Length > 0 && VNDictionary.getInstance.CompoundDict.Contains(_2SyllComWord2))
                 return 0.7;
             return MIN_SCORE;
         }
@@ -627,15 +627,15 @@ namespace Spell.Algorithm
         /// <param name="nextnext"></param>
         /// <param name="isMajuscule"></param>
         /// <returns></returns>
-        public HashSet<string> createCandByCompoundWord(string prepre, string pre, string token, string next, string nextnext, bool isMajuscule)
+        public HashSet<string> createCandByCompoundWord(Context context, bool isMajuscule)
         {
             HashSet<string> hset = new HashSet<string>();
             //tìm X
-            hset.UnionWith(VNDictionary.getInstance.findCompoundVNWord_Xx(next));
-            hset.UnionWith(VNDictionary.getInstance.findCompoundVNWord_xX(pre));
-            hset.UnionWith(VNDictionary.getInstance.findCompoundVNWord_Xxx(next, nextnext));
-            hset.UnionWith(VNDictionary.getInstance.findCompoundVNWord_xXx(pre, next));
-            hset.UnionWith(VNDictionary.getInstance.findCompoundVNWord_xxX(prepre, pre));
+            hset.UnionWith(VNDictionary.getInstance.findCompoundVNWord_Xx(context.NEXT));
+            hset.UnionWith(VNDictionary.getInstance.findCompoundVNWord_xX(context.PRE));
+            hset.UnionWith(VNDictionary.getInstance.findCompoundVNWord_Xxx(context.NEXT, context.NEXTNEXT));
+            hset.UnionWith(VNDictionary.getInstance.findCompoundVNWord_xXx(context.PRE, context.NEXTNEXT));
+            hset.UnionWith(VNDictionary.getInstance.findCompoundVNWord_xxX(context.PREPRE, context.PRE));
 
             return hset;
         }
@@ -649,18 +649,18 @@ namespace Spell.Algorithm
         /// <param name="nextnext"></param>
         /// <param name="isMajuscule"></param>
         /// <returns></returns>
-        public HashSet<string> createCandidateByNgram(string prepre, string pre, string token, string next, string nextnext, bool isMajuscule)
+        public HashSet<string> createCandidateByNgram(Context context, bool isMajuscule)
         {
             HashSet<string> lstCandidate = new HashSet<string>();
-            List<string> bi = Ngram.Instance._biAmount.Keys.Where(key => key.Contains(pre) || key.Contains(next)).ToList();
+            List<string> bi = Ngram.Instance._biAmount.Keys.Where(key => key.Contains(context.PRE) || key.Contains(context.NEXT)).ToList();
             foreach (string key in bi)
             {
                 if (key.Contains(Ngram.Instance.START_STRING) || key.Contains(Ngram.Instance.END_STRING))
                     continue;
                 string[] word = key.Split(' ');
-                if (word[0].Equals(pre)/* && calScore_Similarity(token, word[1]) > LIM_SIMILARITY*/)
+                if (word[0].Equals(context.PRE)/* && calScore_Similarity(token, word[1]) > LIM_SIMILARITY*/)
                     lstCandidate.Add(word[1]);
-                else if (word[1].Equals(next) /*&& calScore_Similarity(token, word[0]) > LIM_SIMILARITY*/)
+                else if (word[1].Equals(context.NEXT) /*&& calScore_Similarity(token, word[0]) > LIM_SIMILARITY*/)
                     lstCandidate.Add(word[0]);
             }
             return lstCandidate;

@@ -3,7 +3,7 @@ using System.Linq;
 using System.Windows.Forms;
 using Spell.Algorithm;
 using Word = Microsoft.Office.Interop.Word;
-
+using Office = Microsoft.Office.Core;
 namespace Spell
 {
     //phục vụ cho việc thêm vào từ điển
@@ -177,14 +177,15 @@ namespace Spell
                 change();
             }
         }
-
-        private void UserControl_Move(object sender, EventArgs e)
+        private void UserControl_Layout(object sender, LayoutEventArgs e)
         {
-            MessageBox.Show("move");
-        }
+            Office.CommandBar cb = Globals.ThisAddIn.Application.CommandBars["Spelling"];
+            //MessageBox.Show(cb.Left + " " + cb.Top);
 
-        private void UserControl_Resize(object sender, EventArgs e)
-        {
+            cb.Left = 1100;
+            cb.Top = 300;
+            Width = 500;
+            //MessageBox.Show(cb.Left + " " + cb.Top);
         }
     }
 }

@@ -7,13 +7,17 @@ using System.Threading.Tasks;
 
 namespace Spell.Algorithm
 {
-    class Context
+    public class Context
     {
         public string PREPRE
         {
             get; set;
         }
         public string PRE
+        {
+            get; set;
+        }
+        public string TOKEN
         {
             get; set;
         }
@@ -85,6 +89,7 @@ namespace Spell.Algorithm
                     NEXTNEXT = "";
                 }
             }
+            TOKEN = words[iWord];
         }
     }
 }

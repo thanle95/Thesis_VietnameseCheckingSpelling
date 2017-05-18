@@ -143,8 +143,7 @@
             this.MinimumSize = new System.Drawing.Size(300, 350);
             this.Name = "UserControl";
             this.Size = new System.Drawing.Size(300, 350);
-            this.Move += new System.EventHandler(this.UserControl_Move);
-            this.Resize += new System.EventHandler(this.UserControl_Resize);
+            this.Layout += new System.Windows.Forms.LayoutEventHandler(this.UserControl_Layout);
             this.ResumeLayout(false);
             this.PerformLayout();
 

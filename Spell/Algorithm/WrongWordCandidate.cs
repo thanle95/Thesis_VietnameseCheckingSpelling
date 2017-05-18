@@ -36,7 +36,7 @@ namespace Spell.Algorithm
         /// <param name="nextnext"></param>
         /// <param name="isMajuscule"></param>
         /// <returns></returns>
-        public HashSet<string> createCandidate(string prepre, string pre, string token, string next, string nextnext, bool isMajuscule)
+        public HashSet<string> createCandidate(Context context, bool isMajuscule)
         {
             HashSet<string> result = new HashSet<string>();
             //giữ cặp <candidate, điểm> để so sánh
@@ -46,8 +46,8 @@ namespace Spell.Algorithm
             //candidate chưa chọn lọc dựa vào số điểm
             HashSet<string> hSetCandidate = new HashSet<string>();
 
-            hSetCandidate.UnionWith(Candidate.getInstance.createCandidateByNgram(prepre, pre, token, next, nextnext, isMajuscule));
-            hSetCandidate.UnionWith(Candidate.getInstance.createCandByCompoundWord(prepre, pre, token, next, nextnext, isMajuscule));
+            hSetCandidate.UnionWith(Candidate.getInstance.createCandidateByNgram(context, isMajuscule));
+            hSetCandidate.UnionWith(Candidate.getInstance.createCandByCompoundWord(context, isMajuscule));
             //giá trị lamda có được do thống kê
             double lamda1 = 0.1;
             double lamda2 = 0.2;
@@ -62,11 +62,11 @@ namespace Spell.Algorithm
             string text_writeFile = "";
             foreach (string candidate in hSetCandidate)
             {
-                S = Candidate.getInstance.calScore_Similarity(token, candidate);
+                S = Candidate.getInstance.calScore_Similarity(context.TOKEN, candidate);
                 if (S >= Candidate.getInstance.LIM_SIMILARITY)
                 {
-                    D = Candidate.getInstance.calScore_CompoundWord(prepre, pre, candidate, next, nextnext);
-                    L = Candidate.getInstance.calScore_Ngram(prepre, pre, candidate, next, nextnext);
+                    D = Candidate.getInstance.calScore_CompoundWord(context, candidate);
+                    L = Candidate.getInstance.calScore_Ngram(context, candidate);
 
                     score = lamda1 * D + lamda2 * L + lamda3 * S;
                     if (score > Candidate.getInstance.MAX_SCORE)
