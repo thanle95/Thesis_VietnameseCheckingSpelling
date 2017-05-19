@@ -9,13 +9,13 @@ namespace Spell.Algorithm
 {
     class FindError
     {
-        public Dictionary<int, Word.Range> lstErrorRange = new Dictionary<int, Word.Range>();
+        public Dictionary<Context, Word.Range> lstErrorRange = new Dictionary<Context, Word.Range>();
         private Word.Sentences curSentences;
         public List<string> MySentences
         {
             get; set;
         }
-        public int FirstError_CountWord { get; set; }
+        public Context FirstError_Context { get; set; }
         private static FindError instance = new FindError();
         private FindError()
         {
@@ -28,17 +28,17 @@ namespace Spell.Algorithm
                 return instance;
             }
         }
-        public Dictionary<int, Word.Range> startFindError(int typeFindError)
+        public Dictionary<Context, Word.Range> startFindError(int typeFindError)
         {
-            lstErrorRange = new Dictionary<int, Word.Range>();
-            Dictionary<int, Word.Range> ret = showWrongWithSuggest(typeFindError);
+            lstErrorRange = new Dictionary<Context, Word.Range>();
+            Dictionary<Context, Word.Range> ret = showWrongWithSuggest(typeFindError);
             return ret;
         }
-        public Dictionary<int, Word.Range> showWrongWithSuggest(int typeFindError)
+        public Dictionary<Context, Word.Range> showWrongWithSuggest(int typeFindError)
         {
             try
             {
-                FirstError_CountWord = -1;
+                //FirstError_Context; ;
                 lstErrorRange.Clear();
 
                 ////lấy toàn bộ danh sách các từ trong Active Document, để lấy được ngữ cảnh
@@ -52,7 +52,6 @@ namespace Spell.Algorithm
                 //với mỗi câu, tách thành từng cụm có liên quan mật thiết với nhau, như "", (),...
                 MySentences = DocumentHandling.Instance.getPhrase(curSentenceList.ElementAt(0));
                 //Xử lý từng cụm từ, vì mỗi cụm từ có liên quan mật thiết với nhau
-                int countWord = 0;
                 foreach (string mySentence in MySentences)
                 {
                     string[] words = mySentence.Trim().Split(' ');
@@ -62,12 +61,10 @@ namespace Spell.Algorithm
                     //duyệt qua từng từ trong cụm
                     for (int i = 0; i < length; i++)
                     {
-                        countWord++;
                         string token = words[i].Trim().ToLower();
                         if (token.Length < 1)
                         {
                             //lstErrorRange.Add(countWord, (DocumentHandling.Instance.HighLight_MistakeWrongWord(token, curSentences, countWord)));
-                            countWord--;
                             continue;
                         }
                         //Kiểm tra các kí tự đặc biệt, mail, số, tên riêng, viết tắt
@@ -84,9 +81,9 @@ namespace Spell.Algorithm
                             //Thì highLight
                             if (!VNDictionary.getInstance.isSyllableVN(token))
                             {
-                                if (FirstError_CountWord == -1)
-                                    FirstError_CountWord = countWord;
-                                lstErrorRange.Add(countWord, (DocumentHandling.Instance.HighLight_MistakeWrongWord(token, curSentenceList.ElementAt(0), countWord)));
+                                if (FirstError_Context == null)
+                                    FirstError_Context = context;
+                                lstErrorRange.Add(context, (DocumentHandling.Instance.HighLight_MistakeWrongWord(context, curSentenceList.ElementAt(0))));
                                 HashSet<string> hsetCand = WrongWordCandidate.getInstance.createCandidate(context, false);
                                 if (hsetCand.Count > 0)
                                     //tự động thay thế bằng candidate tốt nhất
@@ -102,8 +99,8 @@ namespace Spell.Algorithm
                                     context.PRE = token;
                                     context.TOKEN = next;
                                     context.NEXT = nextnext;
-                                    HashSet<string> hsetCandNext = Candidate.getInstance.selectiveCandidate(context);
                                     string tmpNext = "";
+                                    HashSet<string> hsetCandNext = Candidate.getInstance.selectiveCandidate(context);
                                     if (hsetCandNext.Count > 0)
                                         tmpNext = hsetCandNext.ElementAt(0);
                                     context.PRE = pre;
@@ -112,9 +109,12 @@ namespace Spell.Algorithm
 
                                     if (!RightWordCandidate.getInstance.checkRightWord(context))
                                     {
-                                        if (FirstError_CountWord == -1)
-                                            FirstError_CountWord = countWord;
-                                        lstErrorRange.Add(countWord, (DocumentHandling.Instance.HighLight_MistakeRightWord(token, curSentenceList.ElementAt(0), countWord)));
+                                        if (FirstError_Context == null)
+                                            FirstError_Context = context;
+                                        context.PRE = pre;
+                                        context.TOKEN = token;
+                                        context.NEXT = next;
+                                        lstErrorRange.Add(context, (DocumentHandling.Instance.HighLight_MistakeRightWord(context, curSentenceList.ElementAt(0))));
                                         HashSet<string> hsetCand = Candidate.getInstance.selectiveCandidate(context);
                                         if (hsetCand.Count > 0)
                                             //tự động thay thế bằng candidate tốt nhất

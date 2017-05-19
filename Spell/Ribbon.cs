@@ -63,7 +63,7 @@ namespace Spell
             DocumentHandling.Instance.DeHighLight_All_Mistake(Globals.ThisAddIn.Application.ActiveDocument.Characters);
             int startIndex = Globals.ThisAddIn.Application.Selection.Start;
             int endIndex = Globals.ThisAddIn.Application.Selection.End;
-            Dictionary<int, Word.Range> ret = FindError.Instance.startFindError(typeFindError);
+            Dictionary<Context, Word.Range> ret = FindError.Instance.startFindError(typeFindError);
             int count = ret.Count;
             //int count = UserControl.Instance.startFindError(typeFindError);
             if (count > 0)

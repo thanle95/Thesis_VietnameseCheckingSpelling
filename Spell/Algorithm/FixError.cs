@@ -22,7 +22,7 @@ namespace Spell.Algorithm
         {
             get; set;
         }
-        public void getCandidatesWithStartIndex(int startIndex, Dictionary<int, Word.Range> dictError, List<string> mySentences)
+        public void getCandidatesWithStartIndex(int startIndex, Dictionary<Context, Word.Range> dictError, List<string> mySentences)
         {
             hSetCandidate = new HashSet<string>();
             //nếu có lỗi trong danh sách
@@ -40,39 +40,39 @@ namespace Spell.Algorithm
                 //}
 
                 Regex regexEndSentenceChar = new Regex(StringConstant.Instance.patternSignSentence);
-                int countWord = dictError.First(kvp => kvp.Value == tokenRange).Key;
-                int count = 0;
+                Context context = dictError.First(kvp => kvp.Value == tokenRange).Key;
                 foreach (string mySentence in mySentences)
                 {
+                    if (!mySentence.Contains(Token))
+                        continue;
                     string[] words = mySentence.Trim().Split(' ');
                     int i = 0;
                     foreach (string word in words)
                     {
-                        if (word.Length > 0)
-                            count++;
-                        if (countWord == count)
+                        Context iContext = new Context(i, words);
+                        if (context.Equals(iContext))
                         {
-                            string wordInWords = regexEndSentenceChar.Replace(word, "");
-                            if (wordInWords.Trim().ToLower().Equals(Token))
-                            {
-                                Context context = new Context(i, words);
-                                hSetCandidate= Candidate.getInstance.selectiveCandidate(context);
+                            //string wordInWords = regexEndSentenceChar.Replace(word, "");
+                            //if (wordInWords.Trim().ToLower().Equals(Token))
+                            //{
+                                
+                                hSetCandidate= Candidate.getInstance.selectiveCandidate(iContext);
                                 return;
-                            }
+                            //}
                         }
                         i++;
                     } //end if compare to find token
                 } // end for
             }
         }
-        public void getCandidatesWithCountWord(int countWord, Dictionary<int, Word.Range> dictError, List<string> mySentences)
+        public void getCandidatesWithContext(Context context, Dictionary<Context, Word.Range> dictError, List<string> mySentences)
         {
             hSetCandidate = new HashSet<string>();
             //nếu có lỗi trong danh sách
             if (dictError.Count > 0)
             {
                 //lấy lỗi đầu tiên tìm được với startIndex
-                Token = dictError[countWord].Text.ToLower().Trim() ;
+                Token = dictError[context].Text.ToLower().Trim() ;
 
                 //if(token.Length == 0)
                 //{
@@ -82,31 +82,31 @@ namespace Spell.Algorithm
                 //}
 
                 Regex regexEndSentenceChar = new Regex(StringConstant.Instance.patternSignSentence);
-                int count = 0;
                 foreach (string mySentence in mySentences)
                 {
+                    if (!mySentence.Contains(Token))
+                        continue;
                     string[] words = mySentence.Trim().Split(' ');
                     int i = 0;
                     foreach (string word in words)
                     {
-                        if (word.Length > 0)
-                            count++;
-                        if (countWord == count)
+                        Context iContext = new Context(i, words);
+                        if (context.Equals(iContext))
                         {
-                            string wordInWords = regexEndSentenceChar.Replace(word, "");
-                            if (wordInWords.Trim().ToLower().Equals(Token))
-                            {
-                                Context context = new Context(i, words);
-                                hSetCandidate = Candidate.getInstance.selectiveCandidate(context);
-                                return;
-                            }
+                            //string wordInWords = regexEndSentenceChar.Replace(word, "");
+                            //if (wordInWords.Trim().ToLower().Equals(Token))
+                            //{
+
+                            hSetCandidate = Candidate.getInstance.selectiveCandidate(iContext);
+                            return;
+                            //}
                         }
                         i++;
                     } //end if compare to find token
                 } // end for
             }
         }
-        private Word.Range findErrorRangeByStartIndex(int startIndex, Dictionary<int, Word.Range> dictError)
+        private Word.Range findErrorRangeByStartIndex(int startIndex, Dictionary<Context, Word.Range> dictError)
         {
             List<Word.Range> temp = new List<Word.Range>();
             foreach (Word.Range range in dictError.Values)

@@ -22,54 +22,50 @@ namespace Spell
         }
 
 
-        public Word.Range HighLight_Mistake(string wrongText, Word.Sentences sentencesList, int countWord, Word.WdColorIndex colorIndex, Word.WdColor color)
+        public Word.Range HighLight_Mistake(Context context, Word.Sentences sentencesList, Word.WdColorIndex colorIndex, Word.WdColor color)
         {
             Word.Range range = null;
             Word.Range endRange = null;
             //Word.Lines lines = Globals.ThisAddIn.Application.ActiveDocument.Words.l;
             Word.Sentences sentences = sentencesList;
-            //đếm số thứ tự từ hiện tại
-            int count = 0;
 
             //start và end để chọn range highLight cho từ bị lỗi.
             int start = 0;
             int end = 0;
-            int countWordInSentence = 0;
             for (int i = 1; i <= sentences.Count; i++)
             {
-                if (!sentences[i].Text.Contains(wrongText))
+
+                if (!sentences[i].Text.Contains(context.TOKEN))
                     continue;
                 string[] words = sentences[i].Text.Trim().Split(' ');
-                countWordInSentence += words.Length;
                 start = sentences[i].Start;
                 //if (sentences[i].Text.Length < sentences[i].Text.TrimEnd().Length)
                 //    start++;
                 end = 0;
-                foreach (string word in words)
+                for (int j = 0; j < words.Length; j++)
                 {
+                    string word = words[j].Trim().ToLower();
+                    if (words.Length < 1)
+                        continue;
+                    Regex r = new Regex(StringConstant.Instance.patternCheckSpecialChar);
+                    Match m = r.Match(context.TOKEN);
+                    if (m.Success)
+                        continue;
+                    else {
+                        Context jContext = new Context(j, words);
+                        //if (count == countWordInSentence - 1)
+                        //{
+                        //    endRange = Globals.ThisAddIn.Application.ActiveDocument.Range(start, start);
+                        //    endRange.Select();
+                        //}
+                        //nếu từ có chứa những ký tự đặc biệt thì loại bỏ ký tự đó
+                        string wordInArr = Regex.Replace(words[j], StringConstant.Instance.patternSignSentence, "");
 
-                    count++;
-                    //if (count == countWordInSentence - 1)
-                    //{
-                    //    endRange = Globals.ThisAddIn.Application.ActiveDocument.Range(start, start);
-                    //    endRange.Select();
-                    //}
-                    //nếu từ có chứa những ký tự đặc biệt thì loại bỏ ký tự đó
-                    string wordInArr = Regex.Replace(word, StringConstant.Instance.patternSignSentence, "");
+                        end = start + wordInArr.Length;
 
-                    end = start + wordInArr.Length;
-
-                    //trường hợp dư khoảng trắng
-                    if (word.Length == 0)
-                        count--;
-                    if (word.Length != 0 && wordInArr.Length == 0)
-                    {
-                        end += 1;
-                        count--;
-                    }
-                    if (count == countWord || word.Equals(wrongText))
-                    {
-                        if (wordInArr.ToLower().Trim().Equals(wrongText.Trim().ToLower()))
+                        if (words[j].Length != 0 && wordInArr.Length == 0)
+                            end += 1;
+                        if (context.Equals(jContext))
                         {
                             range = Globals.ThisAddIn.Application.ActiveDocument.Range(start, end);
                             range.HighlightColorIndex = colorIndex;
@@ -77,26 +73,26 @@ namespace Spell
                             range.Select();
                             return range;
                         }
+
+                        start = end + 1 + Math.Abs(wordInArr.Length - words[j].Length); // bỏ qua khoảng trắng
+                        if (words[j].Length != 0 && wordInArr.Length == 0)
+                            start -= 1;
+
                     }
 
-                    start = end + 1 + Math.Abs(wordInArr.Length - word.Length); // bỏ qua khoảng trắng
-                    if (word.Length != 0 && wordInArr.Length == 0)
-                        start -= 1;
-
                 }
-
             }
             return range;
         }
 
-        public Word.Range HighLight_MistakeWrongWord(string wrongText, Word.Sentences sentencesList, int countWord)
+        public Word.Range HighLight_MistakeWrongWord(Context context, Word.Sentences sentencesList)
         {
-            return HighLight_Mistake(wrongText, sentencesList, countWord, Word.WdColorIndex.wdRed, Word.WdColor.wdColorYellow);
+            return HighLight_Mistake(context, sentencesList, Word.WdColorIndex.wdRed, Word.WdColor.wdColorYellow);
         }
 
-        public Word.Range HighLight_MistakeRightWord(string wrongText, Word.Sentences sentencesList, int countWord)
+        public Word.Range HighLight_MistakeRightWord(Context context, Word.Sentences sentencesList)
         {
-            return HighLight_Mistake(wrongText, sentencesList, countWord, Word.WdColorIndex.wdYellow, Word.WdColor.wdColorAutomatic);
+            return HighLight_Mistake(context, sentencesList, Word.WdColorIndex.wdYellow, Word.WdColor.wdColorAutomatic);
         }
 
         public void DeHighLight_All_Mistake(Word.Characters characters)

@@ -91,5 +91,23 @@ namespace Spell.Algorithm
             }
             TOKEN = words[iWord];
         }
+        public override bool Equals(object obj)
+        {
+            Context c;
+            if (obj.GetType() != this.GetType())
+                return false;
+            else c = (Context)obj;
+            if (!PREPRE.Equals(c.PREPRE))
+                return false;
+            if (!PRE.Equals(c.PRE))
+                return false;
+            if (!TOKEN.Equals(c.TOKEN))
+                return false;
+            if (!NEXT.Equals(c.NEXT))
+                return false;
+            if (!NEXTNEXT.Equals(c.NEXTNEXT))
+                return false;
+            return true;
+        }
     }
 }
