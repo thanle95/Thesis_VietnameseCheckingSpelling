@@ -19,7 +19,7 @@ namespace Spell.Algorithm
         private static FindError instance = new FindError();
         private FindError()
         {
-
+            lstErrorRange = new Dictionary<Context, Word.Range>();
         }
         public static FindError Instance
         {
@@ -30,7 +30,6 @@ namespace Spell.Algorithm
         }
         public Dictionary<Context, Word.Range> startFindError(int typeFindError)
         {
-            lstErrorRange = new Dictionary<Context, Word.Range>();
             Dictionary<Context, Word.Range> ret = showWrongWithSuggest(typeFindError);
             return ret;
         }
@@ -38,27 +37,20 @@ namespace Spell.Algorithm
         {
             try
             {
-                //FirstError_Context; ;
                 lstErrorRange.Clear();
-
-                ////lấy toàn bộ danh sách các từ trong Active Document, để lấy được ngữ cảnh
-                //lấy danh sách câu dựa trên vùng được bôi đen
+                //lấy toàn bộ danh sách các từ trong Active Document, để lấy được ngữ cảnh
+                
                 if (typeFindError == 0)
+                    //chọn toàn bộ văn bản
                     curSentences = Globals.ThisAddIn.Application.ActiveDocument.Sentences;
-                else
+                else 
+                    //lấy danh sách câu dựa trên vùng được bôi đen
                     curSentences = Globals.ThisAddIn.Application.Selection.Sentences;
                 List<Word.Sentences> curSentenceList = new List<Word.Sentences>();
                 curSentenceList.Add(curSentences);
-                //với mỗi câu, tách thành từng cụm có liên quan mật thiết với nhau, như "", (),...
-                //MySentences = DocumentHandling.Instance.getPhrase(curSentenceList.ElementAt(0));
-                //Xử lý từng cụm từ, vì mỗi cụm từ có liên quan mật thiết với nhau
                 int start = 0, end = 0;
                 for (int iSentence = 1; iSentence <= curSentences.Count; iSentence++)
                 {
-                    //MySentences = DocumentHandling.Instance.getPhrase(curSentences[iSentence]);
-
-                    //foreach (string mySentence in MySentences)
-                    //{
                     string[] words = curSentences[iSentence].Text.Trim().Split(' ');
                     start = curSentences[iSentence].Start;
                     end = 0;
@@ -67,23 +59,22 @@ namespace Spell.Algorithm
                     //duyệt qua từng từ trong cụm
                     for (int i = 0; i < length; i++)
                     {
-                        
-                        string token = words[i].Trim().ToLower();
+                        string iWord = words[i];
+                        string token = iWord.Trim().ToLower();
                         if (token.Length < 1)
                         {
                             start += words[i].Length + 1;
                             continue;
                         }
-
                         //Kiểm tra các kí tự đặc biệt, mail, số, tên riêng, viết tắt
                         Regex r = new Regex(StringConstant.Instance.patternCheckSpecialChar);
                         Match m = r.Match(token);
-                      
                         if (m.Success)
                         {
                             start += words[i].Length + 1;
                             continue;
                         }
+                        //viết hoa giữa câu
                         else if (char.IsUpper(words[i].Trim()[0]) && i != 0)
                         {
                             start += words[i].Length + 1;
@@ -94,13 +85,10 @@ namespace Spell.Algorithm
                             //xác định ngữ cảnh
                             Context context = new Context(i, words);
                             string wordInArr = Regex.Replace(words[i], StringConstant.Instance.patternSignSentence, "");
-
                             end = start + wordInArr.Length;
-                            string prepre = context.PREPRE, pre = context.PRE, next = context.NEXT, nextnext = context.NEXTNEXT;
-
+                            
                             if (words[i].Length != wordInArr.Length)
                             {
-                                end += 1;
                                 context.TOKEN = wordInArr;
                             }
                             if (wordInArr.Length == 0)
@@ -108,57 +96,57 @@ namespace Spell.Algorithm
                                 start += words[i].Length + 1;
                                 continue;
                             }
+                            string prepre = context.PREPRE, pre = context.PRE, next = context.NEXT, nextnext = context.NEXTNEXT;
                             //Kiểm tra nếu không phải là từ Việt Nam
                             //Thì highLight
                             if (!VNDictionary.getInstance.isSyllableVN(wordInArr))
                             {
                                 if (FirstError_Context == null)
                                     FirstError_Context = context;
-
-                                lstErrorRange.Add(context, (DocumentHandling.Instance.HighLight_MistakeWrongWord(start, end)));
-                                //HashSet<string> hsetCand = WrongWordCandidate.getInstance.createCandidate(context, false);
-                                //if (hsetCand.Count > 0)
-                                //    //tự động thay thế bằng candidate tốt nhất
-                                //    //tránh làm sai những gram phía sau
-                                //    words[i] = hsetCand.ElementAt(0);
-                            }
-                            else
+                                HashSet<string> hsetCand = WrongWordCandidate.getInstance.createCandidate(context, false);
+                                if (hsetCand.Count > 0)
+                                {
+                                    //tự động thay thế bằng candidate tốt nhất
+                                    //tránh làm sai những gram phía sau
+                                    words[i] = hsetCand.ElementAt(0);
+                                    lstErrorRange.Add(context, (DocumentHandling.Instance.HighLight_MistakeWrongWord(start, end)));
+                                }
+                                
+                            }//end if wrong word
+                            //kiểm tra token có khả năng sai ngữ cảnh hay k
+                            else if (!RightWordCandidate.getInstance.checkRightWord(context))
                             {
-                                //kiểm tra token có khả năng sai ngữ cảnh hay k
-
+                                context.PRE = token;
+                                context.TOKEN = next;
+                                context.NEXT = nextnext;
+                                string tmpNext = "";
+                                HashSet<string> hsetCandNext = Candidate.getInstance.selectiveCandidate(context);
+                                if (hsetCandNext.Count > 0)
+                                    tmpNext = hsetCandNext.ElementAt(0);
+                                context.PRE = pre;
+                                context.TOKEN = token;
+                                context.NEXT = tmpNext;
                                 if (!RightWordCandidate.getInstance.checkRightWord(context))
                                 {
-                                    context.PRE = token;
-                                    context.TOKEN = next;
-                                    context.NEXT = nextnext;
-                                    string tmpNext = "";
-                                    HashSet<string> hsetCandNext = Candidate.getInstance.selectiveCandidate(context);
-                                    if (hsetCandNext.Count > 0)
-                                        tmpNext = hsetCandNext.ElementAt(0);
+                                    if (FirstError_Context == null)
+                                        FirstError_Context = context;
                                     context.PRE = pre;
                                     context.TOKEN = token;
-                                    context.NEXT = tmpNext;
-
-                                    if (!RightWordCandidate.getInstance.checkRightWord(context))
+                                    context.NEXT = next;
+                                    HashSet<string> hsetCand = Candidate.getInstance.selectiveCandidate(context);
+                                    if (hsetCand.Count > 0)
                                     {
-                                        if (FirstError_Context == null)
-                                            FirstError_Context = context;
-                                        context.PRE = pre;
-                                        context.TOKEN = token;
-                                        context.NEXT = next;
+                                        //tự động thay thế bằng candidate tốt nhất
+                                        //tránh làm sai những gram phía sau
+                                        words[i] = hsetCand.ElementAt(0);
                                         lstErrorRange.Add(context, (DocumentHandling.Instance.HighLight_MistakeRightWord(start, end)));
-                                        HashSet<string> hsetCand = Candidate.getInstance.selectiveCandidate(context);
-                                        if (hsetCand.Count > 0)
-                                            //tự động thay thế bằng candidate tốt nhất
-                                            //tránh làm sai những gram phía sau
-                                            words[i] = hsetCand.ElementAt(0);
                                     }
                                 }
-                            }// end else right word
+                            }// end else if right word
                         }
-                        start += words[i].Length + 1;
-                    }//end for: duyệt từ từng trong câu
-                }//end for: duyệt từ câu
+                        start += iWord.Length + 1;
+                    }//end for: duyệt từng từ trong câu
+                }//end for: duyệt từng câu
             }
             catch (Exception e)
             {

@@ -115,6 +115,7 @@ namespace Spell
             //sửa lỗi tiếp theo
             //
             FindError.Instance.FirstError_Context = FindError.Instance.lstErrorRange.First().Key;
+            FindError.Instance.lstErrorRange[FindError.Instance.FirstError_Context].Select();
             showCandidateInTaskPaneWithCountWord();
         }
 
@@ -171,7 +172,7 @@ namespace Spell
             //sửa lỗi tiếp theo
             //
             FindError.Instance.FirstError_Context = FindError.Instance.lstErrorRange.First().Key;
-            
+            FindError.Instance.lstErrorRange[FindError.Instance.FirstError_Context].Select();
             showCandidateInTaskPaneWithCountWord();
             
         }
