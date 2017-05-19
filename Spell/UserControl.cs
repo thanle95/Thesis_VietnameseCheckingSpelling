@@ -99,7 +99,6 @@ namespace Spell
                     startIndex = range.Start;
                     endIndex = range.End;
                     var item = FindError.Instance.lstErrorRange.First(kvp => kvp.Value == range);
-
                     FindError.Instance.lstErrorRange.Remove(item.Key);
                     break;
                 }

@@ -31,11 +31,14 @@ namespace Spell.Algorithm
         }
         public Context(int iWord, string[] words)
         {
-            getGramArroundIWord(iWord, words);
+            getContext(iWord, words);
+        }
+        public Context()
+        {
+            PREPRE = PRE = TOKEN = NEXT = NEXTNEXT = "";
         }
 
-
-        private void getGramArroundIWord(int iWord, string[] words)
+        public void getContext(int iWord, string[] words)
         {
             Regex regexSpecialChar = new Regex(StringConstant.Instance.patternCheckSpecialChar);
             Regex regexEndSentenceChar = new Regex(StringConstant.Instance.patternEndSentenceCharacter);

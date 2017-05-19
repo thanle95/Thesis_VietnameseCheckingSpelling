@@ -16,6 +16,7 @@ namespace Spell
     {
         Microsoft.Office.Tools.CustomTaskPane myCustomTaskPane;
         private int typeFindError = 0;
+        private int typeError = 0;
         private const int LIFE_CORPUS = 0;
         private const int POLITIC_CORPUS = 1;
         private const int LITERRATY_CORPUS = 2;
@@ -63,7 +64,9 @@ namespace Spell
             DocumentHandling.Instance.DeHighLight_All_Mistake(Globals.ThisAddIn.Application.ActiveDocument.Characters);
             int startIndex = Globals.ThisAddIn.Application.Selection.Start;
             int endIndex = Globals.ThisAddIn.Application.Selection.End;
-            Dictionary<Context, Word.Range> ret = FindError.Instance.startFindError(typeFindError);
+            typeFindError = dropTypeFindError.SelectedItemIndex;
+            typeError = dropTypeError.SelectedItemIndex;
+            Dictionary<Context, Word.Range> ret = FindError.Instance.startFindError(typeFindError, typeError);
             stopwatch.Stop();
             int count = ret.Count;
             //int count = UserControl.Instance.startFindError(typeFindError);
@@ -147,11 +150,11 @@ namespace Spell
         private void dropTypeFindError_SelectionChanged(object sender, RibbonControlEventArgs e)
         {
             //
-            if (dropTypeFindError.SelectedItemIndex == APART_DOCUMENT_SELECTION)
-            {
-                MessageBox.Show(SysMessage.Instance.Feature_is_updating);
-                dropTypeFindError.SelectedItemIndex = WHOLE_DOCUMENT_SELECTION;
-            }
+            //if (dropTypeFindError.SelectedItemIndex == APART_DOCUMENT_SELECTION)
+            //{
+            //    MessageBox.Show(SysMessage.Instance.Feature_is_updating);
+            //    dropTypeFindError.SelectedItemIndex = WHOLE_DOCUMENT_SELECTION;
+            //}
         }
 
         private void btnDeleteFormat_Click(object sender, RibbonControlEventArgs e)
