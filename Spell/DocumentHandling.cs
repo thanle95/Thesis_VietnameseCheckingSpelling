@@ -84,15 +84,31 @@ namespace Spell
             }
             return range;
         }
+        public Word.Range HighLight_Mistake(int start, int end, Word.WdColorIndex colorIndex, Word.WdColor color)
+        {
+            Word.Range range = null;
+            range = Globals.ThisAddIn.Application.ActiveDocument.Range(start, end);
+            range.HighlightColorIndex = colorIndex;
+            range.Font.Color = color;
+            range.Select();
+            return range;
+        }
 
         public Word.Range HighLight_MistakeWrongWord(Context context, Word.Sentences sentencesList)
         {
             return HighLight_Mistake(context, sentencesList, Word.WdColorIndex.wdRed, Word.WdColor.wdColorYellow);
         }
-
+        public Word.Range HighLight_MistakeWrongWord(int start, int end)
+        {
+            return HighLight_Mistake(start, end, Word.WdColorIndex.wdRed, Word.WdColor.wdColorYellow);
+        }
         public Word.Range HighLight_MistakeRightWord(Context context, Word.Sentences sentencesList)
         {
             return HighLight_Mistake(context, sentencesList, Word.WdColorIndex.wdYellow, Word.WdColor.wdColorAutomatic);
+        }
+        public Word.Range HighLight_MistakeRightWord(int start, int end)
+        {
+            return HighLight_Mistake(start, end , Word.WdColorIndex.wdYellow, Word.WdColor.wdColorAutomatic);
         }
 
         public void DeHighLight_All_Mistake(Word.Characters characters)
@@ -166,6 +182,20 @@ namespace Spell
                         ret.Add(iPharse);
                 }
             }
+            return ret;
+        }
+        public List<string> getPhrase(Word.Range sentences)
+        {
+            List<string> ret = new List<string>();
+            string sentence = sentences.Text;
+            string[] phraseArr = new Regex(StringConstant.Instance.patternSignSentence).Split(sentence);
+
+            foreach (string iPharse in phraseArr)
+            {
+                if (iPharse.Trim().Length > 0)
+                    ret.Add(iPharse);
+            }
+
             return ret;
         }
 

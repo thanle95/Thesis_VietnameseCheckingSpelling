@@ -50,45 +50,77 @@ namespace Spell.Algorithm
                 List<Word.Sentences> curSentenceList = new List<Word.Sentences>();
                 curSentenceList.Add(curSentences);
                 //với mỗi câu, tách thành từng cụm có liên quan mật thiết với nhau, như "", (),...
-                MySentences = DocumentHandling.Instance.getPhrase(curSentenceList.ElementAt(0));
+                //MySentences = DocumentHandling.Instance.getPhrase(curSentenceList.ElementAt(0));
                 //Xử lý từng cụm từ, vì mỗi cụm từ có liên quan mật thiết với nhau
-                foreach (string mySentence in MySentences)
+                int start = 0, end = 0;
+                for (int iSentence = 1; iSentence <= curSentences.Count; iSentence++)
                 {
-                    string[] words = mySentence.Trim().Split(' ');
+                    //MySentences = DocumentHandling.Instance.getPhrase(curSentences[iSentence]);
 
+                    //foreach (string mySentence in MySentences)
+                    //{
+                    string[] words = curSentences[iSentence].Text.Trim().Split(' ');
+                    start = curSentences[iSentence].Start;
+                    end = 0;
                     //số lượng các từ trong cụm
                     int length = words.Length;
                     //duyệt qua từng từ trong cụm
                     for (int i = 0; i < length; i++)
                     {
+                        
                         string token = words[i].Trim().ToLower();
                         if (token.Length < 1)
                         {
-                            //lstErrorRange.Add(countWord, (DocumentHandling.Instance.HighLight_MistakeWrongWord(token, curSentences, countWord)));
+                            start += words[i].Length + 1;
                             continue;
                         }
+
                         //Kiểm tra các kí tự đặc biệt, mail, số, tên riêng, viết tắt
                         Regex r = new Regex(StringConstant.Instance.patternCheckSpecialChar);
                         Match m = r.Match(token);
-                        if (m.Success || (char.IsUpper(words[i].Trim()[0]) /*&& i != 0*/))
+                      
+                        if (m.Success)
+                        {
+                            start += words[i].Length + 1;
                             continue;
+                        }
+                        else if (char.IsUpper(words[i].Trim()[0]) && i != 0)
+                        {
+                            start += words[i].Length + 1;
+                            continue;
+                        }
                         else
                         {
                             //xác định ngữ cảnh
                             Context context = new Context(i, words);
+                            string wordInArr = Regex.Replace(words[i], StringConstant.Instance.patternSignSentence, "");
+
+                            end = start + wordInArr.Length;
                             string prepre = context.PREPRE, pre = context.PRE, next = context.NEXT, nextnext = context.NEXTNEXT;
+
+                            if (words[i].Length != wordInArr.Length)
+                            {
+                                end += 1;
+                                context.TOKEN = wordInArr;
+                            }
+                            if (wordInArr.Length == 0)
+                            {
+                                start += words[i].Length + 1;
+                                continue;
+                            }
                             //Kiểm tra nếu không phải là từ Việt Nam
                             //Thì highLight
-                            if (!VNDictionary.getInstance.isSyllableVN(token))
+                            if (!VNDictionary.getInstance.isSyllableVN(wordInArr))
                             {
                                 if (FirstError_Context == null)
                                     FirstError_Context = context;
-                                lstErrorRange.Add(context, (DocumentHandling.Instance.HighLight_MistakeWrongWord(context, curSentenceList.ElementAt(0))));
-                                HashSet<string> hsetCand = WrongWordCandidate.getInstance.createCandidate(context, false);
-                                if (hsetCand.Count > 0)
-                                    //tự động thay thế bằng candidate tốt nhất
-                                    //tránh làm sai những gram phía sau
-                                    words[i] = hsetCand.ElementAt(0);
+
+                                lstErrorRange.Add(context, (DocumentHandling.Instance.HighLight_MistakeWrongWord(start, end)));
+                                //HashSet<string> hsetCand = WrongWordCandidate.getInstance.createCandidate(context, false);
+                                //if (hsetCand.Count > 0)
+                                //    //tự động thay thế bằng candidate tốt nhất
+                                //    //tránh làm sai những gram phía sau
+                                //    words[i] = hsetCand.ElementAt(0);
                             }
                             else
                             {
@@ -114,7 +146,7 @@ namespace Spell.Algorithm
                                         context.PRE = pre;
                                         context.TOKEN = token;
                                         context.NEXT = next;
-                                        lstErrorRange.Add(context, (DocumentHandling.Instance.HighLight_MistakeRightWord(context, curSentenceList.ElementAt(0))));
+                                        lstErrorRange.Add(context, (DocumentHandling.Instance.HighLight_MistakeRightWord(start, end)));
                                         HashSet<string> hsetCand = Candidate.getInstance.selectiveCandidate(context);
                                         if (hsetCand.Count > 0)
                                             //tự động thay thế bằng candidate tốt nhất
@@ -124,9 +156,9 @@ namespace Spell.Algorithm
                                 }
                             }// end else right word
                         }
-                    }//end for: duyệt từ từng trong cụm
-                }//end for: duyệt từ cụm
-
+                        start += words[i].Length + 1;
+                    }//end for: duyệt từ từng trong câu
+                }//end for: duyệt từ câu
             }
             catch (Exception e)
             {

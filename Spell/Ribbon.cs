@@ -64,6 +64,7 @@ namespace Spell
             int startIndex = Globals.ThisAddIn.Application.Selection.Start;
             int endIndex = Globals.ThisAddIn.Application.Selection.End;
             Dictionary<Context, Word.Range> ret = FindError.Instance.startFindError(typeFindError);
+            stopwatch.Stop();
             int count = ret.Count;
             //int count = UserControl.Instance.startFindError(typeFindError);
             if (count > 0)
@@ -107,7 +108,7 @@ namespace Spell
 
             //threadWithSuggest.Abort();
             //threadWithoutSuggest.Abort();
-            stopwatch.Stop();
+            
             TimeSpan ts = stopwatch.Elapsed;
             string elapseTime = string.Format("{0:00}:{1:00}:{2:00}.{3:00}",
                                 ts.Hours, ts.Minutes, ts.Seconds,

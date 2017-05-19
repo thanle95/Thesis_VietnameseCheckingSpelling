@@ -53,7 +53,7 @@ namespace Spell
         public void showCandidateInTaskPaneWithCountWord()
         {
             FixError fixError = new FixError();
-            fixError.getCandidatesWithContext(FindError.Instance.FirstError_Context, FindError.Instance.lstErrorRange, FindError.Instance.MySentences);
+            fixError.getCandidatesWithContext(FindError.Instance.FirstError_Context, FindError.Instance.lstErrorRange);
             lblWrong.Text = fixError.Token;
             lstbCandidate.Items.Clear();
             foreach (string item in fixError.hSetCandidate)
@@ -105,6 +105,12 @@ namespace Spell
                 }
 
             DocumentHandling.Instance.DeHighLight_Mistake(startIndex, endIndex);
+            if (FindError.Instance.lstErrorRange.Count == 0)
+            {
+                MessageBox.Show(SysMessage.Instance.No_error);
+                return;
+            }
+
             //
             //sửa lỗi tiếp theo
             //
@@ -155,11 +161,19 @@ namespace Spell
             lstbCandidate.Items.Clear();
             DocumentHandling.Instance.DeHighLight_Mistake(startIndex, endIndex);
             curRangeTextShowInTaskPane.Select();
+
+            if (FindError.Instance.lstErrorRange.Count == 0)
+            {
+                MessageBox.Show(SysMessage.Instance.No_error);
+                return;
+            }
             //
             //sửa lỗi tiếp theo
             //
             FindError.Instance.FirstError_Context = FindError.Instance.lstErrorRange.First().Key;
+            
             showCandidateInTaskPaneWithCountWord();
+            
         }
         private void btnChange_KeyDown(object sender, KeyEventArgs e)
         {

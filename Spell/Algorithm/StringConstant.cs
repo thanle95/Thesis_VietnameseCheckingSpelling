@@ -173,9 +173,10 @@ namespace Spell.Algorithm
         };
 
         public string patternMiddleSymbol = "[-|/|\\|>|<|\\[|\\]|,|\"|(|)|“|”]";
+        public string patternEndMiddleSymbol = "[”|,|)]";
         public string patternEndSentenceCharacter = "[.!?;:…]";
 
-        public string patternCheckSpecialChar = "[-|\\/|\\|>|<|\\[|\\]|,|\"|(|)|“|”|@|#|$|%|^|&|\\*|\\d|\\s]";
+        public string patternCheckSpecialChar = "[-|\\/|\\|>|<|\\[|\\]|\"|(|)|“|”|@|#|$|%|^|&|\\*|\\d]";
 
         public string[] VNAcronym = new string[]
         {

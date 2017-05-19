@@ -90,6 +90,24 @@ namespace Spell.Algorithm
                 }
             }
             TOKEN = words[iWord];
+            Regex regexEndMidSym = new Regex(StringConstant.Instance.patternEndMiddleSymbol);
+            Match mEndMidSym = regexEndMidSym.Match(TOKEN);
+            if (mEndMidSym.Success)
+            {
+                NEXT = Ngram.Instance.END_STRING;
+                NEXTNEXT = "";
+            }
+            if (PRE.Equals(""))
+            {
+                PRE = Ngram.Instance.START_STRING;
+                PREPRE = "";
+            }
+            if (NEXT.Equals(""))
+            {
+                NEXT = Ngram.Instance.START_STRING;
+                NEXTNEXT = "";
+            }
+
         }
         public override bool Equals(object obj)
         {
