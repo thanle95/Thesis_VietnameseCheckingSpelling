@@ -33,12 +33,12 @@ namespace Spell.Algorithm
                 return instance;
             }
         }
-        public Dictionary<Context, Word.Range> startFindError(int typeFindError, int typeError)
+        public Dictionary<Context, Word.Range> startFindError(int typeFindError, int typeError, bool isAutoChange)
         {
-            Dictionary<Context, Word.Range> ret = showWrongWithSuggest(typeFindError, typeError);
+            Dictionary<Context, Word.Range> ret = showWrongWithSuggest(typeFindError, typeError, isAutoChange);
             return ret;
         }
-        public Dictionary<Context, Word.Range> showWrongWithSuggest(int typeFindError, int typeError)
+        public Dictionary<Context, Word.Range> showWrongWithSuggest(int typeFindError, int typeError, bool isAutoChange)
         {
             try
             {
@@ -113,48 +113,60 @@ namespace Spell.Algorithm
                             {
                                 if (FirstError_Context == null)
                                     FirstError_Context = context;
-                                HashSet<string> hsetCand = WrongWordCandidate.getInstance.createCandidate(context, false);
-                                if (hsetCand.Count > 0)
+                                if (isAutoChange)
                                 {
-                                    //tự động thay thế bằng candidate tốt nhất
-                                    //tránh làm sai những gram phía sau
-                                    words[i] = hsetCand.ElementAt(0);
-                                    lstErrorRange.Add(context, (DocumentHandling.Instance.HighLight_MistakeWrongWord(start, end)));
+                                    HashSet<string> hsetCand = WrongWordCandidate.getInstance.createCandidate(context, false);
+                                    if (hsetCand.Count > 0)
+                                    {
+                                        //tự động thay thế bằng candidate tốt nhất
+                                        //tránh làm sai những gram phía sau
+                                        words[i] = hsetCand.ElementAt(0);
+                                        lstErrorRange.Add(context, (DocumentHandling.Instance.HighLight_MistakeWrongWord(start, end)));
+                                    }
                                 }
+                                else lstErrorRange.Add(context, (DocumentHandling.Instance.HighLight_MistakeWrongWord(start, end)));
 
                             }//end if wrong word
                             //kiểm tra token có khả năng sai ngữ cảnh hay k
                             
                             else if ((typeError == WRONG_RIGHT_ERROR || typeError == RIGHT_ERROR)&&!RightWordCandidate.getInstance.checkRightWord(context) )
                             {
-                                context.PRE = token;
-                                context.TOKEN = next;
-                                context.NEXT = nextnext;
-                                string tmpNext = "";
-                                //
-                                //thay words[i+1] bằng candidate tốt nhất
-                                HashSet<string> hsetCandNext = Candidate.getInstance.selectiveCandidate(context);
-                                if (hsetCandNext.Count > 0)
-                                    tmpNext = hsetCandNext.ElementAt(0);
-                                context.PRE = pre;
-                                context.TOKEN = token;
-                                context.NEXT = tmpNext;
-                                //kiểm tra words[i] bị sai có do ảnh hưởng của words[i+1] hay không
-                                if (!RightWordCandidate.getInstance.checkRightWord(context))
+                                if (isAutoChange)
                                 {
-                                    if (FirstError_Context == null)
-                                        FirstError_Context = context;
+                                    context.PRE = token;
+                                    context.TOKEN = next;
+                                    context.NEXT = nextnext;
+                                    string tmpNext = "";
+                                    //
+                                    //thay words[i+1] bằng candidate tốt nhất
+                                    HashSet<string> hsetCandNext = Candidate.getInstance.selectiveCandidate(context);
+                                    if (hsetCandNext.Count > 0)
+                                        tmpNext = hsetCandNext.ElementAt(0);
                                     context.PRE = pre;
                                     context.TOKEN = token;
-                                    context.NEXT = next;
-                                    HashSet<string> hsetCand = Candidate.getInstance.selectiveCandidate(context);
-                                    if (hsetCand.Count > 0)
+                                    context.NEXT = tmpNext;
+                                    //kiểm tra words[i] bị sai có do ảnh hưởng của words[i+1] hay không
+                                    if (!RightWordCandidate.getInstance.checkRightWord(context))
                                     {
-                                        //tự động thay thế bằng candidate tốt nhất
-                                        //tránh làm sai những gram phía sau
-                                        words[i] = hsetCand.ElementAt(0);
-                                        lstErrorRange.Add(context, (DocumentHandling.Instance.HighLight_MistakeRightWord(start, end)));
+                                        if (FirstError_Context == null)
+                                            FirstError_Context = context;
+                                        context.PRE = pre;
+                                        context.TOKEN = token;
+                                        context.NEXT = next;
+                                        HashSet<string> hsetCand = Candidate.getInstance.selectiveCandidate(context);
+                                        if (hsetCand.Count > 0)
+                                        {
+                                            //tự động thay thế bằng candidate tốt nhất
+                                            //tránh làm sai những gram phía sau
+                                            words[i] = hsetCand.ElementAt(0);
+                                            lstErrorRange.Add(context, (DocumentHandling.Instance.HighLight_MistakeRightWord(start, end)));
+                                        }
                                     }
+                                }
+                                else {
+                                    if (FirstError_Context == null)
+                                        FirstError_Context = context;
+                                    lstErrorRange.Add(context, (DocumentHandling.Instance.HighLight_MistakeRightWord(start, end)));
                                 }
                             }// end else if right word
                         }

@@ -27,6 +27,7 @@ namespace Spell
         private const int DOCK_RIGHT = 0;
         private const int DOCK_LEFT = 1;
 
+        private bool isAutoChange = false;
         private void Ribbon1_Load(object sender, RibbonUIEventArgs e)
         {
             myCustomTaskPane = Globals.ThisAddIn.CustomTaskPanes.Add(UserControl.Instance, "Spelling");
@@ -66,7 +67,8 @@ namespace Spell
             int endIndex = Globals.ThisAddIn.Application.Selection.End;
             typeFindError = dropTypeFindError.SelectedItemIndex;
             typeError = dropTypeError.SelectedItemIndex;
-            Dictionary<Context, Word.Range> ret = FindError.Instance.startFindError(typeFindError, typeError);
+            isAutoChange = chkbAutoChange.Checked;
+            Dictionary<Context, Word.Range> ret = FindError.Instance.startFindError(typeFindError, typeError, isAutoChange);
             stopwatch.Stop();
             int count = ret.Count;
             //int count = UserControl.Instance.startFindError(typeFindError);
