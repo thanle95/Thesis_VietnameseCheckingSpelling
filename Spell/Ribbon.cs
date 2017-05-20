@@ -50,76 +50,79 @@ namespace Spell
         /// <param name="e"></param>
         private void tbtnCheck_Click(object sender, RibbonControlEventArgs e)
         {
-            myCustomTaskPane.Visible = false;
-            Stopwatch stopwatch = new Stopwatch();
-            stopwatch.Start();
-            btnDeleteFormat.Enabled = false;
-            //ThreadStart t = new ThreadStart(UserControl.Instance.showWrongWithoutSuggest);
-            //Thread threadWithoutSuggest = new Thread(t);
-            //ThreadStart t1 = new ThreadStart(UserControl.Instance.showWrongWithSuggest);
-            //Thread threadWithSuggest = new Thread(t1);
-            //nút check được checked
-            //if (tbtnCheck.Checked)
-            //mode1: hiện gợi ý sửa lỗi
-
-            //dehightlight tất cả những lỗi trước đó
-            DocumentHandling.Instance.DeHighLight_All_Mistake(Globals.ThisAddIn.Application.ActiveDocument.Characters);
-            int startIndex = Globals.ThisAddIn.Application.Selection.Start;
-            int endIndex = Globals.ThisAddIn.Application.Selection.End;
-            typeFindError = dropTypeFindError.SelectedItemIndex;
-            typeError = dropTypeError.SelectedItemIndex;
-            isAutoChange = chkbAutoChange.Checked;
-            Dictionary<Context, Word.Range> ret = FindError.Instance.startFindError(typeFindError, typeError, isAutoChange);
-            stopwatch.Stop();
-            int count = ret.Count;
-            //int count = UserControl.Instance.startFindError(typeFindError);
-            if (count > 0)
+            if (tbtnCheck.Checked)
             {
-                btnDeleteFormat.Enabled = true;
-                if (chkSuggest.Checked)
-                {
-                    string message = SysMessage.Instance.Message_Notify_Fix_Error(count);
-                    string caption = SysMessage.Instance.Caption_Notify_Fix_Error;
-                    MessageBoxButtons buttons = MessageBoxButtons.YesNo;
-                    DialogResult result;
-
-                    // Displays the MessageBox.
-
-                    result = MessageBox.Show(message, caption, buttons);
-
-                    if (result == DialogResult.Yes)
-                    {
-                        UserControl.Instance.showCandidateInTaskPaneWithCountWord();
-                    }
-                    myCustomTaskPane.Visible = true;
-
-                }
-
-                else {
-                    myCustomTaskPane.Visible = false;
-                    //threadWithSuggest.Abort();
-                    //threadWithoutSuggest.Start();
-                }
-            }
-            //    myCustomTaskPane.Visible = true;
-            else
-            {
-                MessageBox.Show(SysMessage.Instance.No_error);
+                myCustomTaskPane.Visible = false;
+                Stopwatch stopwatch = new Stopwatch();
+                stopwatch.Start();
                 btnDeleteFormat.Enabled = false;
+                //ThreadStart t = new ThreadStart(UserControl.Instance.showWrongWithoutSuggest);
+                //Thread threadWithoutSuggest = new Thread(t);
+                //ThreadStart t1 = new ThreadStart(UserControl.Instance.showWrongWithSuggest);
+                //Thread threadWithSuggest = new Thread(t1);
+                //nút check được checked
+                //if (tbtnCheck.Checked)
+                //mode1: hiện gợi ý sửa lỗi
+
+                //dehightlight tất cả những lỗi trước đó
+                DocumentHandling.Instance.DeHighLight_All_Mistake(Globals.ThisAddIn.Application.ActiveDocument.Characters);
+                int startIndex = Globals.ThisAddIn.Application.Selection.Start;
+                int endIndex = Globals.ThisAddIn.Application.Selection.End;
+                typeFindError = dropTypeFindError.SelectedItemIndex;
+                typeError = dropTypeError.SelectedItemIndex;
+                isAutoChange = chkbAutoChange.Checked;
+                Dictionary<Context, Word.Range> ret = FindError.Instance.startFindError(typeFindError, typeError, isAutoChange);
+                stopwatch.Stop();
+                int count = ret.Count;
+                //int count = UserControl.Instance.startFindError(typeFindError);
+                if (count > 0)
+                {
+                    btnDeleteFormat.Enabled = true;
+                    if (chkSuggest.Checked)
+                    {
+                        string message = SysMessage.Instance.Message_Notify_Fix_Error(count);
+                        string caption = SysMessage.Instance.Caption_Notify_Fix_Error;
+                        MessageBoxButtons buttons = MessageBoxButtons.YesNo;
+                        DialogResult result;
+
+                        // Displays the MessageBox.
+
+                        result = MessageBox.Show(message, caption, buttons);
+
+                        if (result == DialogResult.Yes)
+                        {
+                            UserControl.Instance.showCandidateInTaskPaneWithCountWord();
+                        }
+                        myCustomTaskPane.Visible = true;
+
+                    }
+
+                    else {
+                        myCustomTaskPane.Visible = false;
+                        //threadWithSuggest.Abort();
+                        //threadWithoutSuggest.Start();
+                    }
+                }
+                //    myCustomTaskPane.Visible = true;
+                else
+                {
+                    MessageBox.Show(SysMessage.Instance.No_error);
+                    btnDeleteFormat.Enabled = false;
+                }
+                //threadWithSuggest.Start();
+
+                //mode2: không hiện gợi ý 
+
+
+                //threadWithSuggest.Abort();
+                //threadWithoutSuggest.Abort();
+
+                TimeSpan ts = stopwatch.Elapsed;
+                string elapseTime = string.Format("{0:00}:{1:00}:{2:00}.{3:00}",
+                                    ts.Hours, ts.Minutes, ts.Seconds,
+                                    ts.Milliseconds / 10);
+                MessageBox.Show(elapseTime);
             }
-            //threadWithSuggest.Start();
-
-            //mode2: không hiện gợi ý 
-
-
-            //threadWithSuggest.Abort();
-            //threadWithoutSuggest.Abort();
-            
-            TimeSpan ts = stopwatch.Elapsed;
-            string elapseTime = string.Format("{0:00}:{1:00}:{2:00}.{3:00}",
-                                ts.Hours, ts.Minutes, ts.Seconds,
-                                ts.Milliseconds / 10);
-            MessageBox.Show(elapseTime);
         }
 
         private void dropDockPosition_SelectionChanged(object sender, RibbonControlEventArgs e)

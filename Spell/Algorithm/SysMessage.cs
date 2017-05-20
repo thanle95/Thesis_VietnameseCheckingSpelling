@@ -46,5 +46,9 @@ namespace Spell.Algorithm
         {
             return string.Format("Có {0} lỗi. Bạn có muốn bắt đầu sửa lỗi ngay?", count);
         }
+        public string IsNotError(string word)
+        {
+            return string.Format("\"{0}\" không phải là một lỗi!", word);
+        }
     }
 }

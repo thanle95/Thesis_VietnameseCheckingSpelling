@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-
+using Word = Microsoft.Office.Interop.Word;
 namespace Spell.Algorithm
 {
     public class Context
@@ -32,6 +32,16 @@ namespace Spell.Algorithm
         public Context(int iWord, string[] words)
         {
             getContext(iWord, words);
+        }
+        public Context(Word.Words words, Word.Sentences sentences)
+        {
+            string[] wordArr = sentences[1].Text.Split(' ');
+            for (int i = 0; i < wordArr.Length; i++)
+                if (wordArr[i].Trim().Equals(words[1].Text.Trim()))
+                {
+                    getContext(i, wordArr);
+                    break;
+                }
         }
         public Context()
         {

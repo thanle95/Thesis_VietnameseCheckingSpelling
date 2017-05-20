@@ -121,8 +121,7 @@ namespace Spell.Algorithm
                             //Thì highLight
                             if ((typeError == WRONG_RIGHT_ERROR || typeError == WRONG_ERROR) && !VNDictionary.getInstance.isSyllableVN(wordInWords))
                             {
-                                if (FirstError_Context == null)
-                                    FirstError_Context = context;
+
                                 if (isAutoChange)
                                 {
                                     hSetCand.Clear();
@@ -132,11 +131,16 @@ namespace Spell.Algorithm
                                         //tự động thay thế bằng candidate tốt nhất
                                         //tránh làm sai những gram phía sau
                                         words[i] = hSetCand.ElementAt(0);
+                                        if (FirstError_Context == null)
+                                            FirstError_Context = context;
                                         lstErrorRange.Add(context, (DocumentHandling.Instance.HighLight_MistakeWrongWord(start, end)));
                                     }
                                 }
-                                else lstErrorRange.Add(context, (DocumentHandling.Instance.HighLight_MistakeWrongWord(start, end)));
-
+                                else {
+                                    if (FirstError_Context == null)
+                                        FirstError_Context = context;
+                                    lstErrorRange.Add(context, (DocumentHandling.Instance.HighLight_MistakeWrongWord(start, end)));
+                                }
                             }//end if wrong word
                             //kiểm tra token có khả năng sai ngữ cảnh hay k
                             
@@ -160,8 +164,7 @@ namespace Spell.Algorithm
                                     //kiểm tra words[i] bị sai có do ảnh hưởng của words[i+1] hay không
                                     if (!RightWordCandidate.getInstance.checkRightWord(context))
                                     {
-                                        if (FirstError_Context == null)
-                                            FirstError_Context = context;
+                                       
                                         context.PRE = pre;
                                         context.TOKEN = token;
                                         context.NEXT = next;
@@ -172,6 +175,8 @@ namespace Spell.Algorithm
                                             //tự động thay thế bằng candidate tốt nhất
                                             //tránh làm sai những gram phía sau
                                             words[i] = hSetCand.ElementAt(0);
+                                            if (FirstError_Context == null)
+                                                FirstError_Context = context;
                                             lstErrorRange.Add(context, (DocumentHandling.Instance.HighLight_MistakeRightWord(start, end)));
                                         }
                                     }

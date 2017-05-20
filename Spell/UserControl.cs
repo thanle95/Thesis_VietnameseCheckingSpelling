@@ -34,26 +34,36 @@ namespace Spell
         /// <summary>
         /// hiện gợi ý sữa lỗi lên taskpane, tự duyệt ngữ cảnh
         /// </summary>
-        public void showCandidateInTaskPane(int startIndex)
+        public void showCandidateInTaskPane(Word.Words words, Word.Sentences sentences)
         {
             FixError fixError = new FixError();
-            fixError.getCandidatesWithStartIndex(startIndex, FindError.Instance.lstErrorRange, FindError.Instance.MySentences);
-            lblWrong.Text = fixError.Token;
-            lstbCandidate.Items.Clear();
-            foreach (string item in fixError.hSetCandidate)
+            Context context = new Context(words, sentences);
+            fixError.getCandidatesWithContext(context, FindError.Instance.lstErrorRange);
+            if (fixError.hSetCandidate.Count > 0)
             {
-                if (!item.ToLower().Equals(fixError.Token.ToLower()))
-                    if (item.Length > 1)
-                        lstbCandidate.Items.Add(item.Trim());
-                if (lstbCandidate.Items.Count > 0)
-                    lstbCandidate.SetSelected(0, true);
-                btnChange.Focus();
+                lblWrong.Text = fixError.Token;
+                lstbCandidate.Items.Clear();
+                foreach (string item in fixError.hSetCandidate)
+                {
+                    if (!item.ToLower().Equals(fixError.Token.ToLower()))
+                        if (item.Length > 1)
+                            lstbCandidate.Items.Add(item.Trim());
+                    if (lstbCandidate.Items.Count > 0)
+                        lstbCandidate.SetSelected(0, true);
+                    btnChange.Focus();
+                }
+            }
+            else
+            {
+                MessageBox.Show(SysMessage.Instance.IsNotError(context.TOKEN));
             }
         }
         public void showCandidateInTaskPaneWithCountWord()
         {
             FixError fixError = new FixError();
+
             fixError.getCandidatesWithContext(FindError.Instance.FirstError_Context, FindError.Instance.lstErrorRange);
+
             lblWrong.Text = fixError.Token;
             lstbCandidate.Items.Clear();
             foreach (string item in fixError.hSetCandidate)
@@ -65,6 +75,7 @@ namespace Spell
                     lstbCandidate.SetSelected(0, true);
                 btnChange.Focus();
             }
+
         }
 
         /// <summary>
@@ -126,12 +137,14 @@ namespace Spell
 
         private void btnStart_Click(object sender, EventArgs e)
         {
-            int startIndex = Globals.ThisAddIn.Application.Selection.Start;
-            startFixError(startIndex);
+            Word.Words words = Globals.ThisAddIn.Application.Selection.Words;
+            Word.Sentences sentences = Globals.ThisAddIn.Application.Selection.Sentences;
+
+            startFixError(words, sentences);
         }
-        public void startFixError(int startIndex)
+        public void startFixError(Word.Words words, Word.Sentences sentences)
         {
-            showCandidateInTaskPane(startIndex);
+            showCandidateInTaskPane(words, sentences);
         }
         private void btnChange_Click(object sender, EventArgs e)
         {
@@ -173,7 +186,7 @@ namespace Spell
             FindError.Instance.FirstError_Context = FindError.Instance.lstErrorRange.First().Key;
             FindError.Instance.lstErrorRange[FindError.Instance.FirstError_Context].Select();
             showCandidateInTaskPaneWithCountWord();
-            
+
         }
         private void btnChange_KeyDown(object sender, KeyEventArgs e)
         {
