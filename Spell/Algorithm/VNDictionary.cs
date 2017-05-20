@@ -25,11 +25,16 @@ namespace Spell.Algorithm
             compoundPath = AppDomain.CurrentDomain.BaseDirectory + compound;
 
             this.SyllableDict = new Dictionary<string, string>();
-            this.SyllableDict = readSyllableDict();
+            
             this.CompoundDict = new List<string>();
-            this.CompoundDict = readCompoundWordDict();
+            
         }
+        public void runFirst()
+        {
+            this.SyllableDict = readSyllableDict();
+            this.CompoundDict = readCompoundWordDict();
 
+        }
         private static VNDictionary instance = new VNDictionary();
         public static VNDictionary getInstance
         {

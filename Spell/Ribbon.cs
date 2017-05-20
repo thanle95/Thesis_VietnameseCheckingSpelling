@@ -50,6 +50,7 @@ namespace Spell
         /// <param name="e"></param>
         private void tbtnCheck_Click(object sender, RibbonControlEventArgs e)
         {
+            myCustomTaskPane.Visible = false;
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
             btnDeleteFormat.Enabled = false;
@@ -165,10 +166,19 @@ namespace Spell
             btnDeleteFormat.Enabled = false;
         }
 
-        private void btnShowLength_Click(object sender, RibbonControlEventArgs e)
+        private void btnShowTaskpane_Click(object sender, RibbonControlEventArgs e)
         {
-            string text = Globals.ThisAddIn.Application.Selection.Sentences[1].Text;
-            MessageBox.Show(text + ": " + text.Length);
+            //string text = Globals.ThisAddIn.Application.Selection.Sentences[1].Text;
+            //MessageBox.Show(text + ": " + text.Length);
+            myCustomTaskPane.Visible = true;
+        }
+
+        private void tbtnShowTaskpane_Click(object sender, RibbonControlEventArgs e)
+        {
+            if (tbtnShowTaskpane.Checked)
+                myCustomTaskPane.Visible = true;
+            else
+                myCustomTaskPane.Visible = false;
         }
     }
 }

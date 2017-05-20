@@ -39,16 +39,18 @@ namespace Spell.Algorithm
         /// <returns></returns>
         public bool checkRightWord(Context context)
         {
-            double L = Candidate.getInstance.calScore_Ngram(context, context.TOKEN);
             double D = Candidate.getInstance.calScore_CompoundWord(context, context.TOKEN);
-            using (FileStream aFile = new FileStream((rightScorePath), FileMode.Append, FileAccess.Write))
-            using (StreamWriter sw = new StreamWriter(aFile))
-            {
-                sw.WriteLine();
-                sw.WriteLine(String.Format("{0}: [{1};{2}]", context.TOKEN, L, D));
-                sw.WriteLine("**********************************************************************");
-            }
-            if (L >= Candidate.getInstance.LIM_LANGUAGEMODEL || D >= Candidate.getInstance.LIM_COMPOUNDWORD)
+            //using (FileStream aFile = new FileStream((rightScorePath), FileMode.Append, FileAccess.Write))
+            //using (StreamWriter sw = new StreamWriter(aFile))
+            //{
+            //    sw.WriteLine();
+            //    sw.WriteLine(String.Format("{0}: [{1};{2}]", context.TOKEN, L, D));
+            //    sw.WriteLine("**********************************************************************");
+            //}
+            if ( D >= Candidate.getInstance.LIM_COMPOUNDWORD)
+                return true;
+            double L = Candidate.getInstance.calScore_Ngram(context, context.TOKEN);
+            if (L >= Candidate.getInstance.LIM_LANGUAGEMODEL)
                 return true;
             return false;
         }
@@ -134,12 +136,12 @@ namespace Spell.Algorithm
                     result.Add(key);
 
             //ghi đè file
-            using (FileStream aFile = new FileStream((rightCandPath), FileMode.Append, FileAccess.Write))
-            using (StreamWriter sw = new StreamWriter(aFile))
-            {
-                sw.WriteLine(text_writeFile);
-                sw.WriteLine("**********************************************************************");
-            }
+            //using (FileStream aFile = new FileStream((rightCandPath), FileMode.Append, FileAccess.Write))
+            //using (StreamWriter sw = new StreamWriter(aFile))
+            //{
+            //    sw.WriteLine(text_writeFile);
+            //    sw.WriteLine("**********************************************************************");
+            //}
             return result;
         }
 

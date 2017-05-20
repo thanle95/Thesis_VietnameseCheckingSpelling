@@ -50,7 +50,7 @@ namespace Spell.Algorithm
             this._uniAmount = new Dictionary<string, int>();
             this._biAmount = new Dictionary<string, int>();
             this._triAmount = new Dictionary<string, int>();
-            runFirst();
+            //runFirst();
         }
         private static Ngram instance = new Ngram();
         public static Ngram Instance

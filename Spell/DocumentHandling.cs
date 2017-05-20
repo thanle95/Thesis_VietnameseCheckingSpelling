@@ -90,7 +90,7 @@ namespace Spell
             range = Globals.ThisAddIn.Application.ActiveDocument.Range(start, end);
             range.HighlightColorIndex = colorIndex;
             range.Font.Color = color;
-            range.Select();
+            //range.Select();
             return range;
         }
 

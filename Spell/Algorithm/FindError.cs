@@ -60,12 +60,19 @@ namespace Spell.Algorithm
                 string token = "";
                 string wordInWords = "";
                 string[] words;
+                int length;
+                string prepre = "", pre = "", next = "", nextnext = "";
+                HashSet<string> hSetCand = new HashSet<string>();
+                Word.Range range= null;
                 for (int iSentence = 1; iSentence <= curSentences.Count; iSentence++)
                 {
                     words = curSentences[iSentence].Text.Trim().Split(' ');
                     start = curSentences[iSentence].Start;
+                    end = curSentences[iSentence].End;
+                    range = Globals.ThisAddIn.Application.ActiveDocument.Range(start, end);
+                    range.Select();
                     //số lượng các từ trong cụm
-                    int length = words.Length;
+                    length = words.Length;
                     //duyệt qua từng từ trong cụm
                     for (int i = 0; i < length; i++)
                     {
@@ -106,7 +113,10 @@ namespace Spell.Algorithm
                             if (words[i].Length != wordInWords.Length)
                                 context.TOKEN = wordInWords;
                             end = start + wordInWords.Length;
-                            string prepre = context.PREPRE, pre = context.PRE, next = context.NEXT, nextnext = context.NEXTNEXT;
+                            prepre = context.PREPRE;
+                            pre = context.PRE;
+                            next = context.NEXT;
+                            nextnext = context.NEXTNEXT;
                             //Kiểm tra nếu không phải là từ Việt Nam
                             //Thì highLight
                             if ((typeError == WRONG_RIGHT_ERROR || typeError == WRONG_ERROR) && !VNDictionary.getInstance.isSyllableVN(wordInWords))
@@ -115,12 +125,13 @@ namespace Spell.Algorithm
                                     FirstError_Context = context;
                                 if (isAutoChange)
                                 {
-                                    HashSet<string> hsetCand = WrongWordCandidate.getInstance.createCandidate(context, false);
-                                    if (hsetCand.Count > 0)
+                                    hSetCand.Clear();
+                                    hSetCand = WrongWordCandidate.getInstance.createCandidate(context, false);
+                                    if (hSetCand.Count > 0)
                                     {
                                         //tự động thay thế bằng candidate tốt nhất
                                         //tránh làm sai những gram phía sau
-                                        words[i] = hsetCand.ElementAt(0);
+                                        words[i] = hSetCand.ElementAt(0);
                                         lstErrorRange.Add(context, (DocumentHandling.Instance.HighLight_MistakeWrongWord(start, end)));
                                     }
                                 }
@@ -139,9 +150,10 @@ namespace Spell.Algorithm
                                     string tmpNext = "";
                                     //
                                     //thay words[i+1] bằng candidate tốt nhất
-                                    HashSet<string> hsetCandNext = Candidate.getInstance.selectiveCandidate(context);
-                                    if (hsetCandNext.Count > 0)
-                                        tmpNext = hsetCandNext.ElementAt(0);
+                                    hSetCand.Clear();
+                                    hSetCand = Candidate.getInstance.selectiveCandidate(context);
+                                    if (hSetCand.Count > 0)
+                                        tmpNext = hSetCand.ElementAt(0);
                                     context.PRE = pre;
                                     context.TOKEN = token;
                                     context.NEXT = tmpNext;
@@ -153,12 +165,13 @@ namespace Spell.Algorithm
                                         context.PRE = pre;
                                         context.TOKEN = token;
                                         context.NEXT = next;
-                                        HashSet<string> hsetCand = Candidate.getInstance.selectiveCandidate(context);
-                                        if (hsetCand.Count > 0)
+                                        hSetCand.Clear();
+                                        hSetCand = Candidate.getInstance.selectiveCandidate(context);
+                                        if (hSetCand.Count > 0)
                                         {
                                             //tự động thay thế bằng candidate tốt nhất
                                             //tránh làm sai những gram phía sau
-                                            words[i] = hsetCand.ElementAt(0);
+                                            words[i] = hSetCand.ElementAt(0);
                                             lstErrorRange.Add(context, (DocumentHandling.Instance.HighLight_MistakeRightWord(start, end)));
                                         }
                                     }

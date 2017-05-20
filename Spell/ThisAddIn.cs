@@ -5,6 +5,7 @@ using System.Text;
 using System.Xml.Linq;
 using Word = Microsoft.Office.Interop.Word;
 using Office = Microsoft.Office.Core;
+using Spell.Algorithm;
 using Microsoft.Office.Tools.Word;
 namespace Spell
 {
@@ -12,6 +13,8 @@ namespace Spell
     {
         private void ThisAddIn_Startup(object sender, System.EventArgs e)
         {
+            VNDictionary.getInstance.runFirst();
+            Ngram.Instance.runFirst();
         }
 
         private void ThisAddIn_Shutdown(object sender, System.EventArgs e)

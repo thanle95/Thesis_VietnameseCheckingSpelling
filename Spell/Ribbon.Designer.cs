@@ -52,14 +52,14 @@
             this.tbtnCheck = this.Factory.CreateRibbonToggleButton();
             this.chkSuggest = this.Factory.CreateRibbonCheckBox();
             this.btnDeleteFormat = this.Factory.CreateRibbonButton();
-            this.btnShowLength = this.Factory.CreateRibbonButton();
             this.separator1 = this.Factory.CreateRibbonSeparator();
             this.dropTypeFindError = this.Factory.CreateRibbonDropDown();
             this.dropTypeError = this.Factory.CreateRibbonDropDown();
             this.dropCorpus = this.Factory.CreateRibbonDropDown();
+            this.chkbAutoChange = this.Factory.CreateRibbonCheckBox();
             this.separator2 = this.Factory.CreateRibbonSeparator();
             this.dropDockPosition = this.Factory.CreateRibbonDropDown();
-            this.chkbAutoChange = this.Factory.CreateRibbonCheckBox();
+            this.tbtnShowTaskpane = this.Factory.CreateRibbonToggleButton();
             this.tab1.SuspendLayout();
             this.group1.SuspendLayout();
             this.box1.SuspendLayout();
@@ -91,7 +91,7 @@
             this.box1.Items.Add(this.tbtnCheck);
             this.box1.Items.Add(this.chkSuggest);
             this.box1.Items.Add(this.btnDeleteFormat);
-            this.box1.Items.Add(this.btnShowLength);
+            this.box1.Items.Add(this.tbtnShowTaskpane);
             this.box1.Name = "box1";
             // 
             // tbtnCheck
@@ -114,12 +114,6 @@
             this.btnDeleteFormat.Label = "Xóa đánh dấu lỗi";
             this.btnDeleteFormat.Name = "btnDeleteFormat";
             this.btnDeleteFormat.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.btnDeleteFormat_Click);
-            // 
-            // btnShowLength
-            // 
-            this.btnShowLength.Label = "Xem độ dài câu";
-            this.btnShowLength.Name = "btnShowLength";
-            this.btnShowLength.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.btnShowLength_Click);
             // 
             // separator1
             // 
@@ -158,6 +152,12 @@
             this.dropCorpus.Name = "dropCorpus";
             this.dropCorpus.SelectionChanged += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.dropCorpus_SelectionChanged);
             // 
+            // chkbAutoChange
+            // 
+            this.chkbAutoChange.Checked = true;
+            this.chkbAutoChange.Label = "Tránh sai do từ lân cận";
+            this.chkbAutoChange.Name = "chkbAutoChange";
+            // 
             // separator2
             // 
             this.separator2.Name = "separator2";
@@ -174,10 +174,12 @@
             this.dropDockPosition.Name = "dropDockPosition";
             this.dropDockPosition.SelectionChanged += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.dropDockPosition_SelectionChanged);
             // 
-            // chkbAutoChange
+            // tbtnShowTaskpane
             // 
-            this.chkbAutoChange.Label = "Tránh sai do từ lân cận";
-            this.chkbAutoChange.Name = "chkbAutoChange";
+            this.tbtnShowTaskpane.Checked = true;
+            this.tbtnShowTaskpane.Label = "Xem gợi ý";
+            this.tbtnShowTaskpane.Name = "tbtnShowTaskpane";
+            this.tbtnShowTaskpane.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.tbtnShowTaskpane_Click);
             // 
             // Ribbon
             // 
@@ -208,9 +210,9 @@
         internal Microsoft.Office.Tools.Ribbon.RibbonDropDown dropDockPosition;
         internal Microsoft.Office.Tools.Ribbon.RibbonDropDown dropCorpus;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton btnDeleteFormat;
-        internal Microsoft.Office.Tools.Ribbon.RibbonButton btnShowLength;
         internal Microsoft.Office.Tools.Ribbon.RibbonDropDown dropTypeError;
         internal Microsoft.Office.Tools.Ribbon.RibbonCheckBox chkbAutoChange;
+        internal Microsoft.Office.Tools.Ribbon.RibbonToggleButton tbtnShowTaskpane;
     }
 
     partial class ThisRibbonCollection
