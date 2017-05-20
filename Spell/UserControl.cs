@@ -157,9 +157,13 @@ namespace Spell
             string wrongText = lblWrong.Text.ToLower();
             if (lblWrong.Text.Equals(ERROR_SPACE))
                 wrongText = " ";
+            bool isMajuscule = false;
+            string fixText = lstbCandidate.SelectedItem.ToString();
             foreach (Word.Range range in FindError.Instance.lstErrorRange.Values)
-                if (range.Text.Equals(wrongText))
+                if (range.Text.ToLower().Equals(wrongText))
                 {
+                    if (!range.Text.Equals(wrongText))
+                        isMajuscule = true;
                     startIndex = range.Start;
                     curRangeTextShowInTaskPane = range;
                     var item = FindError.Instance.lstErrorRange.First(kvp => kvp.Value == range);
@@ -167,8 +171,10 @@ namespace Spell
                     FindError.Instance.lstErrorRange.Remove(item.Key);
                     break;
                 }
+            if (isMajuscule)
+                curRangeTextShowInTaskPane.Text = fixText[0].ToString().ToUpper() + fixText.Substring(1);
+            else curRangeTextShowInTaskPane.Text = fixText;
 
-            curRangeTextShowInTaskPane.Text = lstbCandidate.SelectedItem.ToString();
             endIndex = startIndex + curRangeTextShowInTaskPane.Text.Length;
             lblWrong.Text = "\"Wrong Text\"";
             lstbCandidate.Items.Clear();
