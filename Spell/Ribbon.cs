@@ -15,8 +15,8 @@ namespace Spell
     public partial class Ribbon
     {
         Microsoft.Office.Tools.CustomTaskPane myCustomTaskPane;
-        private int typeFindError = 0;
-        private int typeError = 0;
+        private static int typeFindError = 0;
+        private static int typeError = 0;
         private const int LIFE_CORPUS = 0;
         private const int POLITIC_CORPUS = 1;
         private const int LITERRATY_CORPUS = 2;
@@ -27,7 +27,9 @@ namespace Spell
         private const int DOCK_RIGHT = 0;
         private const int DOCK_LEFT = 1;
 
-        private bool isAutoChange = false;
+        private static bool isAutoChange = false;
+        Thread threadFindError;
+        ThreadStart threadStartFindError;
         private void Ribbon1_Load(object sender, RibbonUIEventArgs e)
         {
             myCustomTaskPane = Globals.ThisAddIn.CustomTaskPanes.Add(UserControl.Instance, "Spelling");
@@ -39,6 +41,9 @@ namespace Spell
             myCustomTaskPane.Width = 300;
             typeFindError = dropTypeFindError.SelectedItemIndex;
             //Ngram.Instance.runFirst();
+            FindError.Instance.createValue(typeFindError, typeError, isAutoChange);
+            threadStartFindError = new ThreadStart(check);
+
         }
 
         /// <summary>
@@ -48,38 +53,46 @@ namespace Spell
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void tbtnCheck_Click(object sender, RibbonControlEventArgs e)
+        private void btnCheckError_Click(object sender, RibbonControlEventArgs e)
         {
-            if (tbtnCheck.Checked)
+            threadFindError = new Thread(threadStartFindError);
+            threadFindError.Priority = ThreadPriority.Highest;
+            //if (!threadFindError.IsAlive)
+            threadFindError.Start();
+            //else
+            //{
+            //    threadFindError.Abort();
+            //    threadFindError.Start();
+            //}
+        }
+        private void check()
+        {
+            try
             {
-                myCustomTaskPane.Visible = false;
-                Stopwatch stopwatch = new Stopwatch();
-                stopwatch.Start();
-                btnDeleteFormat.Enabled = false;
-                //ThreadStart t = new ThreadStart(UserControl.Instance.showWrongWithoutSuggest);
-                //Thread threadWithoutSuggest = new Thread(t);
-                //ThreadStart t1 = new ThreadStart(UserControl.Instance.showWrongWithSuggest);
-                //Thread threadWithSuggest = new Thread(t1);
-                //nút check được checked
-                //if (tbtnCheck.Checked)
-                //mode1: hiện gợi ý sửa lỗi
-
-                //dehightlight tất cả những lỗi trước đó
-                DocumentHandling.Instance.DeHighLight_All_Mistake(Globals.ThisAddIn.Application.ActiveDocument.Characters);
-                int startIndex = Globals.ThisAddIn.Application.Selection.Start;
-                int endIndex = Globals.ThisAddIn.Application.Selection.End;
-                typeFindError = dropTypeFindError.SelectedItemIndex;
-                typeError = dropTypeError.SelectedItemIndex;
-                isAutoChange = chkbAutoChange.Checked;
-                Dictionary<Context, Word.Range> ret = FindError.Instance.startFindError(typeFindError, typeError, isAutoChange);
-                stopwatch.Stop();
-                int count = ret.Count;
-                //int count = UserControl.Instance.startFindError(typeFindError);
-                if (count > 0)
+                try
                 {
-                    btnDeleteFormat.Enabled = true;
-                    if (chkSuggest.Checked)
+                    DocumentHandling.Instance.DeHighLight_All_Mistake(Globals.ThisAddIn.Application.ActiveDocument.Characters);
+                    btnCheckError.Enabled = false;
+                    btnPauseResume.Enabled = true;
+                    btnDeleteFormat.Enabled = false;
+                    btnStop.Enabled = true;
+                    typeFindError = dropTypeFindError.SelectedItemIndex;
+                    typeError = dropTypeError.SelectedItemIndex;
+                    isAutoChange = chkbAutoChange.Checked;
+
+                    FindError.Instance.createValue(typeFindError, typeError, isAutoChange);
+
+                    myCustomTaskPane.Visible = false;
+                    Stopwatch stopwatch = new Stopwatch();
+                    stopwatch.Start();
+                    FindError.Instance.startFindError();
+                    stopwatch.Stop();
+
+                    int count = FindError.Instance.CountError;
+                    //int count = UserControl.Instance.startFindError(typeFindError);
+                    if (count > 0)
                     {
+                        btnDeleteFormat.Enabled = true;
                         string message = SysMessage.Instance.Message_Notify_Fix_Error(count);
                         string caption = SysMessage.Instance.Caption_Notify_Fix_Error;
                         MessageBoxButtons buttons = MessageBoxButtons.YesNo;
@@ -94,37 +107,25 @@ namespace Spell
                             UserControl.Instance.showCandidateInTaskPaneWithCountWord();
                         }
                         myCustomTaskPane.Visible = true;
-
                     }
-
-                    else {
-                        myCustomTaskPane.Visible = false;
-                        //threadWithSuggest.Abort();
-                        //threadWithoutSuggest.Start();
+                    else
+                    {
+                        MessageBox.Show(SysMessage.Instance.No_error);
+                        btnDeleteFormat.Enabled = false;
                     }
+                    TimeSpan ts = stopwatch.Elapsed;
+                    string elapseTime = string.Format("{0:00}:{1:00}:{2:00}.{3:00}",
+                                        ts.Hours, ts.Minutes, ts.Seconds,
+                                        ts.Milliseconds / 10);
+                    MessageBox.Show(elapseTime);
+                    btnPauseResume.Enabled = false;
+                    btnStop.Enabled = false;
+                    btnCheckError.Enabled = true;
                 }
-                //    myCustomTaskPane.Visible = true;
-                else
-                {
-                    MessageBox.Show(SysMessage.Instance.No_error);
-                    btnDeleteFormat.Enabled = false;
-                }
-                //threadWithSuggest.Start();
-
-                //mode2: không hiện gợi ý 
-
-
-                //threadWithSuggest.Abort();
-                //threadWithoutSuggest.Abort();
-
-                TimeSpan ts = stopwatch.Elapsed;
-                string elapseTime = string.Format("{0:00}:{1:00}:{2:00}.{3:00}",
-                                    ts.Hours, ts.Minutes, ts.Seconds,
-                                    ts.Milliseconds / 10);
-                MessageBox.Show(elapseTime);
+                catch (ThreadAbortException) { }
             }
+            catch (ThreadAbortException) { }
         }
-
         private void dropDockPosition_SelectionChanged(object sender, RibbonControlEventArgs e)
         {
             if (dropDockPosition.SelectedItemIndex == DOCK_RIGHT)
@@ -182,6 +183,29 @@ namespace Spell
                 myCustomTaskPane.Visible = true;
             else
                 myCustomTaskPane.Visible = false;
+        }
+
+        private void btnPauseResume_Click(object sender, RibbonControlEventArgs e)
+        {
+            if (btnPauseResume.Label.Equals("Tạm dừng"))
+            {
+                threadFindError.Suspend();
+                btnPauseResume.Label = "Tiếp tục";
+            }
+            else
+            {
+                threadFindError.Resume();
+                btnPauseResume.Label = "Tạm dừng";
+            }
+        }
+
+        private void btnStop_Click(object sender, RibbonControlEventArgs e)
+        {
+            //threadFindError.Suspend();
+            threadFindError.Abort();
+            btnCheckError.Enabled = true;
+            btnStop.Enabled = false;
+            btnPauseResume.Enabled = false;
         }
     }
 }

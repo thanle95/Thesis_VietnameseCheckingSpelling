@@ -22,6 +22,9 @@ namespace Spell.Algorithm
         private const int RIGHT_ERROR = 2;
         public Context FirstError_Context { get; set; }
         private static FindError instance = new FindError();
+        private int _typeFindError = 0;
+        private int _typeError = 0;
+        private bool _isAutoChange = false;
         private FindError()
         {
             lstErrorRange = new Dictionary<Context, Word.Range>();
@@ -33,10 +36,22 @@ namespace Spell.Algorithm
                 return instance;
             }
         }
-        public Dictionary<Context, Word.Range> startFindError(int typeFindError, int typeError, bool isAutoChange)
+        public void createValue(int typeFindError, int typeError, bool isAutoChange)
         {
-            Dictionary<Context, Word.Range> ret = showWrongWithSuggest(typeFindError, typeError, isAutoChange);
-            return ret;
+            _typeFindError = typeFindError;
+            _typeError = typeError;
+            _isAutoChange = isAutoChange;
+        }
+        public int CountError
+        {
+            get
+            {
+                return lstErrorRange.Count;
+            }
+        }
+        public void startFindError()
+        {
+            Dictionary<Context, Word.Range> ret = showWrongWithSuggest(_typeFindError, _typeError, _isAutoChange);
         }
         public Dictionary<Context, Word.Range> showWrongWithSuggest(int typeFindError, int typeError, bool isAutoChange)
         {
