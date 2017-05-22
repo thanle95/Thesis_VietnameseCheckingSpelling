@@ -22,12 +22,14 @@ namespace Spell.Algorithm
         private const int RIGHT_ERROR = 2;
         public Context FirstError_Context { get; set; }
         public Context SelectedError_Context { get; set; }
+        public bool StopFindError { get; set; }
         private static FindError instance = new FindError();
         private int _typeFindError = 0;
         private int _typeError = 0;
         private bool _isAutoChange = false;
         private FindError()
         {
+            StopFindError = false;
             lstErrorRange = new Dictionary<Context, Word.Range>();
         }
         public static FindError Instance
@@ -94,6 +96,10 @@ namespace Spell.Algorithm
                 Word.Range range= null;
                 for (int iSentence = 1; iSentence <= curSentences.Count; iSentence++)
                 {
+                    if (StopFindError)
+                    {
+                        break;
+                    }
                     words = curSentences[iSentence].Text.Trim().Split(' ');
                     start = curSentences[iSentence].Start;
                     end = curSentences[iSentence].End;
@@ -104,6 +110,7 @@ namespace Spell.Algorithm
                     //duyệt qua từng từ trong cụm
                     for (int i = 0; i < length; i++)
                     {
+                       
                         iWord = words[i];
                         token = iWord.Trim().ToLower();
                         if (token.Length < 1)

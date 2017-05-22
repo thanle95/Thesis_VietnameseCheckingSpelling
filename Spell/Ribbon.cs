@@ -67,66 +67,58 @@ namespace Spell
         }
         private void check()
         {
-            try
+            DocumentHandling.Instance.DeHighLight_All_Mistake(Globals.ThisAddIn.Application.ActiveDocument.Characters);
+            btnCheckError.Enabled = false;
+            btnPauseResume.Enabled = true;
+            btnDeleteFormat.Enabled = false;
+            btnStop.Enabled = true;
+            tbtnShowTaskpane.Enabled = false;
+            typeFindError = dropTypeFindError.SelectedItemIndex;
+            typeError = dropTypeError.SelectedItemIndex;
+            isAutoChange = chkbAutoChange.Checked;
+
+            FindError.Instance.createValue(typeFindError, typeError, isAutoChange);
+
+            myCustomTaskPane.Visible = false;
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+            FindError.Instance.startFindError();
+            stopwatch.Stop();
+
+            int count = FindError.Instance.CountError;
+            //int count = UserControl.Instance.startFindError(typeFindError);
+            if (count > 0)
             {
-                try
+                btnDeleteFormat.Enabled = true;
+                string message = SysMessage.Instance.Message_Notify_Fix_Error(count);
+                string caption = SysMessage.Instance.Caption_Notify_Fix_Error;
+                MessageBoxButtons buttons = MessageBoxButtons.YesNo;
+                DialogResult result;
+
+                // Displays the MessageBox.
+
+                result = MessageBox.Show(message, caption, buttons);
+
+                if (result == DialogResult.Yes)
                 {
-                    DocumentHandling.Instance.DeHighLight_All_Mistake(Globals.ThisAddIn.Application.ActiveDocument.Characters);
-                    btnCheckError.Enabled = false;
-                    btnPauseResume.Enabled = true;
-                    btnDeleteFormat.Enabled = false;
-                    btnStop.Enabled = true;
-                    tbtnShowTaskpane.Enabled = false;
-                    typeFindError = dropTypeFindError.SelectedItemIndex;
-                    typeError = dropTypeError.SelectedItemIndex;
-                    isAutoChange = chkbAutoChange.Checked;
-
-                    FindError.Instance.createValue(typeFindError, typeError, isAutoChange);
-
-                    myCustomTaskPane.Visible = false;
-                    Stopwatch stopwatch = new Stopwatch();
-                    stopwatch.Start();
-                    FindError.Instance.startFindError();
-                    stopwatch.Stop();
-
-                    int count = FindError.Instance.CountError;
-                    //int count = UserControl.Instance.startFindError(typeFindError);
-                    if (count > 0)
-                    {
-                        btnDeleteFormat.Enabled = true;
-                        string message = SysMessage.Instance.Message_Notify_Fix_Error(count);
-                        string caption = SysMessage.Instance.Caption_Notify_Fix_Error;
-                        MessageBoxButtons buttons = MessageBoxButtons.YesNo;
-                        DialogResult result;
-
-                        // Displays the MessageBox.
-
-                        result = MessageBox.Show(message, caption, buttons);
-
-                        if (result == DialogResult.Yes)
-                        {
-                            UserControl.Instance.showCandidateInTaskPaneWithCountWord();
-                        }
-                        myCustomTaskPane.Visible = true;
-                    }
-                    else
-                    {
-                        MessageBox.Show(SysMessage.Instance.No_error);
-                        btnDeleteFormat.Enabled = false;
-                    }
-                    TimeSpan ts = stopwatch.Elapsed;
-                    string elapseTime = string.Format("{0:00}:{1:00}:{2:00}.{3:00}",
-                                        ts.Hours, ts.Minutes, ts.Seconds,
-                                        ts.Milliseconds / 10);
-                    MessageBox.Show(elapseTime);
-                    btnPauseResume.Enabled = false;
-                    btnStop.Enabled = false;
-                    btnCheckError.Enabled = true;
-                    tbtnShowTaskpane.Enabled = true;
+                    UserControl.Instance.showCandidateInTaskPaneWithCountWord();
                 }
-                catch (ThreadAbortException) { }
+                myCustomTaskPane.Visible = true;
             }
-            catch (ThreadAbortException) { }
+            else
+            {
+                MessageBox.Show(SysMessage.Instance.No_error);
+                btnDeleteFormat.Enabled = false;
+            }
+            TimeSpan ts = stopwatch.Elapsed;
+            string elapseTime = string.Format("{0:00}:{1:00}:{2:00}.{3:00}",
+                                ts.Hours, ts.Minutes, ts.Seconds,
+                                ts.Milliseconds / 10);
+            MessageBox.Show(elapseTime);
+            btnPauseResume.Enabled = false;
+            btnStop.Enabled = false;
+            btnCheckError.Enabled = true;
+            tbtnShowTaskpane.Enabled = true;
         }
         private void dropDockPosition_SelectionChanged(object sender, RibbonControlEventArgs e)
         {
@@ -211,7 +203,8 @@ namespace Spell
         private void btnStop_Click(object sender, RibbonControlEventArgs e)
         {
             //threadFindError.Suspend();
-            threadFindError.Abort();
+            //threadFindError.Abort();
+            FindError.Instance.StopFindError = true;
             btnCheckError.Enabled = true;
             btnStop.Enabled = false;
             btnPauseResume.Enabled = false;
