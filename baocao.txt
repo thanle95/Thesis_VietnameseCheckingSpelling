@@ -1,0 +1,11 @@
+﻿Làm được:
+	- Kiểm lỗi:
+		+ Có thể pause/ resume/ stop/ restart.
+		+ Word scroll tới câu hiện tại đang kiểm tra.
+		+ Tốc độ được cải thiện, phụ thuộc vào số lượng từ trong văn bản, và số lượng từ sai
+	- Sửa lỗi:
+		+ Người dùng có thể chọn: sửa lỗi tuần tự từ đầu (chương trình tự tìm đến lỗi tiếp theo để sửa) hoặc sửa lỗi bất kỳ.
+Chưa được:
+	+ Trải nghiệm người dùng? (đang khắc phục)
+	+ Tốc độ chương trình còn chậm.
+	+ Thực nghiệm kiểm tra và sửa lỗi chưa cao.

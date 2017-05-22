@@ -15,19 +15,10 @@ namespace Spell.Algorithm
         //từ điển từ ghép
         public List<string> CompoundDict;
         //dùng từ điển chưa có key
-        private string compound = @"Resources\sortedCompoundWordDict.txt";
-        private string syll = @"Resources\SyllableDictByViet39K.txt";
-        private string syllPath;
-        private string compoundPath;
         private VNDictionary()
         {
-            syllPath = AppDomain.CurrentDomain.BaseDirectory + syll;
-            compoundPath = AppDomain.CurrentDomain.BaseDirectory + compound;
-
             this.SyllableDict = new Dictionary<string, string>();
-            
             this.CompoundDict = new List<string>();
-            
         }
         public void runFirst()
         {
@@ -54,7 +45,7 @@ namespace Spell.Algorithm
             try
             {
                 //properties vào fileName, chọn copy always
-                string[] dictArr = File.ReadAllLines(syllPath);
+                string[] dictArr = File.ReadAllLines(FileInfo.Instance.SyllDict);
                 result = dictArr.ToDictionary(x => x, x => "");
             }
             catch (Exception e)
@@ -72,7 +63,7 @@ namespace Spell.Algorithm
             List<string> result = new List<string>();
             try
             {
-                string[] dictArr = File.ReadAllLines(compoundPath);
+                string[] dictArr = File.ReadAllLines(FileInfo.Instance.CompoundWordDict);
                 result = dictArr.ToList();
             }
             catch (Exception e)

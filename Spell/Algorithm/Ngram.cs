@@ -20,10 +20,6 @@ namespace Spell.Algorithm
         public Dictionary<string, int> _biAmount { get; set; } //Chứa Key và giá trị số lượng của bigram
         public Dictionary<string, int> _triAmount { get; set; } //Chứa Key và giá trị số lượng của trigram
 
-        private  string uni = @"Resources\filteredUni.txt";
-        private  string bi = @"Resources\filteredBi.txt";
-        private string uniPath;
-        private string biPath;
         public string START_STRING
         {
             get
@@ -43,8 +39,6 @@ namespace Spell.Algorithm
         /// </summary>
         private Ngram()
         {
-            uniPath = AppDomain.CurrentDomain.BaseDirectory + uni;
-            biPath = AppDomain.CurrentDomain.BaseDirectory + bi;
             this._uniPos = new Dictionary<string, int>();
             this._posUni = new Dictionary<int, string>();
             this._uniAmount = new Dictionary<string, int>();
@@ -66,8 +60,8 @@ namespace Spell.Algorithm
 
 
             //string triPath = @"E:\Google Drive\Document\luan van\source\github\Thesis_VietnameseCheckingSpelling\Spell\Resources\triExtended.txt";
-            readUni(uniPath);
-            readBiAmount(biPath);
+            readUni(FileInfo.Instance.UniGram);
+            readBiAmount(FileInfo.Instance.BiGram);
             //readTriAmount(triPath);
             sumWordInCorpus();
         }

@@ -11,15 +11,9 @@ namespace Spell.Algorithm
     public class RightWordCandidate
     {
 
-        private string rightScore = @"Resources\rightWord.txt";
-        private string rightCand = @"Resources\rightWordCandidate.txt";
-        private string rightScorePath;
-        private string rightCandPath;
         private static RightWordCandidate instance = new RightWordCandidate();
         private RightWordCandidate()
         {
-            rightScorePath = AppDomain.CurrentDomain.BaseDirectory + rightScore;
-            rightCandPath = AppDomain.CurrentDomain.BaseDirectory + rightCand;
         }
         public static RightWordCandidate getInstance
         {

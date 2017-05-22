@@ -11,8 +11,6 @@ namespace Spell.Algorithm
     public class WrongWordCandidate
     {
         private static WrongWordCandidate instance = new WrongWordCandidate();
-        private string wrongWord = @"Resources\wrongWord.txt";
-        private string wrongCandPath;
 
         public static WrongWordCandidate getInstance
         {
@@ -23,7 +21,6 @@ namespace Spell.Algorithm
         }
         private WrongWordCandidate()
         {
-            wrongCandPath = AppDomain.CurrentDomain.BaseDirectory + wrongWord;
         }
 
         /// <summary>

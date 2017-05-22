@@ -10,20 +10,14 @@ namespace Spell.Algorithm
 {
     public class CompoundWordVn
     {
-       
-        private string compound = @"Resources\newCompoundWordByViet39K.txt";
-
-        private string compoundPath;
-
         private CompoundWordVn()
         {
-            compoundPath = AppDomain.CurrentDomain.BaseDirectory + compound;
             readCompoundWordVNFile();
         }
         private void readCompoundWordVNFile()
         {
             compoundWordVnDict = new Dictionary<string, List<string>>();
-            string[] compoundDictArr = File.ReadAllLines(compoundPath);
+            string[] compoundDictArr = File.ReadAllLines(FileInfo.Instance.CompoundWordLinkedList);
             string key = "";
             List<string> value;
             foreach(string i in compoundDictArr)
