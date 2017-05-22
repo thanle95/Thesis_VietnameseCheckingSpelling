@@ -76,6 +76,7 @@ namespace Spell
             btnStop.Enabled = true;
             FindError.Instance.StopFindError = false;
             tbtnShowTaskpane.Enabled = false;
+            btnPauseResume.Label = "Tạm dừng";
 
             typeFindError = dropTypeFindError.SelectedItemIndex;
             typeError = dropTypeError.SelectedItemIndex;
