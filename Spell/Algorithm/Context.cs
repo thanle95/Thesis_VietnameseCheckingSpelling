@@ -40,7 +40,17 @@ namespace Spell.Algorithm
                 if (wordArr[i].Trim().Equals(words[1].Text.Trim()))
                 {
                     getContext(i, wordArr);
-                    break;
+                    return;
+                }
+        }
+        public void GetSeletedContext(Word.Words words, Word.Sentences sentences)
+        {
+            string[] wordArr = sentences[1].Text.Split(' ');
+            for (int i = 0; i < wordArr.Length; i++)
+                if (wordArr[i].Trim().Equals(words[1].Text.Trim()))
+                {
+                    getContext(i, wordArr);
+                    return;
                 }
         }
         public Context()

@@ -37,8 +37,8 @@ namespace Spell
         public void showCandidateInTaskPane(Word.Words words, Word.Sentences sentences)
         {
             FixError fixError = new FixError();
-            Context context = new Context(words, sentences);
-            fixError.getCandidatesWithContext(context, FindError.Instance.lstErrorRange);
+            FindError.Instance.GetSeletedContext(words, sentences);
+            fixError.getCandidatesWithContext(FindError.Instance.SelectedError_Context, FindError.Instance.lstErrorRange);
             if (fixError.hSetCandidate.Count > 0)
             {
                 lblWrong.Text = fixError.Token;
@@ -55,7 +55,7 @@ namespace Spell
             }
             else
             {
-                MessageBox.Show(SysMessage.Instance.IsNotError(context.TOKEN));
+                MessageBox.Show(SysMessage.Instance.IsNotError(FindError.Instance.SelectedError_Context.TOKEN));
             }
         }
         public void showCandidateInTaskPaneWithCountWord()

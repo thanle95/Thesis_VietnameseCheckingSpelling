@@ -76,6 +76,7 @@ namespace Spell
                     btnPauseResume.Enabled = true;
                     btnDeleteFormat.Enabled = false;
                     btnStop.Enabled = true;
+                    tbtnShowTaskpane.Enabled = false;
                     typeFindError = dropTypeFindError.SelectedItemIndex;
                     typeError = dropTypeError.SelectedItemIndex;
                     isAutoChange = chkbAutoChange.Checked;
@@ -121,6 +122,7 @@ namespace Spell
                     btnPauseResume.Enabled = false;
                     btnStop.Enabled = false;
                     btnCheckError.Enabled = true;
+                    tbtnShowTaskpane.Enabled = true;
                 }
                 catch (ThreadAbortException) { }
             }
@@ -180,7 +182,12 @@ namespace Spell
         private void tbtnShowTaskpane_Click(object sender, RibbonControlEventArgs e)
         {
             if (tbtnShowTaskpane.Checked)
+            {
                 myCustomTaskPane.Visible = true;
+                FindError.Instance.FirstError_Context = FindError.Instance.lstErrorRange.First().Key;
+                FindError.Instance.lstErrorRange[FindError.Instance.FirstError_Context].Select();
+                UserControl.Instance.showCandidateInTaskPaneWithCountWord();
+            }
             else
                 myCustomTaskPane.Visible = false;
         }
@@ -191,11 +198,13 @@ namespace Spell
             {
                 threadFindError.Suspend();
                 btnPauseResume.Label = "Tiếp tục";
+                tbtnShowTaskpane.Enabled = true;
             }
             else
             {
                 threadFindError.Resume();
                 btnPauseResume.Label = "Tạm dừng";
+                tbtnShowTaskpane.Enabled = false;
             }
         }
 
@@ -206,6 +215,7 @@ namespace Spell
             btnCheckError.Enabled = true;
             btnStop.Enabled = false;
             btnPauseResume.Enabled = false;
+            tbtnShowTaskpane.Enabled = true;
         }
     }
 }

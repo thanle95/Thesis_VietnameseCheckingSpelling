@@ -55,10 +55,10 @@
             this.chkbAutoChange = this.Factory.CreateRibbonCheckBox();
             this.separator2 = this.Factory.CreateRibbonSeparator();
             this.dropDockPosition = this.Factory.CreateRibbonDropDown();
-            this.btnDeleteFormat = this.Factory.CreateRibbonButton();
-            this.tbtnShowTaskpane = this.Factory.CreateRibbonToggleButton();
-            this.btnPauseResume = this.Factory.CreateRibbonButton();
             this.btnCheckError = this.Factory.CreateRibbonButton();
+            this.btnDeleteFormat = this.Factory.CreateRibbonButton();
+            this.btnPauseResume = this.Factory.CreateRibbonButton();
+            this.tbtnShowTaskpane = this.Factory.CreateRibbonToggleButton();
             this.btnStop = this.Factory.CreateRibbonButton();
             this.tab1.SuspendLayout();
             this.group1.SuspendLayout();
@@ -154,26 +154,6 @@
             this.dropDockPosition.Name = "dropDockPosition";
             this.dropDockPosition.SelectionChanged += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.dropDockPosition_SelectionChanged);
             // 
-            // btnDeleteFormat
-            // 
-            this.btnDeleteFormat.Label = "Xóa đánh dấu lỗi";
-            this.btnDeleteFormat.Name = "btnDeleteFormat";
-            this.btnDeleteFormat.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.btnDeleteFormat_Click);
-            // 
-            // tbtnShowTaskpane
-            // 
-            this.tbtnShowTaskpane.Checked = true;
-            this.tbtnShowTaskpane.Label = "Xem gợi ý";
-            this.tbtnShowTaskpane.Name = "tbtnShowTaskpane";
-            this.tbtnShowTaskpane.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.tbtnShowTaskpane_Click);
-            // 
-            // btnPauseResume
-            // 
-            this.btnPauseResume.Enabled = false;
-            this.btnPauseResume.Label = "Tạm dừng";
-            this.btnPauseResume.Name = "btnPauseResume";
-            this.btnPauseResume.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.btnPauseResume_Click);
-            // 
             // btnCheckError
             // 
             this.btnCheckError.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
@@ -182,6 +162,26 @@
             this.btnCheckError.Name = "btnCheckError";
             this.btnCheckError.ShowImage = true;
             this.btnCheckError.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.btnCheckError_Click);
+            // 
+            // btnDeleteFormat
+            // 
+            this.btnDeleteFormat.Label = "Xóa đánh dấu lỗi";
+            this.btnDeleteFormat.Name = "btnDeleteFormat";
+            this.btnDeleteFormat.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.btnDeleteFormat_Click);
+            // 
+            // btnPauseResume
+            // 
+            this.btnPauseResume.Enabled = false;
+            this.btnPauseResume.Label = "Tạm dừng";
+            this.btnPauseResume.Name = "btnPauseResume";
+            this.btnPauseResume.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.btnPauseResume_Click);
+            // 
+            // tbtnShowTaskpane
+            // 
+            this.tbtnShowTaskpane.Enabled = false;
+            this.tbtnShowTaskpane.Label = "Xem gợi ý";
+            this.tbtnShowTaskpane.Name = "tbtnShowTaskpane";
+            this.tbtnShowTaskpane.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.tbtnShowTaskpane_Click);
             // 
             // btnStop
             // 

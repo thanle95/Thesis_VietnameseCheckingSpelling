@@ -33,8 +33,8 @@ namespace Spell.Algorithm
                 if (dictError.Count > 0)
                 {
                     //lấy lỗi đầu tiên tìm được với startIndex
-                    Token = dictError[context].Text.ToLower().Trim();
-
+                    //Token = dictError[context].Text.ToLower().Trim();
+                    Token = context.TOKEN;
                     hSetCandidate = Candidate.getInstance.selectiveCandidate(context);
                 }
             }

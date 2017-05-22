@@ -21,6 +21,7 @@ namespace Spell.Algorithm
         private const int WRONG_ERROR = 1;
         private const int RIGHT_ERROR = 2;
         public Context FirstError_Context { get; set; }
+        public Context SelectedError_Context { get; set; }
         private static FindError instance = new FindError();
         private int _typeFindError = 0;
         private int _typeError = 0;
@@ -47,6 +48,18 @@ namespace Spell.Algorithm
             get
             {
                 return lstErrorRange.Count;
+            }
+        }
+        public void GetSeletedContext(Word.Words words, Word.Sentences sentences)
+        {
+            SelectedError_Context = new Context(words, sentences);
+            foreach (Context context in lstErrorRange.Keys)
+            {
+                if (context.Equals(SelectedError_Context))
+                {
+                    SelectedError_Context = context;
+                    return;
+                }
             }
         }
         public void startFindError()
