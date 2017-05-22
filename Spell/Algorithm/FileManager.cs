@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Spell.Algorithm
 {
-    class FileInfo
+    class FileManager
     {
-        private static FileInfo instance = new FileInfo();
+        private static FileManager instance = new FileManager();
         private string Directory
         {
             get
@@ -73,12 +73,20 @@ namespace Spell.Algorithm
 
             }
         }
-        private FileInfo()
+        public string ShowAgain
+        {
+            get
+            {
+                return Directory + @"Resources\ShowAgain.txt";
+
+            }
+        }
+        private FileManager()
         {
 
         }
 
-        public static FileInfo Instance
+        public static FileManager Instance
         {
             get
             {

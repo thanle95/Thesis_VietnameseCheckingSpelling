@@ -17,7 +17,7 @@ namespace Spell.Algorithm
         private void readCompoundWordVNFile()
         {
             compoundWordVnDict = new Dictionary<string, List<string>>();
-            string[] compoundDictArr = File.ReadAllLines(FileInfo.Instance.CompoundWordLinkedList);
+            string[] compoundDictArr = File.ReadAllLines(FileManager.Instance.CompoundWordLinkedList);
             string key = "";
             List<string> value;
             foreach(string i in compoundDictArr)

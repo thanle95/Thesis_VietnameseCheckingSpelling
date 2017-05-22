@@ -45,7 +45,7 @@ namespace Spell.Algorithm
             try
             {
                 //properties vào fileName, chọn copy always
-                string[] dictArr = File.ReadAllLines(FileInfo.Instance.SyllDict);
+                string[] dictArr = File.ReadAllLines(FileManager.Instance.SyllDict);
                 result = dictArr.ToDictionary(x => x, x => "");
             }
             catch (Exception e)
@@ -63,7 +63,7 @@ namespace Spell.Algorithm
             List<string> result = new List<string>();
             try
             {
-                string[] dictArr = File.ReadAllLines(FileInfo.Instance.CompoundWordDict);
+                string[] dictArr = File.ReadAllLines(FileManager.Instance.CompoundWordDict);
                 result = dictArr.ToList();
             }
             catch (Exception e)

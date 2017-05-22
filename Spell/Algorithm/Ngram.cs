@@ -60,8 +60,8 @@ namespace Spell.Algorithm
 
 
             //string triPath = @"E:\Google Drive\Document\luan van\source\github\Thesis_VietnameseCheckingSpelling\Spell\Resources\triExtended.txt";
-            readUni(FileInfo.Instance.UniGram);
-            readBiAmount(FileInfo.Instance.BiGram);
+            readUni(FileManager.Instance.UniGram);
+            readBiAmount(FileManager.Instance.BiGram);
             //readTriAmount(triPath);
             sumWordInCorpus();
         }

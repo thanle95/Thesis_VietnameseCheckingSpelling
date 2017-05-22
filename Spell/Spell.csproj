@@ -157,13 +157,19 @@
     <Compile Include="Algorithm\Candidate.cs" />
     <Compile Include="Algorithm\CompoundWordVn.cs" />
     <Compile Include="Algorithm\Context.cs" />
-    <Compile Include="Algorithm\FileInfo.cs" />
+    <Compile Include="Algorithm\FileManager.cs" />
     <Compile Include="Algorithm\FindError.cs" />
     <Compile Include="Algorithm\FixError.cs" />
     <Compile Include="Algorithm\SysMessage.cs" />
     <Compile Include="Algorithm\RightWordCandidate.cs" />
     <Compile Include="Algorithm\StringConstant.cs" />
     <Compile Include="Algorithm\Ngram.cs" />
+    <Compile Include="Algorithm\Usage.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Algorithm\Usage.Designer.cs">
+      <DependentUpon>Usage.cs</DependentUpon>
+    </Compile>
     <Compile Include="Algorithm\VNDictionary.cs" />
     <Compile Include="Algorithm\WrongWordCandidate.cs" />
     <Compile Include="DocumentHandling.cs" />
@@ -177,6 +183,9 @@
       <DependentUpon>UserControl.cs</DependentUpon>
     </Compile>
     <None Include="app.config" />
+    <EmbeddedResource Include="Algorithm\Usage.resx">
+      <DependentUpon>Usage.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -234,6 +243,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Resources\rightWordCandidate.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\ShowAgain.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Resources\wrongWord.txt">

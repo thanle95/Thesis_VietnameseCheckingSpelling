@@ -9,6 +9,7 @@ using System.Threading;
 using System.Windows.Forms;
 using Spell.Algorithm;
 using System.Diagnostics;
+using System.IO;
 
 namespace Spell
 {
@@ -44,6 +45,7 @@ namespace Spell
             FindError.Instance.createValue(typeFindError, typeError, isAutoChange);
             threadStartFindError = new ThreadStart(check);
 
+         
         }
 
         /// <summary>
@@ -55,7 +57,11 @@ namespace Spell
         /// <param name="e"></param>
         private void btnCheckError_Click(object sender, RibbonControlEventArgs e)
         {
-            
+            if (File.ReadAllText(FileManager.Instance.ShowAgain).Equals("0"))
+            {
+                Usage usage = new Usage();
+                usage.ShowDialog();
+            }
             threadFindError = new Thread(threadStartFindError);
             threadFindError.Priority = ThreadPriority.Highest;
             //if (!threadFindError.IsAlive)
@@ -208,5 +214,12 @@ namespace Spell
             btnPauseResume.Enabled = false;
             tbtnShowTaskpane.Enabled = true;
         }
+
+        private void btnUsage_Click(object sender, RibbonControlEventArgs e)
+        {
+            Usage usage = new Usage();
+            usage.ShowDialog();
+        }
+
     }
 }
