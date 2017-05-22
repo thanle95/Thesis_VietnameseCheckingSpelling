@@ -66,7 +66,7 @@ namespace Spell.Algorithm
         }
         public void startFindError()
         {
-            Dictionary<Context, Word.Range> ret = showWrongWithSuggest(_typeFindError, _typeError, _isAutoChange);
+            showWrongWithSuggest(_typeFindError, _typeError, _isAutoChange);
         }
         public Dictionary<Context, Word.Range> showWrongWithSuggest(int typeFindError, int typeError, bool isAutoChange)
         {
@@ -83,8 +83,6 @@ namespace Spell.Algorithm
                 else
                     //lấy danh sách câu dựa trên vùng được bôi đen
                     curSentences = Globals.ThisAddIn.Application.Selection.Sentences;
-                List<Word.Sentences> curSentenceList = new List<Word.Sentences>();
-                curSentenceList.Add(curSentences);
                 int start = 0, end = 0;
                 string iWord = "";
                 string token = "";

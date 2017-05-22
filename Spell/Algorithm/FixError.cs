@@ -23,22 +23,23 @@ namespace Spell.Algorithm
         {
             get; set;
         }
-      
+
         public void getCandidatesWithContext(Context context, Dictionary<Context, Word.Range> dictError)
         {
             hSetCandidate = new HashSet<string>();
-            if (dictError.ContainsKey(context))
-            {
-                //nếu có lỗi trong danh sách
-                if (dictError.Count > 0)
+            if (dictError.Count > 0)
+                if (dictError.ContainsKey(context))
                 {
-                    //lấy lỗi đầu tiên tìm được với startIndex
-                    //Token = dictError[context].Text.ToLower().Trim();
-                    Token = context.TOKEN;
-                    hSetCandidate = Candidate.getInstance.selectiveCandidate(context);
+                    //nếu có lỗi trong danh sách
+                    if (dictError.Count > 0)
+                    {
+                        //lấy lỗi đầu tiên tìm được với startIndex
+                        //Token = dictError[context].Text.ToLower().Trim();
+                        Token = context.TOKEN;
+                        hSetCandidate = Candidate.getInstance.selectiveCandidate(context);
+                    }
                 }
-            }
-            
+
         }
         private Word.Range findErrorRangeByStartIndex(int startIndex, Dictionary<Context, Word.Range> dictError)
         {

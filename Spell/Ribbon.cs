@@ -55,15 +55,11 @@ namespace Spell
         /// <param name="e"></param>
         private void btnCheckError_Click(object sender, RibbonControlEventArgs e)
         {
+            
             threadFindError = new Thread(threadStartFindError);
             threadFindError.Priority = ThreadPriority.Highest;
             //if (!threadFindError.IsAlive)
             threadFindError.Start();
-            //else
-            //{
-            //    threadFindError.Abort();
-            //    threadFindError.Start();
-            //}
         }
         private void check()
         {
@@ -72,7 +68,9 @@ namespace Spell
             btnPauseResume.Enabled = true;
             btnDeleteFormat.Enabled = false;
             btnStop.Enabled = true;
+            FindError.Instance.StopFindError = false;
             tbtnShowTaskpane.Enabled = false;
+
             typeFindError = dropTypeFindError.SelectedItemIndex;
             typeError = dropTypeError.SelectedItemIndex;
             isAutoChange = chkbAutoChange.Checked;
