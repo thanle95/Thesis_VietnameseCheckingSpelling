@@ -134,7 +134,7 @@ namespace Spell.Algorithm
                         {
                             //xác định ngữ cảnh
                             Context context = new Context(i, words);
-                            wordInWords = Regex.Replace(iWord, StringConstant.Instance.patternSignSentence, "");
+                            wordInWords = Regex.Replace(context.TOKEN, StringConstant.Instance.patternSignSentence, "");
                             //nếu loại bỏ ký tự đặc biệt nằm giữa hay đầu từ, ví dụ email, thì bắt đầu vòng lặp sau
                             if (!iWord.Contains(wordInWords)
                                 //nếu loại bỏ ký tự đặc biệt xong, độ dài của từ bằng 0, thì bắt đầu vòng lặp sau

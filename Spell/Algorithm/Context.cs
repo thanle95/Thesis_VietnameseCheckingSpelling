@@ -67,9 +67,9 @@ namespace Spell.Algorithm
             if (iWord == 0)
                 PRE = Ngram.Instance.START_STRING;
             if (iWord > 0)
-                PRE = words[iWord - 1];
+                PRE = words[iWord - 1].Trim();
             if (iWord > 1)
-                PREPRE = words[iWord - 2];
+                PREPRE = words[iWord - 2].Trim();
             if (iWord == length - 1)
                 NEXT = Ngram.Instance.END_STRING;
             if (iWord < length - 1)
@@ -112,7 +112,7 @@ namespace Spell.Algorithm
                     NEXTNEXT = "";
                 }
             }
-            TOKEN = words[iWord];
+            TOKEN = words[iWord].Trim();
             Regex regexEndMidSym = new Regex(StringConstant.Instance.patternEndMiddleSymbol);
             Match mEndMidSym = regexEndMidSym.Match(TOKEN);
             if (mEndMidSym.Success)
