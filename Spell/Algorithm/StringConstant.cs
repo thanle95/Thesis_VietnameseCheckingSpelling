@@ -23,7 +23,7 @@ namespace Spell.Algorithm
         }
         public const int MAX_KEYBOARD_ROW = 3;
         public const int MAX_KEYBOARD_COL = 10;
-        public const int MAXGROUP_REGION_CONFUSED = 4;
+        public const int MAXGROUP_REGION_CONFUSED = 6;
         public const int MAXCASE_REGION_CONFUSED = 4;
         public const int QUESTION_MASK = 2;
         public const int TILDE = 3;
@@ -158,8 +158,10 @@ namespace Spell.Algorithm
 
         public string[,] VNRegion_Confused_Matrix_LowerCase = new string[,]
         {
+            {"i", "y", "",""},
             {"s", "x", "",""},
             {"l", "n", "",""},
+            {"n", "ng", "nh",""},
             {"v","r", "d", "gi" },
             {"ch", "tr", "",""}
         };

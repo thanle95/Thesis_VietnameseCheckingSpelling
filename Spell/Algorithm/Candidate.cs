@@ -21,7 +21,7 @@ namespace Spell.Algorithm
         {
             get
             {
-                return 0.1;
+                return 0.2;
             }
         }
         public double LIM_COMPOUNDWORD
@@ -35,7 +35,7 @@ namespace Spell.Algorithm
         {
             get
             {
-                return 0.7;
+                return 0.6;
             }
         }
         public double MAX_SCORE
@@ -260,7 +260,7 @@ namespace Spell.Algorithm
         {
 
             double diffScore;
-            if (candidate.Equals("với"))
+            if (token.Equals("chạn") && candidate.Equals("chạm"))
                 diffScore = 0;
             //tách dấu ---> tachs dâus
             string[] extTokenArr = extractSignVNNotFully(token);
@@ -308,11 +308,17 @@ namespace Spell.Algorithm
                 int lengthExtX = extX.Length;
                 int lengthExtY = extY.Length;
                 int j = 0;
+                bool isRegion = false;
                 for (int i = 0; i < lengthExtX; i++, j++)
                     if (j < lengthExtY)
                     {
                         if (extX[i] == extY[j])
                             continue;
+                        if(isRegion)
+                        {
+                            numerator += 1;
+                            continue;
+                        }
                         else if (i + 1 < lengthExtX && i + 1 < lengthExtY)
                         {
                             if (isRegionMistake(extX[i], extX[i + 1], extY[j], extY[j + 1]))
@@ -320,6 +326,7 @@ namespace Spell.Algorithm
                                 numerator += 0.1;
                                 i++;
                                 j++;
+                                isRegion = true;
                                 continue;
                             }
 

@@ -73,9 +73,9 @@ namespace Spell.Algorithm
             if (iWord == length - 1)
                 NEXT = Ngram.Instance.END_STRING;
             if (iWord < length - 1)
-                NEXT = regexEndSentenceChar.Replace(words[iWord + 1], "");
+                NEXT = regexEndSentenceChar.Replace(words[iWord + 1].Trim(), "");
             if (iWord < length - 2)
-                NEXTNEXT = regexEndSentenceChar.Replace(words[iWord + 2], "");
+                NEXTNEXT = regexEndSentenceChar.Replace(words[iWord + 2].Trim(), "");
 
             if (PRE.Length > 0 && iWord != 1) //pre không phải từ đầu câu
             {
