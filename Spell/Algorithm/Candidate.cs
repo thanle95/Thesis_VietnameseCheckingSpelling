@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace Spell.Algorithm
 {
@@ -259,7 +260,7 @@ namespace Spell.Algorithm
         {
 
             double diffScore;
-            if (candidate.Equals("chói"))
+            if (candidate.Equals("người"))
                 diffScore = 0;
             //tách dấu ---> tachs dâus
             string[] extTokenArr = extractSignVNNotFully(token);
@@ -298,35 +299,48 @@ namespace Spell.Algorithm
 
         private double calNumeratorForStringDiff(string extX, string extY)
         {
-            double numerator = 0;
-            int lengthExtX = extX.Length;
-            int lengthExtY = extY.Length;
-            for (int i = 0; i < lengthExtX; i++)
-                if (i < lengthExtY)
-                {
-                    if (extX[i] == extY[i])
-                        continue;
-                    else if (i + 1 < lengthExtX && i + 1 < lengthExtY)
+            
+                double numerator = 0;
+            try
+            {
+                int lengthExtX = extX.Length;
+                int lengthExtY = extY.Length;
+                for (int i = 0; i < lengthExtX; i++)
+                    if (i < lengthExtY)
                     {
-                        if (isRegionMistake(extX[i], extX[i + 1], extY[i], extY[i + 1]))
-                        {
-                            numerator += 0.1;
-                            i++;
+                        if (extX[i] == extY[i])
                             continue;
+                        else if (i + 1 < lengthExtX && i + 1 < lengthExtY)
+                        {
+                            if (isRegionMistake(extX[i], extX[i + 1], extY[i], extY[i + 1]))
+                            {
+                                numerator += 0.1;
+                                i++;
+                                continue;
+                            }
+
                         }
+                        if (isRegionMistake(extX[i], extY[i]))
+                            numerator += 0.1;
+                        else if (isKeyboardMistake(extX[i], extY[i]))
+                            numerator += 0.3;
+                        else if (isVowelVNMistake(extX[i], extY[i]))
+                            numerator += 0.3;
+                        else if (extY.Substring(i).Contains(extX[i] + ""))
+                            numerator += 0.1;
 
+                        else numerator += 1;
                     }
-                    if (isRegionMistake(extX[i], extY[i]))
+                    else if (extX.Substring(i).Contains(extY[lengthExtY - 1] + ""))
                         numerator += 0.1;
-                    else if (isKeyboardMistake(extX[i], extY[i]))
-                        numerator += 0.3;
-                    else if (isVowelVNMistake(extX[i], extY[i]))
-                        numerator += 0.3;
-
-                    else numerator += 1;
-                }
-                else
-                    numerator += 1;
+                    else
+                        numerator += 1;
+            
+            }
+            catch 
+            {
+                MessageBox.Show(extX + " " + extY);
+            }
             return numerator;
         }
 
@@ -658,9 +672,9 @@ namespace Spell.Algorithm
                 if (key.Contains(Ngram.Instance.START_STRING) || key.Contains(Ngram.Instance.END_STRING))
                     continue;
                 string[] word = key.Split(' ');
-                if (word[0].Equals(context.PRE)/* && calScore_Similarity(token, word[1]) > LIM_SIMILARITY*/)
+                if (word[0].Equals(context.PRE) && word[1].Length > 0/* && calScore_Similarity(token, word[1]) > LIM_SIMILARITY*/)
                     lstCandidate.Add(word[1]);
-                else if (word[1].Equals(context.NEXT) /*&& calScore_Similarity(token, word[0]) > LIM_SIMILARITY*/)
+                else if (word[1].Equals(context.NEXT) && word[0].Length > 0 /*&& calScore_Similarity(token, word[0]) > LIM_SIMILARITY*/)
                     lstCandidate.Add(word[0]);
             }
             return lstCandidate;

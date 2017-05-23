@@ -125,7 +125,7 @@ namespace Spell.Algorithm
                             continue;
                         }
                         //viết hoa giữa câu
-                        if (char.IsUpper(iWord.Trim()[0]) && i != 0)
+                        if (char.IsUpper(iWord.Trim()[0]))
                         {
                             start += iWord.Length + 1;
                             continue;

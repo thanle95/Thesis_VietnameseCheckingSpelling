@@ -96,8 +96,6 @@ namespace Spell.Algorithm
                     if (pair.Value.Contains(next))
                         hSetResult.Add(pair.Key);
             }
-            else
-                hSetResult.Add("");
             return hSetResult;
         }
         /// <summary>
@@ -117,8 +115,6 @@ namespace Spell.Algorithm
                     if (iArr.Length == 1 && iArr[0].Length > 0)
                         hSetResult.Add(iArr[0]);
                 }
-            else
-                hSetResult.Add("");
             return hSetResult;
         }
         /// <summary>
@@ -140,9 +136,6 @@ namespace Spell.Algorithm
                         && iArr[1].Length > 0)
                         hSetResult.Add(iArr[1]);
                 }
-            else
-                hSetResult.Add("");
-
             return hSetResult;
         }
         /// <summary>
@@ -162,8 +155,6 @@ namespace Spell.Algorithm
                     if (iArr.Length == 2 && iArr[1].Equals(next) && iArr[0].Length > 0)
                         hSetResult.Add(iArr[0]);
                 }
-            else
-                hSetResult.Add("");
             return hSetResult;
         }
         /// <summary>
@@ -184,8 +175,6 @@ namespace Spell.Algorithm
                         if (iArr.Length == 2 && iArr[0].Equals(next) && iArr[1].Equals(nextnext))
                             hSetResult.Add(pair.Key);
                     }
-            else
-                hSetResult.Add("");
             return hSetResult;
         }
         /// <summary>

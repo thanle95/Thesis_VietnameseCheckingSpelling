@@ -34,16 +34,17 @@ namespace Spell.Algorithm
         public bool checkRightWord(Context context)
         {
             double D = Candidate.getInstance.calScore_CompoundWord(context, context.TOKEN);
-            //using (FileStream aFile = new FileStream((rightScorePath), FileMode.Append, FileAccess.Write))
-            //using (StreamWriter sw = new StreamWriter(aFile))
-            //{
-            //    sw.WriteLine();
-            //    sw.WriteLine(String.Format("{0}: [{1};{2}]", context.TOKEN, L, D));
-            //    sw.WriteLine("**********************************************************************");
-            //}
+            double L = Candidate.getInstance.calScore_Ngram(context, context.TOKEN);
+            using (FileStream aFile = new FileStream((FileManager.Instance.RightWordScore), FileMode.Append, FileAccess.Write))
+            using (StreamWriter sw = new StreamWriter(aFile))
+            {
+                sw.WriteLine();
+                sw.WriteLine(String.Format("{0}: [{1};{2}]", context.TOKEN, L, D));
+                sw.WriteLine("**********************************************************************");
+            }
             if ( D >= Candidate.getInstance.LIM_COMPOUNDWORD)
                 return true;
-            double L = Candidate.getInstance.calScore_Ngram(context, context.TOKEN);
+            
             if (L >= Candidate.getInstance.LIM_LANGUAGEMODEL)
                 return true;
             return false;
