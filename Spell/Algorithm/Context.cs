@@ -67,51 +67,15 @@ namespace Spell.Algorithm
             if (iWord == 0)
                 PRE = Ngram.Instance.START_STRING;
             if (iWord > 0)
-                PRE = words[iWord - 1].Trim();
+                PRE = regexSpecialChar.Replace(words[iWord - 1].Trim(), "");
             if (iWord > 1)
-                PREPRE = words[iWord - 2].Trim();
+                PREPRE = regexSpecialChar.Replace(words[iWord - 2].Trim(), "");
             if (iWord == length - 1)
                 NEXT = Ngram.Instance.END_STRING;
             if (iWord < length - 1)
-                NEXT = regexEndSentenceChar.Replace(words[iWord + 1].Trim(), "");
+                NEXT = regexSpecialChar.Replace(words[iWord + 1].Trim(), "");
             if (iWord < length - 2)
-                NEXTNEXT = regexEndSentenceChar.Replace(words[iWord + 2].Trim(), "");
-
-            if (PRE.Length > 0 && iWord != 1) //pre không phải từ đầu câu
-            {
-                Match m = regexSpecialChar.Match(PRE);
-                if (m.Success | char.IsUpper(PRE.Trim()[0]))
-                {
-                    PRE = Ngram.Instance.START_STRING;
-                    PREPRE = "";
-                }
-            }
-            if (NEXT.Length > 0)
-            {
-                Match m = regexSpecialChar.Match(NEXT);
-                if (m.Success)
-                {
-                    NEXT = Ngram.Instance.END_STRING;
-                    NEXTNEXT = "";
-                }
-
-            }
-            if (PREPRE.Length > 0)
-            {
-                Match m = regexSpecialChar.Match(PREPRE);
-                if (m.Success | char.IsUpper(PREPRE.Trim()[0]))
-                {
-                    PREPRE = "";
-                }
-            }
-            if (NEXTNEXT.Length > 0)
-            {
-                Match m = regexSpecialChar.Match(NEXTNEXT);
-                if (m.Success)
-                {
-                    NEXTNEXT = "";
-                }
-            }
+                NEXTNEXT = regexSpecialChar.Replace(words[iWord + 2].Trim(), "");
             TOKEN = words[iWord].Trim();
             Regex regexEndMidSym = new Regex(StringConstant.Instance.patternEndMiddleSymbol);
             Match mEndMidSym = regexEndMidSym.Match(TOKEN);
@@ -130,7 +94,6 @@ namespace Spell.Algorithm
                 NEXT = Ngram.Instance.START_STRING;
                 NEXTNEXT = "";
             }
-
         }
         public override bool Equals(object obj)
         {

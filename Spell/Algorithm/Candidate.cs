@@ -21,7 +21,7 @@ namespace Spell.Algorithm
         {
             get
             {
-                return 0.2;
+                return 0.3;
             }
         }
         public double LIM_COMPOUNDWORD
@@ -260,7 +260,7 @@ namespace Spell.Algorithm
         {
 
             double diffScore;
-            if (token.Equals("chạn") && candidate.Equals("chạm"))
+            if (token.Equals("côngn") && candidate.Equals("công"))
                 diffScore = 0;
             //tách dấu ---> tachs dâus
             string[] extTokenArr = extractSignVNNotFully(token);
