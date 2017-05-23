@@ -24,7 +24,7 @@ namespace Spell.Algorithm
         public const int MAX_KEYBOARD_ROW = 3;
         public const int MAX_KEYBOARD_COL = 10;
         public const int MAXGROUP_REGION_CONFUSED = 4;
-        public const int MAXCASE_REGION_CONFUSED = 3;
+        public const int MAXCASE_REGION_CONFUSED = 4;
         public const int QUESTION_MASK = 2;
         public const int TILDE = 3;
         public const int MAX_VOWEL_NO = 12;
@@ -158,18 +158,18 @@ namespace Spell.Algorithm
 
         public string[,] VNRegion_Confused_Matrix_LowerCase = new string[,]
         {
-            {"s", "x", ""},
-            {"l", "n", ""},
-            {"r", "d", "gi" },
-            {"ch", "tr", ""}
+            {"s", "x", "",""},
+            {"l", "n", "",""},
+            {"v","r", "d", "gi" },
+            {"ch", "tr", "",""}
         };
 
         public string[,] VNRegion_Confused_Matrix_UperCase = new string[,]
         {
-            {"S", "X", ""},
-            {"L", "N", ""},
-            {"R", "D", "GI" },
-            {"CH", "TR", ""}
+            {"S", "X", "",""},
+            {"L", "N", "",""},
+            {"V","R", "D", "GI" },
+            {"CH", "TR", "",""}
         };
 
         public string patternMiddleSymbol = "[-|/|\\|>|<|\\[|\\]|,|\"|(|)|“|”]";

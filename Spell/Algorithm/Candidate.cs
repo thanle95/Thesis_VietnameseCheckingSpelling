@@ -21,7 +21,7 @@ namespace Spell.Algorithm
         {
             get
             {
-                return 0.028;
+                return 0.1;
             }
         }
         public double LIM_COMPOUNDWORD
@@ -260,7 +260,7 @@ namespace Spell.Algorithm
         {
 
             double diffScore;
-            if (candidate.Equals("xúc"))
+            if (candidate.Equals("với"))
                 diffScore = 0;
             //tách dấu ---> tachs dâus
             string[] extTokenArr = extractSignVNNotFully(token);
@@ -325,8 +325,10 @@ namespace Spell.Algorithm
 
                         }
                         if (isRegionMistake(extX[i], extY[j]))
+                        {
                             numerator += 0.1;
-
+                            continue;
+                        }
                         int index;
                         if (j > 0)
                             index = extY.IndexOf(extX[i], j - 1);
@@ -429,17 +431,19 @@ namespace Spell.Algorithm
         {
             int iC1 = -1, iC2 = -1;
             bool isFoundC1 = false, isFoundC2 = false;
+            string c = "";
             for (int i = 0; i < StringConstant.MAXGROUP_REGION_CONFUSED; i++)
                 for (int j = 0; j < StringConstant.MAXCASE_REGION_CONFUSED; j++)
                 {
+                    c = StringConstant.Instance.VNRegion_Confused_Matrix_LowerCase[i, j];
                     if (!isFoundC1)
-                        if (StringConstant.Instance.VNRegion_Confused_Matrix_LowerCase[i, j].Equals(c1))
+                        if (c.Equals(c1+ ""))
                         {
                             isFoundC1 = true;
                             iC1 = i;
                         }
                     if (!isFoundC2)
-                        if (StringConstant.Instance.VNRegion_Confused_Matrix_LowerCase[i, j].Equals(c2))
+                        if (c.Equals(c2+ ""))
                         {
                             isFoundC2 = true;
                             iC2 = i;
