@@ -98,7 +98,7 @@ namespace Spell.Algorithm
                     {
                         break;
                     }
-                    words = curSentences[iSentence].Text.Trim().Split(' ');
+                    words = curSentences[iSentence].Text.Split(' ');
                     start = curSentences[iSentence].Start;
                     end = curSentences[iSentence].End;
                     range = Globals.ThisAddIn.Application.ActiveDocument.Range(start, end);

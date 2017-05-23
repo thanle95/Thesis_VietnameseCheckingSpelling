@@ -63,7 +63,8 @@ namespace Spell
             FixError fixError = new FixError();
 
             fixError.getCandidatesWithContext(FindError.Instance.FirstError_Context, FindError.Instance.lstErrorRange);
-
+            Word.Range range = FindError.Instance.lstErrorRange[FindError.Instance.FirstError_Context];
+            range.Select();
             lblWrong.Text = fixError.Token;
             lstbCandidate.Items.Clear();
             foreach (string item in fixError.hSetCandidate)
