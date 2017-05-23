@@ -75,8 +75,8 @@ namespace Spell.Algorithm
             hSetCandidate.UnionWith(Candidate.getInstance.createCandByCompoundWord(context, isMajuscule));
             //giá trị lamda có được do thống kê
             double lamda1 = 0.1;
-            double lamda2 = 0.2;
-            double lamda3 = 0.7;
+            double lamda2 = 0.3;
+            double lamda3 = 0.6;
             double score = 0;
             //Dictionary
             double D = 0;
@@ -131,12 +131,12 @@ namespace Spell.Algorithm
                     result.Add(key);
 
             //ghi đè file
-            //using (FileStream aFile = new FileStream((rightCandPath), FileMode.Append, FileAccess.Write))
-            //using (StreamWriter sw = new StreamWriter(aFile))
-            //{
-            //    sw.WriteLine(text_writeFile);
-            //    sw.WriteLine("**********************************************************************");
-            //}
+            using (FileStream aFile = new FileStream((FileManager.Instance.RightWordCand), FileMode.Append, FileAccess.Write))
+            using (StreamWriter sw = new StreamWriter(aFile))
+            {
+                sw.WriteLine(text_writeFile);
+                sw.WriteLine("**********************************************************************");
+            }
             return result;
         }
 

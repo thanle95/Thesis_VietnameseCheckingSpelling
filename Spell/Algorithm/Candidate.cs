@@ -21,7 +21,7 @@ namespace Spell.Algorithm
         {
             get
             {
-                return 0.01;
+                return 0.028;
             }
         }
         public double LIM_COMPOUNDWORD
@@ -35,7 +35,7 @@ namespace Spell.Algorithm
         {
             get
             {
-                return 0.65;
+                return 0.7;
             }
         }
         public double MAX_SCORE
@@ -260,7 +260,7 @@ namespace Spell.Algorithm
         {
 
             double diffScore;
-            if (candidate.Equals("người"))
+            if (candidate.Equals("xúc"))
                 diffScore = 0;
             //tách dấu ---> tachs dâus
             string[] extTokenArr = extractSignVNNotFully(token);
@@ -287,9 +287,11 @@ namespace Spell.Algorithm
         {
             if (signToken.Length == 0 && signCandidate.Length == 0)
                 return 0;
+            if (signToken.Equals(signCandidate))
+                return 0;
             if (signToken.Equals("s") && signCandidate.Equals("x") || signToken.Equals("x") && signCandidate.Equals("s"))
                 return 0.1;
-            return 0.3;
+            return 0.5;
         }
 
         private int calDenominatorForStringDiff(string extToken, string signToken, string extCandidate, string signCandidate)
@@ -299,45 +301,69 @@ namespace Spell.Algorithm
 
         private double calNumeratorForStringDiff(string extX, string extY)
         {
-            
-                double numerator = 0;
+
+            double numerator = 0;
             try
             {
                 int lengthExtX = extX.Length;
                 int lengthExtY = extY.Length;
-                for (int i = 0; i < lengthExtX; i++)
-                    if (i < lengthExtY)
+                int j = 0;
+                for (int i = 0; i < lengthExtX; i++, j++)
+                    if (j < lengthExtY)
                     {
-                        if (extX[i] == extY[i])
+                        if (extX[i] == extY[j])
                             continue;
                         else if (i + 1 < lengthExtX && i + 1 < lengthExtY)
                         {
-                            if (isRegionMistake(extX[i], extX[i + 1], extY[i], extY[i + 1]))
+                            if (isRegionMistake(extX[i], extX[i + 1], extY[j], extY[j + 1]))
                             {
                                 numerator += 0.1;
                                 i++;
+                                j++;
                                 continue;
                             }
 
                         }
-                        if (isRegionMistake(extX[i], extY[i]))
-                            numerator += 0.1;
-                        else if (isKeyboardMistake(extX[i], extY[i]))
-                            numerator += 0.3;
-                        else if (isVowelVNMistake(extX[i], extY[i]))
-                            numerator += 0.3;
-                        else if (extY.Substring(i).Contains(extX[i] + ""))
+                        if (isRegionMistake(extX[i], extY[j]))
                             numerator += 0.1;
 
-                        else numerator += 1;
+                        int index;
+                        if (j > 0)
+                            index = extY.IndexOf(extX[i], j - 1);
+                        else
+                            index = extY.IndexOf(extX[i], j);
+                        if (index != -1)
+                        {
+                            if (Math.Abs(i - index) == 1)
+                            {
+                                numerator += 0.1;
+                                continue;
+                            }
+                            else if (Math.Abs(i - index) == 2)
+                            {
+                                numerator += 0.2;
+                                continue;
+                            }
+                        }
+                        
+                        else if (isVowelVNMistake(extX[i], extY[j]))
+                            numerator += 0.3;
+                        else if (isKeyboardMistake(extX[i], extY[j]))
+                        {
+                            j--;
+                            numerator += 0.5;
+                        }
+                        else {
+                            j--;
+                            numerator += 1;
+                        }
                     }
-                    else if (extX.Substring(i).Contains(extY[lengthExtY - 1] + ""))
-                        numerator += 0.1;
+
                     else
                         numerator += 1;
-            
+
             }
-            catch 
+            catch
             {
                 MessageBox.Show(extX + " " + extY);
             }
@@ -393,7 +419,7 @@ namespace Spell.Algorithm
                             jC2 = j;
                         }
                     if (isFoundC1 && isFoundC2)
-                        if (Math.Abs(iC1 - iC2) <= 1 && Math.Abs(jC1 - jC2) <= 1)
+                        if (Math.Abs(iC1 - iC2) == 0 || Math.Abs(jC1 - jC2) == 0)
                             return true;
                         else return false;
                 }
@@ -407,13 +433,13 @@ namespace Spell.Algorithm
                 for (int j = 0; j < StringConstant.MAXCASE_REGION_CONFUSED; j++)
                 {
                     if (!isFoundC1)
-                        if (StringConstant.Instance.VNRegion_Confused_Matrix_LowerCase[i, j].Contains(c1))
+                        if (StringConstant.Instance.VNRegion_Confused_Matrix_LowerCase[i, j].Equals(c1))
                         {
                             isFoundC1 = true;
                             iC1 = i;
                         }
                     if (!isFoundC2)
-                        if (StringConstant.Instance.VNRegion_Confused_Matrix_LowerCase[i, j].Contains(c2))
+                        if (StringConstant.Instance.VNRegion_Confused_Matrix_LowerCase[i, j].Equals(c2))
                         {
                             isFoundC2 = true;
                             iC2 = i;
