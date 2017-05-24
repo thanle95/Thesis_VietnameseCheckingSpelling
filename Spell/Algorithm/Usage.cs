@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Resources;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -24,10 +25,10 @@ namespace Spell.Algorithm
 
         private void Usage_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (chkbNoShowAgain.Checked)
-                File.WriteAllText(FileManager.Instance.ShowAgain, "1");
-            else
-                File.WriteAllText(FileManager.Instance.ShowAgain, "0");
+            //if (chkbNoShowAgain.Checked)
+            //    File.WriteAllText(FileManager.Instance.ShowAgain, "1");
+            //else
+                //File.WriteAllText(FileManager.Instance.ShowAgain, "0");
         }
 
         private void btnGotIt_Click(object sender, EventArgs e)

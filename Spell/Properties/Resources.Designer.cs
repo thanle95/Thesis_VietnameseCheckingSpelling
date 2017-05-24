@@ -69,5 +69,364 @@ namespace Spell.Properties {
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;s&gt; chắc 30323
+        ///chắc hẳn 4395
+        ///hẳn những 899
+        ///những ai 10118
+        ///ai đã 2412
+        ///đã từng 37870
+        ///từng dùng 315
+        ///dùng máy 2360
+        ///máy vi 2780
+        ///vi tính 4218
+        ///tính đều 154
+        ///đều không 15527
+        ///không xa 4005
+        ///xa lạ 5259
+        ///lạ gì 999
+        ///gì với 4709
+        ///với hình 7946
+        ///với hình 7946
+        ///hình nền 851
+        ///mặc định 2303
+        ///định của 68020
+        ///của mang 1086
+        ///mang tên 20049
+        ///tên &lt;/s&gt; 30213
+        ///&lt;s&gt; với 386792
+        ///với đồng 11942
+        ///đồng cỏ 616
+        ///cỏ xanh 413
+        ///xanh mướt 591
+        ///uốn lượn 836
+        ///cùng bầu 93
+        ///bầu trời 4571
+        ///trời cao 282
+        ///bát ngát 225
+        ///ngát &lt;/s&gt; 447
+        ///&lt;s&gt;  [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string filteredBi {
+            get {
+                return ResourceManager.GetString("filteredBi", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;s&gt; 1 42613292
+        ///chắc 2 134621
+        ///hẳn 3 52666
+        ///những 4 2303339
+        ///ai 5 206414
+        ///đã 6 3043248
+        ///từng 7 262070
+        ///dùng 8 315831
+        ///máy 9 416736
+        ///vi 10 213628
+        ///tính 11 488844
+        ///đều 12 352496
+        ///không 13 2911445
+        ///xa 14 125241
+        ///lạ 15 55632
+        ///gì 16 326765
+        ///với 17 3126969
+        ///hình 18 639785
+        ///nền 19 159306
+        ///mặc 20 159107
+        ///định 21 1091591
+        ///của 22 5100583
+        ///mang 23 263684
+        ///tên 24 245891
+        ///&lt;/s&gt; 25 42613292
+        ///đồng 26 1556755
+        ///cỏ 27 20672
+        ///xanh 28 83651
+        ///mướt 29 1454
+        ///uốn 30 5275
+        ///lượn 31 3874
+        ///cùng 32 693860
+        ///bầu 33 90607
+        ///trời 34 78983
+        ///c [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string filteredUni {
+            get {
+                return ResourceManager.GetString("filteredUni", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to a@dua_ha_hoàn_la hán_phiến_tòng_
+        ///a-lô@_
+        ///a-men@_
+        ///a-míp@_
+        ///a-pác-thai@_
+        ///a-rập@học_
+        ///a-xit@_
+        ///ai@_ai_cập học_đời_nấy_oán_
+        ///am@_hiểu_tường_
+        ///an@_bài_dưỡng_dưỡng đường_giấc_hảo_hưởng_khang_nghỉ_nhàn_nhiên_ninh_phận_táng_tâm_thai_thân_thần_toàn_toàn khu_toạ_trí_tức hương_ủi_vị_
+        ///an-bom@_
+        ///ang@_áng_
+        ///anh@_ách_ánh_chàng_chị_danh_dũng_đào_em_hào_hoa_hùng_hùng ca_hùng chủ nghĩa_kiệt_kim_linh_minh_ngữ_nhi_nuôi_quân_tài_thư_tuấn_tú_văn_vũ_yến_
+        ///ao@_chuôm_hồ_ước_
+        ///ao-xơ@_
+        ///au@_
+        ///á@_châu_hoang mạc_khanh_khẩu_khôi_kim [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string newCompoundWordByViet39K {
+            get {
+                return ResourceManager.GetString("newCompoundWordByViet39K", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 0.
+        /// </summary>
+        internal static string ShowAgain {
+            get {
+                return ResourceManager.GetString("ShowAgain", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to a căn đình
+        ///a cê ti len
+        ///a cít
+        ///a cít hóa
+        ///a cít kế
+        ///a di đà phật
+        ///a dong
+        ///a dua
+        ///a đam
+        ///a đrê na lin
+        ///a ga
+        ///a giao
+        ///a hoàn
+        ///a la hán
+        ///a léc
+        ///a lê
+        ///a lịch sơn
+        ///a lịch sơn đắc lộ
+        ///a lô
+        ///a ma tơ
+        ///a măng
+        ///a men
+        ///a mi
+        ///a mi ăng
+        ///a mi đan
+        ///a min
+        ///a míp
+        ///a mô ni ắc
+        ///a ni lin
+        ///a nốt
+        ///a pa tít
+        ///a pác thai
+        ///a pê ri típ
+        ///a phiến
+        ///a phiến trắng
+        ///a phú hãn
+        ///a sen
+        ///a tòng
+        ///a trô pin
+        ///a tùng
+        ///a vào người nào
+        ///a xê ti len
+        ///a xê ton
+        ///a xít
+        ///a xít a min
+        ///a xít béo
+        ///a xpi rin
+        ///ai ai
+        ///ai ai cũng
+        ///ai ai cũng đều
+        ///ai bi
+        ///ai ca        /// [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string sortedCompoundWordDict {
+            get {
+                return ResourceManager.GetString("sortedCompoundWordDict", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to a dua
+        ///a ha
+        ///a hoàn
+        ///a la hán
+        ///a phiến
+        ///a tòng
+        ///a-lô
+        ///a-men
+        ///a-míp
+        ///a-pác-thai
+        ///a-rập học
+        ///a-xit
+        ///ai
+        ///ai ai
+        ///ai cập học
+        ///ai đời
+        ///ai nấy
+        ///ai oán
+        ///am
+        ///am hiểu
+        ///am tường
+        ///an
+        ///an bài
+        ///an dưỡng
+        ///an dưỡng đường
+        ///an giấc
+        ///an hảo
+        ///an hưởng
+        ///an khang
+        ///an nghỉ
+        ///an nhàn
+        ///an nhiên
+        ///an ninh
+        ///an phận
+        ///an táng
+        ///an tâm
+        ///an thai
+        ///an thân
+        ///an thần
+        ///an toàn
+        ///an toàn khu
+        ///an toạ
+        ///an trí
+        ///an tức hương
+        ///an ủi
+        ///an vị
+        ///an-bom
+        ///ang
+        ///ang áng
+        ///anh
+        ///anh ách
+        ///anh ánh
+        ///anh chàng
+        ///anh chị
+        ///anh danh
+        ///anh dũng
+        ///anh đào
+        ///anh em
+        ///anh hào
+        ///an [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string sortedNewViet39K {
+            get {
+                return ResourceManager.GetString("sortedNewViet39K", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to a
+        ///á
+        ///à
+        ///ã
+        ///ả
+        ///ạ
+        ///ác
+        ///ắc
+        ///ậc
+        ///ặc
+        ///ắc-coóc
+        ///ách
+        ///ạch
+        ///ác-mô-ni-ca
+        ///ắc-quy
+        ///ai
+        ///ái
+        ///ải
+        ///a-lô
+        ///am
+        ///ám
+        ///âm
+        ///ăm
+        ///ấm
+        ///ầm
+        ///ẵm
+        ///ảm
+        ///ẩm
+        ///ậm
+        ///a-men
+        ///a-míp
+        ///an
+        ///án
+        ///ân
+        ///ăn
+        ///ấn
+        ///ẩn
+        ///an-bom
+        ///ang
+        ///áng
+        ///ăng
+        ///ắng
+        ///ằng
+        ///ảng
+        ///ẳng
+        ///anh
+        ///ánh
+        ///ảnh
+        ///ạnh
+        ///ao
+        ///áo
+        ///ào
+        ///ảo
+        ///ạo
+        ///ao-xơ
+        ///áp
+        ///ấp
+        ///ắp
+        ///ập
+        ///ặp
+        ///a-pác-thai
+        ///áp-phích
+        ///áp-xe
+        ///a-rập
+        ///át
+        ///ất
+        ///ắt
+        ///ạt
+        ///át-lát
+        ///au
+        ///âu
+        ///ấu
+        ///ẩu
+        ///a-xit
+        ///áy
+        ///ấy
+        ///ầy
+        ///ẩy
+        ///ba
+        ///bá
+        ///bà
+        ///bã
+        ///bả
+        ///bạ
+        ///bác
+        ///bấc
+        ///bắc
+        ///bạc
+        ///bậc
+        ///bách
+        ///bạch
+        ///ba-dơ
+        ///ba-dô-ca
+        ///bai
+        ///bái
+        ///bài
+        ///bãi
+        ///bải
+        ///bại
+        ///bà-la-môn
+        ///ba-lát
+        ///ba-lê        /// [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string SyllableDictByViet39K {
+            get {
+                return ResourceManager.GetString("SyllableDictByViet39K", resourceCulture);
+            }
+        }
     }
 }

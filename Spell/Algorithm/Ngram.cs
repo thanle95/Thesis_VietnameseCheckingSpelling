@@ -218,8 +218,8 @@ namespace Spell.Algorithm
         /// <param name="path">Đường dẫn tới thư mục</param>
         public void readUni(string path)
         {
-            string[] uniGram = File.ReadAllLines(path);
-            foreach (string line in uniGram)
+            List<string> uniList = Properties.Resources.filteredUni.Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries).ToList();
+            foreach (string line in uniList)
             {
                 string[] uni = line.Split(' ');
                 _uniPos.Add(uni[0], Int32.Parse(uni[1]));
@@ -307,8 +307,8 @@ namespace Spell.Algorithm
         //chuyển 16 bit đầu, và 16 bit sau lần lượt sang int16 dạng hec ---->1200, 1245
         public void readBiAmount(string path)
         {
-            string[] biGram = File.ReadAllLines(path);
-            foreach (string line in biGram)
+            List<string> biList = Properties.Resources.filteredBi.Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries).ToList();
+            foreach (string line in biList)
             {
                 try {
                     string[] bi = line.Split(' ');

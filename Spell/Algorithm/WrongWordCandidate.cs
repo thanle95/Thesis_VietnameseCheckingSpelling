@@ -102,12 +102,12 @@ namespace Spell.Algorithm
                     result.Add(key);
 
             //ghi đè file
-            using (FileStream aFile = new FileStream((FileManager.Instance.WrongWord), FileMode.Append, FileAccess.Write))
-            using (StreamWriter sw = new StreamWriter(aFile))
-            {
-                sw.WriteLine(text_writeFile);
-                sw.WriteLine("**********************************************************************");
-            }
+            //using (FileStream aFile = new FileStream((FileManager.Instance.WrongWord), FileMode.Append, FileAccess.Write))
+            //using (StreamWriter sw = new StreamWriter(aFile))
+            //{
+            //    sw.WriteLine(text_writeFile);
+            //    sw.WriteLine("**********************************************************************");
+            //}
             return result;
         }
 

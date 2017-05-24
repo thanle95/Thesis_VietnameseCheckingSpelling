@@ -196,6 +196,7 @@
             // 
             this.btnUsage.Label = "Hướng dẫn sử dụng";
             this.btnUsage.Name = "btnUsage";
+            this.btnUsage.Visible = false;
             this.btnUsage.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.btnUsage_Click);
             // 
             // Ribbon

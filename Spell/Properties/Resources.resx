@@ -121,4 +121,25 @@
   <data name="check" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\check.PNG;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="filteredBi" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\filteredBi.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="filteredUni" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\filteredUni.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="newCompoundWordByViet39K" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\newCompoundWordByViet39K.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="ShowAgain" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ShowAgain.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="sortedCompoundWordDict" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\sortedCompoundWordDict.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="sortedNewViet39K" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\sortedNewViet39K.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="SyllableDictByViet39K" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\SyllableDictByViet39K.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
 </root>

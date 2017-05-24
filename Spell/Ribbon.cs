@@ -57,11 +57,11 @@ namespace Spell
         /// <param name="e"></param>
         private void btnCheckError_Click(object sender, RibbonControlEventArgs e)
         {
-            if (File.ReadAllText(FileManager.Instance.ShowAgain).Equals("0"))
-            {
-                Usage usage = new Usage();
-                usage.ShowDialog();
-            }
+            //if (Properties.Resources.ShowAgain.Equals("0"))
+            //{
+            //    Usage usage = new Usage();
+            //    usage.ShowDialog();
+            //}
             threadFindError = new Thread(threadStartFindError);
             threadFindError.Priority = ThreadPriority.Highest;
             //if (!threadFindError.IsAlive)
