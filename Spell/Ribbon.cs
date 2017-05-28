@@ -21,9 +21,6 @@ namespace Spell
         private const int POLITIC_CORPUS = 1;
         private const int LITERRATY_CORPUS = 2;
 
-        private const int WHOLE_DOCUMENT_SELECTION = 0;
-        private const int APART_DOCUMENT_SELECTION = 1;
-
         private const int DOCK_RIGHT = 0;
         private const int DOCK_LEFT = 1;
 
@@ -73,6 +70,10 @@ namespace Spell
             btnPauseResume.Enabled = true;
             btnDeleteFormat.Enabled = false;
             btnStop.Enabled = true;
+            dropCorpus.Enabled = false;
+            dropTypeError.Enabled = false;
+            dropTypeFindError.Enabled = false;
+            chkbAutoChange.Enabled = false;
             FindError.Instance.StopFindError = false;
             tbtnShowTaskpane.Enabled = false;
             btnPauseResume.Label = "Tạm dừng";
@@ -123,7 +124,10 @@ namespace Spell
             btnPauseResume.Enabled = false;
             btnStop.Enabled = false;
             btnCheckError.Enabled = true;
-            
+            dropCorpus.Enabled = true;
+            dropTypeError.Enabled = true;
+            dropTypeFindError.Enabled = true;
+            chkbAutoChange.Enabled = true;
         }
         private void dropDockPosition_SelectionChanged(object sender, RibbonControlEventArgs e)
         {
@@ -216,11 +220,7 @@ namespace Spell
             tbtnShowTaskpane.Enabled = true;
         }
 
-        private void btnUsage_Click(object sender, RibbonControlEventArgs e)
-        {
-            Usage usage = new Usage();
-            usage.ShowDialog();
-        }
+     
 
     }
 }

@@ -151,8 +151,8 @@
             // 
             // dropTypeFindError
             // 
-            ribbonDropDownItemImpl1.Label = "Toàn bộ văn bản";
-            ribbonDropDownItemImpl2.Label = "Từng câu";
+            ribbonDropDownItemImpl1.Label = "Khi đánh máy";
+            ribbonDropDownItemImpl2.Label = "Toàn bộ văn bản";
             this.dropTypeFindError.Items.Add(ribbonDropDownItemImpl1);
             this.dropTypeFindError.Items.Add(ribbonDropDownItemImpl2);
             this.dropTypeFindError.Label = "Kiểu kiểm lỗi";
