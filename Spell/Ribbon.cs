@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.Office.Tools.Ribbon;
-using Word = Microsoft.Office.Interop.Word;
 using Office = Microsoft.Office.Core;
 using System.Threading;
 using System.Windows.Forms;
@@ -94,6 +93,7 @@ namespace Spell
             //int count = UserControl.Instance.startFindError(typeFindError);
             if (count > 0)
             {
+                tbtnShowTaskpane.Enabled = true;
                 btnDeleteFormat.Enabled = true;
                 string message = SysMessage.Instance.Message_Notify_Fix_Error(count);
                 string caption = SysMessage.Instance.Caption_Notify_Fix_Error;
@@ -123,7 +123,7 @@ namespace Spell
             btnPauseResume.Enabled = false;
             btnStop.Enabled = false;
             btnCheckError.Enabled = true;
-            tbtnShowTaskpane.Enabled = true;
+            
         }
         private void dropDockPosition_SelectionChanged(object sender, RibbonControlEventArgs e)
         {

@@ -34,13 +34,13 @@
     <PublishUrl>C:\Users\Than Le\Desktop\Deploy\</PublishUrl>
     <InstallUrl />
     <TargetCulture>en</TargetCulture>
-    <ApplicationVersion>1.0.0.5</ApplicationVersion>
+    <ApplicationVersion>1.0.0.10</ApplicationVersion>
     <AutoIncrementApplicationRevision>true</AutoIncrementApplicationRevision>
     <UpdateEnabled>true</UpdateEnabled>
     <UpdateInterval>7</UpdateInterval>
     <UpdateIntervalUnits>days</UpdateIntervalUnits>
-    <ProductName>Spell</ProductName>
-    <PublisherName />
+    <ProductName>VietnameseSpellChecking</ProductName>
+    <PublisherName>Than, Kiet</PublisherName>
     <SupportUrl />
     <FriendlyName>Spell</FriendlyName>
     <OfficeApplicationDescription />
@@ -187,12 +187,6 @@
     <Compile Include="Algorithm\RightWordCandidate.cs" />
     <Compile Include="Algorithm\StringConstant.cs" />
     <Compile Include="Algorithm\Ngram.cs" />
-    <Compile Include="Algorithm\Usage.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Algorithm\Usage.Designer.cs">
-      <DependentUpon>Usage.cs</DependentUpon>
-    </Compile>
     <Compile Include="Algorithm\VNDictionary.cs" />
     <Compile Include="Algorithm\WrongWordCandidate.cs" />
     <Compile Include="DocumentHandling.cs" />
@@ -206,9 +200,6 @@
       <DependentUpon>UserControl.cs</DependentUpon>
     </Compile>
     <None Include="app.config" />
-    <EmbeddedResource Include="Algorithm\Usage.resx">
-      <DependentUpon>Usage.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -243,7 +234,6 @@
     <Compile Include="ThisAddIn.cs">
       <SubType>Code</SubType>
     </Compile>
-    <None Include="Spell_TemporaryKey.pfx" />
     <None Include="ThisAddIn.Designer.xml">
       <DependentUpon>ThisAddIn.cs</DependentUpon>
     </None>
@@ -256,21 +246,25 @@
     <None Include="Resources\check.PNG" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\delete.png" />
     <Content Include="Resources\filteredBi.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Resources\filteredUni.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="Resources\fix.jpg" />
     <Content Include="Resources\newCompoundWordByViet39K.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="Resources\pause_resume.png" />
     <Content Include="Resources\rightWordCandidate.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Resources\ShowAgain.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="Resources\stop.png" />
     <Content Include="Resources\wrongWord.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -299,10 +293,18 @@
     <SignManifests>true</SignManifests>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestKeyFile>Spell_TemporaryKey.pfx</ManifestKeyFile>
+    <ManifestKeyFile>
+    </ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestCertificateThumbprint>8993E8FE1D06473BB2C49943F94974018B49B7FC</ManifestCertificateThumbprint>
+    <ManifestCertificateThumbprint>71935704A63DA8F910006DC78B3526AB5D389151</ManifestCertificateThumbprint>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>false</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <!-- Include the build rules for a C# project. -->
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
@@ -314,7 +316,7 @@
       <FlavorProperties GUID="{BAA0C2D2-18E2-41B9-852F-F413020CAA33}">
         <ProjectProperties HostName="Word" HostPackage="{29A7B9D7-A7F1-4328-8EF0-6B2D1A56B2C1}" OfficeVersion="15.0" VstxVersion="4.0" ApplicationType="Word" Language="cs" TemplatesPath="" DebugInfoExeName="#Software\Microsoft\Office\15.0\Word\InstallRoot\Path#WINWORD.EXE" DebugInfoCommandLine="/x" AddItemTemplatesGuid="{51063C3A-E220-4D12-8922-BDA915ACD783}" />
         <Host Name="Word" GeneratedCodeNamespace="Spell" PublishedHash="69C324AB27932AA2FBF2B7EA72250886FF164DE6" IconIndex="0">
-          <HostItem Name="ThisAddIn" Code="ThisAddIn.cs" CanonicalName="AddIn" CanActivate="false" IconIndex="1" Blueprint="ThisAddIn.Designer.xml" GeneratedCode="ThisAddIn.Designer.cs" PublishedHash="8D968D03C852439F848C21B24D788260C0AD1C40" />
+          <HostItem Name="ThisAddIn" Code="ThisAddIn.cs" CanonicalName="AddIn" PublishedHash="8D968D03C852439F848C21B24D788260C0AD1C40" CanActivate="false" IconIndex="1" Blueprint="ThisAddIn.Designer.xml" GeneratedCode="ThisAddIn.Designer.cs" />
         </Host>
       </FlavorProperties>
     </VisualStudio>

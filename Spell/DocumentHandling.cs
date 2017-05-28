@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Word = Microsoft.Office.Interop.Word;
-using System.Windows.Forms;
 using System.Text.RegularExpressions;
 using Spell.Algorithm;
 namespace Spell
@@ -25,7 +22,6 @@ namespace Spell
         public Word.Range HighLight_Mistake(Context context, Word.Sentences sentencesList, Word.WdColorIndex colorIndex, Word.WdColor color)
         {
             Word.Range range = null;
-            Word.Range endRange = null;
             //Word.Lines lines = Globals.ThisAddIn.Application.ActiveDocument.Words.l;
             Word.Sentences sentences = sentencesList;
 
@@ -90,7 +86,6 @@ namespace Spell
             range = Globals.ThisAddIn.Application.ActiveDocument.Range(start, end);
             range.HighlightColorIndex = colorIndex;
             range.Font.Color = color;
-            //range.Select();
             return range;
         }
 
