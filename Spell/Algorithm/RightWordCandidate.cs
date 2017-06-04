@@ -35,13 +35,13 @@ namespace Spell.Algorithm
         {
             double D = Candidate.getInstance.calScore_CompoundWord(context, context.TOKEN);
             double L = Candidate.getInstance.calScore_Ngram(context, context.TOKEN);
-            //using (FileStream aFile = new FileStream((FileManager.Instance.RightWordScore), FileMode.Append, FileAccess.Write))
-            //using (StreamWriter sw = new StreamWriter(aFile))
-            //{
-            //    sw.WriteLine();
-            //    sw.WriteLine(String.Format("{0}: [{1};{2}]", context.TOKEN, L, D));
-            //    sw.WriteLine("**********************************************************************");
-            //}
+            using (FileStream aFile = new FileStream((FileManager.Instance.RightWordScore), FileMode.Append, FileAccess.Write))
+            using (StreamWriter sw = new StreamWriter(aFile))
+            {
+                sw.WriteLine();
+                sw.WriteLine(String.Format("{0}: [{1};{2}]", context.TOKEN, L, D));
+                sw.WriteLine("**********************************************************************");
+            }
             if ( D >= Candidate.getInstance.LIM_COMPOUNDWORD)
                 return true;
             

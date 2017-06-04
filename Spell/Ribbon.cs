@@ -23,6 +23,7 @@ namespace Spell
 
         private const int DOCK_RIGHT = 0;
         private const int DOCK_LEFT = 1;
+        private const int IS_TYPING_TYPE = 0;
 
         private static bool isAutoChange = false;
         Thread threadFindError;
@@ -41,7 +42,7 @@ namespace Spell
             FindError.Instance.createValue(typeFindError, typeError, isAutoChange);
             threadStartFindError = new ThreadStart(check);
 
-         
+
         }
 
         /// <summary>
@@ -66,8 +67,16 @@ namespace Spell
         private void check()
         {
             DocumentHandling.Instance.DeHighLight_All_Mistake(Globals.ThisAddIn.Application.ActiveDocument.Characters);
+
+            typeFindError = dropTypeFindError.SelectedItemIndex;
+            typeError = dropTypeError.SelectedItemIndex;
+            isAutoChange = chkbAutoChange.Checked;
+
             btnCheckError.Enabled = false;
-            btnPauseResume.Enabled = true;
+            if (typeFindError == IS_TYPING_TYPE)
+                btnPauseResume.Enabled = false;
+            else
+                btnPauseResume.Enabled = true;
             btnDeleteFormat.Enabled = false;
             btnStop.Enabled = true;
             dropCorpus.Enabled = false;
@@ -78,9 +87,7 @@ namespace Spell
             tbtnShowTaskpane.Enabled = false;
             btnPauseResume.Label = "Tạm dừng";
 
-            typeFindError = dropTypeFindError.SelectedItemIndex;
-            typeError = dropTypeError.SelectedItemIndex;
-            isAutoChange = chkbAutoChange.Checked;
+            
 
             FindError.Instance.createValue(typeFindError, typeError, isAutoChange);
 
@@ -220,7 +227,7 @@ namespace Spell
             tbtnShowTaskpane.Enabled = true;
         }
 
-     
+
 
     }
 }

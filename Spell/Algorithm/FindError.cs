@@ -28,6 +28,8 @@ namespace Spell.Algorithm
         private int _typeFindError = 0;
         private int _typeError = 0;
         private bool _isAutoChange = false;
+        private bool isNoChange = false;
+
         private FindError()
         {
             StopFindError = false;
@@ -117,6 +119,7 @@ namespace Spell.Algorithm
                         //duyệt qua từng từ trong cụm
                         for (int i = 0; i < length; i++)
                         {
+
                             if (StopFindError)
                             {
                                 break;
@@ -164,6 +167,21 @@ namespace Spell.Algorithm
                                 nextnext = context.NEXTNEXT;
                                 //Kiểm tra nếu không phải là từ Việt Nam
                                 //Thì highLight
+                                isNoChange = false;
+                                if (typeFindError == IS_TYPING_TYPE)
+                                {
+                                    foreach (Context iContext in lstErrorRange.Keys)
+                                        if (iContext.Equals(context))
+                                        {
+                                            isNoChange = true;
+                                            hSetCand = Candidate.getInstance.selectiveCandidate(context);
+                                            if (hSetCand.Count > 0)
+                                                words[i] = hSetCand.ElementAt(0);
+                                            break;
+                                        }
+                                }
+                                if (isNoChange)
+                                    continue;
                                 if ((typeError == WRONG_RIGHT_ERROR || typeError == WRONG_ERROR) && !VNDictionary.getInstance.isSyllableVN(wordInWords))
                                 {
 
@@ -178,6 +196,7 @@ namespace Spell.Algorithm
                                             words[i] = hSetCand.ElementAt(0);
                                             if (FirstError_Context == null)
                                                 FirstError_Context = context;
+
                                             lstErrorRange.Add(context, (DocumentHandling.Instance.HighLight_MistakeWrongWord(start, end)));
                                         }
                                     }
