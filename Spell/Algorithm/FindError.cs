@@ -160,6 +160,7 @@ namespace Spell.Algorithm
                                 }
                                 if (words[i].Length != wordInWords.Length)
                                     context.TOKEN = wordInWords;
+                                start += iWord.Length - wordInWords.Length;
                                 end = start + wordInWords.Length;
                                 prepre = context.PREPRE;
                                 pre = context.PRE;
