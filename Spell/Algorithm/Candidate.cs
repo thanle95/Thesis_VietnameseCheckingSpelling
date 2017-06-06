@@ -289,7 +289,10 @@ namespace Spell.Algorithm
                 return 0;
             if (signToken.Equals(signCandidate))
                 return 0;
-            if (signToken.Equals("s") && signCandidate.Equals("x") || signToken.Equals("x") && signCandidate.Equals("s"))
+            if (signToken.Equals("s") && signCandidate.Equals("x") ||
+                signToken.Equals("x") && signCandidate.Equals("s") ||   
+                signToken.Equals("j") && signCandidate.Equals("x") ||
+                signToken.Equals("x") && signCandidate.Equals("j"))
                 return 0.1;
             return 0.5;
         }
@@ -314,7 +317,7 @@ namespace Spell.Algorithm
                     {
                         if (extX[i] == extY[j])
                             continue;
-                        if(isRegion)
+                        if (isRegion)
                         {
                             numerator += 1;
                             continue;
@@ -354,7 +357,7 @@ namespace Spell.Algorithm
                                 continue;
                             }
                         }
-                        
+
                         else if (isVowelVNMistake(extX[i], extY[j]))
                             numerator += 0.3;
                         else if (isKeyboardMistake(extX[i], extY[j]))
@@ -444,13 +447,13 @@ namespace Spell.Algorithm
                 {
                     c = StringConstant.Instance.VNRegion_Confused_Matrix_LowerCase[i, j];
                     if (!isFoundC1)
-                        if (c.Equals(c1+ ""))
+                        if (c.Equals(c1 + ""))
                         {
                             isFoundC1 = true;
                             iC1 = i;
                         }
                     if (!isFoundC2)
-                        if (c.Equals(c2+ ""))
+                        if (c.Equals(c2 + ""))
                         {
                             isFoundC2 = true;
                             iC2 = i;
