@@ -35,13 +35,13 @@ namespace Spell.Algorithm
         {
             double D = Candidate.getInstance.calScore_CompoundWord(context, context.TOKEN);
             double L = Candidate.getInstance.calScore_Ngram(context, context.TOKEN);
-            using (FileStream aFile = new FileStream((FileManager.Instance.RightWordScore), FileMode.Append, FileAccess.Write))
-            using (StreamWriter sw = new StreamWriter(aFile))
-            {
-                sw.WriteLine();
-                sw.WriteLine(String.Format("{0}: [{1};{2}]", context.TOKEN, L, D));
-                sw.WriteLine("**********************************************************************");
-            }
+            //using (FileStream aFile = new FileStream((FileManager.Instance.RightWordScore), FileMode.Append, FileAccess.Write))
+            //using (StreamWriter sw = new StreamWriter(aFile))
+            //{
+            //    sw.WriteLine();
+            //    sw.WriteLine(String.Format("{0}: [{1};{2}]", context.TOKEN, L, D));
+            //    sw.WriteLine("**********************************************************************");
+            //}
             if ( D >= Candidate.getInstance.LIM_COMPOUNDWORD)
                 return true;
             
@@ -84,7 +84,7 @@ namespace Spell.Algorithm
             double L = 0.0;
             //Similarity
             double S = 0;
-            string text_writeFile = "";
+            //string text_writeFile = "";
             foreach (string candidate in hSetCandidate)
             {
                 S = Candidate.getInstance.calScore_Similarity(context.TOKEN, candidate);
@@ -117,7 +117,7 @@ namespace Spell.Algorithm
 
 
                     }
-                    text_writeFile += String.Format("{0}: [{1};{2};{3}] = {4}", candidate, D, L, S, score) + "\n";
+                    //text_writeFile += String.Format("{0}: [{1};{2};{3}] = {4}", candidate, D, L, S, score) + "\n";
                 }
 
             }

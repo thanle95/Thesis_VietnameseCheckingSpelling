@@ -3,6 +3,9 @@ using System.Linq;
 using System.Windows.Forms;
 using Spell.Algorithm;
 using Word = Microsoft.Office.Interop.Word;
+using System.Threading;
+using System.ComponentModel;
+
 namespace Spell
 {
     //phục vụ cho việc thêm vào từ điển
@@ -64,20 +67,39 @@ namespace Spell
             fixError.getCandidatesWithContext(FindError.Instance.FirstError_Context, FindError.Instance.lstErrorRange);
             Word.Range range = FindError.Instance.lstErrorRange[FindError.Instance.FirstError_Context];
             range.Select();
-            lblWrong.Text = fixError.Token;
-            lstbCandidate.Items.Clear();
+
+            SynchronizedInvoke(lblWrong, delegate () { lblWrong.Text = fixError.Token; });
+            SynchronizedInvoke(lstbCandidate, delegate () { lstbCandidate.Items.Clear(); });
+            
             foreach (string item in fixError.hSetCandidate)
             {
                 if (!item.ToLower().Equals(fixError.Token.ToLower()))
                     if (item.Length > 1)
-                        lstbCandidate.Items.Add(item.Trim());
+                        SynchronizedInvoke(lstbCandidate, delegate () { lstbCandidate.Items.Add(item.Trim()); });
+                
                 if (lstbCandidate.Items.Count > 0)
-                    lstbCandidate.SetSelected(0, true);
-                btnChange.Focus();
+                    SynchronizedInvoke(lstbCandidate, delegate () { lstbCandidate.SetSelected(0, true); });
+                SynchronizedInvoke(btnChange, delegate () { btnChange.Focus(); });
+                
             }
 
-        }
 
+        }
+        private void SynchronizedInvoke(ISynchronizeInvoke sync, Action action)
+        {
+            // If the invoke is not required, then invoke here and get out.
+            if (!sync.InvokeRequired)
+            {
+                // Execute action.
+                action();
+
+                // Get out.
+                return;
+            }
+
+            // Marshal to the required context.
+            sync.Invoke(action, new object[] { });
+        }
         /// <summary>
         /// HighLight tất cả những lỗi mà không hiện gợi ý
         /// </summary>

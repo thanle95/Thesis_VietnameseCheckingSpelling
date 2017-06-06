@@ -56,7 +56,7 @@ namespace Spell.Algorithm
             double L = 0.0;
             //Similarity
             double S = 0;
-            string text_writeFile = "";
+            //string text_writeFile = "";
             foreach (string candidate in hSetCandidate)
             {
                 S = Candidate.getInstance.calScore_Similarity(context.TOKEN, candidate);
@@ -87,7 +87,7 @@ namespace Spell.Algorithm
                             candidatesWithScore = Candidate.getInstance.sortDict(candidatesWithScore);
                         }
                     }
-                    text_writeFile += String.Format("{0}: [{1};{2};{3}] = {4}", candidate, D, L, S, score) + "\n";
+                    //text_writeFile += String.Format("{0}: [{1};{2};{3}] = {4}", candidate, D, L, S, score) + "\n";
                 }
                
 
