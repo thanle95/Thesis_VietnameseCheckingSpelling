@@ -57,13 +57,60 @@ namespace Spell.Algorithm
         /// </summary>
         public void runFirst()
         {
-
-
-            //string triPath = @"E:\Google Drive\Document\luan van\source\github\Thesis_VietnameseCheckingSpelling\Spell\Resources\triExtended.txt";
+            //generateUnigram();
             readUni(FileManager.Instance.UniGram);
+            //filter_uni();
             readBiAmount(FileManager.Instance.BiGram);
             //readTriAmount(triPath);
             sumWordInCorpus();
+
+        }
+        /// <summary>
+        /// loc file uni gram
+        /// </summary>
+        public void filter_uni()
+        {
+            StringBuilder filterdUni = new StringBuilder();
+            string[] uni_file = File.ReadAllLines(@"E:\Google Drive\Document\luan van\source\github\Thesis_VietnameseCheckingSpelling\Spell\Resources\filteredUni.txt");
+            foreach (string line in uni_file)
+            {
+                string[] uni = line.Split(' ');
+                if (Int32.Parse(uni[2]) > 10)
+                    filterdUni.AppendFormat("{0} {1}{2}", uni[0], uni[2], "\n");
+            }
+            File.WriteAllText(@"E:\Google Drive\Document\luan van\source\github\Thesis_VietnameseCheckingSpelling\Spell\Resources\filteredUni1.txt", filterdUni.ToString());
+        }
+
+
+        /// <summary>
+        /// loc file bi gram
+        /// </summary>
+        public void filter_bi()
+        {
+            StringBuilder filterdBi = new StringBuilder();
+            string[] bi_file = File.ReadAllLines(@"C:\Users\Kiet\OneDrive\Thesis\Thesis\Thesis_VietnameseCheckingSpelling\bi.txt");
+            foreach (string line in bi_file)
+            {
+                string[] bi = line.Split(' ');
+                if (Int32.Parse(bi[2]) > 50 && _uniAmount.ContainsKey(bi[0]) && _uniAmount.ContainsKey(bi[1]))
+                    filterdBi.AppendFormat("{0} {1} {2}{3}", bi[0], bi[1], bi[2], "\n");
+            }
+            File.WriteAllText(@"C:\Users\Kiet\OneDrive\Thesis\Thesis\Thesis_VietnameseCheckingSpelling\filterdBi.txt", filterdBi.ToString());
+        }
+
+        private void sortUni(string uniPath)
+        {
+            readUni(@"C:\Users\Kiet\OneDrive\Thesis\Ngram\uni.txt");
+            List<int> lstAmout = new List<int>();
+            lstAmout = _uniAmount.Values.ToList();
+            lstAmout.Sort();
+            string[] arr = new string[lstAmout.Count];
+            int j = 0;
+            foreach (int i in lstAmout)
+                arr[j++] = i.ToString();
+
+            File.WriteAllLines(@"C:\Users\Kiet\OneDrive\Thesis\Ngram\uni_Sort.txt", arr);
+
         }
         #region convert between bin and dec
         private string toInt16(int tokenIndex)
@@ -166,13 +213,11 @@ namespace Spell.Algorithm
         /// </summary>
         public void generateUnigram()
         {
-            string folderPath = @"E:\Google Drive\Document\luan van\ngram\input\";
             int count = 1;// da chay toi 5
             Stopwatch stopWatch = new Stopwatch();
-            string[] getFile = Directory.GetFiles(folderPath, "*.txt", SearchOption.AllDirectories);
+            string[] getFile = Directory.GetFiles(@"E:\Google Drive\Document\luan van\ngram\input", "*.txt", SearchOption.AllDirectories);
             Dictionary<string, int> uniPos = new Dictionary<string, int>();
             Dictionary<string, int> uniAmount = new Dictionary<string, int>();
-            int pos = 1;
             int amount = 1;
             foreach (string file in getFile)
             {
@@ -181,22 +226,21 @@ namespace Spell.Algorithm
                 //continue;
 
                 stopWatch.Start();
-                string input = File.ReadAllText(file);
-                string[] words = new Regex("\\s+|,\\s*|\\.\\s*").Split(input);
-                string key = "";
-                int n = 1; //uni
-                for (int i = 0; i < words.Length - n + 1; i++)
+                string[] phraseArr = File.ReadAllLines(file);
+                foreach (string phrase in phraseArr)
                 {
-                    key = generateEachClusterNgram(words, i, i + n);
-                    key = key.ToLower();
-                    if (key.Length > 0)
-                        if (uniPos.ContainsKey(key))
-                            uniAmount[key] += 1;
-                        else
-                        {
-                            uniPos.Add(key, pos++);
-                            uniAmount.Add(key, amount);
-                        }
+                    string newPhrase = String.Format("{0} {1} {2}", "<s>", phrase.ToLower(), "</s>");
+                    string[] words = newPhrase.Split(' ');
+                    foreach (string key in words)
+                    {
+                        if (key.Length > 0)
+                            if (uniAmount.ContainsKey(key))
+                                uniAmount[key] += 1;
+                            else
+                            {
+                                uniAmount.Add(key, amount);
+                            }
+                    }
                 }
 
                 //System.IO.File.Move(file, @"C:\Users\Kiet\OneDrive\Thesis\Filtered\" + file.Substring(folderPath.Length, file.Length - folderPath.Length - ".txt".Length) + ".txt");
@@ -208,8 +252,9 @@ namespace Spell.Algorithm
                 Console.WriteLine(string.Format("Creating unigram: {0}/{1}--------{2}", count++, getFile.Length, elapseTime));
             }
             string output = "";
-            foreach (KeyValuePair<string, int> temp in uniPos)
-                output += temp.Key + "-" + temp.Value + "-" + uniAmount[temp.Key] + "\n";
+            foreach (KeyValuePair<string, int> pair in uniPos)
+                if (uniAmount[pair.Key] > 100)
+                    output += pair.Key + " " + pair.Value + " " + uniAmount[pair.Key] + "\n";
             File.WriteAllText(@"E:\Google Drive\Document\luan van\ngram\UniNgram\uni.txt", output);
         }
 
@@ -220,6 +265,7 @@ namespace Spell.Algorithm
         public void readUni(string path)
         {
             List<string> uniList = Properties.Resources.filteredUni.Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries).ToList();
+            
             foreach (string line in uniList)
             {
                 string[] uni = line.Split(' ');

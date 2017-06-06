@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.Office.Tools.Ribbon;
 using Office = Microsoft.Office.Core;
+using Word = Microsoft.Office.Interop.Word;
 using System.Threading;
 using System.Windows.Forms;
 using Spell.Algorithm;
@@ -227,7 +228,21 @@ namespace Spell
             tbtnShowTaskpane.Enabled = true;
         }
 
-
-
+        private void showSumError_Click(object sender, RibbonControlEventArgs e)
+        {
+            int sum = 0;
+            Thread a = new Thread(
+                delegate ()
+                {
+                    foreach (Word.Range range in Globals.ThisAddIn.Application.ActiveDocument.Words)
+                        if (range.Font.Color == Word.WdColor.wdColorRed)
+                        {
+                            sum++;
+                            lblSumError.Label = sum.ToString() + " lỗi";
+                        }
+                }
+                );
+            a.Start();
+        }
     }
 }
