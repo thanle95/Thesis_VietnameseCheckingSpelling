@@ -265,6 +265,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <None Include="Resources\stop.png" />
+    <None Include="Resources\showCandidate.png" />
     <Content Include="Resources\wrongWord.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

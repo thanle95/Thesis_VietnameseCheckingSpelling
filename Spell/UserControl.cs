@@ -14,7 +14,7 @@ namespace Spell
     public partial class UserControl : System.Windows.Forms.UserControl
     {
         private Word.Range curRangeTextShowInTaskPane;
-        private bool _isFixAll = false;
+        public bool _isFixAll { get; set; }
         private static UserControl instance = new UserControl();
         private const string ERROR_SPACE = "\"Lỗi dư khoảng trắng\"";
         private UserControl()

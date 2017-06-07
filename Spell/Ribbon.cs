@@ -43,7 +43,6 @@ namespace Spell
             FindError.Instance.createValue(typeFindError, typeError, isAutoChange);
             threadStartFindError = new ThreadStart(check);
 
-
         }
 
         /// <summary>
@@ -64,6 +63,7 @@ namespace Spell
             threadFindError.Priority = ThreadPriority.Highest;
             //if (!threadFindError.IsAlive)
             threadFindError.Start();
+      
         }
         private void check()
         {
@@ -72,7 +72,7 @@ namespace Spell
             typeFindError = dropTypeFindError.SelectedItemIndex;
             typeError = dropTypeError.SelectedItemIndex;
             isAutoChange = chkbAutoChange.Checked;
-
+            btnStopAutoFixError.Enabled = false;
             btnCheckError.Enabled = false;
             if (typeFindError == IS_TYPING_TYPE)
                 btnPauseResume.Enabled = false;
@@ -97,7 +97,7 @@ namespace Spell
             stopwatch.Start();
             FindError.Instance.startFindError();
             stopwatch.Stop();
-
+            btnStartAutoFixError.Enabled = true;
             int count = FindError.Instance.CountError;
             //int count = UserControl.Instance.startFindError(typeFindError);
             if (count > 0)
@@ -115,6 +115,7 @@ namespace Spell
                 myCustomTaskPane.Visible = true;
                 if (result == DialogResult.Yes)
                 {
+                    btnStopAutoFixError.Enabled = true;
                     UserControl.Instance.showCandidateInTaskPane(true);
                 }
                 else
@@ -139,6 +140,7 @@ namespace Spell
             dropTypeFindError.Enabled = true;
             chkbAutoChange.Enabled = true;
         }
+        
         private void dropDockPosition_SelectionChanged(object sender, RibbonControlEventArgs e)
         {
             if (dropDockPosition.SelectedItemIndex == DOCK_RIGHT)
@@ -230,6 +232,12 @@ namespace Spell
             tbtnShowTaskpane.Enabled = true;
         }
 
+        private void btnStartAutoFixError_Click(object sender, RibbonControlEventArgs e)
+        {
+            btnStopAutoFixError.Enabled = true;
+            UserControl.Instance.showCandidateInTaskPane(true);
+        }
+
         private void showSumError_Click(object sender, RibbonControlEventArgs e)
         {
             int sum = 0;
@@ -245,6 +253,12 @@ namespace Spell
                 }
                 );
             a.Start();
+        }
+
+        private void btnStopAutoFixError_Click(object sender, RibbonControlEventArgs e)
+        {
+            UserControl.Instance._isFixAll = false;
+            btnStopAutoFixError.Enabled = false;
         }
     }
 }
