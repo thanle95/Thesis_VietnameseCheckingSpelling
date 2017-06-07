@@ -10,9 +10,11 @@ namespace Spell
 {
     //phục vụ cho việc thêm vào từ điển
     public enum Position { xxX, xXx, Xxx, xX, Xx, X };
+
     public partial class UserControl : System.Windows.Forms.UserControl
     {
         private Word.Range curRangeTextShowInTaskPane;
+        private bool _isFixAll = false;
         private static UserControl instance = new UserControl();
         private const string ERROR_SPACE = "\"Lỗi dư khoảng trắng\"";
         private UserControl()
@@ -60,31 +62,43 @@ namespace Spell
                 MessageBox.Show(SysMessage.Instance.IsNotError(FindError.Instance.SelectedError_Context.TOKEN));
             }
         }
-        public void showCandidateInTaskPaneWithCountWord()
+        public void showCandidateInTaskPane(bool isFixAll)
         {
-            FixError fixError = new FixError();
-
-            fixError.getCandidatesWithContext(FindError.Instance.FirstError_Context, FindError.Instance.lstErrorRange);
-            Word.Range range = FindError.Instance.lstErrorRange[FindError.Instance.FirstError_Context];
-            range.Select();
-
-            SynchronizedInvoke(lblWrong, delegate () { lblWrong.Text = fixError.Token; });
-            SynchronizedInvoke(lstbCandidate, delegate () { lstbCandidate.Items.Clear(); });
-            
-            foreach (string item in fixError.hSetCandidate)
+            _isFixAll = isFixAll;
+            string oldString = "", newString = "";
+            while (FindError.Instance.lstErrorRange.Count > 0)
             {
-                if (!item.ToLower().Equals(fixError.Token.ToLower()))
-                    if (item.Length > 1)
-                        SynchronizedInvoke(lstbCandidate, delegate () { lstbCandidate.Items.Add(item.Trim()); });
+                FixError fixError = new FixError();
+
+                fixError.getCandidatesWithContext(FindError.Instance.FirstError_Context, FindError.Instance.lstErrorRange);
+                Word.Range range = FindError.Instance.lstErrorRange[FindError.Instance.FirstError_Context];
+                range.Select();
+
                 
-                if (lstbCandidate.Items.Count > 0)
-                    SynchronizedInvoke(lstbCandidate, delegate () { lstbCandidate.SetSelected(0, true); });
-                SynchronizedInvoke(btnChange, delegate () { btnChange.Focus(); });
-                
+                if (_isFixAll)
+                {
+                    oldString = FindError.Instance.ToString().Trim();
+                    newString = fixError.ToString().Trim();
+                    SynchronizedInvoke(gridLog, delegate () { gridLog.Rows.Add(oldString, newString); });
+                    change(fixError.Token.ToLower(), fixError.hSetCandidate.ElementAt(0));
+                }
+                else {
+                    SynchronizedInvoke(lblWrong, delegate () { lblWrong.Text = fixError.Token; });
+                    SynchronizedInvoke(lstbCandidate, delegate () { lstbCandidate.Items.Clear(); });
+                    foreach (string item in fixError.hSetCandidate)
+                        if (!item.ToLower().Equals(fixError.Token.ToLower()))
+                            if (item.Length > 1)
+                                SynchronizedInvoke(lstbCandidate, delegate () { lstbCandidate.Items.Add(item.Trim()); });
+                    if (lstbCandidate.Items.Count > 0)
+                        SynchronizedInvoke(lstbCandidate, delegate () { lstbCandidate.SetSelected(0, true); });
+                    SynchronizedInvoke(btnChange, delegate () { btnChange.Focus(); });
+                    return;
+                }
             }
 
 
         }
+
         private void SynchronizedInvoke(ISynchronizeInvoke sync, Action action)
         {
             // If the invoke is not required, then invoke here and get out.
@@ -149,7 +163,7 @@ namespace Spell
             //
             FindError.Instance.FirstError_Context = FindError.Instance.lstErrorRange.First().Key;
             FindError.Instance.lstErrorRange[FindError.Instance.FirstError_Context].Select();
-            showCandidateInTaskPaneWithCountWord();
+            showCandidateInTaskPane(_isFixAll);
         }
 
         private void btnAdd_Click(object sender, EventArgs e)
@@ -171,17 +185,15 @@ namespace Spell
         }
         private void btnChange_Click(object sender, EventArgs e)
         {
-            change();
+            change(lblWrong.Text.ToLower(), lstbCandidate.SelectedItem.ToString());
         }
-        private void change()
+        private void change(string wrongText, string fixText)
         {
             int startIndex = 0;
             int endIndex = 0;
-            string wrongText = lblWrong.Text.ToLower();
             if (lblWrong.Text.Equals(ERROR_SPACE))
                 wrongText = " ";
             bool isMajuscule = false;
-            string fixText = lstbCandidate.SelectedItem.ToString();
             foreach (Word.Range range in FindError.Instance.lstErrorRange.Values)
                 if (range.Text.ToLower().Equals(wrongText))
                 {
@@ -199,15 +211,18 @@ namespace Spell
             else curRangeTextShowInTaskPane.Text = fixText;
 
             endIndex = startIndex + curRangeTextShowInTaskPane.Text.Length;
-            lblWrong.Text = "\"Wrong Text\"";
-            lstbCandidate.Items.Clear();
+            if (!_isFixAll)
+            {
+                lblWrong.Text = "\"Từ sai\"";
+                lstbCandidate.Items.Clear();
+            }
             DocumentHandling.Instance.DeHighLight_Mistake(startIndex, endIndex);
             curRangeTextShowInTaskPane.Select();
 
             if (FindError.Instance.lstErrorRange.Count == 0)
             {
                 MessageBox.Show(SysMessage.Instance.No_error);
-                this.Visible = false;
+                //SynchronizedInvoke(this, delegate () { this.Visible = false; });
                 return;
             }
             //
@@ -215,15 +230,14 @@ namespace Spell
             //
             FindError.Instance.FirstError_Context = FindError.Instance.lstErrorRange.First().Key;
             FindError.Instance.lstErrorRange[FindError.Instance.FirstError_Context].Select();
-            showCandidateInTaskPaneWithCountWord();
+            if(!_isFixAll)
+                showCandidateInTaskPane(_isFixAll);
 
         }
         private void btnChange_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
-            {
-                change();
-            }
+                change(lblWrong.Text.ToLower(), lstbCandidate.SelectedItem.ToString());
         }
 
         private void lstbCandidate_KeyDown(object sender, KeyEventArgs e)
@@ -231,7 +245,7 @@ namespace Spell
             if (e.KeyCode == Keys.Enter)
             {
                 btnChange.Focus();
-                change();
+                change(lblWrong.Text.ToLower(), lstbCandidate.SelectedItem.ToString());
             }
         }
     }

@@ -112,12 +112,14 @@ namespace Spell
                 // Displays the MessageBox.
 
                 result = MessageBox.Show(message, caption, buttons);
-
+                myCustomTaskPane.Visible = true;
                 if (result == DialogResult.Yes)
                 {
-                    UserControl.Instance.showCandidateInTaskPaneWithCountWord();
+                    UserControl.Instance.showCandidateInTaskPane(true);
                 }
-                myCustomTaskPane.Visible = true;
+                else
+                    UserControl.Instance.showCandidateInTaskPane(false);
+                
             }
             else
             {
@@ -193,9 +195,9 @@ namespace Spell
             if (tbtnShowTaskpane.Checked)
             {
                 myCustomTaskPane.Visible = true;
-                FindError.Instance.FirstError_Context = FindError.Instance.lstErrorRange.First().Key;
-                FindError.Instance.lstErrorRange[FindError.Instance.FirstError_Context].Select();
-                UserControl.Instance.showCandidateInTaskPaneWithCountWord();
+                //FindError.Instance.FirstError_Context = FindError.Instance.lstErrorRange.First().Key;
+                //FindError.Instance.lstErrorRange[FindError.Instance.FirstError_Context].Select();
+                //UserControl.Instance.showCandidateInTaskPane();
             }
             else
                 myCustomTaskPane.Visible = false;

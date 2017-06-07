@@ -29,7 +29,18 @@ namespace Spell.Algorithm
         private int _typeError = 0;
         private bool _isAutoChange = false;
         private bool isNoChange = false;
-
+        public override string ToString()
+        {
+            string pp = FirstError_Context.PREPRE.Equals(Ngram.Instance.START_STRING) ?
+                "" : FirstError_Context.PREPRE;
+            string p = FirstError_Context.PRE.Equals(Ngram.Instance.START_STRING) ?
+                "" : FirstError_Context.PRE;
+            string n = FirstError_Context.NEXT.Equals(Ngram.Instance.END_STRING) ?
+                "" : FirstError_Context.NEXT;
+            string nn = FirstError_Context.NEXTNEXT.Equals(Ngram.Instance.END_STRING) ?
+                "" : FirstError_Context.NEXTNEXT;
+            return string.Format("{0} {1} {2} {3} {4}", pp, p, FirstError_Context.TOKEN, n, nn);
+        }
         private FindError()
         {
             StopFindError = false;

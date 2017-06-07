@@ -44,7 +44,7 @@ namespace Spell.Algorithm
         }
         public string Message_Notify_Fix_Error(int count)
         {
-            return string.Format("Có {0} lỗi. Bạn có muốn bắt đầu sửa lỗi ngay?", count);
+            return string.Format("Có {0} lỗi. Bạn có muốn sửa tất cả?", count);
         }
         public string IsNotError(string word)
         {

@@ -34,6 +34,10 @@
             this.lstbCandidate = new System.Windows.Forms.ListBox();
             this.btnStart = new System.Windows.Forms.Button();
             this.btnChange = new System.Windows.Forms.Button();
+            this.gridLog = new System.Windows.Forms.DataGridView();
+            this.wrongContext = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.rightContext = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            ((System.ComponentModel.ISupportInitialize)(this.gridLog)).BeginInit();
             this.SuspendLayout();
             // 
             // btnIgnore
@@ -99,11 +103,35 @@
             this.btnChange.Click += new System.EventHandler(this.btnChange_Click);
             this.btnChange.KeyDown += new System.Windows.Forms.KeyEventHandler(this.btnChange_KeyDown);
             // 
+            // gridLog
+            // 
+            this.gridLog.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.gridLog.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.wrongContext,
+            this.rightContext});
+            this.gridLog.Location = new System.Drawing.Point(18, 208);
+            this.gridLog.Name = "gridLog";
+            this.gridLog.Size = new System.Drawing.Size(243, 295);
+            this.gridLog.TabIndex = 20;
+            // 
+            // wrongContext
+            // 
+            this.wrongContext.HeaderText = "Ngữ cảnh sai";
+            this.wrongContext.Name = "wrongContext";
+            this.wrongContext.ReadOnly = true;
+            // 
+            // rightContext
+            // 
+            this.rightContext.HeaderText = "Ngữ cảnh đúng";
+            this.rightContext.Name = "rightContext";
+            this.rightContext.ReadOnly = true;
+            // 
             // UserControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
+            this.Controls.Add(this.gridLog);
             this.Controls.Add(this.btnChange);
             this.Controls.Add(this.btnStart);
             this.Controls.Add(this.lstbCandidate);
@@ -111,7 +139,8 @@
             this.Controls.Add(this.btnIgnore);
             this.MinimumSize = new System.Drawing.Size(300, 350);
             this.Name = "UserControl";
-            this.Size = new System.Drawing.Size(300, 350);
+            this.Size = new System.Drawing.Size(300, 529);
+            ((System.ComponentModel.ISupportInitialize)(this.gridLog)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -124,6 +153,9 @@
         private System.Windows.Forms.ListBox lstbCandidate;
         private System.Windows.Forms.Button btnStart;
         private System.Windows.Forms.Button btnChange;
+        private System.Windows.Forms.DataGridView gridLog;
+        private System.Windows.Forms.DataGridViewTextBoxColumn wrongContext;
+        private System.Windows.Forms.DataGridViewTextBoxColumn rightContext;
     }
 }
 
