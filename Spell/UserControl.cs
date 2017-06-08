@@ -15,6 +15,7 @@ namespace Spell
     {
         private Word.Range curRangeTextShowInTaskPane;
         public bool _isFixAll { get; set; }
+        public int Count { get; set; }
         private static UserControl instance = new UserControl();
         private const string ERROR_SPACE = "\"Lỗi dư khoảng trắng\"";
         private UserControl()
@@ -74,17 +75,17 @@ namespace Spell
                 Word.Range range = FindError.Instance.lstErrorRange[FindError.Instance.FirstError_Context];
                 range.Select();
 
-                
+                oldString = FindError.Instance.ToString().Trim();
+                newString = fixError.ToString().Trim();
                 if (_isFixAll)
                 {
-                    oldString = FindError.Instance.ToString().Trim();
-                    newString = fixError.ToString().Trim();
-                    SynchronizedInvoke(gridLog, delegate () { gridLog.Rows.Add(oldString, newString); });
+                    SynchronizedInvoke(gridLog, delegate () { gridLog.Rows.Add(++Count,oldString, newString); });
                     change(fixError.Token.ToLower(), fixError.hSetCandidate.ElementAt(0));
                 }
                 else {
                     SynchronizedInvoke(lblWrong, delegate () { lblWrong.Text = fixError.Token; });
                     SynchronizedInvoke(lstbCandidate, delegate () { lstbCandidate.Items.Clear(); });
+                    SynchronizedInvoke(gridLog, delegate () { gridLog.Rows.Add(++Count, oldString, newString); });
                     foreach (string item in fixError.hSetCandidate)
                         if (!item.ToLower().Equals(fixError.Token.ToLower()))
                             if (item.Length > 1)
@@ -95,7 +96,6 @@ namespace Spell
                     return;
                 }
             }
-
 
         }
 
@@ -247,6 +247,58 @@ namespace Spell
                 btnChange.Focus();
                 change(lblWrong.Text.ToLower(), lstbCandidate.SelectedItem.ToString());
             }
+        }
+        
+        private void gridLog_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            showMoreInfoContext();
+        }
+        private void showMoreInfoContext()
+        {
+            DataGridViewRow row = gridLog.SelectedRows[0];
+
+            SynchronizedInvoke(lblWrongContext, delegate () {
+                lblWrongContext.Text = row.Cells[1].Value.ToString();
+                lblWrongContext.Visible = true;
+            });
+            SynchronizedInvoke(lblRightContext, delegate () {
+                lblRightContext.Text = row.Cells[2].Value.ToString();
+                lblRightContext.Visible = true;
+            });
+            SynchronizedInvoke(lblRightArrow, delegate () {
+                lblRightArrow.Visible = true;
+            });
+            SynchronizedInvoke(btnGo, delegate () {
+                btnGo.Visible = true;
+            });
+        }
+        private void lstbCandidate_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnGo_Click(object sender, EventArgs e)
+        {
+            //Word.Find findObject = Globals.ThisAddIn.Application.Selection.Find;
+            //findObject.ClearFormatting();
+            //SynchronizedInvoke(lblRightContext, delegate () {
+            //    findObject.Text = lblRightContext.Text;
+            //});
+            Word.Document oWordDoc = Globals.ThisAddIn.Application.ActiveDocument;
+            Word.Range rng = oWordDoc.Content;
+            rng.Find.ClearFormatting();
+            object findText = "";
+            SynchronizedInvoke(lblRightContext, delegate () {
+                findText = lblRightContext.Text;
+            });
+            object oTrue = true;
+            object oFalse = false;
+            object oFindStop = Word.WdFindWrap.wdFindStop;
+            rng.Find.Execute(ref findText, ref oTrue, ref oFalse, ref oTrue,
+                ref oFalse, ref oFalse, ref oTrue, ref oFindStop, ref oFalse,
+                null, null,null,null,null,null);
+            rng.Select();
+
         }
     }
 }

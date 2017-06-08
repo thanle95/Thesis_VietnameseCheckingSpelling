@@ -34,10 +34,10 @@ namespace Spell
             myCustomTaskPane = Globals.ThisAddIn.CustomTaskPanes.Add(UserControl.Instance, "Spelling");
             myCustomTaskPane.DockPosition = Office.MsoCTPDockPosition.msoCTPDockPositionFloating;
 
-            myCustomTaskPane.Width = 300;
-            myCustomTaskPane.Height = 350;
+            myCustomTaskPane.Width = 320;
+            myCustomTaskPane.Height = 530;
             myCustomTaskPane.DockPosition = Office.MsoCTPDockPosition.msoCTPDockPositionRight;
-            myCustomTaskPane.Width = 300;
+            myCustomTaskPane.Width = 320;
             typeFindError = dropTypeFindError.SelectedItemIndex;
             //Ngram.Instance.runFirst();
             FindError.Instance.createValue(typeFindError, typeError, isAutoChange);
@@ -91,7 +91,7 @@ namespace Spell
             
 
             FindError.Instance.createValue(typeFindError, typeError, isAutoChange);
-
+            UserControl.Instance.Count = 0;
             myCustomTaskPane.Visible = false;
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();

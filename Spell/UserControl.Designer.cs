@@ -29,14 +29,23 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle13 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle14 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle15 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle16 = new System.Windows.Forms.DataGridViewCellStyle();
             this.btnIgnore = new System.Windows.Forms.Button();
             this.lblWrong = new System.Windows.Forms.Label();
             this.lstbCandidate = new System.Windows.Forms.ListBox();
             this.btnStart = new System.Windows.Forms.Button();
             this.btnChange = new System.Windows.Forms.Button();
             this.gridLog = new System.Windows.Forms.DataGridView();
+            this.lblWrongContext = new System.Windows.Forms.Label();
+            this.lblRightContext = new System.Windows.Forms.Label();
+            this.lblRightArrow = new System.Windows.Forms.Label();
+            this.STT = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.wrongContext = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.rightContext = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.btnGo = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.gridLog)).BeginInit();
             this.SuspendLayout();
             // 
@@ -46,9 +55,9 @@
             this.btnIgnore.BackColor = System.Drawing.Color.White;
             this.btnIgnore.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnIgnore.ForeColor = System.Drawing.Color.Black;
-            this.btnIgnore.Location = new System.Drawing.Point(181, 4);
+            this.btnIgnore.Location = new System.Drawing.Point(214, 4);
             this.btnIgnore.Name = "btnIgnore";
-            this.btnIgnore.Size = new System.Drawing.Size(80, 30);
+            this.btnIgnore.Size = new System.Drawing.Size(90, 30);
             this.btnIgnore.TabIndex = 0;
             this.btnIgnore.Text = "Bỏ qua";
             this.btnIgnore.UseVisualStyleBackColor = false;
@@ -72,8 +81,9 @@
             this.lstbCandidate.ItemHeight = 16;
             this.lstbCandidate.Location = new System.Drawing.Point(18, 40);
             this.lstbCandidate.Name = "lstbCandidate";
-            this.lstbCandidate.Size = new System.Drawing.Size(243, 100);
+            this.lstbCandidate.Size = new System.Drawing.Size(285, 100);
             this.lstbCandidate.TabIndex = 4;
+            this.lstbCandidate.SelectedIndexChanged += new System.EventHandler(this.lstbCandidate_SelectedIndexChanged);
             this.lstbCandidate.KeyDown += new System.Windows.Forms.KeyEventHandler(this.lstbCandidate_KeyDown);
             // 
             // btnStart
@@ -82,7 +92,7 @@
             this.btnStart.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnStart.Location = new System.Drawing.Point(18, 153);
             this.btnStart.Name = "btnStart";
-            this.btnStart.Size = new System.Drawing.Size(80, 30);
+            this.btnStart.Size = new System.Drawing.Size(90, 30);
             this.btnStart.TabIndex = 18;
             this.btnStart.Text = "Xem gợi ý";
             this.btnStart.UseVisualStyleBackColor = false;
@@ -94,9 +104,9 @@
             this.btnChange.BackColor = System.Drawing.Color.White;
             this.btnChange.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnChange.ForeColor = System.Drawing.Color.Black;
-            this.btnChange.Location = new System.Drawing.Point(181, 153);
+            this.btnChange.Location = new System.Drawing.Point(214, 153);
             this.btnChange.Name = "btnChange";
-            this.btnChange.Size = new System.Drawing.Size(80, 30);
+            this.btnChange.Size = new System.Drawing.Size(90, 30);
             this.btnChange.TabIndex = 19;
             this.btnChange.Text = "Sửa";
             this.btnChange.UseVisualStyleBackColor = false;
@@ -105,14 +115,92 @@
             // 
             // gridLog
             // 
+            this.gridLog.AllowUserToAddRows = false;
+            this.gridLog.AllowUserToDeleteRows = false;
+            this.gridLog.AllowUserToResizeRows = false;
+            dataGridViewCellStyle13.BackColor = System.Drawing.Color.Aqua;
+            this.gridLog.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle13;
+            dataGridViewCellStyle14.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle14.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle14.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle14.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle14.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle14.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle14.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.gridLog.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle14;
             this.gridLog.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.gridLog.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.STT,
             this.wrongContext,
             this.rightContext});
-            this.gridLog.Location = new System.Drawing.Point(18, 208);
+            dataGridViewCellStyle15.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle15.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle15.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+            dataGridViewCellStyle15.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle15.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle15.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle15.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.gridLog.DefaultCellStyle = dataGridViewCellStyle15;
+            this.gridLog.Location = new System.Drawing.Point(18, 263);
+            this.gridLog.MultiSelect = false;
             this.gridLog.Name = "gridLog";
-            this.gridLog.Size = new System.Drawing.Size(243, 295);
+            this.gridLog.ReadOnly = true;
+            dataGridViewCellStyle16.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle16.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle16.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+            dataGridViewCellStyle16.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle16.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle16.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle16.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.gridLog.RowHeadersDefaultCellStyle = dataGridViewCellStyle16;
+            this.gridLog.Size = new System.Drawing.Size(285, 246);
             this.gridLog.TabIndex = 20;
+            this.gridLog.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.gridLog_CellDoubleClick);
+            // 
+            // lblWrongContext
+            // 
+            this.lblWrongContext.AutoSize = true;
+            this.lblWrongContext.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblWrongContext.ForeColor = System.Drawing.Color.Red;
+            this.lblWrongContext.Location = new System.Drawing.Point(18, 195);
+            this.lblWrongContext.Name = "lblWrongContext";
+            this.lblWrongContext.Size = new System.Drawing.Size(51, 16);
+            this.lblWrongContext.TabIndex = 21;
+            this.lblWrongContext.Text = "label1";
+            this.lblWrongContext.Visible = false;
+            // 
+            // lblRightContext
+            // 
+            this.lblRightContext.AutoSize = true;
+            this.lblRightContext.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblRightContext.ForeColor = System.Drawing.Color.ForestGreen;
+            this.lblRightContext.Location = new System.Drawing.Point(68, 222);
+            this.lblRightContext.Name = "lblRightContext";
+            this.lblRightContext.Size = new System.Drawing.Size(51, 16);
+            this.lblRightContext.TabIndex = 22;
+            this.lblRightContext.Text = "label1";
+            this.lblRightContext.Visible = false;
+            // 
+            // lblRightArrow
+            // 
+            this.lblRightArrow.AutoSize = true;
+            this.lblRightArrow.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblRightArrow.ForeColor = System.Drawing.Color.ForestGreen;
+            this.lblRightArrow.Location = new System.Drawing.Point(32, 216);
+            this.lblRightArrow.Name = "lblRightArrow";
+            this.lblRightArrow.Size = new System.Drawing.Size(30, 24);
+            this.lblRightArrow.TabIndex = 23;
+            this.lblRightArrow.Text = "→";
+            this.lblRightArrow.Visible = false;
+            // 
+            // STT
+            // 
+            this.STT.HeaderText = "STT";
+            this.STT.MaxInputLength = 10000;
+            this.STT.Name = "STT";
+            this.STT.ReadOnly = true;
+            this.STT.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.STT.Width = 50;
             // 
             // wrongContext
             // 
@@ -126,11 +214,30 @@
             this.rightContext.Name = "rightContext";
             this.rightContext.ReadOnly = true;
             // 
+            // btnGo
+            // 
+            this.btnGo.AutoSize = true;
+            this.btnGo.BackColor = System.Drawing.Color.White;
+            this.btnGo.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnGo.ForeColor = System.Drawing.Color.Black;
+            this.btnGo.Location = new System.Drawing.Point(214, 215);
+            this.btnGo.Name = "btnGo";
+            this.btnGo.Size = new System.Drawing.Size(90, 30);
+            this.btnGo.TabIndex = 24;
+            this.btnGo.Text = "Đi đến lỗi...";
+            this.btnGo.UseVisualStyleBackColor = false;
+            this.btnGo.Visible = false;
+            this.btnGo.Click += new System.EventHandler(this.btnGo_Click);
+            // 
             // UserControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
+            this.Controls.Add(this.btnGo);
+            this.Controls.Add(this.lblRightArrow);
+            this.Controls.Add(this.lblRightContext);
+            this.Controls.Add(this.lblWrongContext);
             this.Controls.Add(this.gridLog);
             this.Controls.Add(this.btnChange);
             this.Controls.Add(this.btnStart);
@@ -139,7 +246,7 @@
             this.Controls.Add(this.btnIgnore);
             this.MinimumSize = new System.Drawing.Size(300, 350);
             this.Name = "UserControl";
-            this.Size = new System.Drawing.Size(300, 529);
+            this.Size = new System.Drawing.Size(320, 530);
             ((System.ComponentModel.ISupportInitialize)(this.gridLog)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -154,8 +261,13 @@
         private System.Windows.Forms.Button btnStart;
         private System.Windows.Forms.Button btnChange;
         private System.Windows.Forms.DataGridView gridLog;
+        private System.Windows.Forms.Label lblWrongContext;
+        private System.Windows.Forms.Label lblRightContext;
+        private System.Windows.Forms.Label lblRightArrow;
+        private System.Windows.Forms.DataGridViewTextBoxColumn STT;
         private System.Windows.Forms.DataGridViewTextBoxColumn wrongContext;
         private System.Windows.Forms.DataGridViewTextBoxColumn rightContext;
+        private System.Windows.Forms.Button btnGo;
     }
 }
 
