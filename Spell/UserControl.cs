@@ -33,27 +33,28 @@ namespace Spell
         }
         public void Start()
         {
-            SynchronizedInvoke(lblWrongContext, delegate ()
+            //SynchronizedInvoke(lblWrongContext, delegate ()
+            //{
+            //    lblWrongContext.Visible = false;
+            //});
+            //SynchronizedInvoke(lblRightContext, delegate ()
+            //{
+            //    lblRightContext.Visible = false;
+            //});
+            //SynchronizedInvoke(lblRightArrow, delegate ()
+            //{
+            //    lblRightArrow.Visible = false;
+            //});
+            //SynchronizedInvoke(btnGo, delegate ()
+            //{
+            //    btnGo.Visible = false;
+            //});
+            SynchronizedInvoke(gridLog, delegate ()
             {
-                lblWrongContext.Visible = false;
-            });
-            SynchronizedInvoke(lblRightContext, delegate ()
-            {
-                lblRightContext.Visible = false;
-            });
-            SynchronizedInvoke(lblRightArrow, delegate ()
-            {
-                lblRightArrow.Visible = false;
-            });
-            SynchronizedInvoke(btnGo, delegate ()
-            {
-                btnGo.Visible = false;
-            });
-            SynchronizedInvoke(gridLog, delegate () {
                 gridLog.Rows.Clear();
                 gridLog.Size = new System.Drawing.Size(287, 85);
             });
-            changeUI_IsFixAll();
+            //changeUI_IsFixAll();
         }
         public static string WRONG_TEXT
         {
@@ -92,7 +93,10 @@ namespace Spell
         public void showCandidateInTaskPane(bool isFixAll)
         {
             _isFixAll = isFixAll;
-            
+            if (_isFixAll)
+                changeUI_IsFixAll();
+            else
+                changeUI_IsNotFixAll();
             while (FindError.Instance.lstErrorRange.Count > 0)
             {
                 FixError fixError = new FixError();
@@ -108,10 +112,9 @@ namespace Spell
                     change(fixError.Token.ToLower(), fixError.hSetCandidate.ElementAt(0));
                 }
                 else {
-                    changeUI_IsNotFixAll();
                     SynchronizedInvoke(lblWrong, delegate () { lblWrong.Text = fixError.Token; });
                     SynchronizedInvoke(lstbCandidate, delegate () { lstbCandidate.Items.Clear(); });
-                    
+
                     foreach (string item in fixError.hSetCandidate)
                         if (!item.ToLower().Equals(fixError.Token.ToLower()))
                             if (item.Length > 1)
@@ -143,10 +146,6 @@ namespace Spell
         /// <summary>
         /// HighLight tất cả những lỗi mà không hiện gợi ý
         /// </summary>
-        public void showWrongWithoutSuggest()
-        {
-
-        }
         /// <summary>
         /// HighLight những lỗi hiện tại và đưa vào danh sách lỗi
         /// </summary>
@@ -249,6 +248,7 @@ namespace Spell
             if (FindError.Instance.lstErrorRange.Count == 0)
             {
                 MessageBox.Show(SysMessage.Instance.No_error);
+                changeUI_IsNotFixAll_OutOfError();
                 //SynchronizedInvoke(this, delegate () { this.Visible = false; });
                 return;
             }
@@ -296,24 +296,13 @@ namespace Spell
             });
 
             DataGridViewRow row = gridLog.SelectedRows[0];
-
             SynchronizedInvoke(lblWrongContext, delegate ()
             {
                 lblWrongContext.Text = row.Cells[1].Value.ToString();
-                lblWrongContext.Visible = true;
             });
             SynchronizedInvoke(lblRightContext, delegate ()
             {
                 lblRightContext.Text = row.Cells[2].Value.ToString();
-                lblRightContext.Visible = true;
-            });
-            SynchronizedInvoke(lblRightArrow, delegate ()
-            {
-                lblRightArrow.Visible = true;
-            });
-            SynchronizedInvoke(btnGo, delegate ()
-            {
-                btnGo.Visible = true;
             });
         }
 
@@ -342,68 +331,91 @@ namespace Spell
             rng.Select();
 
         }
-        public void changeUIStart()
-        {
-            SynchronizedInvoke(gridLog, delegate () { gridLog.Location = new System.Drawing.Point(18, 5); });
-        }
+
         private void changeUI_IsFixAll()
         {
-            SynchronizedInvoke(lblWrong, delegate ()
-            {
-                lblWrong.Visible = false;
-            });
-            SynchronizedInvoke(btnIgnore, delegate ()
-            {
-                btnIgnore.Visible = false;
-            });
-            SynchronizedInvoke(lstbCandidate, delegate ()
-            {
-                lstbCandidate.Visible = false;
-            });
-            SynchronizedInvoke(btnStart, delegate ()
-            {
-                btnStart.Visible = false;
-            });
-            SynchronizedInvoke(btnChange, delegate ()
-            {
-                btnChange.Visible = false;
-            });
+            changeUI_FixSequenceGroup(false);
+            SynchronizedInvoke(gridLog, delegate () { gridLog.Location = new System.Drawing.Point(18, 5); });
+            changeUI_ShowMore(false);
         }
+        //Sửa lỗi tuần tự
         private void changeUI_IsNotFixAll()
         {
-            SynchronizedInvoke(lblWrong, delegate ()
-            {
-                lblWrong.Visible = true;
-            });
-            SynchronizedInvoke(btnIgnore, delegate ()
-            {
-                btnIgnore.Visible = true;
-            });
-            SynchronizedInvoke(lstbCandidate, delegate ()
-            {
-                lstbCandidate.Visible = true;
-            });
-            SynchronizedInvoke(btnStart, delegate ()
-            {
-                btnStart.Visible = true;
-            });
-            SynchronizedInvoke(btnChange, delegate ()
-            {
-                btnChange.Visible = true;
-            });
+            changeUI_FixSequenceGroup(true);
+            changeUI_ShowMore(false);
             SynchronizedInvoke(gridLog, delegate ()
             {
-                if(gridLog.Location.Y > 195)
+                if (gridLog.Location.Y > 195)
                     for (int i = gridLog.Location.Y; i >= 195; i--)
                     {
                         gridLog.Location = new System.Drawing.Point(18, i);
                         Thread.Sleep(5);
                     }
+                gridLog.Location = new System.Drawing.Point(18, 195);
+            });
+            
+        }
+        private void changeUI_IsNotFixAll_OutOfError()
+        {
+            _isFixAll = true;
+            changeUI_FixSequenceGroup(false);
+
+            changeUI_ShowMore(false);
+            SynchronizedInvoke(gridLog, delegate ()
+            {
+                for (int i = gridLog.Location.Y; i >= 5; i--)
+                {
+                    gridLog.Location = new System.Drawing.Point(18, i);
+                    Thread.Sleep(1);
+                }
+            });
+        }
+        private void changeUI_FixSequenceGroup(bool visible)
+        {
+            SynchronizedInvoke(lblWrong, delegate ()
+            {
+                lblWrong.Visible = visible;
+            });
+            SynchronizedInvoke(btnIgnore, delegate ()
+            {
+                btnIgnore.Visible = visible;
+            });
+            SynchronizedInvoke(lstbCandidate, delegate ()
+            {
+                lstbCandidate.Visible = visible;
+            });
+            SynchronizedInvoke(btnStart, delegate ()
+            {
+                btnStart.Visible = visible;
+            });
+            SynchronizedInvoke(btnChange, delegate ()
+            {
+                btnChange.Visible = visible;
+            });
+        }
+        private void changeUI_ShowMore(bool visible)
+        {
+            SynchronizedInvoke(lblWrongContext, delegate ()
+            {
+                lblWrongContext.Visible = visible;
+            });
+            SynchronizedInvoke(lblRightArrow, delegate ()
+            {
+                lblRightArrow.Visible = visible;
+            });
+            SynchronizedInvoke(lblRightContext, delegate ()
+            {
+                lblRightContext.Visible = visible;
+            });
+            SynchronizedInvoke(btnGo, delegate ()
+            {
+                btnGo.Visible = visible;
             });
         }
         private void addRowGridLog()
         {
-            SynchronizedInvoke(gridLog, delegate () {
+            SynchronizedInvoke(gridLog, delegate ()
+            {
                 gridLog.Visible = true;
                 if (_isFixAll)
                 {
@@ -414,18 +426,7 @@ namespace Spell
                 else
                 if (gridLog.Size.Height <= 250)
                 {
-                    SynchronizedInvoke(lblWrongContext, delegate () {
-                        lblWrongContext.Visible = false;
-                    });
-                    SynchronizedInvoke(lblRightArrow, delegate () {
-                        lblRightArrow.Visible = false;
-                    });
-                    SynchronizedInvoke(lblRightContext, delegate () {
-                        lblRightContext.Visible = false;
-                    });
-                    SynchronizedInvoke(btnGo, delegate () {
-                        btnGo.Visible = false;
-                    });
+
                     gridLog.Size = new System.Drawing.Size(gridLog.Size.Width, gridLog.Size.Height + 22);
                     if (gridLog.Location.Y > 195)
                         for (int i = gridLog.Location.Y; i >= 195; i--)
@@ -439,56 +440,9 @@ namespace Spell
             });
 
         }
-
-        private void changeUI_ShowMoreInfo_IsNotFixAll()
-        {
-            SynchronizedInvoke(gridLog, delegate ()
-            {
-                for (int i = 195; i <= 263; i++)
-                {
-                    gridLog.Location = new System.Drawing.Point(18, i);
-                    Thread.Sleep(5);
-                }
-            });
-            SynchronizedInvoke(lblWrongContext, delegate ()
-            {
-                lblWrongContext.Location = new System.Drawing.Point(18, 195);
-            });
-            SynchronizedInvoke(lblRightArrow, delegate ()
-            {
-                lblRightArrow.Location = new System.Drawing.Point(22, 216);
-            });
-            SynchronizedInvoke(lblRightContext, delegate ()
-            {
-                lblRightContext.Location = new System.Drawing.Point(58, 222);
-            });
-            SynchronizedInvoke(btnGo, delegate ()
-            {
-                btnGo.Location = new System.Drawing.Point(214, 215);
-            });
-        }
         private void changeUI_ShowMoreInfo_IsFixAll()
         {
-            SynchronizedInvoke(lblWrong, delegate ()
-            {
-                lblWrong.Visible = false;
-            });
-            SynchronizedInvoke(btnIgnore, delegate ()
-            {
-                btnIgnore.Visible = false;
-            });
-            SynchronizedInvoke(lstbCandidate, delegate ()
-            {
-                lstbCandidate.Visible = false;
-            });
-            SynchronizedInvoke(btnStart, delegate ()
-            {
-                btnStart.Visible = false;
-            });
-            SynchronizedInvoke(btnChange, delegate ()
-            {
-                btnChange.Visible = false;
-            });
+            changeUI_FixSequenceGroup(false);
             SynchronizedInvoke(gridLog, delegate ()
             {
                 if (gridLog.Location.Y != 263)
@@ -500,6 +454,26 @@ namespace Spell
                     }
                 }
             });
+            changeUI_ShowMoreTop();
+            changeUI_ShowMore(true);
+            
+        }
+        private void changeUI_ShowMoreInfo_IsNotFixAll()
+        {
+            changeUI_FixSequenceGroup(true);
+            SynchronizedInvoke(gridLog, delegate ()
+            {
+                for (int i = 195; i <= 263; i++)
+                {
+                    gridLog.Location = new System.Drawing.Point(18, i);
+                    Thread.Sleep(5);
+                }
+            });
+            changeUI_ShowMoreBottom();
+            changeUI_ShowMore(true);
+        }
+        private void changeUI_ShowMoreTop()
+        {
             SynchronizedInvoke(lblWrongContext, delegate ()
             {
                 lblWrongContext.Location = new System.Drawing.Point(18, 5);
@@ -517,5 +491,25 @@ namespace Spell
                 btnGo.Location = new System.Drawing.Point(214, 15);
             });
         }
+        private void changeUI_ShowMoreBottom()
+        {
+            SynchronizedInvoke(lblWrongContext, delegate ()
+            {
+                lblWrongContext.Location = new System.Drawing.Point(18, 195);
+            });
+            SynchronizedInvoke(lblRightArrow, delegate ()
+            {
+                lblRightArrow.Location = new System.Drawing.Point(22, 216);
+            });
+            SynchronizedInvoke(lblRightContext, delegate ()
+            {
+                lblRightContext.Location = new System.Drawing.Point(58, 222);
+            });
+            SynchronizedInvoke(btnGo, delegate ()
+            {
+                btnGo.Location = new System.Drawing.Point(214, 215);
+            });
+        }
+    
     }
 }

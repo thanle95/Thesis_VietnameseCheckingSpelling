@@ -112,7 +112,7 @@ namespace Spell
                 // Displays the MessageBox.
 
                 result = MessageBox.Show(message, caption, buttons);
-                UserControl.Instance.changeUIStart();
+                //UserControl.Instance.changeUIStart();
                 myCustomTaskPane.Visible = true;
                 if (result == DialogResult.Yes)
                 {
