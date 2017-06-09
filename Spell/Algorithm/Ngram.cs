@@ -147,18 +147,25 @@ namespace Spell.Algorithm
         #region calculate ngram
         public double calBigram(string w1, string w2)
         {
-            //int MAX = 10;
             string key = w1 + " " + w2;
             int Cw1 = 0;
             int Cw1w2 = 0;
+            double alpha = 0.1;
             if (_uniAmount.ContainsKey(w1.ToLower()))
                 Cw1 = _uniAmount[w1.ToLower()];
             if (_biAmount.ContainsKey(key.ToLower()))
                 Cw1w2 = _biAmount[key.ToLower()];
-            double ret = (double)(Cw1w2 + 1) / (Cw1 + _sumUni);
+            double ret = (double)(Cw1w2 + alpha) / (Cw1 + _sumUni*alpha);
             return ret;
-        }
 
+        }
+        public int getBiGram(string w1, string w2)
+        {
+            string key = w1 + " " + w2;
+            if (_biAmount.ContainsKey(key.ToLower()))
+                return _biAmount[key.ToLower()];
+            return 0;
+        }
         public double calTrigram(string w1, string w2, string w3)
         {
             ////int MAX = 10;

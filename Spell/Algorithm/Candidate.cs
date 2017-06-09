@@ -118,7 +118,37 @@ namespace Spell.Algorithm
                 ret.Add(pair.Key, pair.Value);
             return ret;
         }
+        public double calScore_NgramForFixError(Context context, string candidate)
+        {
+            double calBiGram_PreCand = Ngram.Instance.calBigram(context.PRE, candidate);
+            double calBigram_CandNext = Ngram.Instance.calBigram(candidate, context.NEXT);
+            double calBiGram_PreToken = Ngram.Instance.calBigram(context.PRE, context.TOKEN);
+            double calBigram_TokenNext = Ngram.Instance.calBigram(context.TOKEN, context.NEXT);
 
+            if (calBiGram_PreCand == 0 && calBigram_CandNext == 0)
+                return 0;
+            if (calBiGram_PreToken == 0 && calBigram_TokenNext == 0)
+                return 1;
+            double lamda1 = 0, lamda2 = 0;
+            lamda1 = calBiGram_PreCand / calBiGram_PreToken;
+            lamda2 = calBigram_CandNext / calBigram_TokenNext;
+            if (lamda1 > 100 || lamda2 > 100)
+                return 1;
+            if (lamda1 > 80 || lamda2 > 80)
+                return 0.8;
+            if (lamda1 > 50 || lamda2 > 50)
+                return 0.5;
+            return 0;
+        }
+        public double calScore_NgramForFindError(Context context)
+        {
+            double calBiGram_PreToken = Ngram.Instance.calBigram(context.PRE, context.TOKEN);
+            double calBigram_TokenNext = Ngram.Instance.calBigram(context.TOKEN, context.NEXT);
+
+
+            double ret = (0.5 * calBiGram_PreToken + 0.5 * calBigram_TokenNext) * 1E5;
+            return ret;
+        }
         /// <summary>
         /// tính điểm cho candidate dựa vào ngữ cảnh
         /// </summary>
@@ -132,11 +162,23 @@ namespace Spell.Algorithm
         {
             double calBiGram_PreCand = Ngram.Instance.calBigram(context.PRE, candidate);
             double calBigram_CandNext = Ngram.Instance.calBigram(candidate, context.NEXT);
-            double ret = (calBiGram_PreCand + calBigram_CandNext) * 1E5;
-            //tang gia tri ngram
-            if (ret > MAX_SCORE)
-                return MAX_SCORE;
-            return ret;
+            double calBiGram_PreToken = Ngram.Instance.calBigram(context.PRE, context.TOKEN);
+            double calBigram_TokenNext = Ngram.Instance.calBigram(candidate, context.TOKEN);
+
+            if (calBiGram_PreCand == 0 && calBigram_CandNext == 0)
+                return 0;
+            if (calBiGram_PreToken == 0 && calBigram_TokenNext == 0)
+                return 1;
+            double lamda1 = 0, lamda2 = 0;
+            lamda1 = calBiGram_PreCand / calBiGram_PreToken;
+            lamda2 = calBigram_CandNext / calBigram_TokenNext;
+            if (lamda1 > 100 || lamda2 > 100)
+                return 1;
+            if (lamda1 > 80 || lamda2 > 80)
+                return 0.8;
+            if (lamda1 > 50 || lamda2 > 50)
+                return 0.5;
+            return 0;
         }
         /// <summary>
         /// tính điểm cho candidate dựa vào từ ghép
