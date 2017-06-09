@@ -53,7 +53,7 @@ namespace Spell
                 gridLog.Rows.Clear();
                 gridLog.Size = new System.Drawing.Size(287, 85);
             });
-
+            changeUI_IsFixAll();
         }
         public static string WRONG_TEXT
         {
@@ -92,7 +92,7 @@ namespace Spell
         public void showCandidateInTaskPane(bool isFixAll)
         {
             _isFixAll = isFixAll;
-            changeUI_IsFixAll();
+            
             while (FindError.Instance.lstErrorRange.Count > 0)
             {
                 FixError fixError = new FixError();
@@ -393,7 +393,12 @@ namespace Spell
             });
             SynchronizedInvoke(gridLog, delegate ()
             {
-                gridLog.Location = new System.Drawing.Point(18, 195);
+                if(gridLog.Location.Y > 195)
+                    for (int i = gridLog.Location.Y; i >= 195; i--)
+                    {
+                        gridLog.Location = new System.Drawing.Point(18, i);
+                        Thread.Sleep(5);
+                    }
             });
         }
         private void addRowGridLog()
@@ -402,13 +407,34 @@ namespace Spell
                 gridLog.Visible = true;
                 if (_isFixAll)
                 {
-                    
+
                     if (gridLog.Size.Height <= 500)
                         gridLog.Size = new System.Drawing.Size(gridLog.Size.Width, gridLog.Size.Height + 22);
                 }
                 else
                 if (gridLog.Size.Height <= 250)
+                {
+                    SynchronizedInvoke(lblWrongContext, delegate () {
+                        lblWrongContext.Visible = false;
+                    });
+                    SynchronizedInvoke(lblRightArrow, delegate () {
+                        lblRightArrow.Visible = false;
+                    });
+                    SynchronizedInvoke(lblRightContext, delegate () {
+                        lblRightContext.Visible = false;
+                    });
+                    SynchronizedInvoke(btnGo, delegate () {
+                        btnGo.Visible = false;
+                    });
                     gridLog.Size = new System.Drawing.Size(gridLog.Size.Width, gridLog.Size.Height + 22);
+                    if (gridLog.Location.Y > 195)
+                        for (int i = gridLog.Location.Y; i >= 195; i--)
+                        {
+                            gridLog.Location = new System.Drawing.Point(18, i);
+                            Thread.Sleep(5);
+                        }
+                    gridLog.Location = new System.Drawing.Point(18, 195);
+                }
                 gridLog.Rows.Add(++Count, oldString, newString);
             });
 
