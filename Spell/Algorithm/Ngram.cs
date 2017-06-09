@@ -265,9 +265,16 @@ namespace Spell.Algorithm
         public void readUni(string path)
         {
             List<string> uniList = Properties.Resources.filteredUni.Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries).ToList();
-            
+            string[] uniArr;
+            if (uniList.Count == 1)
+            {
+                uniArr = uniList[0].Split('\n');
+                uniList = uniArr.ToList();
+            }
             foreach (string line in uniList)
             {
+                if (line.Length == 0)
+                    continue;
                 string[] uni = line.Split(' ');
                 //_uniPos.Add(uni[0], Int32.Parse(uni[1]));
                 //_posUni.Add(Int32.Parse(uni[1]), uni[0]);
@@ -355,8 +362,16 @@ namespace Spell.Algorithm
         public void readBiAmount(string path)
         {
             List<string> biList = Properties.Resources.filteredBi.Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries).ToList();
+            string[] biArr;
+            if (biList.Count == 1)
+            {
+                biArr = biList[0].Split('\n');
+                biList = biArr.ToList();
+            }
             foreach (string line in biList)
             {
+                if (line.Length == 0)
+                    continue;
                 try {
                     string[] bi = line.Split(' ');
 

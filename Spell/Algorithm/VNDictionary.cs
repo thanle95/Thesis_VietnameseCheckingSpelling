@@ -46,6 +46,12 @@ namespace Spell.Algorithm
             {
                 //properties vào fileName, chọn copy always
                 result = Properties.Resources.SyllableDictByViet39K.Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries).ToList().ToDictionary(x => x, x => "");
+                string[] uniArr;
+                if (result.Count == 1)
+                {
+                    uniArr = result.Keys.First().Split('\n');
+                    result = uniArr.ToDictionary(x => x, x => "");
+                }
             }
             catch (Exception e)
             {
@@ -63,6 +69,12 @@ namespace Spell.Algorithm
             try
             {
                 result = Properties.Resources.sortedCompoundWordDict.Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries).ToList();
+                string[] uniArr;
+                if (result.Count == 1)
+                {
+                    uniArr = result[0].Split('\n');
+                    result = uniArr.ToList();
+                }
             }
             catch (Exception e)
             {
