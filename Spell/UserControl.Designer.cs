@@ -61,6 +61,7 @@
             this.btnIgnore.TabIndex = 0;
             this.btnIgnore.Text = "Bỏ qua";
             this.btnIgnore.UseVisualStyleBackColor = false;
+            this.btnIgnore.Visible = false;
             this.btnIgnore.Click += new System.EventHandler(this.btnIgnore_Click);
             // 
             // lblWrong
@@ -73,6 +74,7 @@
             this.lblWrong.Size = new System.Drawing.Size(71, 21);
             this.lblWrong.TabIndex = 3;
             this.lblWrong.Text = "\"Từ sai\"";
+            this.lblWrong.Visible = false;
             // 
             // lstbCandidate
             // 
@@ -83,6 +85,7 @@
             this.lstbCandidate.Name = "lstbCandidate";
             this.lstbCandidate.Size = new System.Drawing.Size(285, 100);
             this.lstbCandidate.TabIndex = 4;
+            this.lstbCandidate.Visible = false;
             this.lstbCandidate.KeyDown += new System.Windows.Forms.KeyEventHandler(this.lstbCandidate_KeyDown);
             // 
             // btnStart
@@ -95,6 +98,7 @@
             this.btnStart.TabIndex = 18;
             this.btnStart.Text = "Xem gợi ý";
             this.btnStart.UseVisualStyleBackColor = false;
+            this.btnStart.Visible = false;
             this.btnStart.Click += new System.EventHandler(this.btnStart_Click);
             // 
             // btnChange
@@ -109,6 +113,7 @@
             this.btnChange.TabIndex = 19;
             this.btnChange.Text = "Sửa";
             this.btnChange.UseVisualStyleBackColor = false;
+            this.btnChange.Visible = false;
             this.btnChange.Click += new System.EventHandler(this.btnChange_Click);
             this.btnChange.KeyDown += new System.Windows.Forms.KeyEventHandler(this.btnChange_KeyDown);
             // 
@@ -152,8 +157,9 @@
             dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
             dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
             this.gridLog.RowHeadersDefaultCellStyle = dataGridViewCellStyle4;
-            this.gridLog.Size = new System.Drawing.Size(287, 246);
+            this.gridLog.Size = new System.Drawing.Size(287, 90);
             this.gridLog.TabIndex = 20;
+            this.gridLog.Visible = false;
             this.gridLog.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.gridLog_CellDoubleClick);
             // 
             // STT

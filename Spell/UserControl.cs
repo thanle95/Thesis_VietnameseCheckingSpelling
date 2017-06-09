@@ -15,6 +15,7 @@ namespace Spell
     {
         private Word.Range curRangeTextShowInTaskPane;
         private int DeltaYLocation { get { return 188; } }
+        private string oldString = "", newString = "";
         public bool _isFixAll { get; set; }
         public int Count { get; set; }
         private static UserControl instance = new UserControl();
@@ -48,6 +49,11 @@ namespace Spell
             {
                 btnGo.Visible = false;
             });
+            SynchronizedInvoke(gridLog, delegate () {
+                gridLog.Rows.Clear();
+                gridLog.Size = new System.Drawing.Size(287, 85);
+            });
+
         }
         public static string WRONG_TEXT
         {
@@ -86,8 +92,7 @@ namespace Spell
         public void showCandidateInTaskPane(bool isFixAll)
         {
             _isFixAll = isFixAll;
-            string oldString = "", newString = "";
-
+            changeUI_IsFixAll();
             while (FindError.Instance.lstErrorRange.Count > 0)
             {
                 FixError fixError = new FixError();
@@ -100,15 +105,13 @@ namespace Spell
                 newString = fixError.ToString().Trim();
                 if (_isFixAll)
                 {
-
-                    SynchronizedInvoke(gridLog, delegate () { gridLog.Rows.Add(++Count, oldString, newString); });
                     change(fixError.Token.ToLower(), fixError.hSetCandidate.ElementAt(0));
                 }
                 else {
                     changeUI_IsNotFixAll();
                     SynchronizedInvoke(lblWrong, delegate () { lblWrong.Text = fixError.Token; });
                     SynchronizedInvoke(lstbCandidate, delegate () { lstbCandidate.Items.Clear(); });
-                    SynchronizedInvoke(gridLog, delegate () { gridLog.Rows.Add(++Count, oldString, newString); });
+                    
                     foreach (string item in fixError.hSetCandidate)
                         if (!item.ToLower().Equals(fixError.Token.ToLower()))
                             if (item.Length > 1)
@@ -212,6 +215,7 @@ namespace Spell
         }
         private void change(string wrongText, string fixText)
         {
+            addRowGridLog();
             int startIndex = 0;
             int endIndex = 0;
             if (lblWrong.Text.Equals(ERROR_SPACE))
@@ -342,6 +346,29 @@ namespace Spell
         {
             SynchronizedInvoke(gridLog, delegate () { gridLog.Location = new System.Drawing.Point(18, 5); });
         }
+        private void changeUI_IsFixAll()
+        {
+            SynchronizedInvoke(lblWrong, delegate ()
+            {
+                lblWrong.Visible = false;
+            });
+            SynchronizedInvoke(btnIgnore, delegate ()
+            {
+                btnIgnore.Visible = false;
+            });
+            SynchronizedInvoke(lstbCandidate, delegate ()
+            {
+                lstbCandidate.Visible = false;
+            });
+            SynchronizedInvoke(btnStart, delegate ()
+            {
+                btnStart.Visible = false;
+            });
+            SynchronizedInvoke(btnChange, delegate ()
+            {
+                btnChange.Visible = false;
+            });
+        }
         private void changeUI_IsNotFixAll()
         {
             SynchronizedInvoke(lblWrong, delegate ()
@@ -368,8 +395,25 @@ namespace Spell
             {
                 gridLog.Location = new System.Drawing.Point(18, 195);
             });
+        }
+        private void addRowGridLog()
+        {
+            SynchronizedInvoke(gridLog, delegate () {
+                gridLog.Visible = true;
+                if (_isFixAll)
+                {
+                    
+                    if (gridLog.Size.Height <= 500)
+                        gridLog.Size = new System.Drawing.Size(gridLog.Size.Width, gridLog.Size.Height + 22);
+                }
+                else
+                if (gridLog.Size.Height <= 250)
+                    gridLog.Size = new System.Drawing.Size(gridLog.Size.Width, gridLog.Size.Height + 22);
+                gridLog.Rows.Add(++Count, oldString, newString);
+            });
 
         }
+
         private void changeUI_ShowMoreInfo_IsNotFixAll()
         {
             SynchronizedInvoke(gridLog, delegate ()
