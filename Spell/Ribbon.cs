@@ -68,7 +68,7 @@ namespace Spell
         private void check()
         {
             DocumentHandling.Instance.DeHighLight_All_Mistake(Globals.ThisAddIn.Application.ActiveDocument.Characters);
-
+            UserControl.Instance.Start();
             typeFindError = dropTypeFindError.SelectedItemIndex;
             typeError = dropTypeError.SelectedItemIndex;
             isAutoChange = chkbAutoChange.Checked;
@@ -112,6 +112,7 @@ namespace Spell
                 // Displays the MessageBox.
 
                 result = MessageBox.Show(message, caption, buttons);
+                UserControl.Instance.changeUIStart();
                 myCustomTaskPane.Visible = true;
                 if (result == DialogResult.Yes)
                 {
