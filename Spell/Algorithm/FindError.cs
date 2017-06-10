@@ -119,7 +119,7 @@ namespace Spell.Algorithm
                         {
                             break;
                         }
-                        words = curSentences[iSentence].Text.Split(' ');
+                        words = curSentences[iSentence].Text.TrimEnd().Split(' ');
                         start = curSentences[iSentence].Start;
                         end = curSentences[iSentence].End;
                         range = Globals.ThisAddIn.Application.ActiveDocument.Range(start, end);
@@ -151,7 +151,7 @@ namespace Spell.Algorithm
                                 continue;
                             }
                             //viết hoa giữa câu
-                            if (char.IsUpper(iWord.Trim()[0]))
+                            if (char.IsUpper(iWord.Trim()[0]) && i != 0)
                             {
                                 start += iWord.Length + 1;
                                 continue;

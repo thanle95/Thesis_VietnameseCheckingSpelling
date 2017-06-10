@@ -187,5 +187,9 @@ namespace Spell.Algorithm
         };
         public string patternSignSentence = "[-|/|\\|>|<|\\[|\\]|,|\"|(|)|“|”|.!?;:…]";
         public string patternCheckWord = "[-|\\/|\\|>|<|\\[|\\]|,|\"|(|)|“|”|@|#|$|%|^|&|\\*|\\d]";
+
+        public string patternSPEC = "[-|\\/|\\|>|<|\\[|\\]||@|#|$|%|^|&|\\*|\\d|]";
+        public string patternOPEN = "[(|“]";
+        public string patternCLOSE = "[,|)|”]";
     }
 }
