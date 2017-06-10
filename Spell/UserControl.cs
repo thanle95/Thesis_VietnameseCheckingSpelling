@@ -20,6 +20,7 @@ namespace Spell
         public int Count { get; set; }
         private static UserControl instance = new UserControl();
         private const string ERROR_SPACE = "\"Lỗi dư khoảng trắng\"";
+        private int SELECTED_ERROR { get; set; }
         private UserControl()
         {
             InitializeComponent();
@@ -296,6 +297,7 @@ namespace Spell
             });
 
             DataGridViewRow row = gridLog.SelectedRows[0];
+            SELECTED_ERROR = row.Index;
             SynchronizedInvoke(lblWrongContext, delegate ()
             {
                 lblWrongContext.Text = row.Cells[1].Value.ToString();
@@ -320,14 +322,36 @@ namespace Spell
             object findText = "";
             SynchronizedInvoke(lblRightContext, delegate ()
             {
+                DataGridViewRow rowNext = null;
                 findText = lblRightContext.Text;
+                int count = 0;
+                if (gridLog.RowCount >= SELECTED_ERROR + 1)
+                {
+                    rowNext = gridLog.Rows[SELECTED_ERROR + 1];
+                    string wrongRowNext = rowNext.Cells[1].Value.ToString();
+                    string[] wrongRowNextArr = wrongRowNext.Split(' ');
+
+                    foreach (string i in wrongRowNextArr)
+                    {
+                        if (lblRightContext.Text.ToLower().Contains(i.ToLower()))
+                        {
+                            if (++count == 2)
+                            {
+                                findText = rowNext.Cells[2].Value.ToString();
+                                break;
+                            }
+
+                        }
+                    }
+                }
+
             });
             object oTrue = true;
             object oFalse = false;
             object oFindStop = Word.WdFindWrap.wdFindStop;
             rng.Find.Execute(ref findText, ref oTrue, ref oFalse, ref oTrue,
-                ref oFalse, ref oFalse, ref oTrue, ref oFindStop, ref oFalse,
-                null, null, null, null, null, null);
+                    ref oFalse, ref oFalse, ref oTrue, ref oFindStop, ref oFalse,
+                    null, null, null, null, null, null);
             rng.Select();
 
         }
@@ -353,7 +377,7 @@ namespace Spell
                     }
                 gridLog.Location = new System.Drawing.Point(18, 195);
             });
-            
+
         }
         private void changeUI_IsNotFixAll_OutOfError()
         {
@@ -456,7 +480,7 @@ namespace Spell
             });
             changeUI_ShowMoreTop();
             changeUI_ShowMore(true);
-            
+
         }
         private void changeUI_ShowMoreInfo_IsNotFixAll()
         {
@@ -510,6 +534,6 @@ namespace Spell
                 btnGo.Location = new System.Drawing.Point(214, 215);
             });
         }
-    
+
     }
 }

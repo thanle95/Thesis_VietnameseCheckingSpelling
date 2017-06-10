@@ -230,10 +230,6 @@ namespace Spell.Algorithm
                     }
                     else
                     {
-                        //quy hach duoc phe duyet. lenght = 5;
-                        //0     1   2   3   4
-                        //iword = 3, "phe"
-                        //
                         //20
                         if (iWord < words.Length - 2)
                         {
