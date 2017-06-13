@@ -332,7 +332,7 @@ namespace Spell.Algorithm
             if (signToken.Equals(signCandidate))
                 return 0;
             if (signToken.Equals("s") && signCandidate.Equals("x") ||
-                signToken.Equals("x") && signCandidate.Equals("s") ||   
+                signToken.Equals("x") && signCandidate.Equals("s") ||
                 signToken.Equals("j") && signCandidate.Equals("x") ||
                 signToken.Equals("x") && signCandidate.Equals("j"))
                 return 0.1;
@@ -727,11 +727,11 @@ namespace Spell.Algorithm
         {
             HashSet<string> hset = new HashSet<string>();
             //tìm X
-            hset.UnionWith(VNDictionary.getInstance.findCompoundVNWord_Xx(context.NEXT));
-            hset.UnionWith(VNDictionary.getInstance.findCompoundVNWord_xX(context.PRE));
-            hset.UnionWith(VNDictionary.getInstance.findCompoundVNWord_Xxx(context.NEXT, context.NEXTNEXT));
-            hset.UnionWith(VNDictionary.getInstance.findCompoundVNWord_xXx(context.PRE, context.NEXTNEXT));
-            hset.UnionWith(VNDictionary.getInstance.findCompoundVNWord_xxX(context.PREPRE, context.PRE));
+            hset.UnionWith(VNDictionary.getInstance.findCompoundVNWord_Xx(context));
+            hset.UnionWith(VNDictionary.getInstance.findCompoundVNWord_xX(context));
+            hset.UnionWith(VNDictionary.getInstance.findCompoundVNWord_Xxx(context));
+            hset.UnionWith(VNDictionary.getInstance.findCompoundVNWord_xXx(context));
+            hset.UnionWith(VNDictionary.getInstance.findCompoundVNWord_xxX(context));
 
             return hset;
         }
@@ -748,7 +748,7 @@ namespace Spell.Algorithm
         public HashSet<string> createCandidateByNgram(Context context, bool isMajuscule)
         {
             HashSet<string> lstCandidate = new HashSet<string>();
-            List<string> bi = Ngram.Instance._biAmount.Keys.Where(key => key.Contains(context.PRE) || key.Contains(context.NEXT)).ToList();
+            List<string> bi = Ngram.Instance._biAmount.Keys.Where(key => IsLikeLy(context.TOKEN, key) && (key.Contains(context.PRE) || key.Contains(context.NEXT))).ToList();
             foreach (string key in bi)
             {
                 if (key.Contains(Ngram.Instance.START_STRING) || key.Contains(Ngram.Instance.END_STRING))
@@ -760,6 +760,24 @@ namespace Spell.Algorithm
                     lstCandidate.Add(word[0]);
             }
             return lstCandidate;
+        }
+        public bool IsLikeLy(string syll, string cand)
+        {
+            int lenght = syll.Length;
+            bool isLongWord = lenght > 3 ? true : false;
+            int count = 0;
+            foreach (char s in syll)
+                foreach (char c in cand)
+                {
+                    if (c == s)
+                    {
+                        count++;
+                        if ((isLongWord && count == lenght - 2) || (!isLongWord && count == lenght - 1))
+                            return true;
+                        break;
+                    }
+                }
+            return false;
         }
     }
 

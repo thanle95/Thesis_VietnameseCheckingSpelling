@@ -14,7 +14,6 @@ namespace Spell
     public partial class UserControl : System.Windows.Forms.UserControl
     {
         private Word.Range curRangeTextShowInTaskPane;
-        private int DeltaYLocation { get { return 188; } }
         private string oldString = "", newString = "";
         public bool _isFixAll { get; set; }
         public int Count { get; set; }

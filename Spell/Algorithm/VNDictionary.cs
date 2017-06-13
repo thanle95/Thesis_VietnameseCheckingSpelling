@@ -96,14 +96,14 @@ namespace Spell.Algorithm
         /// </summary>
         /// <param name="next"></param>
         /// <returns></returns>
-        public HashSet<string> findCompoundVNWord_Xx(string next)
+        public HashSet<string> findCompoundVNWord_Xx(Context context)
         {
             HashSet<string> hSetResult = new HashSet<string>();
-            if (next.Length > 0)
+            if (context.NEXT.Length > 0)
             {
                 //duyệt qua tất cả trường hợp, với value là token
                 foreach (KeyValuePair<string, List<string>> pair in CompoundWordVn.Instance.compoundWordVnDict)
-                    if (pair.Value.Contains(next))
+                    if (pair.Value.Contains(context.NEXT) && Candidate.getInstance.IsLikeLy(context.TOKEN, pair.Key))
                         hSetResult.Add(pair.Key);
             }
             return hSetResult;
@@ -113,16 +113,16 @@ namespace Spell.Algorithm
         /// </summary>
         /// <param name="pre"></param>
         /// <returns></returns>
-        public HashSet<string> findCompoundVNWord_xX(string pre)
+        public HashSet<string> findCompoundVNWord_xX(Context context)
         {
             HashSet<string> hSetResult = new HashSet<string>();
-            if (pre.Length > 0 && CompoundWordVn.Instance.compoundWordVnDict.ContainsKey(pre.Trim().ToLower()))
+            if (context.PRE.Trim().Length > 0 && CompoundWordVn.Instance.compoundWordVnDict.ContainsKey(context.PRE.Trim().ToLower()))
                 //duyệt qua List<string> là value với key là token
-                foreach (string i in CompoundWordVn.Instance.compoundWordVnDict[pre.Trim().ToLower()])
+                foreach (string i in CompoundWordVn.Instance.compoundWordVnDict[context.PRE.Trim().ToLower()])
                 {
                     string[] iArr = i.Trim().Split(' ');
                     //từ ghép có 2 âm tiết dạng: token iArr[0]
-                    if (iArr.Length == 1 && iArr[0].Length > 0)
+                    if (iArr.Length == 1 && iArr[0].Length > 0 && Candidate.getInstance.IsLikeLy(context.TOKEN, iArr[0]))
                         hSetResult.Add(iArr[0]);
                 }
             return hSetResult;
@@ -132,18 +132,19 @@ namespace Spell.Algorithm
         /// </summary>
         /// <param name="token"></param>
         /// <returns></returns>
-        public HashSet<string> findCompoundVNWord_xxX(string prepre, string pre)
+        public HashSet<string> findCompoundVNWord_xxX(Context context)
         {
             HashSet<string> hSetResult = new HashSet<string>();
-            if (prepre.Length > 0 && pre.Length > 0 && CompoundWordVn.Instance.compoundWordVnDict.ContainsKey(prepre.Trim().ToLower()))
+            if (context.PREPRE.Trim().Length > 0 && context.PRE.Trim().Length > 0 && CompoundWordVn.Instance.compoundWordVnDict.ContainsKey(context.PREPRE.Trim().ToLower()))
                 //duyệt qua List<string> là value với key là token
-                foreach (string i in CompoundWordVn.Instance.compoundWordVnDict[prepre.Trim().ToLower()])
+                foreach (string i in CompoundWordVn.Instance.compoundWordVnDict[context.PREPRE.Trim().ToLower()])
                 {
                     string[] iArr = i.Trim().Split(' ');
                     //từ ghép có 3 âm tiết dạng: w_2 w_1 iArr[1]
                     if (iArr.Length == 2
-                        && iArr[0].Equals(pre)
-                        && iArr[1].Length > 0)
+                        && iArr[0].Equals(context.PRE.Trim())
+                        && iArr[1].Length > 0
+                        && Candidate.getInstance.IsLikeLy(context.TOKEN, iArr[1]))
                         hSetResult.Add(iArr[1]);
                 }
             return hSetResult;
@@ -153,16 +154,16 @@ namespace Spell.Algorithm
         /// </summary>
         /// <param name="token"></param>
         /// <returns></returns>
-        public HashSet<string> findCompoundVNWord_xXx(string pre, string next)
+        public HashSet<string> findCompoundVNWord_xXx(Context context)
         {
             HashSet<string> hSetResult = new HashSet<string>();
-            if (next.Length > 0 && pre.Length > 0 && CompoundWordVn.Instance.compoundWordVnDict.ContainsKey(pre.Trim().ToLower()))
+            if (context.NEXT.Trim().Length > 0 && context.PRE.Trim().Length > 0 && CompoundWordVn.Instance.compoundWordVnDict.ContainsKey(context.PRE.Trim().ToLower()))
                 //duyệt qua List<string> là value với key là token
-                foreach (string i in CompoundWordVn.Instance.compoundWordVnDict[pre.Trim().ToLower()])
+                foreach (string i in CompoundWordVn.Instance.compoundWordVnDict[context.PRE.Trim().ToLower()])
                 {
                     string[] iArr = i.Trim().Split(' ');
                     //từ ghép có 3 âm tiết dạng: w_1 iArr[0] _w_1
-                    if (iArr.Length == 2 && iArr[1].Equals(next) && iArr[0].Length > 0)
+                    if (iArr.Length == 2 && iArr[1].Equals(context.NEXT.Trim()) && iArr[0].Length > 0 && Candidate.getInstance.IsLikeLy(context.TOKEN, iArr[0]))
                         hSetResult.Add(iArr[0]);
                 }
             return hSetResult;
@@ -172,17 +173,17 @@ namespace Spell.Algorithm
         /// </summary>
         /// <param name="token"></param>
         /// <returns></returns>
-        public HashSet<string> findCompoundVNWord_Xxx(string next, string nextnext)
+        public HashSet<string> findCompoundVNWord_Xxx(Context context)
         {
             HashSet<string> hSetResult = new HashSet<string>();
-            if (next.Length > 0 && nextnext.Length > 0)
+            if (context.NEXT.Trim().Length > 0 && context.NEXTNEXT.Trim().Length > 0)
                 //duyệt qua tất cả trường hợp, với value là token
                 foreach (KeyValuePair<string, List<string>> pair in CompoundWordVn.Instance.compoundWordVnDict)
                     foreach (string i in pair.Value)
                     {
                         string[] iArr = i.Trim().Split(' ');
                         //từ ghép có 3 âm tiết dạng: key next nextnexxt
-                        if (iArr.Length == 2 && iArr[0].Equals(next) && iArr[1].Equals(nextnext))
+                        if (iArr.Length == 2 && iArr[0].Equals(context.NEXT.Trim()) && iArr[1].Equals(context.NEXTNEXT.Trim()) && Candidate.getInstance.IsLikeLy(context.TOKEN, pair.Key))
                             hSetResult.Add(pair.Key);
                     }
             return hSetResult;

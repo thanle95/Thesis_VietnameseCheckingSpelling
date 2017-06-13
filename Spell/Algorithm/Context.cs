@@ -36,6 +36,14 @@ namespace Spell.Algorithm
         {
             getContext(iWord, words);
         }
+        public void CopyForm(Context c)
+        {
+            this.PREPRE = c.PREPRE;
+            this.PRE = c.PRE;
+            this.TOKEN = c.TOKEN;
+            this.NEXT = c.NEXT;
+            this.NEXTNEXT = c.NEXTNEXT;
+        }
         public Context(Word.Words words, Word.Sentences sentences)
         {
             string[] wordArr = sentences[1].Text.Split(' ');

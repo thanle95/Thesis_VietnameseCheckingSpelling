@@ -89,29 +89,25 @@ namespace Spell.Algorithm
                 //sửa lỗi kiểm tra lần 2 không hiện được gợi ý
                 lstErrorRange.Clear();
                 FirstError_Context = null;
+                if (typeFindError == IS_TYPING_TYPE)
+                    //chọn toàn bộ văn bản
+                    curSentences = Globals.ThisAddIn.Application.Selection.Sentences;
+
+                else
+                    //lấy danh sách câu dựa trên vùng được bôi đen
+                    curSentences = Globals.ThisAddIn.Application.ActiveDocument.Sentences;
+                int start = 0, end = 0;
+                string iWord = "";
+                string iWordReplaced = "";
+                string[] words;
+                int length;
+                Context tmpContext = new Context();
+                
+                HashSet<string> hSetCand = new HashSet<string>();
+                Word.Range range = null;
                 //lấy toàn bộ danh sách các từ trong Active Document, để lấy được ngữ cảnh
                 while (true)
                 {
-                    if (StopFindError)
-                    {
-                        break;
-                    }
-                    if (typeFindError == IS_TYPING_TYPE)
-                        //chọn toàn bộ văn bản
-                        curSentences = Globals.ThisAddIn.Application.Selection.Sentences;
-
-                    else
-                        //lấy danh sách câu dựa trên vùng được bôi đen
-                        curSentences = Globals.ThisAddIn.Application.ActiveDocument.Sentences;
-                    int start = 0, end = 0;
-                    string iWord = "";
-                    string token = "";
-                    string wordInWords = "";
-                    string[] words;
-                    int length;
-                    string prepre = "", pre = "", next = "", nextnext = "";
-                    HashSet<string> hSetCand = new HashSet<string>();
-                    Word.Range range = null;
                     for (int iSentence = 1; iSentence <= curSentences.Count; iSentence++)
                     {
 
@@ -136,15 +132,15 @@ namespace Spell.Algorithm
                                 break;
                             }
                             iWord = words[i];
-                            token = iWord.Trim().ToLower();
-                            if (token.Length < 1)
+                            tmpContext.TOKEN = iWord.Trim().ToLower();
+                            if (tmpContext.TOKEN.Length < 1)
                             {
                                 start += iWord.Length + 1;
                                 continue;
                             }
                             //Kiểm tra các kí tự đặc biệt, mail, số, tên riêng, viết tắt
                             Regex r = new Regex(StringConstant.Instance.patternCheckSpecialChar);
-                            Match m = r.Match(token);
+                            Match m = r.Match(tmpContext.TOKEN);
                             if (m.Success)
                             {
                                 start += iWord.Length + 1;
@@ -160,26 +156,24 @@ namespace Spell.Algorithm
                             {
                                 //xác định ngữ cảnh
                                 Context context = new Context(i, words);
-                                wordInWords = Regex.Replace(context.TOKEN, StringConstant.Instance.patternSignSentence, "");
+
+                                iWordReplaced = Regex.Replace(context.TOKEN, StringConstant.Instance.patternSignSentence, "");
                                 //nếu loại bỏ ký tự đặc biệt nằm giữa hay đầu từ, ví dụ email, thì bắt đầu vòng lặp sau
-                                if (!iWord.Contains(wordInWords)
+                                if (!iWord.Contains(iWordReplaced)
                                     //nếu loại bỏ ký tự đặc biệt xong, độ dài của từ bằng 0, thì bắt đầu vòng lặp sau
-                                    || wordInWords.Length == 0)
+                                    || iWordReplaced.Length == 0)
                                 {
                                     start += words[i].Length + 1;
                                     continue;
                                 }
-                                if (words[i].Length != wordInWords.Length)
-                                    context.TOKEN = wordInWords;
+                                if (words[i].Length != iWordReplaced.Length)
+                                    context.TOKEN = iWordReplaced;
                                 if (!iWord.Contains("\r"))
-                                    start += iWord.Length - wordInWords.Length;
-                                end = start + wordInWords.Length;
-                                prepre = context.PREPRE;
-                                pre = context.PRE;
-                                next = context.NEXT;
-                                nextnext = context.NEXTNEXT;
-                                //Kiểm tra nếu không phải là từ Việt Nam
-                                //Thì highLight
+                                    start += iWord.Length - iWordReplaced.Length;
+                                end = start + iWordReplaced.Length;
+
+                                tmpContext.CopyForm(context);
+
                                 isNoChange = false;
                                 if (typeFindError == IS_TYPING_TYPE)
                                 {
@@ -195,7 +189,8 @@ namespace Spell.Algorithm
                                 }
                                 if (isNoChange)
                                     continue;
-                                if ((typeError == WRONG_RIGHT_ERROR || typeError == WRONG_ERROR) && !VNDictionary.getInstance.isSyllableVN(wordInWords))
+                                //Kiểm tra trên từ điển âm tiết
+                                if ((typeError == WRONG_RIGHT_ERROR || typeError == WRONG_ERROR) && !VNDictionary.getInstance.isSyllableVN(iWordReplaced))
                                 {
 
                                     if (isAutoChange)
@@ -219,15 +214,16 @@ namespace Spell.Algorithm
                                         lstErrorRange.Add(context, (DocumentHandling.Instance.HighLight_MistakeWrongWord(start, end)));
                                     }
                                 }//end if wrong word
-                                 //kiểm tra token có khả năng sai ngữ cảnh hay k
+
+                                //kiểm tra token có khả năng sai ngữ cảnh hay k
 
                                 else if ((typeError == WRONG_RIGHT_ERROR || typeError == RIGHT_ERROR) && !RightWordCandidate.getInstance.checkRightWord(context))
                                 {
                                     if (isAutoChange)
                                     {
-                                        context.PRE = token;
-                                        context.TOKEN = next;
-                                        context.NEXT = nextnext;
+                                        context.PRE = tmpContext.TOKEN;
+                                        context.TOKEN = tmpContext.NEXT;
+                                        context.NEXT = tmpContext.NEXTNEXT;
                                         string tmpNext = "";
                                         //
                                         //thay words[i+1] bằng candidate tốt nhất
@@ -235,16 +231,16 @@ namespace Spell.Algorithm
                                         hSetCand = Candidate.getInstance.selectiveCandidate(context);
                                         if (hSetCand.Count > 0)
                                             tmpNext = hSetCand.ElementAt(0);
-                                        context.PRE = pre;
-                                        context.TOKEN = token;
+                                        context.PRE = tmpContext.PRE;
+                                        context.TOKEN = tmpContext.TOKEN;
                                         context.NEXT = tmpNext;
                                         //kiểm tra words[i] bị sai có do ảnh hưởng của words[i+1] hay không
                                         if (!RightWordCandidate.getInstance.checkRightWord(context))
                                         {
 
-                                            context.PRE = pre;
-                                            context.TOKEN = token;
-                                            context.NEXT = next;
+                                            context.PRE = tmpContext.PRE;
+                                            context.TOKEN = tmpContext.TOKEN;
+                                            context.NEXT = tmpContext.NEXT;
                                             hSetCand.Clear();
                                             hSetCand = Candidate.getInstance.selectiveCandidate(context);
                                             if (hSetCand.Count > 0)
