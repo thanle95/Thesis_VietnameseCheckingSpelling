@@ -29,7 +29,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.btnIgnore = new System.Windows.Forms.Button();
             this.lblWrong = new System.Windows.Forms.Label();
             this.lstbCandidate = new System.Windows.Forms.ListBox();
@@ -124,8 +124,8 @@
             this.gridLog.AllowUserToAddRows = false;
             this.gridLog.AllowUserToDeleteRows = false;
             this.gridLog.AllowUserToResizeRows = false;
-            dataGridViewCellStyle4.BackColor = System.Drawing.Color.Aqua;
-            this.gridLog.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle1.BackColor = System.Drawing.Color.Aqua;
+            this.gridLog.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
             this.gridLog.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.gridLog.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.STT,
@@ -233,11 +233,11 @@
             // lblPauseResumeAutoFix
             // 
             this.lblPauseResumeAutoFix.AutoSize = true;
-            this.lblPauseResumeAutoFix.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblPauseResumeAutoFix.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblPauseResumeAutoFix.ForeColor = System.Drawing.Color.DodgerBlue;
             this.lblPauseResumeAutoFix.Location = new System.Drawing.Point(50, 58);
             this.lblPauseResumeAutoFix.Name = "lblPauseResumeAutoFix";
-            this.lblPauseResumeAutoFix.Size = new System.Drawing.Size(188, 20);
+            this.lblPauseResumeAutoFix.Size = new System.Drawing.Size(175, 18);
             this.lblPauseResumeAutoFix.TabIndex = 28;
             this.lblPauseResumeAutoFix.Text = "Tạm dừng sửa tự động";
             this.lblPauseResumeAutoFix.TextAlign = System.Drawing.ContentAlignment.BottomCenter;

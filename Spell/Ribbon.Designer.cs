@@ -34,7 +34,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Ribbon));
             Microsoft.Office.Tools.Ribbon.RibbonDropDownItem ribbonDropDownItemImpl1 = this.Factory.CreateRibbonDropDownItem();
             Microsoft.Office.Tools.Ribbon.RibbonDropDownItem ribbonDropDownItemImpl2 = this.Factory.CreateRibbonDropDownItem();
             Microsoft.Office.Tools.Ribbon.RibbonDropDownItem ribbonDropDownItemImpl3 = this.Factory.CreateRibbonDropDownItem();
@@ -50,7 +49,6 @@
             this.group1 = this.Factory.CreateRibbonGroup();
             this.box1 = this.Factory.CreateRibbonBox();
             this.btnCheckError = this.Factory.CreateRibbonButton();
-            this.btnPauseResume = this.Factory.CreateRibbonButton();
             this.btnStop = this.Factory.CreateRibbonButton();
             this.btnDeleteFormat = this.Factory.CreateRibbonButton();
             this.separator1 = this.Factory.CreateRibbonSeparator();
@@ -63,8 +61,6 @@
             this.lblSumError = this.Factory.CreateRibbonLabel();
             this.group2 = this.Factory.CreateRibbonGroup();
             this.tbtnShowTaskpane = this.Factory.CreateRibbonToggleButton();
-            this.btnStartAutoFixError = this.Factory.CreateRibbonButton();
-            this.btnStopAutoFixError = this.Factory.CreateRibbonButton();
             this.dropDockPosition = this.Factory.CreateRibbonDropDown();
             this.tab1.SuspendLayout();
             this.group1.SuspendLayout();
@@ -98,7 +94,6 @@
             // 
             this.box1.BoxStyle = Microsoft.Office.Tools.Ribbon.RibbonBoxStyle.Vertical;
             this.box1.Items.Add(this.btnCheckError);
-            this.box1.Items.Add(this.btnPauseResume);
             this.box1.Items.Add(this.btnStop);
             this.box1.Items.Add(this.btnDeleteFormat);
             this.box1.Name = "box1";
@@ -111,16 +106,6 @@
             this.btnCheckError.Name = "btnCheckError";
             this.btnCheckError.ShowImage = true;
             this.btnCheckError.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.btnCheckError_Click);
-            // 
-            // btnPauseResume
-            // 
-            this.btnPauseResume.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
-            this.btnPauseResume.Enabled = false;
-            this.btnPauseResume.Image = ((System.Drawing.Image)(resources.GetObject("btnPauseResume.Image")));
-            this.btnPauseResume.Label = "Tạm dừng";
-            this.btnPauseResume.Name = "btnPauseResume";
-            this.btnPauseResume.ShowImage = true;
-            this.btnPauseResume.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.btnPauseResume_Click);
             // 
             // btnStop
             // 
@@ -203,8 +188,6 @@
             // group2
             // 
             this.group2.Items.Add(this.tbtnShowTaskpane);
-            this.group2.Items.Add(this.btnStartAutoFixError);
-            this.group2.Items.Add(this.btnStopAutoFixError);
             this.group2.Items.Add(this.dropDockPosition);
             this.group2.Label = "Sửa lỗi";
             this.group2.Name = "group2";
@@ -218,26 +201,6 @@
             this.tbtnShowTaskpane.Name = "tbtnShowTaskpane";
             this.tbtnShowTaskpane.ShowImage = true;
             this.tbtnShowTaskpane.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.tbtnShowTaskpane_Click);
-            // 
-            // btnStartAutoFixError
-            // 
-            this.btnStartAutoFixError.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
-            this.btnStartAutoFixError.Enabled = false;
-            this.btnStartAutoFixError.Image = global::Spell.Properties.Resources.fix;
-            this.btnStartAutoFixError.Label = "Sửa tự động";
-            this.btnStartAutoFixError.Name = "btnStartAutoFixError";
-            this.btnStartAutoFixError.ShowImage = true;
-            this.btnStartAutoFixError.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.btnStartAutoFixError_Click);
-            // 
-            // btnStopAutoFixError
-            // 
-            this.btnStopAutoFixError.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
-            this.btnStopAutoFixError.Enabled = false;
-            this.btnStopAutoFixError.Image = global::Spell.Properties.Resources.stop;
-            this.btnStopAutoFixError.Label = "Dừng sửa tự động";
-            this.btnStopAutoFixError.Name = "btnStopAutoFixError";
-            this.btnStopAutoFixError.ShowImage = true;
-            this.btnStopAutoFixError.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.btnStopAutoFixError_Click);
             // 
             // dropDockPosition
             // 
@@ -282,15 +245,12 @@
         internal Microsoft.Office.Tools.Ribbon.RibbonDropDown dropTypeError;
         internal Microsoft.Office.Tools.Ribbon.RibbonCheckBox chkbAutoChange;
         internal Microsoft.Office.Tools.Ribbon.RibbonToggleButton tbtnShowTaskpane;
-        internal Microsoft.Office.Tools.Ribbon.RibbonButton btnPauseResume;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton btnCheckError;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton btnStop;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton showSumError;
         internal Microsoft.Office.Tools.Ribbon.RibbonLabel lblSumError;
         internal Microsoft.Office.Tools.Ribbon.RibbonSeparator separator2;
         internal Microsoft.Office.Tools.Ribbon.RibbonGroup group2;
-        internal Microsoft.Office.Tools.Ribbon.RibbonButton btnStopAutoFixError;
-        internal Microsoft.Office.Tools.Ribbon.RibbonButton btnStartAutoFixError;
     }
 
     partial class ThisRibbonCollection

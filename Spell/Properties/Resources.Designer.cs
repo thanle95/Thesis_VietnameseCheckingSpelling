@@ -178,16 +178,6 @@ namespace Spell.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap fix {
-            get {
-                object obj = ResourceManager.GetObject("fix", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to a@dua_ha_hoàn_la hán_phiến_tòng_
         ///a-lô@_
         ///a-men@_
@@ -218,16 +208,6 @@ namespace Spell.Properties {
         internal static System.Drawing.Bitmap pause {
             get {
                 object obj = ResourceManager.GetObject("pause", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap pause_resume {
-            get {
-                object obj = ResourceManager.GetObject("pause_resume", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

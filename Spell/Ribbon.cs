@@ -59,25 +59,37 @@ namespace Spell
             //    Usage usage = new Usage();
             //    usage.ShowDialog();
             //}
-            threadFindError = new Thread(threadStartFindError);
-            threadFindError.Priority = ThreadPriority.Highest;
-            //if (!threadFindError.IsAlive)
-            threadFindError.Start();
-      
+            if (btnCheckError.Label.Contains("Kiểm lỗi"))
+            {
+                threadFindError = new Thread(threadStartFindError);
+                threadFindError.Priority = ThreadPriority.Highest;
+                //if (!threadFindError.IsAlive)
+                threadFindError.Start();
+                btnCheckError.Label = "Tạm dừng";
+                btnCheckError.Image = global::Spell.Properties.Resources.pause;
+            }
+            else if (btnCheckError.Label.Contains("Tạm dừng"))
+            {
+                threadFindError.Suspend();
+                tbtnShowTaskpane.Enabled = true;
+                btnCheckError.Label = "Tiếp tục";
+                btnCheckError.Image = global::Spell.Properties.Resources.check;
+            }
+            else
+            {
+                threadFindError.Resume();
+                tbtnShowTaskpane.Enabled = false;
+                btnCheckError.Label = "Tạm dừng";
+                btnCheckError.Image = global::Spell.Properties.Resources.pause;
+            }
         }
         private void check()
         {
             DocumentHandling.Instance.DeHighLight_All_Mistake(Globals.ThisAddIn.Application.ActiveDocument.Characters);
-            
+
             typeFindError = dropTypeFindError.SelectedItemIndex;
             typeError = dropTypeError.SelectedItemIndex;
             isAutoChange = chkbAutoChange.Checked;
-            btnStopAutoFixError.Enabled = false;
-            btnCheckError.Enabled = false;
-            if (typeFindError == IS_TYPING_TYPE)
-                btnPauseResume.Enabled = false;
-            else
-                btnPauseResume.Enabled = true;
             btnDeleteFormat.Enabled = false;
             btnStop.Enabled = true;
             dropCorpus.Enabled = false;
@@ -86,9 +98,6 @@ namespace Spell
             chkbAutoChange.Enabled = false;
             FindError.Instance.StopFindError = false;
             tbtnShowTaskpane.Enabled = false;
-            btnPauseResume.Label = "Tạm dừng";
-
-            
 
             FindError.Instance.createValue(typeFindError, typeError, isAutoChange);
             UserControl.Instance.Count = 0;
@@ -97,7 +106,6 @@ namespace Spell
             stopwatch.Start();
             FindError.Instance.startFindError();
             stopwatch.Stop();
-            btnStartAutoFixError.Enabled = true;
             int count = FindError.Instance.CountError;
             //int count = UserControl.Instance.startFindError(typeFindError);
             if (count > 0)
@@ -116,7 +124,6 @@ namespace Spell
                 myCustomTaskPane.Visible = true;
                 if (result == DialogResult.Yes)
                 {
-                    btnStopAutoFixError.Enabled = true;
                     UserControl.Instance.Start(true);
                     UserControl.Instance.showCandidateInTaskPane();
                 }
@@ -135,15 +142,13 @@ namespace Spell
                                 ts.Hours, ts.Minutes, ts.Seconds,
                                 ts.Milliseconds / 10);
             MessageBox.Show(elapseTime);
-            btnPauseResume.Enabled = false;
             btnStop.Enabled = false;
-            btnCheckError.Enabled = true;
             dropCorpus.Enabled = true;
             dropTypeError.Enabled = true;
             dropTypeFindError.Enabled = true;
             chkbAutoChange.Enabled = true;
         }
-        
+
         private void dropDockPosition_SelectionChanged(object sender, RibbonControlEventArgs e)
         {
             if (dropDockPosition.SelectedItemIndex == DOCK_RIGHT)
@@ -208,37 +213,14 @@ namespace Spell
                 myCustomTaskPane.Visible = false;
         }
 
-        private void btnPauseResume_Click(object sender, RibbonControlEventArgs e)
-        {
-            if (btnPauseResume.Label.Equals("Tạm dừng"))
-            {
-                threadFindError.Suspend();
-                btnPauseResume.Label = "Tiếp tục";
-                tbtnShowTaskpane.Enabled = true;
-            }
-            else
-            {
-                threadFindError.Resume();
-                btnPauseResume.Label = "Tạm dừng";
-                tbtnShowTaskpane.Enabled = false;
-            }
-        }
-
         private void btnStop_Click(object sender, RibbonControlEventArgs e)
         {
-            //threadFindError.Suspend();
-            //threadFindError.Abort();
             FindError.Instance.StopFindError = true;
-            btnCheckError.Enabled = true;
             btnStop.Enabled = false;
-            btnPauseResume.Enabled = false;
             tbtnShowTaskpane.Enabled = true;
-        }
 
-        private void btnStartAutoFixError_Click(object sender, RibbonControlEventArgs e)
-        {
-            btnStopAutoFixError.Enabled = true;
-            UserControl.Instance.showCandidateInTaskPane();
+            btnCheckError.Label = "Kiểm lỗi";
+            btnCheckError.Image = global::Spell.Properties.Resources.check;
         }
 
         private void showSumError_Click(object sender, RibbonControlEventArgs e)
@@ -253,15 +235,8 @@ namespace Spell
                             sum++;
                             lblSumError.Label = sum.ToString() + " lỗi";
                         }
-                }
-                );
+                });
             a.Start();
-        }
-
-        private void btnStopAutoFixError_Click(object sender, RibbonControlEventArgs e)
-        {
-            UserControl.Instance._isFixAll = false;
-            btnStopAutoFixError.Enabled = false;
         }
     }
 }
