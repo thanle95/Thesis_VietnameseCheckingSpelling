@@ -80,10 +80,8 @@ namespace Spell
                 MessageBox.Show(SysMessage.Instance.IsNotError(FindError.Instance.SelectedError_Context.TOKEN));
             }
         }
-        public void showCandidateInTaskPane(bool isFixAll)
+        public void showCandidateInTaskPane()
         {
-
-
             while (FindError.Instance.lstErrorRange.Count > 0)
             {
                 FixError fixError = new FixError();
@@ -175,7 +173,7 @@ namespace Spell
             //
             FindError.Instance.FirstError_Context = FindError.Instance.lstErrorRange.First().Key;
             FindError.Instance.lstErrorRange[FindError.Instance.FirstError_Context].Select();
-            showCandidateInTaskPane(_isFixAll);
+            showCandidateInTaskPane();
         }
 
         private void btnAdd_Click(object sender, EventArgs e)
@@ -245,7 +243,7 @@ namespace Spell
             FindError.Instance.FirstError_Context = FindError.Instance.lstErrorRange.First().Key;
             FindError.Instance.lstErrorRange[FindError.Instance.FirstError_Context].Select();
             if (!_isFixAll)
-                showCandidateInTaskPane(_isFixAll);
+                showCandidateInTaskPane();
 
         }
         private void btnChange_KeyDown(object sender, KeyEventArgs e)
@@ -406,7 +404,7 @@ namespace Spell
                 if (_isFixAll)
                 {
 
-                    if (gridLog.Size.Height <= 500)
+                    if (gridLog.Size.Height <= 310)
                         gridLog.Size = new System.Drawing.Size(gridLog.Size.Width, gridLog.Size.Height + 22);
                 }
                 else
@@ -425,6 +423,43 @@ namespace Spell
             });
 
         }
+
+        private void btnPauseResumeAutoFix_Click(object sender, EventArgs e)
+        {
+            Pause_Resume();
+        }
+        private void Pause_Resume()
+        {
+            SynchronizedInvoke(lblPauseResumeAutoFix, delegate ()
+            {
+                if(lblPauseResumeAutoFix.Text.Contains("dừng"))
+                {
+                    _isFixAll = false;
+                    lblPauseResumeAutoFix.Text = "Tiếp tục sửa tự động";
+                    SynchronizedInvoke(btnPauseResumeAutoFix, delegate ()
+                    {
+                        btnPauseResumeAutoFix.BackgroundImage = global::Spell.Properties.Resources.change;
+                    });
+                }
+                else
+                {
+                    _isFixAll = true;
+                    lblPauseResumeAutoFix.Text = "Tạm dừng sửa tự động";
+                    SynchronizedInvoke(btnPauseResumeAutoFix, delegate ()
+                    {
+                        btnPauseResumeAutoFix.BackgroundImage = global::Spell.Properties.Resources.pause;
+                    });
+                    Thread t = new Thread(new ThreadStart(showCandidateInTaskPane));
+                    t.Start();
+                }
+            });
+        }
+
+        private void lblPauseResumeAutoFix_Click(object sender, EventArgs e)
+        {
+            Pause_Resume();
+        }
+
         private void changeUI_ShowMoreInfo()
         {
             SynchronizedInvoke(gridLog, delegate ()

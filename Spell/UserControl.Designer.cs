@@ -29,7 +29,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             this.btnIgnore = new System.Windows.Forms.Button();
             this.lblWrong = new System.Windows.Forms.Label();
             this.lstbCandidate = new System.Windows.Forms.ListBox();
@@ -44,10 +44,8 @@
             this.lblRightArrow = new System.Windows.Forms.Label();
             this.btnGo = new System.Windows.Forms.Button();
             this.pnlSequenceFix = new System.Windows.Forms.Panel();
-            this.btnAutoFix = new System.Windows.Forms.Button();
-            this.btnStopAutoFix = new System.Windows.Forms.Button();
-            this.lblAutoFix = new System.Windows.Forms.Label();
-            this.lblStopAutoFix = new System.Windows.Forms.Label();
+            this.btnPauseResumeAutoFix = new System.Windows.Forms.Button();
+            this.lblPauseResumeAutoFix = new System.Windows.Forms.Label();
             this.pnlAutoFix = new System.Windows.Forms.Panel();
             this.pnlButtonAutoFix = new System.Windows.Forms.Panel();
             this.pnlShowMore = new System.Windows.Forms.Panel();
@@ -126,8 +124,8 @@
             this.gridLog.AllowUserToAddRows = false;
             this.gridLog.AllowUserToDeleteRows = false;
             this.gridLog.AllowUserToResizeRows = false;
-            dataGridViewCellStyle2.BackColor = System.Drawing.Color.Aqua;
-            this.gridLog.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle4.BackColor = System.Drawing.Color.Aqua;
+            this.gridLog.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle4;
             this.gridLog.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.gridLog.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.STT,
@@ -221,47 +219,29 @@
             this.pnlSequenceFix.Size = new System.Drawing.Size(285, 176);
             this.pnlSequenceFix.TabIndex = 25;
             // 
-            // btnAutoFix
+            // btnPauseResumeAutoFix
             // 
-            this.btnAutoFix.BackgroundImage = global::Spell.Properties.Resources.fix;
-            this.btnAutoFix.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.btnAutoFix.Location = new System.Drawing.Point(30, 3);
-            this.btnAutoFix.Name = "btnAutoFix";
-            this.btnAutoFix.Size = new System.Drawing.Size(50, 50);
-            this.btnAutoFix.TabIndex = 26;
-            this.btnAutoFix.UseVisualStyleBackColor = true;
+            this.btnPauseResumeAutoFix.BackgroundImage = global::Spell.Properties.Resources.pause;
+            this.btnPauseResumeAutoFix.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btnPauseResumeAutoFix.Location = new System.Drawing.Point(114, 3);
+            this.btnPauseResumeAutoFix.Name = "btnPauseResumeAutoFix";
+            this.btnPauseResumeAutoFix.Size = new System.Drawing.Size(50, 50);
+            this.btnPauseResumeAutoFix.TabIndex = 26;
+            this.btnPauseResumeAutoFix.UseVisualStyleBackColor = true;
+            this.btnPauseResumeAutoFix.Click += new System.EventHandler(this.btnPauseResumeAutoFix_Click);
             // 
-            // btnStopAutoFix
+            // lblPauseResumeAutoFix
             // 
-            this.btnStopAutoFix.BackgroundImage = global::Spell.Properties.Resources.stop;
-            this.btnStopAutoFix.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.btnStopAutoFix.Location = new System.Drawing.Point(181, 3);
-            this.btnStopAutoFix.Name = "btnStopAutoFix";
-            this.btnStopAutoFix.Size = new System.Drawing.Size(50, 50);
-            this.btnStopAutoFix.TabIndex = 27;
-            this.btnStopAutoFix.UseVisualStyleBackColor = true;
-            // 
-            // lblAutoFix
-            // 
-            this.lblAutoFix.AutoSize = true;
-            this.lblAutoFix.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblAutoFix.ForeColor = System.Drawing.Color.DodgerBlue;
-            this.lblAutoFix.Location = new System.Drawing.Point(-2, 66);
-            this.lblAutoFix.Name = "lblAutoFix";
-            this.lblAutoFix.Size = new System.Drawing.Size(107, 20);
-            this.lblAutoFix.TabIndex = 28;
-            this.lblAutoFix.Text = "Sửa tự động";
-            // 
-            // lblStopAutoFix
-            // 
-            this.lblStopAutoFix.AutoSize = true;
-            this.lblStopAutoFix.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblStopAutoFix.ForeColor = System.Drawing.Color.DodgerBlue;
-            this.lblStopAutoFix.Location = new System.Drawing.Point(129, 66);
-            this.lblStopAutoFix.Name = "lblStopAutoFix";
-            this.lblStopAutoFix.Size = new System.Drawing.Size(152, 20);
-            this.lblStopAutoFix.TabIndex = 29;
-            this.lblStopAutoFix.Text = "Dừng sửa tự động";
+            this.lblPauseResumeAutoFix.AutoSize = true;
+            this.lblPauseResumeAutoFix.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblPauseResumeAutoFix.ForeColor = System.Drawing.Color.DodgerBlue;
+            this.lblPauseResumeAutoFix.Location = new System.Drawing.Point(50, 58);
+            this.lblPauseResumeAutoFix.Name = "lblPauseResumeAutoFix";
+            this.lblPauseResumeAutoFix.Size = new System.Drawing.Size(188, 20);
+            this.lblPauseResumeAutoFix.TabIndex = 28;
+            this.lblPauseResumeAutoFix.Text = "Tạm dừng sửa tự động";
+            this.lblPauseResumeAutoFix.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.lblPauseResumeAutoFix.Click += new System.EventHandler(this.lblPauseResumeAutoFix_Click);
             // 
             // pnlAutoFix
             // 
@@ -270,19 +250,17 @@
             this.pnlAutoFix.Controls.Add(this.gridLog);
             this.pnlAutoFix.Location = new System.Drawing.Point(14, 194);
             this.pnlAutoFix.Name = "pnlAutoFix";
-            this.pnlAutoFix.Size = new System.Drawing.Size(285, 311);
+            this.pnlAutoFix.Size = new System.Drawing.Size(285, 400);
             this.pnlAutoFix.TabIndex = 30;
             this.pnlAutoFix.Visible = false;
             // 
             // pnlButtonAutoFix
             // 
-            this.pnlButtonAutoFix.Controls.Add(this.btnStopAutoFix);
-            this.pnlButtonAutoFix.Controls.Add(this.btnAutoFix);
-            this.pnlButtonAutoFix.Controls.Add(this.lblStopAutoFix);
-            this.pnlButtonAutoFix.Controls.Add(this.lblAutoFix);
+            this.pnlButtonAutoFix.Controls.Add(this.btnPauseResumeAutoFix);
+            this.pnlButtonAutoFix.Controls.Add(this.lblPauseResumeAutoFix);
             this.pnlButtonAutoFix.Location = new System.Drawing.Point(2, 0);
             this.pnlButtonAutoFix.Name = "pnlButtonAutoFix";
-            this.pnlButtonAutoFix.Size = new System.Drawing.Size(285, 90);
+            this.pnlButtonAutoFix.Size = new System.Drawing.Size(280, 90);
             this.pnlButtonAutoFix.TabIndex = 30;
             // 
             // pnlShowMore
@@ -305,7 +283,7 @@
             this.Controls.Add(this.pnlSequenceFix);
             this.MinimumSize = new System.Drawing.Size(300, 350);
             this.Name = "UserControl";
-            this.Size = new System.Drawing.Size(320, 530);
+            this.Size = new System.Drawing.Size(320, 597);
             ((System.ComponentModel.ISupportInitialize)(this.gridLog)).EndInit();
             this.pnlSequenceFix.ResumeLayout(false);
             this.pnlSequenceFix.PerformLayout();
@@ -334,11 +312,9 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn rightContext;
         private System.Windows.Forms.Button btnGo;
         private System.Windows.Forms.Panel pnlSequenceFix;
-        private System.Windows.Forms.Button btnAutoFix;
-        private System.Windows.Forms.Label lblAutoFix;
-        private System.Windows.Forms.Label lblStopAutoFix;
+        private System.Windows.Forms.Button btnPauseResumeAutoFix;
+        private System.Windows.Forms.Label lblPauseResumeAutoFix;
         private System.Windows.Forms.Panel pnlAutoFix;
-        private System.Windows.Forms.Button btnStopAutoFix;
         private System.Windows.Forms.Panel pnlShowMore;
         private System.Windows.Forms.Panel pnlButtonAutoFix;
     }

@@ -118,11 +118,11 @@ namespace Spell
                 {
                     btnStopAutoFixError.Enabled = true;
                     UserControl.Instance.Start(true);
-                    UserControl.Instance.showCandidateInTaskPane(true);
+                    UserControl.Instance.showCandidateInTaskPane();
                 }
                 else {
                     UserControl.Instance.Start(false);
-                    UserControl.Instance.showCandidateInTaskPane(false);
+                    UserControl.Instance.showCandidateInTaskPane();
                 }
             }
             else
@@ -238,7 +238,7 @@ namespace Spell
         private void btnStartAutoFixError_Click(object sender, RibbonControlEventArgs e)
         {
             btnStopAutoFixError.Enabled = true;
-            UserControl.Instance.showCandidateInTaskPane(true);
+            UserControl.Instance.showCandidateInTaskPane();
         }
 
         private void showSumError_Click(object sender, RibbonControlEventArgs e)

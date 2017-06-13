@@ -248,6 +248,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\delete.png" />
+    <None Include="Resources\change.png" />
     <Content Include="Resources\filteredBi.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -259,6 +260,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <None Include="Resources\pause_resume.png" />
+    <None Include="Resources\pause.png" />
     <Content Include="Resources\rightWordCandidate.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
