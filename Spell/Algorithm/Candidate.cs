@@ -100,10 +100,6 @@ namespace Spell.Algorithm
             return WrongWordCandidate.getInstance.createCandidate(context, isMajuscule);
         }
 
-        public HashSet<string> selectiveCandidate(Context context)
-        {
-            return createCandidate(context);
-        }
 
         /// <summary>
         /// sắp xếp candidate dựa trên số điểm, candidate có điểm cao nhất sẽ ở vị trí đầu tiên
@@ -727,11 +723,14 @@ namespace Spell.Algorithm
         {
             HashSet<string> hset = new HashSet<string>();
             //tìm X
-            hset.UnionWith(VNDictionary.getInstance.findCompoundVNWord_Xx(context));
-            hset.UnionWith(VNDictionary.getInstance.findCompoundVNWord_xX(context));
             hset.UnionWith(VNDictionary.getInstance.findCompoundVNWord_Xxx(context));
             hset.UnionWith(VNDictionary.getInstance.findCompoundVNWord_xXx(context));
             hset.UnionWith(VNDictionary.getInstance.findCompoundVNWord_xxX(context));
+            if (hset.Count > 0)
+                return hset;
+            hset.UnionWith(VNDictionary.getInstance.findCompoundVNWord_Xx(context));
+            hset.UnionWith(VNDictionary.getInstance.findCompoundVNWord_xX(context));
+            
 
             return hset;
         }
@@ -754,10 +753,30 @@ namespace Spell.Algorithm
                 if (key.Contains(Ngram.Instance.START_STRING) || key.Contains(Ngram.Instance.END_STRING))
                     continue;
                 string[] word = key.Split(' ');
-                if (word[0].Equals(context.PRE) && word[1].Length > 0/* && calScore_Similarity(token, word[1]) > LIM_SIMILARITY*/)
+                if (word[0].Equals(context.PRE) && word[1].Length > 0)
                     lstCandidate.Add(word[1]);
-                else if (word[1].Equals(context.NEXT) && word[0].Length > 0 /*&& calScore_Similarity(token, word[0]) > LIM_SIMILARITY*/)
+                else if (word[1].Equals(context.NEXT) && word[0].Length > 0)
                     lstCandidate.Add(word[0]);
+                if (lstCandidate.Count > 50)
+                    return lstCandidate;
+            }
+            return lstCandidate;
+        }
+        public HashSet<string> createCandidateByNgram_NoUseLamdaExp(Context context, bool isMajuscule)
+        {
+            HashSet<string> lstCandidate = new HashSet<string>();
+            foreach (KeyValuePair<string, int> pair  in Ngram.Instance._biAmount)
+            {
+                if (pair.Key.Contains(Ngram.Instance.START_STRING) || pair.Key.Contains(Ngram.Instance.END_STRING))
+                    continue;
+                if (IsLikeLy(context.TOKEN, pair.Key) &&(pair.Key.Contains(context.PRE) || pair.Key.Contains(context.NEXT)))
+                {
+                    string[] word = pair.Key.Split(' ');
+                    if (word[0].Equals(context.PRE) && word[1].Length > 0)
+                        lstCandidate.Add(word[1]);
+                    else if (word[1].Equals(context.NEXT) && word[0].Length > 0)
+                        lstCandidate.Add(word[0]);
+                }
             }
             return lstCandidate;
         }

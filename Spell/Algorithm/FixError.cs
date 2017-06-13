@@ -38,7 +38,7 @@ namespace Spell.Algorithm
                         //lấy lỗi đầu tiên tìm được với startIndex
                         //Token = dictError[context].Text.ToLower().Trim();
                         Token = context.TOKEN;
-                        hSetCandidate = Candidate.getInstance.selectiveCandidate(context);
+                        hSetCandidate = Candidate.getInstance.createCandidate(context);
                         if (hSetCandidate.Count > 0)
                             _candidate = hSetCandidate.ElementAt(0);
                     }

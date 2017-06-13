@@ -114,12 +114,9 @@ namespace Spell.Algorithm
                             candidatesWithScore.Add(candidate, score);
                             candidatesWithScore = Candidate.getInstance.sortDict(candidatesWithScore);
                         }
-
-
                     }
                     //text_writeFile += String.Format("{0}: [{1};{2};{3}] = {4}", candidate, D, L, S, score) + "\n";
                 }
-
             }
             //nếu có từ ghép 3 âm tiết
             if (prioritizedCandidatesWithScore.Count > 0)

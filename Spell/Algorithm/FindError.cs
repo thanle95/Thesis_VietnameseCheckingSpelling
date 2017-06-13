@@ -181,7 +181,7 @@ namespace Spell.Algorithm
                                         if (iContext.Equals(context))
                                         {
                                             isNoChange = true;
-                                            hSetCand = Candidate.getInstance.selectiveCandidate(context);
+                                            hSetCand = Candidate.getInstance.createCandidate(context);
                                             if (hSetCand.Count > 0)
                                                 words[i] = hSetCand.ElementAt(0);
                                             break;
@@ -228,7 +228,7 @@ namespace Spell.Algorithm
                                         //
                                         //thay words[i+1] bằng candidate tốt nhất
                                         hSetCand.Clear();
-                                        hSetCand = Candidate.getInstance.selectiveCandidate(context);
+                                        hSetCand = RightWordCandidate.getInstance.createCandidate(context, false);
                                         if (hSetCand.Count > 0)
                                             tmpNext = hSetCand.ElementAt(0);
                                         context.PRE = tmpContext.PRE;
@@ -242,7 +242,7 @@ namespace Spell.Algorithm
                                             context.TOKEN = tmpContext.TOKEN;
                                             context.NEXT = tmpContext.NEXT;
                                             hSetCand.Clear();
-                                            hSetCand = Candidate.getInstance.selectiveCandidate(context);
+                                            hSetCand = RightWordCandidate.getInstance.createCandidate(context,false);
                                             if (hSetCand.Count > 0)
                                             {
                                                 //tự động thay thế bằng candidate tốt nhất
