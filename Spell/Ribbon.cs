@@ -68,7 +68,7 @@ namespace Spell
         private void check()
         {
             DocumentHandling.Instance.DeHighLight_All_Mistake(Globals.ThisAddIn.Application.ActiveDocument.Characters);
-            UserControl.Instance.Start();
+            
             typeFindError = dropTypeFindError.SelectedItemIndex;
             typeError = dropTypeError.SelectedItemIndex;
             isAutoChange = chkbAutoChange.Checked;
@@ -117,11 +117,13 @@ namespace Spell
                 if (result == DialogResult.Yes)
                 {
                     btnStopAutoFixError.Enabled = true;
+                    UserControl.Instance.Start(true);
                     UserControl.Instance.showCandidateInTaskPane(true);
                 }
-                else
+                else {
+                    UserControl.Instance.Start(false);
                     UserControl.Instance.showCandidateInTaskPane(false);
-                
+                }
             }
             else
             {
