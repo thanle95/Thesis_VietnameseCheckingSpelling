@@ -37,10 +37,9 @@ namespace Spell
         }
         private int Index { get; set; }
         private int TotalError { get; set; }
-        private CancellationTokenSource cts;
         public void Start(bool isFixAll)
         {
-            cts = new CancellationTokenSource();
+
             TotalError = FindError.Instance.lstErrorRange.Count;
             _isFixAll = isFixAll;
             SynchronizedInvoke(gridLog, delegate ()
@@ -89,7 +88,7 @@ namespace Spell
         }
         public void showCandidateInTaskPane()
         {
-            while (Index < TotalError)
+            while (FindError.Instance.lstErrorRange.Count > 0)
             {
                 FixError fixError = new FixError();
 
@@ -237,16 +236,13 @@ namespace Spell
             DocumentHandling.Instance.DeHighLight_Mistake(startIndex, endIndex);
             curRangeTextShowInTaskPane.Select();
             Index++;
-            UpdateProgressBar(Index, TotalError);
-            if (FindError.Instance.lstErrorRange.Count == 0)
+            UpdateProgressBar();
+            if (Index == TotalError)
             {
+                Thread.Sleep(500);
                 MessageBox.Show(SysMessage.Instance.No_error);
                 changeUI_OutOfError();
                 Index = 0;
-                if(cts!= null)
-                {
-                    cts.Cancel();
-                }
                 return;
             }
             //
@@ -488,31 +484,35 @@ namespace Spell
                 pnlShowMore.Visible = true;
             });
         }
-        private Task ProcessData(int index, int totalProcess, IProgress<ProgressReport> progress)
+        private async Task ProcessData(IProgress<ProgressReport> progress)
         {
             var progressReport = new ProgressReport();
-            return Task.Run(() =>
+            await Task.Run(() =>
             {
-                progressReport.PercentComplete = index * 100 / totalProcess;
+                progressReport.PercentComplete = Index * 100 / TotalError;
                 progress.Report(progressReport);
                 Thread.Sleep(20);
             });
         }
-        private async void UpdateProgressBar(int index, int totalProcess)
+        private async void UpdateProgressBar()
         {
-            try {
-                var progress = new Progress<ProgressReport>();
-                progress.ProgressChanged += (o, report) =>
+            var progress = new Progress<ProgressReport>();
+
+            progress.ProgressChanged += (o, report) =>
+            {
+                SynchronizedInvoke(lblStatus, delegate ()
                 {
-                    lblStatus.Text = string.Format("{0}/{1} lỗi", index, totalProcess);
+                    lblStatus.Text = string.Format("{0}/{1} lỗi", Index, TotalError);
+                });
+                SynchronizedInvoke(progressBar1, delegate ()
+                {
                     progressBar1.Value = report.PercentComplete;
                     progressBar1.Update();
-                };
-                await ProcessData(index, totalProcess, progress);
-                lblStatus.Text = string.Format("{0}/{1} lỗi", index, totalProcess);
-            }
-            catch (OperationCanceledException) { }
-            cts = null;
+                });
+            };
+            await ProcessData(progress);
+            //lblStatus.Text = string.Format("{0}/{1} lỗi", Index, TotalError);
+
         }
 
     }
