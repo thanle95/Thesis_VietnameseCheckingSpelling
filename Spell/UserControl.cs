@@ -4,7 +4,9 @@ using System.Windows.Forms;
 using Spell.Algorithm;
 using Word = Microsoft.Office.Interop.Word;
 using System.Threading;
+using System.Threading.Tasks;
 using System.ComponentModel;
+using System.Collections.Generic;
 
 namespace Spell
 {
@@ -33,8 +35,13 @@ namespace Spell
                 return instance;
             }
         }
+        private int Index { get; set; }
+        private int TotalError { get; set; }
+        private CancellationTokenSource cts;
         public void Start(bool isFixAll)
         {
+            cts = new CancellationTokenSource();
+            TotalError = FindError.Instance.lstErrorRange.Count;
             _isFixAll = isFixAll;
             SynchronizedInvoke(gridLog, delegate ()
             {
@@ -82,7 +89,7 @@ namespace Spell
         }
         public void showCandidateInTaskPane()
         {
-            while (FindError.Instance.lstErrorRange.Count > 0)
+            while (Index < TotalError)
             {
                 FixError fixError = new FixError();
 
@@ -229,12 +236,17 @@ namespace Spell
             }
             DocumentHandling.Instance.DeHighLight_Mistake(startIndex, endIndex);
             curRangeTextShowInTaskPane.Select();
-
+            Index++;
+            UpdateProgressBar(Index, TotalError);
             if (FindError.Instance.lstErrorRange.Count == 0)
             {
                 MessageBox.Show(SysMessage.Instance.No_error);
                 changeUI_OutOfError();
-                //SynchronizedInvoke(this, delegate () { this.Visible = false; });
+                Index = 0;
+                if(cts!= null)
+                {
+                    cts.Cancel();
+                }
                 return;
             }
             //
@@ -432,10 +444,10 @@ namespace Spell
         {
             SynchronizedInvoke(lblPauseResumeAutoFix, delegate ()
             {
-                if(lblPauseResumeAutoFix.Text.Contains("dừng"))
+                if (lblPauseResumeAutoFix.Text.Contains("dừng"))
                 {
                     _isFixAll = false;
-                    lblPauseResumeAutoFix.Text = "Tiếp tục sửa tự động";
+                    lblPauseResumeAutoFix.Text = "Tiếp tục";
                     SynchronizedInvoke(btnPauseResumeAutoFix, delegate ()
                     {
                         btnPauseResumeAutoFix.BackgroundImage = global::Spell.Properties.Resources.change;
@@ -444,7 +456,7 @@ namespace Spell
                 else
                 {
                     _isFixAll = true;
-                    lblPauseResumeAutoFix.Text = "Tạm dừng sửa tự động";
+                    lblPauseResumeAutoFix.Text = "Tạm dừng";
                     SynchronizedInvoke(btnPauseResumeAutoFix, delegate ()
                     {
                         btnPauseResumeAutoFix.BackgroundImage = global::Spell.Properties.Resources.pause;
@@ -476,5 +488,32 @@ namespace Spell
                 pnlShowMore.Visible = true;
             });
         }
+        private Task ProcessData(int index, int totalProcess, IProgress<ProgressReport> progress)
+        {
+            var progressReport = new ProgressReport();
+            return Task.Run(() =>
+            {
+                progressReport.PercentComplete = index * 100 / totalProcess;
+                progress.Report(progressReport);
+                Thread.Sleep(20);
+            });
+        }
+        private async void UpdateProgressBar(int index, int totalProcess)
+        {
+            try {
+                var progress = new Progress<ProgressReport>();
+                progress.ProgressChanged += (o, report) =>
+                {
+                    lblStatus.Text = string.Format("{0}/{1} lỗi", index, totalProcess);
+                    progressBar1.Value = report.PercentComplete;
+                    progressBar1.Update();
+                };
+                await ProcessData(index, totalProcess, progress);
+                lblStatus.Text = string.Format("{0}/{1} lỗi", index, totalProcess);
+            }
+            catch (OperationCanceledException) { }
+            cts = null;
+        }
+
     }
 }
