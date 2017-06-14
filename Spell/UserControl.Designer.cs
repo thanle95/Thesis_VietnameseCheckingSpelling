@@ -29,7 +29,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.btnIgnore = new System.Windows.Forms.Button();
             this.lblWrong = new System.Windows.Forms.Label();
             this.lstbCandidate = new System.Windows.Forms.ListBox();
@@ -47,13 +47,15 @@
             this.btnPauseResumeAutoFix = new System.Windows.Forms.Button();
             this.lblPauseResumeAutoFix = new System.Windows.Forms.Label();
             this.pnlAutoFix = new System.Windows.Forms.Panel();
+            this.pnlProgressBar = new System.Windows.Forms.Panel();
+            this.lblStatus = new System.Windows.Forms.Label();
+            this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.pnlButtonAutoFix = new System.Windows.Forms.Panel();
             this.pnlShowMore = new System.Windows.Forms.Panel();
-            this.progressBar1 = new System.Windows.Forms.ProgressBar();
-            this.lblStatus = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.gridLog)).BeginInit();
             this.pnlSequenceFix.SuspendLayout();
             this.pnlAutoFix.SuspendLayout();
+            this.pnlProgressBar.SuspendLayout();
             this.pnlButtonAutoFix.SuspendLayout();
             this.pnlShowMore.SuspendLayout();
             this.SuspendLayout();
@@ -126,8 +128,8 @@
             this.gridLog.AllowUserToAddRows = false;
             this.gridLog.AllowUserToDeleteRows = false;
             this.gridLog.AllowUserToResizeRows = false;
-            dataGridViewCellStyle3.BackColor = System.Drawing.Color.Aqua;
-            this.gridLog.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle2.BackColor = System.Drawing.Color.Aqua;
+            this.gridLog.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle2;
             this.gridLog.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.gridLog.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.STT,
@@ -225,7 +227,7 @@
             // 
             this.btnPauseResumeAutoFix.BackgroundImage = global::Spell.Properties.Resources.pause;
             this.btnPauseResumeAutoFix.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.btnPauseResumeAutoFix.Location = new System.Drawing.Point(211, 3);
+            this.btnPauseResumeAutoFix.Location = new System.Drawing.Point(17, 3);
             this.btnPauseResumeAutoFix.Name = "btnPauseResumeAutoFix";
             this.btnPauseResumeAutoFix.Size = new System.Drawing.Size(50, 50);
             this.btnPauseResumeAutoFix.TabIndex = 26;
@@ -237,7 +239,7 @@
             this.lblPauseResumeAutoFix.AutoSize = true;
             this.lblPauseResumeAutoFix.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblPauseResumeAutoFix.ForeColor = System.Drawing.Color.DodgerBlue;
-            this.lblPauseResumeAutoFix.Location = new System.Drawing.Point(192, 56);
+            this.lblPauseResumeAutoFix.Location = new System.Drawing.Point(5, 56);
             this.lblPauseResumeAutoFix.Name = "lblPauseResumeAutoFix";
             this.lblPauseResumeAutoFix.Size = new System.Drawing.Size(82, 18);
             this.lblPauseResumeAutoFix.TabIndex = 28;
@@ -247,6 +249,7 @@
             // 
             // pnlAutoFix
             // 
+            this.pnlAutoFix.Controls.Add(this.pnlProgressBar);
             this.pnlAutoFix.Controls.Add(this.pnlButtonAutoFix);
             this.pnlAutoFix.Controls.Add(this.pnlShowMore);
             this.pnlAutoFix.Controls.Add(this.gridLog);
@@ -256,15 +259,40 @@
             this.pnlAutoFix.TabIndex = 30;
             this.pnlAutoFix.Visible = false;
             // 
+            // pnlProgressBar
+            // 
+            this.pnlProgressBar.Controls.Add(this.lblStatus);
+            this.pnlProgressBar.Controls.Add(this.progressBar1);
+            this.pnlProgressBar.Location = new System.Drawing.Point(0, 0);
+            this.pnlProgressBar.Name = "pnlProgressBar";
+            this.pnlProgressBar.Size = new System.Drawing.Size(200, 90);
+            this.pnlProgressBar.TabIndex = 31;
+            // 
+            // lblStatus
+            // 
+            this.lblStatus.AutoSize = true;
+            this.lblStatus.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblStatus.ForeColor = System.Drawing.Color.Green;
+            this.lblStatus.Location = new System.Drawing.Point(4, 55);
+            this.lblStatus.Name = "lblStatus";
+            this.lblStatus.Size = new System.Drawing.Size(52, 18);
+            this.lblStatus.TabIndex = 30;
+            this.lblStatus.Text = "label1";
+            // 
+            // progressBar1
+            // 
+            this.progressBar1.Location = new System.Drawing.Point(5, 22);
+            this.progressBar1.Name = "progressBar1";
+            this.progressBar1.Size = new System.Drawing.Size(191, 23);
+            this.progressBar1.TabIndex = 29;
+            // 
             // pnlButtonAutoFix
             // 
-            this.pnlButtonAutoFix.Controls.Add(this.lblStatus);
-            this.pnlButtonAutoFix.Controls.Add(this.progressBar1);
             this.pnlButtonAutoFix.Controls.Add(this.btnPauseResumeAutoFix);
             this.pnlButtonAutoFix.Controls.Add(this.lblPauseResumeAutoFix);
-            this.pnlButtonAutoFix.Location = new System.Drawing.Point(2, 0);
+            this.pnlButtonAutoFix.Location = new System.Drawing.Point(200, 0);
             this.pnlButtonAutoFix.Name = "pnlButtonAutoFix";
-            this.pnlButtonAutoFix.Size = new System.Drawing.Size(280, 90);
+            this.pnlButtonAutoFix.Size = new System.Drawing.Size(85, 90);
             this.pnlButtonAutoFix.TabIndex = 30;
             // 
             // pnlShowMore
@@ -277,24 +305,6 @@
             this.pnlShowMore.Name = "pnlShowMore";
             this.pnlShowMore.Size = new System.Drawing.Size(285, 55);
             this.pnlShowMore.TabIndex = 25;
-            // 
-            // progressBar1
-            // 
-            this.progressBar1.Location = new System.Drawing.Point(0, 23);
-            this.progressBar1.Name = "progressBar1";
-            this.progressBar1.Size = new System.Drawing.Size(191, 23);
-            this.progressBar1.TabIndex = 29;
-            // 
-            // lblStatus
-            // 
-            this.lblStatus.AutoSize = true;
-            this.lblStatus.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblStatus.ForeColor = System.Drawing.Color.Green;
-            this.lblStatus.Location = new System.Drawing.Point(-2, 56);
-            this.lblStatus.Name = "lblStatus";
-            this.lblStatus.Size = new System.Drawing.Size(52, 18);
-            this.lblStatus.TabIndex = 30;
-            this.lblStatus.Text = "label1";
             // 
             // UserControl
             // 
@@ -310,6 +320,8 @@
             this.pnlSequenceFix.ResumeLayout(false);
             this.pnlSequenceFix.PerformLayout();
             this.pnlAutoFix.ResumeLayout(false);
+            this.pnlProgressBar.ResumeLayout(false);
+            this.pnlProgressBar.PerformLayout();
             this.pnlButtonAutoFix.ResumeLayout(false);
             this.pnlButtonAutoFix.PerformLayout();
             this.pnlShowMore.ResumeLayout(false);
@@ -341,6 +353,7 @@
         private System.Windows.Forms.Panel pnlButtonAutoFix;
         private System.Windows.Forms.Label lblStatus;
         private System.Windows.Forms.ProgressBar progressBar1;
+        private System.Windows.Forms.Panel pnlProgressBar;
     }
 }
 

@@ -100,7 +100,7 @@ namespace Spell
             tbtnShowTaskpane.Enabled = false;
 
             FindError.Instance.createValue(typeFindError, typeError, isAutoChange);
-            UserControl.Instance.Count = 0;
+            UserControl.Instance.grigLogCount = 0;
             myCustomTaskPane.Visible = false;
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();

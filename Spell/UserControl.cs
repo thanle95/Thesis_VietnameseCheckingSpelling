@@ -18,12 +18,11 @@ namespace Spell
         private Word.Range curRangeTextShowInTaskPane;
         private string oldString = "", newString = "";
         public bool _isFixAll { get; set; }
-        public int Count { get; set; }
+        public int grigLogCount { get; set; }
         private static UserControl instance = new UserControl();
         private const string ERROR_SPACE = "\"Lỗi dư khoảng trắng\"";
         private int SELECTED_ERROR { get; set; }
-        private int GrigLog_Y_ShowMore { get { return 60; } }
-        private int GrigLog_Y_AutoFix { get { return 90; } }
+        private bool IsOutOfError { get; set; }
         private UserControl()
         {
             InitializeComponent();
@@ -90,6 +89,7 @@ namespace Spell
         {
             while (FindError.Instance.lstErrorRange.Count > 0)
             {
+                IsOutOfError = false;
                 FixError fixError = new FixError();
 
                 fixError.getCandidatesWithContext(FindError.Instance.FirstError_Context, FindError.Instance.lstErrorRange);
@@ -239,6 +239,7 @@ namespace Spell
             UpdateProgressBar();
             if (Index == TotalError)
             {
+                IsOutOfError = true;
                 Thread.Sleep(500);
                 MessageBox.Show(SysMessage.Instance.No_error);
                 changeUI_OutOfError();
@@ -345,11 +346,16 @@ namespace Spell
         {
             SynchronizedInvoke(pnlSequenceFix, delegate () { pnlSequenceFix.Visible = false; });
             SynchronizedInvoke(pnlAutoFix, delegate () { pnlAutoFix.Location = new System.Drawing.Point(14, 5); });
-            SynchronizedInvoke(gridLog, delegate () { gridLog.Location = new System.Drawing.Point(0, GrigLog_Y_AutoFix); });
+            SynchronizedInvoke(gridLog, delegate () { gridLog.Location = new System.Drawing.Point(0, 90); });
             SynchronizedInvoke(pnlButtonAutoFix, delegate ()
             {
-                pnlButtonAutoFix.Location = new System.Drawing.Point(0, 0);
+                pnlButtonAutoFix.Location = new System.Drawing.Point(200, 0);
                 pnlButtonAutoFix.Visible = true;
+            });
+            SynchronizedInvoke(pnlProgressBar, delegate ()
+            {
+                pnlProgressBar.Size = new System.Drawing.Size(200, 90);
+                pnlProgressBar.Visible = true;
             });
             SynchronizedInvoke(pnlShowMore, delegate () { pnlShowMore.Visible = false; });
         }
@@ -377,6 +383,7 @@ namespace Spell
             SynchronizedInvoke(pnlSequenceFix, delegate () { pnlSequenceFix.Visible = false; });
             SynchronizedInvoke(pnlShowMore, delegate () { pnlShowMore.Visible = false; });
             SynchronizedInvoke(pnlButtonAutoFix, delegate () { pnlButtonAutoFix.Visible = false; });
+            SynchronizedInvoke(pnlProgressBar, delegate () { pnlProgressBar.Visible = false; });
             SynchronizedInvoke(pnlAutoFix, delegate ()
             {
                 for (int i = pnlAutoFix.Location.Y; i > 5; i--)
@@ -398,14 +405,25 @@ namespace Spell
 
         private void addRowGridLog()
         {
-            SynchronizedInvoke(pnlAutoFix, delegate ()
+            SynchronizedInvoke(pnlProgressBar, delegate ()
             {
-                pnlAutoFix.Visible = true;
+                if (!_isFixAll)
+                    if (pnlProgressBar.Size.Width != 285)
+                    {
+                        pnlProgressBar.Size = new System.Drawing.Size(285, 90);
+                        progressBar1.Width = 275;
+                        pnlProgressBar.Visible = true;
+                    }
             });
             SynchronizedInvoke(pnlShowMore, delegate ()
             {
                 pnlShowMore.Visible = false;
             });
+            SynchronizedInvoke(pnlAutoFix, delegate ()
+            {
+                pnlAutoFix.Visible = true;
+            });
+
             SynchronizedInvoke(gridLog, delegate ()
             {
                 gridLog.Visible = true;
@@ -420,14 +438,14 @@ namespace Spell
                 {
 
                     gridLog.Size = new System.Drawing.Size(gridLog.Size.Width, gridLog.Size.Height + 22);
-                    for (int i = gridLog.Location.Y; i >= 0; i--)
+                    for (int i = gridLog.Location.Y; i >= 90; i--)
                     {
                         gridLog.Location = new System.Drawing.Point(0, i);
                         Thread.Sleep(5);
                     }
-                    gridLog.Location = new System.Drawing.Point(0, 0);
+                    gridLog.Location = new System.Drawing.Point(0, 90);
                 }
-                gridLog.Rows.Add(++Count, oldString, newString);
+                gridLog.Rows.Add(++grigLogCount, oldString, newString);
             });
 
         }
@@ -451,6 +469,19 @@ namespace Spell
                 }
                 else
                 {
+                    SynchronizedInvoke(pnlShowMore, delegate ()
+                    {
+                        pnlShowMore.Visible = false;
+                    });
+                    SynchronizedInvoke(gridLog, delegate ()
+                    {
+                        for (int i = gridLog.Location.Y; i >= 90; i--)
+                        {
+                            gridLog.Location = new System.Drawing.Point(0, i);
+                            Thread.Sleep(5);
+                        }
+                    });
+
                     _isFixAll = true;
                     lblPauseResumeAutoFix.Text = "Tạm dừng";
                     SynchronizedInvoke(btnPauseResumeAutoFix, delegate ()
@@ -470,9 +501,20 @@ namespace Spell
 
         private void changeUI_ShowMoreInfo()
         {
+            int yGridLog, yShowMore;
+            if (IsOutOfError)
+            {
+                yGridLog = 60;
+                yShowMore = 0;
+            }
+            else {
+                yGridLog = 150;
+                yShowMore = 90;
+            }
             SynchronizedInvoke(gridLog, delegate ()
             {
-                for (int i = gridLog.Location.Y; i <= GrigLog_Y_ShowMore; i++)
+
+                for (int i = gridLog.Location.Y; i <= yGridLog; i++)
                 {
                     gridLog.Location = new System.Drawing.Point(0, i);
                     Thread.Sleep(5);
@@ -480,7 +522,7 @@ namespace Spell
             });
             SynchronizedInvoke(pnlShowMore, delegate ()
             {
-                pnlShowMore.Location = new System.Drawing.Point(0, 0);
+                pnlShowMore.Location = new System.Drawing.Point(0, yShowMore);
                 pnlShowMore.Visible = true;
             });
         }
@@ -494,6 +536,8 @@ namespace Spell
                 Thread.Sleep(20);
             });
         }
+
+
         private async void UpdateProgressBar()
         {
             var progress = new Progress<ProgressReport>();
