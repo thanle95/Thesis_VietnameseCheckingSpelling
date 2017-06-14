@@ -311,7 +311,7 @@ namespace Spell
                 DataGridViewRow rowNext = null;
                 findText = lblRightContext.Text;
                 int count = 0;
-                if (gridLog.RowCount >= SELECTED_ERROR + 1)
+                if (gridLog.RowCount > SELECTED_ERROR + 1)
                 {
                     rowNext = gridLog.Rows[SELECTED_ERROR + 1];
                     string wrongRowNext = rowNext.Cells[1].Value.ToString();
@@ -536,8 +536,6 @@ namespace Spell
                 Thread.Sleep(20);
             });
         }
-
-
         private async void UpdateProgressBar()
         {
             var progress = new Progress<ProgressReport>();
