@@ -113,7 +113,7 @@ namespace Spell.Algorithm
 
                         if (StopFindError)
                         {
-                            break;
+                            return;
                         }
                         words = curSentences[iSentence].Text.TrimEnd().Split(' ');
                         start = curSentences[iSentence].Start;
@@ -129,7 +129,7 @@ namespace Spell.Algorithm
 
                             if (StopFindError)
                             {
-                                break;
+                                return;
                             }
                             iWord = words[i];
                             tmpContext.TOKEN = iWord.Trim().ToLower();
@@ -265,7 +265,11 @@ namespace Spell.Algorithm
                         }//end for: duyệt từng từ trong câu
                     }//end for: duyệt từng câu
                     if (typeFindError == IS_TYPING_TYPE)
+                    {
                         Thread.Sleep(1000);
+                        DocumentHandling.Instance.DeHighLight_All_Mistake(Globals.ThisAddIn.Application.ActiveDocument.Characters);
+                        lstErrorRange.Clear();
+                    }
                     else
                         break;
                 }//end while true

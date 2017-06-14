@@ -107,7 +107,6 @@ namespace Spell
             FindError.Instance.startFindError();
             stopwatch.Stop();
             int count = FindError.Instance.CountError;
-            //int count = UserControl.Instance.startFindError(typeFindError);
             if (count > 0)
             {
                 tbtnShowTaskpane.Enabled = true;

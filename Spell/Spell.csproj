@@ -183,6 +183,12 @@
     <Compile Include="Algorithm\FileManager.cs" />
     <Compile Include="Algorithm\FindError.cs" />
     <Compile Include="Algorithm\FixError.cs" />
+    <Compile Include="Algorithm\Form1.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Algorithm\Form1.Designer.cs">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </Compile>
     <Compile Include="Algorithm\ProgressReport.cs" />
     <Compile Include="Algorithm\SysMessage.cs" />
     <Compile Include="Algorithm\RightWordCandidate.cs" />
@@ -256,11 +262,9 @@
     <Content Include="Resources\filteredUni.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <None Include="Resources\fix.jpg" />
     <Content Include="Resources\newCompoundWordByViet39K.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <None Include="Resources\pause_resume.png" />
     <None Include="Resources\pause.png" />
     <Content Include="Resources\rightWordCandidate.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
