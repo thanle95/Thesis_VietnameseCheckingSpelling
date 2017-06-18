@@ -182,8 +182,8 @@ namespace Spell.Algorithm
 
         public string[] VNAcronym = new string[]
         {
-            "CHXHCNVN", "MTDTGPMNVN", "QDND","QLVNCH","VNQDĐ","VNQDD","VNCH","VNDCCH",
-            "ĐH","TS", "PGS", "clb", "đh", "ts",
+            "XHCN", "CNXH", "ĐCS", "CHXHCNVN", "MTDTGPMNVN", "QDND","QLVNCH","VNQDĐ","VNQDD","VNCH","VNDCCH",
+            "ĐH","TS", "PGS", "CLB"
         };
         public string patternSignSentence = "[-|/|\\|>|<|\\[|\\]|,|\"|(|)|“|”|.!?;:…]";
         public string patternCheckWord = "[-|\\/|\\|>|<|\\[|\\]|,|\"|(|)|“|”|@|#|$|%|^|&|\\*|\\d]";

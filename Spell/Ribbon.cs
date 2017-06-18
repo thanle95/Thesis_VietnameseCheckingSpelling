@@ -26,7 +26,6 @@ namespace Spell
         private const int DOCK_LEFT = 1;
         private const int IS_TYPING_SELECTION = 0;
         private const int WHOLE_DOCUMENT_SELECTION = 1;
-        private static bool isAutoChange = false;
         Thread threadFindError;
         ThreadStart threadStartFindError;
         private void Ribbon1_Load(object sender, RibbonUIEventArgs e)
@@ -41,7 +40,7 @@ namespace Spell
             dropTypeFindError.SelectedItemIndex = WHOLE_DOCUMENT_SELECTION;
             typeFindError = dropTypeFindError.SelectedItemIndex;
             //Ngram.Instance.runFirst();
-            FindError.Instance.createValue(typeFindError, typeError, isAutoChange);
+            FindError.Instance.createValue(typeFindError, typeError);
             threadStartFindError = new ThreadStart(check);
 
         }
@@ -60,7 +59,7 @@ namespace Spell
             //    Usage usage = new Usage();
             //    usage.ShowDialog();
             //}
-            if (btnCheckError.Label.Contains("Kiểm lỗi"))
+            if (btnCheckError.Label.Equals("Kiểm lỗi"))
             {
                 threadFindError = new Thread(threadStartFindError);
                 threadFindError.Priority = ThreadPriority.Highest;
@@ -69,7 +68,7 @@ namespace Spell
                 btnCheckError.Label = "Tạm dừng";
                 btnCheckError.Image = global::Spell.Properties.Resources.pause;
             }
-            else if (btnCheckError.Label.Contains("Tạm dừng"))
+            else if (btnCheckError.Label.Equals("Tạm dừng"))
             {
                 threadFindError.Suspend();
                 tbtnShowTaskpane.Enabled = true;
@@ -90,17 +89,15 @@ namespace Spell
 
             typeFindError = dropTypeFindError.SelectedItemIndex;
             typeError = dropTypeError.SelectedItemIndex;
-            isAutoChange = chkbAutoChange.Checked;
             btnDeleteFormat.Enabled = false;
             btnStop.Enabled = true;
             dropCorpus.Enabled = false;
             dropTypeError.Enabled = false;
             dropTypeFindError.Enabled = false;
-            chkbAutoChange.Enabled = false;
             FindError.Instance.StopFindError = false;
             tbtnShowTaskpane.Enabled = false;
 
-            FindError.Instance.createValue(typeFindError, typeError, isAutoChange);
+            FindError.Instance.createValue(typeFindError, typeError);
             UserControl.Instance.grigLogCount = 0;
             myCustomTaskPane.Visible = false;
             Stopwatch stopwatch = new Stopwatch();
@@ -146,7 +143,6 @@ namespace Spell
             dropCorpus.Enabled = true;
             dropTypeError.Enabled = true;
             dropTypeFindError.Enabled = true;
-            chkbAutoChange.Enabled = true;
         }
 
         private void dropDockPosition_SelectionChanged(object sender, RibbonControlEventArgs e)

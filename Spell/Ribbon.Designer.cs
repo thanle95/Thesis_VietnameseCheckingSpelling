@@ -56,7 +56,6 @@
             this.dropTypeError = this.Factory.CreateRibbonDropDown();
             this.dropCorpus = this.Factory.CreateRibbonDropDown();
             this.separator2 = this.Factory.CreateRibbonSeparator();
-            this.chkbAutoChange = this.Factory.CreateRibbonCheckBox();
             this.showSumError = this.Factory.CreateRibbonButton();
             this.lblSumError = this.Factory.CreateRibbonLabel();
             this.group2 = this.Factory.CreateRibbonGroup();
@@ -84,7 +83,6 @@
             this.group1.Items.Add(this.dropTypeError);
             this.group1.Items.Add(this.dropCorpus);
             this.group1.Items.Add(this.separator2);
-            this.group1.Items.Add(this.chkbAutoChange);
             this.group1.Items.Add(this.showSumError);
             this.group1.Items.Add(this.lblSumError);
             this.group1.Label = "Kiểm tra lỗi";
@@ -168,12 +166,6 @@
             // 
             this.separator2.Name = "separator2";
             // 
-            // chkbAutoChange
-            // 
-            this.chkbAutoChange.Checked = true;
-            this.chkbAutoChange.Label = "Tránh sai do từ lân cận";
-            this.chkbAutoChange.Name = "chkbAutoChange";
-            // 
             // showSumError
             // 
             this.showSumError.Label = "Xem tổng lỗi";
@@ -243,7 +235,6 @@
         internal Microsoft.Office.Tools.Ribbon.RibbonDropDown dropCorpus;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton btnDeleteFormat;
         internal Microsoft.Office.Tools.Ribbon.RibbonDropDown dropTypeError;
-        internal Microsoft.Office.Tools.Ribbon.RibbonCheckBox chkbAutoChange;
         internal Microsoft.Office.Tools.Ribbon.RibbonToggleButton tbtnShowTaskpane;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton btnCheckError;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton btnStop;
