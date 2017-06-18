@@ -72,6 +72,7 @@ namespace Spell
             {
                 threadFindError.Suspend();
                 tbtnShowTaskpane.Enabled = true;
+                btnDeleteFormat.Enabled = true;
                 btnCheckError.Label = "Tiếp tục";
                 btnCheckError.Image = global::Spell.Properties.Resources.check;
             }
@@ -190,8 +191,26 @@ namespace Spell
 
         private void btnDeleteFormat_Click(object sender, RibbonControlEventArgs e)
         {
-            DocumentHandling.Instance.DeHighLight_All_Mistake(Globals.ThisAddIn.Application.ActiveDocument.Characters);
-            btnDeleteFormat.Enabled = false;
+            string message = SysMessage.Instance.Message_Notify_Delete_Format;
+            string caption = SysMessage.Instance.Caption_Notify_Fix_Error;
+            MessageBoxButtons buttons = MessageBoxButtons.YesNo;
+            DialogResult result;
+
+            // Displays the MessageBox.
+
+            result = MessageBox.Show(message, caption, buttons);
+            //UserControl.Instance.changeUIStart();
+            myCustomTaskPane.Visible = true;
+            if (result == DialogResult.Yes)
+            {
+                DocumentHandling.Instance.DeHighLight_All_Mistake(Globals.ThisAddIn.Application.ActiveDocument.Characters);
+                FindError.Instance.Clear();
+                UserControl.Instance._isFixAll = false;
+                myCustomTaskPane.Visible = false;
+
+                btnDeleteFormat.Enabled = false;
+            }
+           
         }
 
         private void btnShowTaskpane_Click(object sender, RibbonControlEventArgs e)

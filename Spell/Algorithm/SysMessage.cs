@@ -46,6 +46,13 @@ namespace Spell.Algorithm
         {
             return string.Format("Có {0} lỗi. Bạn có muốn sửa tất cả?", count);
         }
+        public string Message_Notify_Delete_Format
+        {
+            get
+            {
+                return "Hành động này sẽ xóa đánh dấu tất cả những lỗi tìm được, cũng như dừng lại hoạt động sửa lỗi. Bạn có muốn tiếp tục?";
+            }
+        }
         public string IsNotError(string word)
         {
             return string.Format("\"{0}\" không phải là một lỗi!", word);

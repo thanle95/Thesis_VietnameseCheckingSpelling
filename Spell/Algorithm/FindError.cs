@@ -53,6 +53,11 @@ namespace Spell.Algorithm
                 return instance;
             }
         }
+        public void Clear()
+        {
+            lstErrorRange.Clear();
+            FirstError_Context = null; 
+        }
         public void createValue(int typeFindError, int typeError)
         {
             _typeFindError = typeFindError;
