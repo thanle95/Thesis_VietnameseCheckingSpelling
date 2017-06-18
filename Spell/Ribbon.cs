@@ -24,8 +24,8 @@ namespace Spell
 
         private const int DOCK_RIGHT = 0;
         private const int DOCK_LEFT = 1;
-        private const int IS_TYPING_TYPE = 0;
-
+        private const int IS_TYPING_SELECTION = 0;
+        private const int WHOLE_DOCUMENT_SELECTION = 1;
         private static bool isAutoChange = false;
         Thread threadFindError;
         ThreadStart threadStartFindError;
@@ -38,6 +38,7 @@ namespace Spell
             myCustomTaskPane.Height = 530;
             myCustomTaskPane.DockPosition = Office.MsoCTPDockPosition.msoCTPDockPositionRight;
             myCustomTaskPane.Width = 320;
+            dropTypeFindError.SelectedItemIndex = WHOLE_DOCUMENT_SELECTION;
             typeFindError = dropTypeFindError.SelectedItemIndex;
             //Ngram.Instance.runFirst();
             FindError.Instance.createValue(typeFindError, typeError, isAutoChange);
@@ -178,6 +179,11 @@ namespace Spell
 
         private void dropTypeFindError_SelectionChanged(object sender, RibbonControlEventArgs e)
         {
+            if(dropTypeFindError.SelectedItemIndex == IS_TYPING_SELECTION)
+            {
+                MessageBox.Show(SysMessage.Instance.Feature_is_updating);
+                dropTypeFindError.SelectedItemIndex = WHOLE_DOCUMENT_SELECTION;
+            }
             //
             //if (dropTypeFindError.SelectedItemIndex == APART_DOCUMENT_SELECTION)
             //{

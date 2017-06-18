@@ -35,7 +35,7 @@ namespace Spell.Algorithm
         {
             double D = Candidate.getInstance.calScore_CompoundWord(context, context.TOKEN);
             double L = Candidate.getInstance.calScore_NgramForFindError(context);
-            using (FileStream aFile = new FileStream((FileManager.Instance.RightWordScore), FileMode.Append, FileAccess.Write))
+            using (FileStream aFile = new FileStream((FileManager.Instance.RightWordScore), FileMode.Open, FileAccess.Write))
             using (StreamWriter sw = new StreamWriter(aFile))
             {
                 sw.WriteLine();

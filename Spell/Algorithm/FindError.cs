@@ -5,6 +5,7 @@ using System.Windows.Forms;
 using Word = Microsoft.Office.Interop.Word;
 using System.Text.RegularExpressions;
 using System.Threading;
+using System.IO;
 
 namespace Spell.Algorithm
 {
@@ -90,19 +91,20 @@ namespace Spell.Algorithm
                 lstErrorRange.Clear();
                 FirstError_Context = null;
                 if (typeFindError == IS_TYPING_TYPE)
-                    //chọn toàn bộ văn bản
+                    //lấy câu dựa trên vị trí con trỏ
                     curSentences = Globals.ThisAddIn.Application.Selection.Sentences;
 
-                else
-                    //lấy danh sách câu dựa trên vùng được bôi đen
+                else 
+                    //chọn toàn bộ văn bản
                     curSentences = Globals.ThisAddIn.Application.ActiveDocument.Sentences;
                 int start = 0, end = 0;
                 string iWord = "";
                 string iWordReplaced = "";
                 string[] words;
                 int length;
+                bool isError = false;
                 Context tmpContext = new Context();
-                
+
                 HashSet<string> hSetCand = new HashSet<string>();
                 Word.Range range = null;
                 //lấy toàn bộ danh sách các từ trong Active Document, để lấy được ngữ cảnh
@@ -110,11 +112,6 @@ namespace Spell.Algorithm
                 {
                     for (int iSentence = 1; iSentence <= curSentences.Count; iSentence++)
                     {
-
-                        if (StopFindError)
-                        {
-                            return;
-                        }
                         words = curSentences[iSentence].Text.TrimEnd().Split(' ');
                         start = curSentences[iSentence].Start;
                         end = curSentences[iSentence].End;
@@ -129,6 +126,16 @@ namespace Spell.Algorithm
 
                             if (StopFindError)
                             {
+                                //using (FileStream aFile = new FileStream((FileManager.Instance.RightWordCand), FileMode.Append, FileAccess.Write))
+                                //using (StreamWriter sw = new StreamWriter(aFile))
+                                //{
+                                //    foreach (var pair in lstErrorRange)
+                                //    {
+                                //        sw.WriteLine();
+                                //        sw.WriteLine(string.Format("{0}]", pair.Key.ToString()));
+                                //        sw.WriteLine("**********************************************************************");
+                                //    }
+                                //}
                                 return;
                             }
                             iWord = words[i];
@@ -204,13 +211,14 @@ namespace Spell.Algorithm
                                             words[i] = hSetCand.ElementAt(0);
                                             if (FirstError_Context == null)
                                                 FirstError_Context = context;
-
+                                            isError = true;
                                             lstErrorRange.Add(context, (DocumentHandling.Instance.HighLight_MistakeWrongWord(start, end)));
                                         }
                                     }
                                     else {
                                         if (FirstError_Context == null)
                                             FirstError_Context = context;
+                                        isError = true;
                                         lstErrorRange.Add(context, (DocumentHandling.Instance.HighLight_MistakeWrongWord(start, end)));
                                     }
                                 }//end if wrong word
@@ -242,7 +250,7 @@ namespace Spell.Algorithm
                                             context.TOKEN = tmpContext.TOKEN;
                                             context.NEXT = tmpContext.NEXT;
                                             hSetCand.Clear();
-                                            hSetCand = RightWordCandidate.getInstance.createCandidate(context,false);
+                                            hSetCand = RightWordCandidate.getInstance.createCandidate(context, false);
                                             if (hSetCand.Count > 0)
                                             {
                                                 //tự động thay thế bằng candidate tốt nhất
@@ -250,6 +258,7 @@ namespace Spell.Algorithm
                                                 words[i] = hSetCand.ElementAt(0);
                                                 if (FirstError_Context == null)
                                                     FirstError_Context = context;
+                                                isError = true;
                                                 lstErrorRange.Add(context, (DocumentHandling.Instance.HighLight_MistakeRightWord(start, end)));
                                             }
                                         }
@@ -257,8 +266,21 @@ namespace Spell.Algorithm
                                     else {
                                         if (FirstError_Context == null)
                                             FirstError_Context = context;
+                                        isError = true;
                                         lstErrorRange.Add(context, (DocumentHandling.Instance.HighLight_MistakeRightWord(start, end)));
                                     }
+                                    if (typeFindError == IS_TYPING_TYPE)
+                                    {
+                                        if (!isError)
+                                        {
+                                            if (lstErrorRange.ContainsKey(context))
+                                            {
+                                                lstErrorRange.Remove(context);
+                                                DocumentHandling.Instance.DeHighLight_Mistake(start, end);
+                                            }
+                                        }
+                                    }
+
                                 }// end else if right word
                             }
                             start += iWord.Length + 1;
@@ -267,12 +289,11 @@ namespace Spell.Algorithm
                     if (typeFindError == IS_TYPING_TYPE)
                     {
                         Thread.Sleep(1000);
-                        DocumentHandling.Instance.DeHighLight_All_Mistake(Globals.ThisAddIn.Application.ActiveDocument.Characters);
-                        lstErrorRange.Clear();
                     }
                     else
                         break;
                 }//end while true
+
             }
             catch (Exception e)
             {

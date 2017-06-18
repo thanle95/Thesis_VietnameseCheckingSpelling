@@ -271,7 +271,10 @@ namespace Spell.Algorithm
                 return;
             }
         }
-
+        public override string ToString()
+        {
+            return string.Format("{0} {1} {2} {3} {4}", PREPRE, PRE, TOKEN, NEXT, NEXTNEXT);
+        }
         public override bool Equals(object obj)
         {
             Context c;

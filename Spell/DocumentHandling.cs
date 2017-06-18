@@ -17,8 +17,6 @@ namespace Spell
         {
             get { return instance; }
         }
-
-
         public Word.Range HighLight_Mistake(Context context, Word.Sentences sentencesList, Word.WdColorIndex colorIndex, Word.WdColor color)
         {
             Word.Range range = null;
