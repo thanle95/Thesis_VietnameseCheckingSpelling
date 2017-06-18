@@ -32,7 +32,7 @@ namespace Spell
         {
             myCustomTaskPane = Globals.ThisAddIn.CustomTaskPanes.Add(UserControl.Instance, "Spelling");
             myCustomTaskPane.DockPosition = Office.MsoCTPDockPosition.msoCTPDockPositionFloating;
-            
+
             myCustomTaskPane.Width = 320;
             myCustomTaskPane.Height = 530;
             myCustomTaskPane.DockPosition = Office.MsoCTPDockPosition.msoCTPDockPositionRight;
@@ -106,29 +106,7 @@ namespace Spell
             stopwatch.Stop();
             int count = FindError.Instance.CountError;
             if (count > 0)
-            {
-                tbtnShowTaskpane.Enabled = true;
-                btnDeleteFormat.Enabled = true;
-                string message = SysMessage.Instance.Message_Notify_Fix_Error(count);
-                string caption = SysMessage.Instance.Caption_Notify_Fix_Error;
-                MessageBoxButtons buttons = MessageBoxButtons.YesNo;
-                DialogResult result;
-
-                // Displays the MessageBox.
-
-                result = MessageBox.Show(message, caption, buttons);
-                //UserControl.Instance.changeUIStart();
-                myCustomTaskPane.Visible = true;
-                if (result == DialogResult.Yes)
-                {
-                    UserControl.Instance.Start(true);
-                    UserControl.Instance.showCandidateInTaskPane();
-                }
-                else {
-                    UserControl.Instance.Start(false);
-                    UserControl.Instance.showCandidateInTaskPane();
-                }
-            }
+                showSuggest(count);
             else
             {
                 MessageBox.Show(SysMessage.Instance.No_error);
@@ -144,7 +122,29 @@ namespace Spell
             dropTypeError.Enabled = true;
             dropTypeFindError.Enabled = true;
         }
+        private void showSuggest(int count)
+        {
+            btnDeleteFormat.Enabled = true;
+            string message = SysMessage.Instance.Message_Notify_Fix_Error(count);
+            string caption = SysMessage.Instance.Caption_Notify_Fix_Error;
+            MessageBoxButtons buttons = MessageBoxButtons.YesNo;
+            DialogResult result;
 
+            // Displays the MessageBox.
+
+            result = MessageBox.Show(message, caption, buttons);
+            //UserControl.Instance.changeUIStart();
+            myCustomTaskPane.Visible = true;
+            if (result == DialogResult.Yes)
+            {
+                UserControl.Instance.Start(true);
+                UserControl.Instance.showCandidateInTaskPane();
+            }
+            else {
+                UserControl.Instance.Start(false);
+                UserControl.Instance.showCandidateInTaskPane();
+            }
+        }
         private void dropDockPosition_SelectionChanged(object sender, RibbonControlEventArgs e)
         {
             if (dropDockPosition.SelectedItemIndex == DOCK_RIGHT)
@@ -175,7 +175,7 @@ namespace Spell
 
         private void dropTypeFindError_SelectionChanged(object sender, RibbonControlEventArgs e)
         {
-            if(dropTypeFindError.SelectedItemIndex == IS_TYPING_SELECTION)
+            if (dropTypeFindError.SelectedItemIndex == IS_TYPING_SELECTION)
             {
                 MessageBox.Show(SysMessage.Instance.Feature_is_updating);
                 dropTypeFindError.SelectedItemIndex = WHOLE_DOCUMENT_SELECTION;
@@ -205,7 +205,7 @@ namespace Spell
         {
             if (tbtnShowTaskpane.Checked)
             {
-                myCustomTaskPane.Visible = true;
+                showSuggest(FindError.Instance.CountError);
                 //FindError.Instance.FirstError_Context = FindError.Instance.lstErrorRange.First().Key;
                 //FindError.Instance.lstErrorRange[FindError.Instance.FirstError_Context].Select();
                 //UserControl.Instance.showCandidateInTaskPane();
@@ -216,6 +216,10 @@ namespace Spell
 
         private void btnStop_Click(object sender, RibbonControlEventArgs e)
         {
+            if (btnCheckError.Label.Equals("Tiếp tục"))
+            {
+                threadFindError.Resume();
+            }
             FindError.Instance.StopFindError = true;
             btnStop.Enabled = false;
             tbtnShowTaskpane.Enabled = true;
