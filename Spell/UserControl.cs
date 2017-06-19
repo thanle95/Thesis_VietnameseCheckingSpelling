@@ -249,7 +249,7 @@ namespace Spell
             //
             //sửa lỗi tiếp theo
             //
-            if (!isRightClick)
+            //if (!isRightClick)
             {
                 FindError.Instance.FirstError_Context = FindError.Instance.lstErrorRange.First().Key;
                 FindError.Instance.lstErrorRange[FindError.Instance.FirstError_Context].Select();

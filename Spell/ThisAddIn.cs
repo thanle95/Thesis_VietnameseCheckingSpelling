@@ -46,70 +46,14 @@ namespace Spell
         {
 
         }
-        private void AddMenuItem()
-        {
-            //myApplication.CustomizationContext = customTemplate;
-            Office.MsoControlType menuItem =
-                Office.MsoControlType.msoControlButton;
-
-            myControl =
-                (Office.CommandBarButton)myApplication.CommandBars["Text"].Controls.Add
-                (menuItem, missing, missing, 1, true);
-
-            myControl.Style = Office.MsoButtonStyle.msoButtonCaption;
-            myControl.Caption = "My Menu Item";
-            myControl.Tag = "MyMenuItem";
-
-            myControl.Click +=
-                new Microsoft.Office.Core._CommandBarButtonEvents_ClickEventHandler
-                    (myControl_Click);
-
-            //customTemplate.Saved = true;
-
-            GC.Collect();
-
-        }
+   
         void myControl_Click(Microsoft.Office.Core.CommandBarButton Ctrl, ref bool CancelDefault)
         {
-            //System.Windows.Forms.MessageBox.Show(Ctrl.Caption);
             UserControl.Instance.Start(false);
             UserControl.Instance.change(WrongWord, Ctrl.Caption, true);
         }
         public void application_WindowBeforeRightClick(Word.Selection selection, ref bool Cancel)
         {
-            //     Word.Application applicationObject =
-            //Globals.ThisAddIn.Application as Word.Application;
-            //     Office.CommandBarButton commandBarButton =
-            // applicationObject.CommandBars.FindControl
-            // (Office.MsoControlType.msoControlButton, missing, "HELLO_TAG", missing)
-            // as Office.CommandBarButton;
-            //     if (commandBarButton != null)
-            //     {
-            //         return;
-            //     }
-            //     Office.CommandBar popupCommandBar = applicationObject.CommandBars["Text"];
-            //     bool isFound = false;
-            //     foreach (object _object in popupCommandBar.Controls)
-            //     {
-            //         Office.CommandBarButton _commandBarButton = _object as Office.CommandBarButton;
-            //         if (_commandBarButton == null) continue;
-            //         if (_commandBarButton.Tag.Equals("HELLO_TAG"))
-            //         {
-            //             isFound = true;
-            //         }
-            //     }
-            //     if (!isFound)
-            //     {
-            //         commandBarButton = (Office.CommandBarButton)popupCommandBar.Controls.Add
-            // (Office.MsoControlType.msoControlButton, missing, missing, missing, true);
-            //         commandBarButton.Caption = "Hello !!!";
-            //         commandBarButton.FaceId = 356;
-            //         commandBarButton.Tag = "HELLO_TAG";
-            //         commandBarButton.BeginGroup = true;
-            //     }
-
-            //--------------------------------------
-
             RemoveExistingMenuItem();
             Word.Words words = Globals.ThisAddIn.Application.Selection.Words;
             Word.Sentences sentences = Globals.ThisAddIn.Application.Selection.Sentences;
