@@ -100,7 +100,7 @@ namespace Spell
                 newString = fixError.ToString().Trim();
                 if (_isFixAll)
                 {
-                    change(fixError.Token.ToLower(), fixError.hSetCandidate.ElementAt(0));
+                    change(fixError.Token.ToLower(), fixError.hSetCandidate.ElementAt(0), false);
                 }
                 else {
                     SynchronizedInvoke(lblWrong, delegate () { lblWrong.Text = fixError.Token; });
@@ -201,9 +201,9 @@ namespace Spell
         }
         private void btnChange_Click(object sender, EventArgs e)
         {
-            change(lblWrong.Text.ToLower(), lstbCandidate.SelectedItem.ToString());
+            change(lblWrong.Text.ToLower(), lstbCandidate.SelectedItem.ToString(), false);
         }
-        private void change(string wrongText, string fixText)
+        public void change(string wrongText, string fixText, bool isRightClick)
         {
             addRowGridLog();
             int startIndex = 0;
@@ -249,16 +249,18 @@ namespace Spell
             //
             //sửa lỗi tiếp theo
             //
-            FindError.Instance.FirstError_Context = FindError.Instance.lstErrorRange.First().Key;
-            FindError.Instance.lstErrorRange[FindError.Instance.FirstError_Context].Select();
-            if (!_isFixAll)
-                showCandidateInTaskPane();
-
+            if (!isRightClick)
+            {
+                FindError.Instance.FirstError_Context = FindError.Instance.lstErrorRange.First().Key;
+                FindError.Instance.lstErrorRange[FindError.Instance.FirstError_Context].Select();
+                if (!_isFixAll)
+                    showCandidateInTaskPane();
+            }
         }
         private void btnChange_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
-                change(lblWrong.Text.ToLower(), lstbCandidate.SelectedItem.ToString());
+                change(lblWrong.Text.ToLower(), lstbCandidate.SelectedItem.ToString(), false);
         }
 
         private void lstbCandidate_KeyDown(object sender, KeyEventArgs e)
@@ -266,7 +268,7 @@ namespace Spell
             if (e.KeyCode == Keys.Enter)
             {
                 btnChange.Focus();
-                change(lblWrong.Text.ToLower(), lstbCandidate.SelectedItem.ToString());
+                change(lblWrong.Text.ToLower(), lstbCandidate.SelectedItem.ToString(), false);
             }
         }
 
