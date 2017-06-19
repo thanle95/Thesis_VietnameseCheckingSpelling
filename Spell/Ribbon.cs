@@ -34,7 +34,7 @@ namespace Spell
             myCustomTaskPane.DockPosition = Office.MsoCTPDockPosition.msoCTPDockPositionFloating;
 
             myCustomTaskPane.Width = 320;
-            myCustomTaskPane.Height = 530;
+            myCustomTaskPane.Height = 600;
             myCustomTaskPane.DockPosition = Office.MsoCTPDockPosition.msoCTPDockPositionRight;
             myCustomTaskPane.Width = 320;
             dropTypeFindError.SelectedItemIndex = WHOLE_DOCUMENT_SELECTION;
@@ -42,13 +42,9 @@ namespace Spell
             //Ngram.Instance.runFirst();
             FindError.Instance.createValue(typeFindError, typeError);
             threadStartFindError = new ThreadStart(check);
-
         }
 
         /// <summary>
-        /// Khi nút check được click
-        /// Kiểm tra nếu có tick vào check box gợi ý, thì hiện task pane gợi ý bên phải
-        /// còn không thì chỉ highLight những lỗi trong văn bản
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>

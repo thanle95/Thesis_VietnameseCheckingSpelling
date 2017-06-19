@@ -29,7 +29,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.btnIgnore = new System.Windows.Forms.Button();
             this.lblWrong = new System.Windows.Forms.Label();
             this.lstbCandidate = new System.Windows.Forms.ListBox();
@@ -128,8 +128,8 @@
             this.gridLog.AllowUserToAddRows = false;
             this.gridLog.AllowUserToDeleteRows = false;
             this.gridLog.AllowUserToResizeRows = false;
-            dataGridViewCellStyle2.BackColor = System.Drawing.Color.Aqua;
-            this.gridLog.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle1.BackColor = System.Drawing.Color.Aqua;
+            this.gridLog.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
             this.gridLog.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.gridLog.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.STT,
@@ -313,9 +313,9 @@
             this.AutoSize = true;
             this.Controls.Add(this.pnlAutoFix);
             this.Controls.Add(this.pnlSequenceFix);
-            this.MinimumSize = new System.Drawing.Size(300, 350);
+            this.MinimumSize = new System.Drawing.Size(320, 600);
             this.Name = "UserControl";
-            this.Size = new System.Drawing.Size(320, 597);
+            this.Size = new System.Drawing.Size(320, 600);
             ((System.ComponentModel.ISupportInitialize)(this.gridLog)).EndInit();
             this.pnlSequenceFix.ResumeLayout(false);
             this.pnlSequenceFix.PerformLayout();
