@@ -17,7 +17,7 @@ namespace Spell
     {
         private Word.Range curRangeTextShowInTaskPane;
         private string oldString = "", newString = "";
-        public bool _isFixAll { get; set; }
+        public bool IsFixAll { get; set; }
         public int grigLogCount { get; set; }
         private static UserControl instance = new UserControl();
         private const string ERROR_SPACE = "\"Lỗi dư khoảng trắng\"";
@@ -38,18 +38,24 @@ namespace Spell
         private int TotalError { get; set; }
         public void Start(bool isFixAll)
         {
-
-            TotalError = FindError.Instance.lstErrorRange.Count;
-            _isFixAll = isFixAll;
+            lblStatus.Text = "";
+            if (TotalError == 0)
+                TotalError = FindError.Instance.lstErrorRange.Count;
+            IsFixAll = isFixAll;
+           
+            if (IsFixAll)
+                changeUI_IsAutoFix();
+            else
+                changeUI_IsSequenceFix();
+        }
+        public void Clear()
+        {
+            TotalError = 0;
             SynchronizedInvoke(gridLog, delegate ()
             {
                 gridLog.Rows.Clear();
                 gridLog.Size = new System.Drawing.Size(287, 85);
             });
-            if (_isFixAll)
-                changeUI_IsAutoFix();
-            else
-                changeUI_IsSequenceFix();
         }
         public static string WRONG_TEXT
         {
@@ -98,11 +104,12 @@ namespace Spell
 
                 oldString = FindError.Instance.ToString().Trim();
                 newString = fixError.ToString().Trim();
-                if (_isFixAll)
+                if (IsFixAll)
                 {
                     change(fixError.Token.ToLower(), fixError.hSetCandidate.ElementAt(0), false);
                 }
-                else {
+                else
+                {
                     SynchronizedInvoke(lblWrong, delegate () { lblWrong.Text = fixError.Token; });
                     SynchronizedInvoke(lstbCandidate, delegate () { lstbCandidate.Items.Clear(); });
 
@@ -239,7 +246,7 @@ namespace Spell
             else curRangeTextShowInTaskPane.Text = fixText;
 
             endIndex = startIndex + curRangeTextShowInTaskPane.Text.Length;
-            if (!_isFixAll)
+            if (!IsFixAll)
             {
                 lblWrong.Text = "\"Từ sai\"";
                 lstbCandidate.Items.Clear();
@@ -264,7 +271,7 @@ namespace Spell
             {
                 FindError.Instance.FirstError_Context = FindError.Instance.lstErrorRange.First().Key;
                 FindError.Instance.lstErrorRange[FindError.Instance.FirstError_Context].Select();
-                if (!_isFixAll)
+                if (!IsFixAll)
                     showCandidateInTaskPane();
             }
         }
@@ -420,7 +427,7 @@ namespace Spell
         {
             SynchronizedInvoke(pnlProgressBar, delegate ()
             {
-                if (!_isFixAll)
+                if (!IsFixAll)
                     if (pnlProgressBar.Size.Width != 285)
                     {
                         pnlProgressBar.Size = new System.Drawing.Size(285, 90);
@@ -440,7 +447,7 @@ namespace Spell
             SynchronizedInvoke(gridLog, delegate ()
             {
                 gridLog.Visible = true;
-                if (_isFixAll)
+                if (IsFixAll)
                 {
 
                     if (gridLog.Size.Height <= 310)
@@ -473,7 +480,7 @@ namespace Spell
             {
                 if (lblPauseResumeAutoFix.Text.Contains("dừng"))
                 {
-                    _isFixAll = false;
+                    IsFixAll = false;
                     lblPauseResumeAutoFix.Text = "Tiếp tục";
                     SynchronizedInvoke(btnPauseResumeAutoFix, delegate ()
                     {
@@ -495,7 +502,7 @@ namespace Spell
                         }
                     });
 
-                    _isFixAll = true;
+                    IsFixAll = true;
                     lblPauseResumeAutoFix.Text = "Tạm dừng";
                     SynchronizedInvoke(btnPauseResumeAutoFix, delegate ()
                     {
@@ -520,7 +527,8 @@ namespace Spell
                 yGridLog = 60;
                 yShowMore = 0;
             }
-            else {
+            else
+            {
                 yGridLog = 150;
                 yShowMore = 90;
             }

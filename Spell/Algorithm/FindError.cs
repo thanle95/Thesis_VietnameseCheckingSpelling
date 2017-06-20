@@ -56,7 +56,7 @@ namespace Spell.Algorithm
         public void Clear()
         {
             lstErrorRange.Clear();
-            FirstError_Context = null; 
+            FirstError_Context = null;
         }
         public void createValue(int typeFindError, int typeError)
         {
@@ -93,13 +93,21 @@ namespace Spell.Algorithm
                 //sửa lỗi kiểm tra lần 2 không hiện được gợi ý
                 lstErrorRange.Clear();
                 FirstError_Context = null;
+                bool isSelected = false;
+                 curSentences = Globals.ThisAddIn.Application.Selection.Sentences;
+
+
                 if (typeFindError == IS_TYPING_TYPE)
                     //lấy câu dựa trên vị trí con trỏ
                     curSentences = Globals.ThisAddIn.Application.Selection.Sentences;
 
-                else
+                else if (curSentences[1].Start == 0)
+                {
                     //chọn toàn bộ văn bản
                     curSentences = Globals.ThisAddIn.Application.ActiveDocument.Sentences;
+                    isSelected = true;
+                }
+
                 int start = 0, end = 0;
                 string iWord = "";
                 string iWordReplaced = "";
@@ -119,7 +127,7 @@ namespace Spell.Algorithm
                         start = curSentences[iSentence].Start;
                         end = curSentences[iSentence].End;
                         range = Globals.ThisAddIn.Application.ActiveDocument.Range(start, end);
-                        if (typeFindError != IS_TYPING_TYPE)
+                        if (typeFindError != IS_TYPING_TYPE && isSelected)
                             range.Select();
                         //số lượng các từ trong cụm
                         length = words.Length;
@@ -166,7 +174,7 @@ namespace Spell.Algorithm
                             {
                                 //xác định ngữ cảnh
                                 Context context = new Context(i, words);
-                                
+
                                 iWordReplaced = Regex.Replace(context.TOKEN, StringConstant.Instance.patternSignSentence, "");
                                 //nếu loại bỏ ký tự đặc biệt nằm giữa hay đầu từ, ví dụ email, thì bắt đầu vòng lặp sau
                                 if (!iWord.Contains(iWordReplaced)
@@ -257,14 +265,14 @@ namespace Spell.Algorithm
                                 }// end else if right word
                                 if (typeFindError == IS_TYPING_TYPE)
                                 {
-                                    //if (!isError)
-                                    //{
-                                    //    if (lstErrorRange.ContainsKey(context))
-                                    //    {
-                                    //        lstErrorRange.Remove(context);
-                                    //        DocumentHandling.Instance.DeHighLight_Mistake(start, end);
-                                    //    }
-                                    //}
+                                    if (!isError)
+                                    {
+                                        if (lstErrorRange.ContainsKey(context))
+                                        {
+                                            lstErrorRange.Remove(context);
+                                            DocumentHandling.Instance.DeHighLight_Mistake(start, end);
+                                        }
+                                    }
                                 }
 
 

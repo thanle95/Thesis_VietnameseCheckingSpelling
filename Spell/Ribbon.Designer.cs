@@ -61,6 +61,7 @@
             this.group2 = this.Factory.CreateRibbonGroup();
             this.tbtnShowTaskpane = this.Factory.CreateRibbonToggleButton();
             this.dropDockPosition = this.Factory.CreateRibbonDropDown();
+            this.btnFixAll = this.Factory.CreateRibbonButton();
             this.tab1.SuspendLayout();
             this.group1.SuspendLayout();
             this.box1.SuspendLayout();
@@ -180,6 +181,7 @@
             // group2
             // 
             this.group2.Items.Add(this.tbtnShowTaskpane);
+            this.group2.Items.Add(this.btnFixAll);
             this.group2.Items.Add(this.dropDockPosition);
             this.group2.Label = "Sửa lỗi";
             this.group2.Name = "group2";
@@ -205,6 +207,14 @@
             this.dropDockPosition.Label = "Vị trí neo";
             this.dropDockPosition.Name = "dropDockPosition";
             this.dropDockPosition.SelectionChanged += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.dropDockPosition_SelectionChanged);
+            // 
+            // btnFixAll
+            // 
+            this.btnFixAll.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
+            this.btnFixAll.Label = "Sửa tất cả";
+            this.btnFixAll.Name = "btnFixAll";
+            this.btnFixAll.ShowImage = true;
+            this.btnFixAll.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.btnFixAll_Click);
             // 
             // Ribbon
             // 
@@ -242,6 +252,7 @@
         internal Microsoft.Office.Tools.Ribbon.RibbonLabel lblSumError;
         internal Microsoft.Office.Tools.Ribbon.RibbonSeparator separator2;
         internal Microsoft.Office.Tools.Ribbon.RibbonGroup group2;
+        internal Microsoft.Office.Tools.Ribbon.RibbonButton btnFixAll;
     }
 
     partial class ThisRibbonCollection

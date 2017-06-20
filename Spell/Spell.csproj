@@ -235,6 +235,7 @@
     <Compile Include="ThisAddIn.cs">
       <SubType>Code</SubType>
     </Compile>
+    <None Include="Spell_1_TemporaryKey.pfx" />
     <None Include="Spell_TemporaryKey.pfx" />
     <None Include="ThisAddIn.Designer.xml">
       <DependentUpon>ThisAddIn.cs</DependentUpon>
@@ -296,10 +297,10 @@
     <SignManifests>true</SignManifests>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestKeyFile>Spell_TemporaryKey.pfx</ManifestKeyFile>
+    <ManifestKeyFile>Spell_1_TemporaryKey.pfx</ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestCertificateThumbprint>DB19EF8F4F402D5584E2407BB98421E1CFC91FC0</ManifestCertificateThumbprint>
+    <ManifestCertificateThumbprint>6B697FE279538AB9A43D1CFFF58AC1B9AE4F18A4</ManifestCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup>
     <SignAssembly>false</SignAssembly>

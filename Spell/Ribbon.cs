@@ -98,9 +98,11 @@ namespace Spell
             UserControl.Instance.grigLogCount = 0;
             myCustomTaskPane.Visible = false;
             Stopwatch stopwatch = new Stopwatch();
+
             stopwatch.Start();
             FindError.Instance.startFindError();
             stopwatch.Stop();
+
             int count = FindError.Instance.CountError;
             if (count > 0)
                 showSuggest(count);
@@ -130,16 +132,16 @@ namespace Spell
             // Displays the MessageBox.
 
             result = MessageBox.Show(message, caption, buttons);
-            //UserControl.Instance.changeUIStart();
             myCustomTaskPane.Visible = true;
             if (result == DialogResult.Yes)
             {
                 UserControl.Instance.Start(true);
                 UserControl.Instance.showCandidateInTaskPane();
             }
-            else {
+            else
+            {
                 UserControl.Instance.Start(false);
-                UserControl.Instance.showCandidateInTaskPane();
+            UserControl.Instance.showCandidateInTaskPane();
             }
         }
         private void dropDockPosition_SelectionChanged(object sender, RibbonControlEventArgs e)
@@ -148,7 +150,8 @@ namespace Spell
                 myCustomTaskPane.DockPosition = Office.MsoCTPDockPosition.msoCTPDockPositionRight;
             else if (dropDockPosition.SelectedItemIndex == DOCK_LEFT)
                 myCustomTaskPane.DockPosition = Office.MsoCTPDockPosition.msoCTPDockPositionLeft;
-            else {
+            else
+            {
                 myCustomTaskPane.DockPosition = Office.MsoCTPDockPosition.msoCTPDockPositionFloating;
                 Office.CommandBar cb = Globals.ThisAddIn.Application.CommandBars[myCustomTaskPane.Title];
                 cb.Left = 1000;
@@ -172,11 +175,11 @@ namespace Spell
 
         private void dropTypeFindError_SelectionChanged(object sender, RibbonControlEventArgs e)
         {
-            if (dropTypeFindError.SelectedItemIndex == IS_TYPING_SELECTION)
-            {
-                MessageBox.Show(SysMessage.Instance.Feature_is_updating);
-                dropTypeFindError.SelectedItemIndex = WHOLE_DOCUMENT_SELECTION;
-            }
+            //if (dropTypeFindError.SelectedItemIndex == IS_TYPING_SELECTION)
+            //{
+            //    MessageBox.Show(SysMessage.Instance.Feature_is_updating);
+            //    dropTypeFindError.SelectedItemIndex = WHOLE_DOCUMENT_SELECTION;
+            //}
             //
             //if (dropTypeFindError.SelectedItemIndex == APART_DOCUMENT_SELECTION)
             //{
@@ -187,26 +190,26 @@ namespace Spell
 
         private void btnDeleteFormat_Click(object sender, RibbonControlEventArgs e)
         {
-            string message = SysMessage.Instance.Message_Notify_Delete_Format;
-            string caption = SysMessage.Instance.Caption_Notify_Fix_Error;
-            MessageBoxButtons buttons = MessageBoxButtons.YesNo;
-            DialogResult result;
+            //string message = SysMessage.Instance.Message_Notify_Delete_Format;
+            //string caption = SysMessage.Instance.Caption_Notify_Fix_Error;
+            //MessageBoxButtons buttons = MessageBoxButtons.YesNo;
+            //DialogResult result;
 
-            // Displays the MessageBox.
+            //// Displays the MessageBox.
 
-            result = MessageBox.Show(message, caption, buttons);
-            //UserControl.Instance.changeUIStart();
-            myCustomTaskPane.Visible = true;
-            if (result == DialogResult.Yes)
-            {
-                DocumentHandling.Instance.DeHighLight_All_Mistake(Globals.ThisAddIn.Application.ActiveDocument.Characters);
-                FindError.Instance.Clear();
-                UserControl.Instance._isFixAll = false;
-                myCustomTaskPane.Visible = false;
+            //result = MessageBox.Show(message, caption, buttons);
+            ////UserControl.Instance.changeUIStart();
+            //myCustomTaskPane.Visible = true;
+            //if (result == DialogResult.Yes)
+            //{
+            DocumentHandling.Instance.DeHighLight_All_Mistake(Globals.ThisAddIn.Application.ActiveDocument.Characters);
+            FindError.Instance.Clear();
+            UserControl.Instance.IsFixAll = false;
+            myCustomTaskPane.Visible = false;
 
-                btnDeleteFormat.Enabled = false;
-            }
-           
+            btnDeleteFormat.Enabled = false;
+            //}
+
         }
 
         private void btnShowTaskpane_Click(object sender, RibbonControlEventArgs e)
@@ -218,7 +221,7 @@ namespace Spell
 
         private void tbtnShowTaskpane_Click(object sender, RibbonControlEventArgs e)
         {
-            if (tbtnShowTaskpane.Checked)
+            if (tbtnShowTaskpane.Checked && FindError.Instance.lstErrorRange.Count > 0)
             {
                 showSuggest(FindError.Instance.CountError);
                 //FindError.Instance.FirstError_Context = FindError.Instance.lstErrorRange.First().Key;
@@ -241,6 +244,7 @@ namespace Spell
 
             btnCheckError.Label = "Kiểm lỗi";
             btnCheckError.Image = global::Spell.Properties.Resources.check;
+            UserControl.Instance.Clear();
         }
 
         private void showSumError_Click(object sender, RibbonControlEventArgs e)
@@ -257,6 +261,12 @@ namespace Spell
                         }
                 });
             a.Start();
+        }
+
+        private void btnFixAll_Click(object sender, RibbonControlEventArgs e)
+        {
+            UserControl.Instance.Start(true);
+            UserControl.Instance.showCandidateInTaskPane();
         }
     }
 }
