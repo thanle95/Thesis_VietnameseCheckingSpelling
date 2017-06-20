@@ -46,7 +46,7 @@ namespace Spell
         {
 
         }
-   
+
         void myControl_Click(Microsoft.Office.Core.CommandBarButton Ctrl, ref bool CancelDefault)
         {
             UserControl.Instance.Start(false);
@@ -61,13 +61,20 @@ namespace Spell
             FindError.Instance.GetSeletedContext(words, sentences);
             fixError.getCandidatesWithContext(FindError.Instance.SelectedError_Context, FindError.Instance.lstErrorRange);
             WrongWord = fixError.Token.ToLower();
+            string[] candidateArr = new string[fixError.hSetCandidate.Count];
+            int i = 0;
+            string candidate = "";
             if (fixError.hSetCandidate.Count > 0)
             {
                 foreach (string item in fixError.hSetCandidate)
+
+                    candidateArr[i++] = item;
+                for (i = fixError.hSetCandidate.Count - 1; i >= 0; i--)
                 {
-                    if (!item.ToLower().Equals(fixError.Token.ToLower()))
-                        if (item.Length > 1)
-                            addCandidate(item.Trim());
+                    candidate = candidateArr[i];
+                    if (!candidate.ToLower().Equals(fixError.Token.ToLower()))
+                        if (candidate.Length > 1)
+                            addCandidate(candidate.Trim());
                 }
             }
             else
@@ -79,9 +86,9 @@ namespace Spell
 
             //}
         }
-        private void addCandidate( string candidate)
+        private void addCandidate(string candidate)
         {
-           
+
             Office.MsoControlType menuItem =
                        Office.MsoControlType.msoControlButton;
 

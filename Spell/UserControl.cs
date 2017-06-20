@@ -205,6 +205,17 @@ namespace Spell
         }
         public void change(string wrongText, string fixText, bool isRightClick)
         {
+            //if (isRightClick)
+            //{
+            //    FixError fixError = new FixError();
+
+            //    fixError.getCandidatesWithContext(FindError.Instance.FirstError_Context, FindError.Instance.lstErrorRange);
+            //    Word.Range range = FindError.Instance.lstErrorRange[FindError.Instance.FirstError_Context];
+            //    range.Select();
+
+            //    oldString = FindError.Instance.ToString().Trim();
+            //    newString = fixError.ToString().Trim();
+            //}
             addRowGridLog();
             int startIndex = 0;
             int endIndex = 0;
