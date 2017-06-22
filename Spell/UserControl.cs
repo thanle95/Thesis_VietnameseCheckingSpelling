@@ -34,6 +34,7 @@ namespace Spell
                 return instance;
             }
         }
+        private bool IsPause { get; set; }
         private int Index { get; set; }
         private int TotalError { get; set; }
         public void Start(bool isFixAll)
@@ -41,9 +42,12 @@ namespace Spell
             if (TotalError == 0)
                 TotalError = FindError.Instance.lstErrorRange.Count;
             IsFixAll = isFixAll;
-           
+
             if (IsFixAll)
+            {
                 changeUI_IsAutoFix();
+                IsPause = false;
+            }
             else
                 changeUI_IsSequenceFix();
         }
@@ -103,7 +107,7 @@ namespace Spell
 
                 oldString = FindError.Instance.ToString().Trim();
                 newString = fixError.ToString().Trim();
-                if (IsFixAll)
+                if (!IsPause)
                 {
                     change(fixError.Token.ToLower(), fixError.hSetCandidate.ElementAt(0), false);
                 }
@@ -368,7 +372,7 @@ namespace Spell
             SynchronizedInvoke(gridLog, delegate () { gridLog.Location = new System.Drawing.Point(0, 90); });
             SynchronizedInvoke(pnlButtonAutoFix, delegate ()
             {
-                pnlButtonAutoFix.Location = new System.Drawing.Point(200, 0);
+                pnlButtonAutoFix.Location = new System.Drawing.Point(0, 0);
                 pnlButtonAutoFix.Visible = true;
             });
             //SynchronizedInvoke(pnlProgressBar, delegate ()
@@ -383,7 +387,7 @@ namespace Spell
         {
             SynchronizedInvoke(pnlAutoFix, delegate ()
             {
-                pnlAutoFix.Location = new System.Drawing.Point(14, 200);
+                pnlAutoFix.Location = new System.Drawing.Point(14, 194);
                 pnlAutoFix.Visible = false;
             });
             SynchronizedInvoke(pnlSequenceFix, delegate () { pnlSequenceFix.Visible = true; });
@@ -457,12 +461,12 @@ namespace Spell
                 {
 
                     gridLog.Size = new System.Drawing.Size(gridLog.Size.Width, gridLog.Size.Height + 22);
-                    for (int i = gridLog.Location.Y; i >= 90; i--)
+                    for (int i = gridLog.Location.Y; i >= 0; i--)
                     {
                         gridLog.Location = new System.Drawing.Point(0, i);
                         Thread.Sleep(5);
                     }
-                    gridLog.Location = new System.Drawing.Point(0, 90);
+                    gridLog.Location = new System.Drawing.Point(0, 0);
                 }
                 gridLog.Rows.Add(++grigLogCount, oldString, newString);
             });
@@ -479,7 +483,7 @@ namespace Spell
             {
                 if (lblPauseResumeAutoFix.Text.Contains("dừng"))
                 {
-                    IsFixAll = false;
+                    IsPause = true;
                     lblPauseResumeAutoFix.Text = "Tiếp tục";
                     SynchronizedInvoke(btnPauseResumeAutoFix, delegate ()
                     {
@@ -501,7 +505,7 @@ namespace Spell
                         }
                     });
 
-                    IsFixAll = true;
+                    IsPause = false;
                     lblPauseResumeAutoFix.Text = "Tạm dừng";
                     SynchronizedInvoke(btnPauseResumeAutoFix, delegate ()
                     {
@@ -526,10 +530,15 @@ namespace Spell
                 yGridLog = 60;
                 yShowMore = 0;
             }
-            else
+            else if(IsFixAll)
             {
                 yGridLog = 150;
                 yShowMore = 90;
+            }
+            else
+            {
+                yGridLog = 60;
+                yShowMore = 0;
             }
             SynchronizedInvoke(gridLog, delegate ()
             {
