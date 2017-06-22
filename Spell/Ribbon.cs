@@ -30,7 +30,7 @@ namespace Spell
         ThreadStart threadStartFindError;
         private void Ribbon1_Load(object sender, RibbonUIEventArgs e)
         {
-            myCustomTaskPane = Globals.ThisAddIn.CustomTaskPanes.Add(UserControl.Instance, "Spelling");
+            myCustomTaskPane = Globals.ThisAddIn.CustomTaskPanes.Add(UserControl.Instance, "Chính tả");
             myCustomTaskPane.DockPosition = Office.MsoCTPDockPosition.msoCTPDockPositionFloating;
 
             myCustomTaskPane.Width = 320;
@@ -82,7 +82,7 @@ namespace Spell
         }
         private void check()
         {
-            DocumentHandling.Instance.DeHighLight_All_Mistake(Globals.ThisAddIn.Application.ActiveDocument.Characters);
+            DocumentHandling.Instance.DeHighLight_All_Mistake();
 
             typeFindError = dropTypeFindError.SelectedItemIndex;
             typeError = dropTypeError.SelectedItemIndex;
@@ -97,12 +97,23 @@ namespace Spell
             FindError.Instance.createValue(typeFindError, typeError);
             UserControl.Instance.grigLogCount = 0;
             myCustomTaskPane.Visible = false;
-            Stopwatch stopwatch = new Stopwatch();
+            //Stopwatch stopwatch = new Stopwatch();
 
-            stopwatch.Start();
+            //stopwatch.Start();
             FindError.Instance.startFindError();
-            stopwatch.Stop();
+            //stopwatch.Stop();
 
+            //thiết lập kiểm lỗi lần sau
+            btnStop.Enabled = false;
+            dropCorpus.Enabled = true;
+            dropTypeError.Enabled = true;
+            dropTypeFindError.Enabled = true;
+            tbtnShowTaskpane.Enabled = true;
+            btnCheckError.Label = "Kiểm lỗi";
+            btnCheckError.Image = global::Spell.Properties.Resources.check;
+            //
+            //-------------------------------
+            //
             int count = FindError.Instance.CountError;
             if (count > 0)
                 showSuggest(count);
@@ -111,15 +122,12 @@ namespace Spell
                 MessageBox.Show(SysMessage.Instance.No_error);
                 btnDeleteFormat.Enabled = false;
             }
-            TimeSpan ts = stopwatch.Elapsed;
-            string elapseTime = string.Format("{0:00}:{1:00}:{2:00}.{3:00}",
-                                ts.Hours, ts.Minutes, ts.Seconds,
-                                ts.Milliseconds / 10);
-            MessageBox.Show(elapseTime);
-            btnStop.Enabled = false;
-            dropCorpus.Enabled = true;
-            dropTypeError.Enabled = true;
-            dropTypeFindError.Enabled = true;
+            //TimeSpan ts = stopwatch.Elapsed;
+            //string elapseTime = string.Format("{0:00}:{1:00}:{2:00}.{3:00}",
+            //                    ts.Hours, ts.Minutes, ts.Seconds,
+            //                    ts.Milliseconds / 10);
+            //MessageBox.Show(elapseTime);
+            
         }
         private void showSuggest(int count)
         {
@@ -202,7 +210,7 @@ namespace Spell
             //myCustomTaskPane.Visible = true;
             //if (result == DialogResult.Yes)
             //{
-            DocumentHandling.Instance.DeHighLight_All_Mistake(Globals.ThisAddIn.Application.ActiveDocument.Characters);
+            DocumentHandling.Instance.DeHighLight_All_Mistake();
             FindError.Instance.Clear();
             UserControl.Instance.IsFixAll = false;
             myCustomTaskPane.Visible = false;

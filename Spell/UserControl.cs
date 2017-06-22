@@ -38,7 +38,6 @@ namespace Spell
         private int TotalError { get; set; }
         public void Start(bool isFixAll)
         {
-            lblStatus.Text = "";
             if (TotalError == 0)
                 TotalError = FindError.Instance.lstErrorRange.Count;
             IsFixAll = isFixAll;
@@ -254,7 +253,7 @@ namespace Spell
             DocumentHandling.Instance.DeHighLight_Mistake(startIndex, endIndex);
             curRangeTextShowInTaskPane.Select();
             Index++;
-            UpdateProgressBar();
+            //UpdateProgressBar();
             if (Index == TotalError)
             {
                 IsOutOfError = true;
@@ -372,11 +371,11 @@ namespace Spell
                 pnlButtonAutoFix.Location = new System.Drawing.Point(200, 0);
                 pnlButtonAutoFix.Visible = true;
             });
-            SynchronizedInvoke(pnlProgressBar, delegate ()
-            {
-                pnlProgressBar.Size = new System.Drawing.Size(200, 90);
-                pnlProgressBar.Visible = true;
-            });
+            //SynchronizedInvoke(pnlProgressBar, delegate ()
+            //{
+            //    pnlProgressBar.Size = new System.Drawing.Size(200, 90);
+            //    pnlProgressBar.Visible = true;
+            //});
             SynchronizedInvoke(pnlShowMore, delegate () { pnlShowMore.Visible = false; });
         }
         //Sửa lỗi tuần tự
@@ -403,7 +402,7 @@ namespace Spell
             SynchronizedInvoke(pnlSequenceFix, delegate () { pnlSequenceFix.Visible = false; });
             SynchronizedInvoke(pnlShowMore, delegate () { pnlShowMore.Visible = false; });
             SynchronizedInvoke(pnlButtonAutoFix, delegate () { pnlButtonAutoFix.Visible = false; });
-            SynchronizedInvoke(pnlProgressBar, delegate () { pnlProgressBar.Visible = false; });
+            //SynchronizedInvoke(pnlProgressBar, delegate () { pnlProgressBar.Visible = false; });
             SynchronizedInvoke(pnlAutoFix, delegate ()
             {
                 for (int i = pnlAutoFix.Location.Y; i > 5; i--)
@@ -425,16 +424,16 @@ namespace Spell
 
         private void addRowGridLog()
         {
-            SynchronizedInvoke(pnlProgressBar, delegate ()
-            {
-                if (!IsFixAll)
-                    if (pnlProgressBar.Size.Width != 285)
-                    {
-                        pnlProgressBar.Size = new System.Drawing.Size(285, 90);
-                        progressBar1.Width = 275;
-                        pnlProgressBar.Visible = true;
-                    }
-            });
+            //SynchronizedInvoke(pnlProgressBar, delegate ()
+            //{
+            //    if (!IsFixAll)
+            //        if (pnlProgressBar.Size.Width != 285)
+            //        {
+            //            pnlProgressBar.Size = new System.Drawing.Size(285, 90);
+            //            progressBar1.Width = 275;
+            //            pnlProgressBar.Visible = true;
+            //        }
+            //});
             SynchronizedInvoke(pnlShowMore, delegate ()
             {
                 pnlShowMore.Visible = false;
@@ -547,36 +546,36 @@ namespace Spell
                 pnlShowMore.Visible = true;
             });
         }
-        private async Task ProcessData(IProgress<ProgressReport> progress)
-        {
-            var progressReport = new ProgressReport();
-            await Task.Run(() =>
-            {
-                progressReport.PercentComplete = Index * 100 / TotalError;
-                progress.Report(progressReport);
-                Thread.Sleep(20);
-            });
-        }
-        private async void UpdateProgressBar()
-        {
-            var progress = new Progress<ProgressReport>();
+        //private async Task ProcessData(IProgress<ProgressReport> progress)
+        //{
+        //    var progressReport = new ProgressReport();
+        //    await Task.Run(() =>
+        //    {
+        //        progressReport.PercentComplete = Index * 100 / TotalError;
+        //        progress.Report(progressReport);
+        //        Thread.Sleep(20);
+        //    });
+        //}
+        //private async void UpdateProgressBar()
+        //{
+        //    var progress = new Progress<ProgressReport>();
 
-            progress.ProgressChanged += (o, report) =>
-            {
-                SynchronizedInvoke(lblStatus, delegate ()
-                {
-                    lblStatus.Text = string.Format("{0}/{1} lỗi", Index, TotalError);
-                });
-                SynchronizedInvoke(progressBar1, delegate ()
-                {
-                    progressBar1.Value = report.PercentComplete;
-                    progressBar1.Update();
-                });
-            };
-            await ProcessData(progress);
-            //lblStatus.Text = string.Format("{0}/{1} lỗi", Index, TotalError);
+        //    progress.ProgressChanged += (o, report) =>
+        //    {
+        //        SynchronizedInvoke(lblStatus, delegate ()
+        //        {
+        //            lblStatus.Text = string.Format("{0}/{1} lỗi", Index, TotalError);
+        //        });
+        //        SynchronizedInvoke(progressBar1, delegate ()
+        //        {
+        //            progressBar1.Value = report.PercentComplete;
+        //            progressBar1.Update();
+        //        });
+        //    };
+        //    await ProcessData(progress);
+        //    //lblStatus.Text = string.Format("{0}/{1} lỗi", Index, TotalError);
 
-        }
+        //}
 
     }
 }

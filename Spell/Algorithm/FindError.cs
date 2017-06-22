@@ -285,7 +285,7 @@ namespace Spell.Algorithm
                         Thread.Sleep(1000);
                     }
                     else
-                        break;
+                        break; // break while true
                 }//end while true
 
             }

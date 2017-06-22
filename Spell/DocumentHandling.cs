@@ -104,10 +104,10 @@ namespace Spell
             return HighLight_Mistake(start, end , Word.WdColorIndex.wdYellow, Word.WdColor.wdColorAutomatic);
         }
 
-        public void DeHighLight_All_Mistake(Word.Characters characters)
+        public void DeHighLight_All_Mistake()
         {
-            //int count = Globals.ThisAddIn.Application.ActiveDocument.Characters.Count;
-            int count = characters.Count;
+            int count = Globals.ThisAddIn.Application.ActiveDocument.Characters.Count;
+            //int count = characters.Count;
             Word.Range range = Globals.ThisAddIn.Application.ActiveDocument.Range(0, count);
             range.HighlightColorIndex = Word.WdColorIndex.wdNoHighlight;
             range.Font.Color = Word.WdColor.wdColorAutomatic;
