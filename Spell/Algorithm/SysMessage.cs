@@ -39,7 +39,7 @@ namespace Spell.Algorithm
         {
             get
             {
-                return "Microsoft Word Spelling";
+                return "Kiểm lỗi chính tả tiếng Việt";
             }
         }
         public string Message_Notify_Fix_Error(int count)

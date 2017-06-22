@@ -63,11 +63,14 @@ namespace Spell
                 threadFindError.Start();
                 btnCheckError.Label = "Tạm dừng";
                 btnCheckError.Image = global::Spell.Properties.Resources.pause;
+                if (FindError.Instance.CountError > 0)
+                    showSuggest(FindError.Instance.CountError);
             }
             else if (btnCheckError.Label.Equals("Tạm dừng"))
             {
                 threadFindError.Suspend();
                 tbtnShowTaskpane.Enabled = true;
+                btnFixAll.Enabled = true;
                 btnDeleteFormat.Enabled = true;
                 btnCheckError.Label = "Tiếp tục";
                 btnCheckError.Image = global::Spell.Properties.Resources.check;
@@ -76,8 +79,11 @@ namespace Spell
             {
                 threadFindError.Resume();
                 tbtnShowTaskpane.Enabled = false;
+                btnFixAll.Enabled = false;
                 btnCheckError.Label = "Tạm dừng";
                 btnCheckError.Image = global::Spell.Properties.Resources.pause;
+                if (FindError.Instance.CountError > 0)
+                    showSuggest(FindError.Instance.CountError);
             }
         }
         private void check()
@@ -127,30 +133,30 @@ namespace Spell
             //                    ts.Hours, ts.Minutes, ts.Seconds,
             //                    ts.Milliseconds / 10);
             //MessageBox.Show(elapseTime);
-            
+
         }
         private void showSuggest(int count)
         {
             btnDeleteFormat.Enabled = true;
-            string message = SysMessage.Instance.Message_Notify_Fix_Error(count);
-            string caption = SysMessage.Instance.Caption_Notify_Fix_Error;
-            MessageBoxButtons buttons = MessageBoxButtons.YesNo;
-            DialogResult result;
+            //string message = SysMessage.Instance.Message_Notify_Fix_Error(count);
+            //string caption = SysMessage.Instance.Caption_Notify_Fix_Error;
+            //MessageBoxButtons buttons = MessageBoxButtons.YesNo;
+            //DialogResult result;
 
-            // Displays the MessageBox.
+            //// Displays the MessageBox.
 
-            result = MessageBox.Show(message, caption, buttons);
+            //result = MessageBox.Show(message, caption, buttons);
             myCustomTaskPane.Visible = true;
-            if (result == DialogResult.Yes)
-            {
-                UserControl.Instance.Start(true);
-                UserControl.Instance.showCandidateInTaskPane();
-            }
-            else
-            {
+            //if (result == DialogResult.Yes)
+            //{
+            //    UserControl.Instance.Start(true);
+            //    UserControl.Instance.showCandidateInTaskPane();
+            //}
+            //else
+            //{
                 UserControl.Instance.Start(false);
-            UserControl.Instance.showCandidateInTaskPane();
-            }
+                UserControl.Instance.showCandidateInTaskPane();
+            //}
         }
         private void dropDockPosition_SelectionChanged(object sender, RibbonControlEventArgs e)
         {
@@ -229,7 +235,7 @@ namespace Spell
 
         private void tbtnShowTaskpane_Click(object sender, RibbonControlEventArgs e)
         {
-            if (tbtnShowTaskpane.Checked && FindError.Instance.lstErrorRange.Count > 0)
+            if (FindError.Instance.lstErrorRange.Count > 0)
             {
                 showSuggest(FindError.Instance.CountError);
                 //FindError.Instance.FirstError_Context = FindError.Instance.lstErrorRange.First().Key;
