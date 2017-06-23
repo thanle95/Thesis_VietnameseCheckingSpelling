@@ -55,6 +55,9 @@ namespace Spell
             //    Usage usage = new Usage();
             //    usage.ShowDialog();
             //}
+            //-------------------
+            //------------Tạm dừng kiểm lỗi--------------
+            //-------------------
             if (btnCheckError.Label.Equals("Kiểm lỗi"))
             {
                 threadFindError = new Thread(threadStartFindError);
@@ -66,6 +69,9 @@ namespace Spell
                 if (FindError.Instance.CountError > 0)
                     showSuggest(FindError.Instance.CountError);
             }
+            //-------------------
+            //------------Tiếp tục kiểm lỗi--------------
+            //-------------------
             else if (btnCheckError.Label.Equals("Tạm dừng"))
             {
                 threadFindError.Suspend();
@@ -75,6 +81,9 @@ namespace Spell
                 btnCheckError.Label = "Tiếp tục";
                 btnCheckError.Image = global::Spell.Properties.Resources.play;
             }
+            //-------------------
+            //------------Tạm dừng kiểm lỗi--------------
+            //-------------------
             else
             {
                 threadFindError.Resume();
@@ -115,6 +124,7 @@ namespace Spell
             dropTypeError.Enabled = true;
             dropTypeFindError.Enabled = true;
             tbtnShowTaskpane.Enabled = true;
+            btnFixAll.Enabled = true;
             btnCheckError.Label = "Kiểm lỗi";
             btnCheckError.Image = global::Spell.Properties.Resources.check;
             //
@@ -266,7 +276,7 @@ namespace Spell
             FindError.Instance.StopFindError = true;
             btnStop.Enabled = false;
             tbtnShowTaskpane.Enabled = true;
-
+            btnFixAll.Enabled = true;
             btnCheckError.Label = "Kiểm lỗi";
             btnCheckError.Image = global::Spell.Properties.Resources.check;
             UserControl.Instance.Clear();
