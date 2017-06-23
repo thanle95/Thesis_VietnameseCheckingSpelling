@@ -262,6 +262,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <None Include="Resources\pause.png" />
+    <None Include="Resources\play.png" />
     <Content Include="Resources\rightWordCandidate.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

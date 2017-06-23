@@ -73,7 +73,7 @@ namespace Spell
                 btnFixAll.Enabled = true;
                 btnDeleteFormat.Enabled = true;
                 btnCheckError.Label = "Tiếp tục";
-                btnCheckError.Image = global::Spell.Properties.Resources.check;
+                btnCheckError.Image = global::Spell.Properties.Resources.play;
             }
             else
             {
@@ -154,8 +154,8 @@ namespace Spell
             //}
             //else
             //{
-                UserControl.Instance.Start(false);
-                UserControl.Instance.showCandidateInTaskPane();
+            UserControl.Instance.Start(false);
+            UserControl.Instance.showCandidateInTaskPane();
             //}
         }
         private void dropDockPosition_SelectionChanged(object sender, RibbonControlEventArgs e)
@@ -216,12 +216,18 @@ namespace Spell
             //myCustomTaskPane.Visible = true;
             //if (result == DialogResult.Yes)
             //{
-            DocumentHandling.Instance.DeHighLight_All_Mistake();
-            FindError.Instance.Clear();
-            UserControl.Instance.IsFixAll = false;
+            if (FindError.Instance.CountError > 0)
+            {
+                DocumentHandling.Instance.DeHighLight_All_Mistake();
+                FindError.Instance.Clear();
+                UserControl.Instance.IsFixAll = false;
+            }
             myCustomTaskPane.Visible = false;
-
             btnDeleteFormat.Enabled = false;
+            btnDeleteFormat.Enabled = false;
+            tbtnShowTaskpane.Enabled = false;
+            btnFixAll.Enabled = false;
+
             //}
 
         }
@@ -242,8 +248,13 @@ namespace Spell
                 //FindError.Instance.lstErrorRange[FindError.Instance.FirstError_Context].Select();
                 //UserControl.Instance.showCandidateInTaskPane();
             }
-            else
+            else {
                 myCustomTaskPane.Visible = false;
+                tbtnShowTaskpane.Enabled = false;
+                btnFixAll.Enabled = false;
+                btnDeleteFormat.Enabled = false;
+            }
+
         }
 
         private void btnStop_Click(object sender, RibbonControlEventArgs e)
@@ -259,6 +270,7 @@ namespace Spell
             btnCheckError.Label = "Kiểm lỗi";
             btnCheckError.Image = global::Spell.Properties.Resources.check;
             UserControl.Instance.Clear();
+            myCustomTaskPane.Visible = false;
         }
 
         private void showSumError_Click(object sender, RibbonControlEventArgs e)
@@ -279,8 +291,19 @@ namespace Spell
 
         private void btnFixAll_Click(object sender, RibbonControlEventArgs e)
         {
-            UserControl.Instance.Start(true);
-            UserControl.Instance.showCandidateInTaskPane();
+            if (FindError.Instance.CountError > 0)
+            {
+                myCustomTaskPane.Visible = true;
+                UserControl.Instance.Start(true);
+                UserControl.Instance.showCandidateInTaskPane();
+            }
+            else
+            {
+                tbtnShowTaskpane.Enabled = false;
+                btnFixAll.Enabled = false;
+                myCustomTaskPane.Visible = false;
+                btnDeleteFormat.Enabled = false;
+            }
         }
     }
 }

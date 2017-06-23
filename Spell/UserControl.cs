@@ -48,8 +48,11 @@ namespace Spell
                 changeUI_IsAutoFix();
                 IsPause = false;
             }
-            else
+            else {
                 changeUI_IsSequenceFix();
+                IsPause = true;
+            }
+
         }
         public void Clear()
         {
@@ -262,7 +265,7 @@ namespace Spell
             {
                 IsOutOfError = true;
                 Thread.Sleep(500);
-                MessageBox.Show(SysMessage.Instance.No_error);
+                //MessageBox.Show(SysMessage.Instance.No_error);
                 changeUI_OutOfError();
                 Index = 0;
                 return;
@@ -270,7 +273,7 @@ namespace Spell
             //
             //sửa lỗi tiếp theo
             //
-            //if (!isRightClick)
+            if (!isRightClick)
             {
                 FindError.Instance.FirstError_Context = FindError.Instance.lstErrorRange.First().Key;
                 FindError.Instance.lstErrorRange[FindError.Instance.FirstError_Context].Select();
