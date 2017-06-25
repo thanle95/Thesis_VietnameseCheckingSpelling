@@ -29,7 +29,7 @@ namespace Spell.Algorithm
         private int _typeFindError = 0;
         private int _typeError = 0;
         private bool isNoChange = false;
-        public int ISentence { get;set; }
+        public int ISentence { get; set; }
         public override string ToString()
         {
             string pp = FirstError_Context.PREPRE.Equals(Ngram.Instance.START_STRING) ?
@@ -95,11 +95,9 @@ namespace Spell.Algorithm
             try
             {
                 //sửa lỗi kiểm tra lần 2 không hiện được gợi ý
-                
+
                 bool isSelected = false;
-                 curSentences = Globals.ThisAddIn.Application.Selection.Sentences;
-
-
+                curSentences = Globals.ThisAddIn.Application.Selection.Sentences;
                 if (typeFindError == IS_TYPING_TYPE)
                     //lấy câu dựa trên vị trí con trỏ
                     curSentences = Globals.ThisAddIn.Application.Selection.Sentences;

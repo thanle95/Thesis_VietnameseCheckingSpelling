@@ -70,8 +70,8 @@ namespace Spell
                 threadFindError.Start();
                 btnCheckError.Label = "Tạm dừng";
                 btnCheckError.Image = global::Spell.Properties.Resources.pause;
-                if (FindError.Instance.CountError > 0)
-                    showSuggest(FindError.Instance.CountError);
+                //if (FindError.Instance.CountError > 0)
+                //    showSuggest(FindError.Instance.CountError);
             }
             //-------------------
             //------------Tiếp tục kiểm lỗi--------------

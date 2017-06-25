@@ -80,8 +80,11 @@ namespace Spell
             FixError fixError = new FixError();
             FindError.Instance.GetSeletedContext(words, sentences);
             fixError.getCandidatesWithContext(FindError.Instance.SelectedError_Context, FindError.Instance.lstErrorRange);
+
             if (fixError.hSetCandidate.Count > 0)
             {
+                oldString = FindError.Instance.ToString().Trim();
+                newString = fixError.ToString().Trim();
                 lblWrong.Text = fixError.Token;
                 lstbCandidate.Items.Clear();
                 foreach (string item in fixError.hSetCandidate)
