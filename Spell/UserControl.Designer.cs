@@ -29,26 +29,26 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.btnIgnore = new System.Windows.Forms.Button();
             this.lblWrong = new System.Windows.Forms.Label();
             this.lstbCandidate = new System.Windows.Forms.ListBox();
             this.btnChange = new System.Windows.Forms.Button();
             this.gridLog = new System.Windows.Forms.DataGridView();
-            this.STT = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.wrongContext = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.rightContext = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.lblWrongContext = new System.Windows.Forms.Label();
             this.lblRightContext = new System.Windows.Forms.Label();
             this.lblRightArrow = new System.Windows.Forms.Label();
             this.btnGo = new System.Windows.Forms.Button();
             this.pnlSequenceFix = new System.Windows.Forms.Panel();
+            this.btnResume = new System.Windows.Forms.Button();
             this.btnPauseResumeAutoFix = new System.Windows.Forms.Button();
             this.lblPauseResumeAutoFix = new System.Windows.Forms.Label();
             this.pnlAutoFix = new System.Windows.Forms.Panel();
             this.pnlButtonAutoFix = new System.Windows.Forms.Panel();
             this.pnlShowMore = new System.Windows.Forms.Panel();
-            this.btnResume = new System.Windows.Forms.Button();
+            this.STT = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.wrongContext = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.rightContext = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.gridLog)).BeginInit();
             this.pnlSequenceFix.SuspendLayout();
             this.pnlAutoFix.SuspendLayout();
@@ -58,6 +58,7 @@
             // 
             // btnIgnore
             // 
+            this.btnIgnore.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnIgnore.AutoSize = true;
             this.btnIgnore.BackColor = System.Drawing.Color.White;
             this.btnIgnore.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -83,6 +84,10 @@
             // 
             // lstbCandidate
             // 
+            this.lstbCandidate.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.lstbCandidate.BackColor = System.Drawing.SystemColors.InactiveBorder;
             this.lstbCandidate.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lstbCandidate.FormattingEnabled = true;
             this.lstbCandidate.ItemHeight = 16;
@@ -94,6 +99,7 @@
             // 
             // btnChange
             // 
+            this.btnChange.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnChange.AutoSize = true;
             this.btnChange.BackColor = System.Drawing.Color.White;
             this.btnChange.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -112,8 +118,10 @@
             this.gridLog.AllowUserToAddRows = false;
             this.gridLog.AllowUserToDeleteRows = false;
             this.gridLog.AllowUserToResizeRows = false;
-            dataGridViewCellStyle3.BackColor = System.Drawing.Color.Aqua;
-            this.gridLog.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle1.BackColor = System.Drawing.Color.Aqua;
+            this.gridLog.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
+            this.gridLog.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.gridLog.BackgroundColor = System.Drawing.Color.SkyBlue;
             this.gridLog.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.gridLog.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.STT,
@@ -126,27 +134,6 @@
             this.gridLog.Size = new System.Drawing.Size(287, 90);
             this.gridLog.TabIndex = 20;
             this.gridLog.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.gridLog_CellDoubleClick);
-            // 
-            // STT
-            // 
-            this.STT.HeaderText = "STT";
-            this.STT.MaxInputLength = 10000;
-            this.STT.Name = "STT";
-            this.STT.ReadOnly = true;
-            this.STT.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.STT.Width = 50;
-            // 
-            // wrongContext
-            // 
-            this.wrongContext.HeaderText = "Ngữ cảnh sai";
-            this.wrongContext.Name = "wrongContext";
-            this.wrongContext.ReadOnly = true;
-            // 
-            // rightContext
-            // 
-            this.rightContext.HeaderText = "Ngữ cảnh đúng";
-            this.rightContext.Name = "rightContext";
-            this.rightContext.ReadOnly = true;
             // 
             // lblWrongContext
             // 
@@ -183,6 +170,7 @@
             // 
             // btnGo
             // 
+            this.btnGo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnGo.AutoSize = true;
             this.btnGo.BackColor = System.Drawing.Color.White;
             this.btnGo.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -197,6 +185,9 @@
             // 
             // pnlSequenceFix
             // 
+            this.pnlSequenceFix.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.pnlSequenceFix.BackColor = System.Drawing.SystemColors.Window;
             this.pnlSequenceFix.Controls.Add(this.btnResume);
             this.pnlSequenceFix.Controls.Add(this.lstbCandidate);
             this.pnlSequenceFix.Controls.Add(this.btnIgnore);
@@ -206,6 +197,23 @@
             this.pnlSequenceFix.Name = "pnlSequenceFix";
             this.pnlSequenceFix.Size = new System.Drawing.Size(285, 176);
             this.pnlSequenceFix.TabIndex = 25;
+            // 
+            // btnResume
+            // 
+            this.btnResume.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnResume.AutoSize = true;
+            this.btnResume.BackColor = System.Drawing.Color.White;
+            this.btnResume.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnResume.ForeColor = System.Drawing.Color.Black;
+            this.btnResume.Location = new System.Drawing.Point(93, 0);
+            this.btnResume.Name = "btnResume";
+            this.btnResume.Size = new System.Drawing.Size(90, 30);
+            this.btnResume.TabIndex = 20;
+            this.btnResume.Text = "Trở lại";
+            this.btnResume.UseVisualStyleBackColor = false;
+            this.btnResume.Visible = false;
+            this.btnResume.Click += new System.EventHandler(this.btnResume_Click);
             // 
             // btnPauseResumeAutoFix
             // 
@@ -233,6 +241,7 @@
             // 
             // pnlAutoFix
             // 
+            this.pnlAutoFix.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.pnlAutoFix.Controls.Add(this.pnlButtonAutoFix);
             this.pnlAutoFix.Controls.Add(this.pnlShowMore);
             this.pnlAutoFix.Controls.Add(this.gridLog);
@@ -244,6 +253,9 @@
             // 
             // pnlButtonAutoFix
             // 
+            this.pnlButtonAutoFix.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.pnlButtonAutoFix.Controls.Add(this.btnPauseResumeAutoFix);
             this.pnlButtonAutoFix.Controls.Add(this.lblPauseResumeAutoFix);
             this.pnlButtonAutoFix.Location = new System.Drawing.Point(0, 0);
@@ -253,6 +265,7 @@
             // 
             // pnlShowMore
             // 
+            this.pnlShowMore.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.pnlShowMore.Controls.Add(this.btnGo);
             this.pnlShowMore.Controls.Add(this.lblWrongContext);
             this.pnlShowMore.Controls.Add(this.lblRightArrow);
@@ -262,26 +275,35 @@
             this.pnlShowMore.Size = new System.Drawing.Size(285, 55);
             this.pnlShowMore.TabIndex = 25;
             // 
-            // btnResume
+            // STT
             // 
-            this.btnResume.AutoSize = true;
-            this.btnResume.BackColor = System.Drawing.Color.White;
-            this.btnResume.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnResume.ForeColor = System.Drawing.Color.Black;
-            this.btnResume.Location = new System.Drawing.Point(93, 0);
-            this.btnResume.Name = "btnResume";
-            this.btnResume.Size = new System.Drawing.Size(90, 30);
-            this.btnResume.TabIndex = 20;
-            this.btnResume.Text = "Trở lại";
-            this.btnResume.UseVisualStyleBackColor = false;
-            this.btnResume.Visible = false;
-            this.btnResume.Click += new System.EventHandler(this.btnResume_Click);
+            this.STT.HeaderText = "STT";
+            this.STT.MaxInputLength = 10000;
+            this.STT.Name = "STT";
+            this.STT.ReadOnly = true;
+            this.STT.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.STT.Width = 40;
+            // 
+            // wrongContext
+            // 
+            this.wrongContext.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.wrongContext.HeaderText = "Ngữ cảnh sai";
+            this.wrongContext.Name = "wrongContext";
+            this.wrongContext.ReadOnly = true;
+            // 
+            // rightContext
+            // 
+            this.rightContext.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.rightContext.HeaderText = "Ngữ cảnh đúng";
+            this.rightContext.Name = "rightContext";
+            this.rightContext.ReadOnly = true;
             // 
             // UserControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
+            this.BackColor = System.Drawing.SystemColors.Window;
             this.Controls.Add(this.pnlAutoFix);
             this.Controls.Add(this.pnlSequenceFix);
             this.MinimumSize = new System.Drawing.Size(320, 600);
@@ -309,9 +331,6 @@
         private System.Windows.Forms.Label lblWrongContext;
         private System.Windows.Forms.Label lblRightContext;
         private System.Windows.Forms.Label lblRightArrow;
-        private System.Windows.Forms.DataGridViewTextBoxColumn STT;
-        private System.Windows.Forms.DataGridViewTextBoxColumn wrongContext;
-        private System.Windows.Forms.DataGridViewTextBoxColumn rightContext;
         private System.Windows.Forms.Button btnGo;
         private System.Windows.Forms.Panel pnlSequenceFix;
         private System.Windows.Forms.Button btnPauseResumeAutoFix;
@@ -320,6 +339,9 @@
         private System.Windows.Forms.Panel pnlShowMore;
         private System.Windows.Forms.Panel pnlButtonAutoFix;
         public System.Windows.Forms.Button btnResume;
+        private System.Windows.Forms.DataGridViewTextBoxColumn STT;
+        private System.Windows.Forms.DataGridViewTextBoxColumn wrongContext;
+        private System.Windows.Forms.DataGridViewTextBoxColumn rightContext;
     }
 }
 
