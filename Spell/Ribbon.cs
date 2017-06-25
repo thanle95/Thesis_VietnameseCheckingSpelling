@@ -26,6 +26,9 @@ namespace Spell
         private const int DOCK_LEFT = 1;
         private const int IS_TYPING_SELECTION = 0;
         private const int WHOLE_DOCUMENT_SELECTION = 1;
+
+        private enum CheckButton { CHECKING, PAUSE, RESUME };
+        private CheckButton checkButton;
         Thread threadFindError;
         ThreadStart threadStartFindError;
         private void Ribbon1_Load(object sender, RibbonUIEventArgs e)
@@ -40,7 +43,8 @@ namespace Spell
             dropTypeFindError.SelectedItemIndex = WHOLE_DOCUMENT_SELECTION;
             typeFindError = dropTypeFindError.SelectedItemIndex;
             //Ngram.Instance.runFirst();
-            FindError.Instance.createValue(typeFindError, typeError);
+            //Bắt đầu từ câu đầu tiên
+            
             threadStartFindError = new ThreadStart(check);
         }
 
@@ -60,9 +64,9 @@ namespace Spell
             //-------------------
             if (btnCheckError.Label.Equals("Kiểm lỗi"))
             {
+                checkButton = CheckButton.CHECKING;
                 threadFindError = new Thread(threadStartFindError);
                 threadFindError.Priority = ThreadPriority.Highest;
-                //if (!threadFindError.IsAlive)
                 threadFindError.Start();
                 btnCheckError.Label = "Tạm dừng";
                 btnCheckError.Image = global::Spell.Properties.Resources.pause;
@@ -74,50 +78,62 @@ namespace Spell
             //-------------------
             else if (btnCheckError.Label.Equals("Tạm dừng"))
             {
-                threadFindError.Suspend();
+                checkButton = CheckButton.PAUSE;
+                FindError.Instance.StopFindError = true;
                 tbtnShowTaskpane.Enabled = true;
                 btnFixAll.Enabled = true;
                 btnDeleteFormat.Enabled = true;
                 btnCheckError.Label = "Tiếp tục";
                 btnCheckError.Image = global::Spell.Properties.Resources.play;
+
             }
             //-------------------
             //------------Tạm dừng kiểm lỗi--------------
             //-------------------
             else
             {
-                threadFindError.Resume();
+                checkButton = CheckButton.RESUME;
                 tbtnShowTaskpane.Enabled = false;
                 btnFixAll.Enabled = false;
                 btnCheckError.Label = "Tạm dừng";
                 btnCheckError.Image = global::Spell.Properties.Resources.pause;
                 if (FindError.Instance.CountError > 0)
                     showSuggest(FindError.Instance.CountError);
+
+                Globals.ThisAddIn.Application.ActiveDocument.Range(0, 0).Select();
+                FindError.Instance.StopFindError = false;
+                threadFindError = new Thread(threadStartFindError);
+                threadFindError.Priority = ThreadPriority.Highest;
+                threadFindError.Start();
             }
         }
         private void check()
         {
-            DocumentHandling.Instance.DeHighLight_All_Mistake();
+            if (checkButton == CheckButton.CHECKING)
+            {
+                DocumentHandling.Instance.DeHighLight_All_Mistake();
+                
+                typeFindError = dropTypeFindError.SelectedItemIndex;
+                typeError = dropTypeError.SelectedItemIndex;
+                FindError.Instance.createValue(typeFindError, typeError, 1);
+                btnDeleteFormat.Enabled = false;
+                btnStop.Enabled = true;
+                dropCorpus.Enabled = false;
+                dropTypeError.Enabled = false;
+                dropTypeFindError.Enabled = false;
+                FindError.Instance.StopFindError = false;
+                tbtnShowTaskpane.Enabled = false;
 
-            typeFindError = dropTypeFindError.SelectedItemIndex;
-            typeError = dropTypeError.SelectedItemIndex;
-            btnDeleteFormat.Enabled = false;
-            btnStop.Enabled = true;
-            dropCorpus.Enabled = false;
-            dropTypeError.Enabled = false;
-            dropTypeFindError.Enabled = false;
-            FindError.Instance.StopFindError = false;
-            tbtnShowTaskpane.Enabled = false;
-
-            FindError.Instance.createValue(typeFindError, typeError);
-            UserControl.Instance.grigLogCount = 0;
+                UserControl.Instance.grigLogCount = 0;
+            }
             myCustomTaskPane.Visible = false;
             //Stopwatch stopwatch = new Stopwatch();
 
             //stopwatch.Start();
             FindError.Instance.startFindError();
             //stopwatch.Stop();
-
+            if (checkButton == CheckButton.PAUSE)
+                return;
             //thiết lập kiểm lỗi lần sau
             btnStop.Enabled = false;
             dropCorpus.Enabled = true;
@@ -298,7 +314,7 @@ namespace Spell
                 });
             a.Start();
         }
-        
+
         private void btnFixAll_Click(object sender, RibbonControlEventArgs e)
         {
             if (FindError.Instance.CountError > 0)
@@ -321,7 +337,7 @@ namespace Spell
             //Globals.ThisAddIn.Application.ActiveDocument.Protect(
             // Word.WdProtectionType.wdAllowOnlyReading,
             // false, System.String.Empty, false, false);
-            
+
             Microsoft.Office.Tools.Word.Document vstoDocument =
                 Globals.Factory.GetVstoObject(Globals.ThisAddIn.Application.ActiveDocument);
 

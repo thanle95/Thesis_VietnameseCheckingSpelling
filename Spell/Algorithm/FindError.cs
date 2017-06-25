@@ -29,6 +29,7 @@ namespace Spell.Algorithm
         private int _typeFindError = 0;
         private int _typeError = 0;
         private bool isNoChange = false;
+        public int ISentence { get;set; }
         public override string ToString()
         {
             string pp = FirstError_Context.PREPRE.Equals(Ngram.Instance.START_STRING) ?
@@ -58,10 +59,13 @@ namespace Spell.Algorithm
             lstErrorRange.Clear();
             FirstError_Context = null;
         }
-        public void createValue(int typeFindError, int typeError)
+        public void createValue(int typeFindError, int typeError, int iSentence)
         {
+            lstErrorRange.Clear();
+            FirstError_Context = null;
             _typeFindError = typeFindError;
             _typeError = typeError;
+            ISentence = iSentence;
         }
         public int CountError
         {
@@ -91,8 +95,7 @@ namespace Spell.Algorithm
             try
             {
                 //sửa lỗi kiểm tra lần 2 không hiện được gợi ý
-                lstErrorRange.Clear();
-                FirstError_Context = null;
+                
                 bool isSelected = false;
                  curSentences = Globals.ThisAddIn.Application.Selection.Sentences;
 
@@ -121,11 +124,11 @@ namespace Spell.Algorithm
                 //lấy toàn bộ danh sách các từ trong Active Document, để lấy được ngữ cảnh
                 while (true)
                 {
-                    for (int iSentence = 1; iSentence <= curSentences.Count; iSentence++)
+                    for (; ISentence <= curSentences.Count; ISentence++)
                     {
-                        words = curSentences[iSentence].Text.TrimEnd().Split(' ');
-                        start = curSentences[iSentence].Start;
-                        end = curSentences[iSentence].End;
+                        words = curSentences[ISentence].Text.TrimEnd().Split(' ');
+                        start = curSentences[ISentence].Start;
+                        end = curSentences[ISentence].End;
                         range = Globals.ThisAddIn.Application.ActiveDocument.Range(start, end);
                         if (typeFindError != IS_TYPING_TYPE && isSelected)
                             range.Select();
