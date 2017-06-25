@@ -23,6 +23,8 @@ namespace Spell
         private const string ERROR_SPACE = "\"Lỗi dư khoảng trắng\"";
         private int SELECTED_ERROR { get; set; }
         private bool IsOutOfError { get; set; }
+        private Word.Range CurRannge = null;
+        private string Error { get; set; }
         private UserControl()
         {
             InitializeComponent();
@@ -105,22 +107,24 @@ namespace Spell
                 FixError fixError = new FixError();
 
                 fixError.getCandidatesWithContext(FindError.Instance.FirstError_Context, FindError.Instance.lstErrorRange);
-                Word.Range range = FindError.Instance.lstErrorRange[FindError.Instance.FirstError_Context];
-                range.Select();
-
+                CurRannge = FindError.Instance.lstErrorRange[FindError.Instance.FirstError_Context];
+                Error = fixError.Token;
+                //MessageBox.Show(string.Format("\"{0}\"-\"{1}\"", range.Text, fixError.Token));
                 oldString = FindError.Instance.ToString().Trim();
                 newString = fixError.ToString().Trim();
                 if (!IsPause)
                 {
                     change(fixError.Token.ToLower(), fixError.hSetCandidate.ElementAt(0), false);
+                    CurRannge.Select();
                 }
                 else
                 {
                     SynchronizedInvoke(lblWrong, delegate ()
                     {
                         lblWrong.Text = fixError.Token;
-                        
+
                     });
+                    CurRannge.Select();
                     SynchronizedInvoke(lstbCandidate, delegate () { lstbCandidate.Items.Clear(); });
 
                     foreach (string item in fixError.hSetCandidate)
@@ -132,8 +136,8 @@ namespace Spell
                     SynchronizedInvoke(btnChange, delegate () { btnChange.Focus(); });
                     return;
                 }
-            }
 
+            }
         }
 
         public void SynchronizedInvoke(ISynchronizeInvoke sync, Action action)
@@ -173,15 +177,18 @@ namespace Spell
             int startIndex = 0;
             int endIndex = 0;
 
-            foreach (Word.Range range in FindError.Instance.lstErrorRange.Values)
-                if (range.Text.Trim().ToLower().Equals(lblWrong.Text.ToLower()))
-                {
-                    startIndex = range.Start;
-                    endIndex = range.End;
-                    var item = FindError.Instance.lstErrorRange.First(kvp => kvp.Value == range);
+            //foreach (Word.Range range in FindError.Instance.lstErrorRange.Values)
+            //    if (range.Text.Trim().ToLower().Equals(lblWrong.Text.ToLower()))
+            //    {
+            //        startIndex = range.Start;
+            //        endIndex = range.End;
+            var item = FindError.Instance.lstErrorRange.First();
+                    //var item = FindError.Instance.lstErrorRange.First(kvp => kvp.Value == range);
                     FindError.Instance.lstErrorRange.Remove(item.Key);
-                    break;
-                }
+            startIndex = item.Value.Start;
+            endIndex = item.Value.End;
+                //    break;
+                //}
 
             DocumentHandling.Instance.DeHighLight_Mistake(startIndex, endIndex);
             if (FindError.Instance.lstErrorRange.Count == 0)
@@ -205,13 +212,6 @@ namespace Spell
             Ngram.Instance.addToDictionary(lblWrong.Text, null, null, Position.X);
         }
 
-        private void btnStart_Click(object sender, EventArgs e)
-        {
-            Word.Words words = Globals.ThisAddIn.Application.Selection.Words;
-            Word.Sentences sentences = Globals.ThisAddIn.Application.Selection.Sentences;
-
-            startFixError(words, sentences);
-        }
         public void startFixError(Word.Words words, Word.Sentences sentences)
         {
             showCandidateInTaskPane(words, sentences);
@@ -527,6 +527,17 @@ namespace Spell
         private void lblPauseResumeAutoFix_Click(object sender, EventArgs e)
         {
             Pause_Resume();
+        }
+
+        private void btnResume_Click(object sender, EventArgs e)
+        {
+            string text = CurRannge.Text;
+            if (CurRannge.Text.Equals(Error))
+                CurRannge.Select();
+            else {
+                ignore();
+                btnResume.Visible = false;
+            }
         }
 
         private void changeUI_ShowMoreInfo()

@@ -3,6 +3,7 @@ using Word = Microsoft.Office.Interop.Word;
 using Office = Microsoft.Office.Core;
 using System;
 using Microsoft.Office.Tools.Word;
+using System.IO;
 
 namespace Spell
 {
@@ -25,22 +26,36 @@ namespace Spell
             //AddMenuItem();
             myApplication.WindowBeforeRightClick +=
                 new Word.ApplicationEvents4_WindowBeforeRightClickEventHandler(application_WindowBeforeRightClick);
-              myApplication.WindowSelectionChange +=
-                    new Word.ApplicationEvents4_WindowSelectionChangeEventHandler(ThisDocument_SelectionChange);
+            myApplication.WindowSelectionChange +=
+                  new Word.ApplicationEvents4_WindowSelectionChangeEventHandler(ThisDocument_SelectionChange);
         }
         private void ThisDocument_SelectionChange(Word.Selection selection)
         {
-            Word.Range curRange/* = Globals.ThisAddIn.Application.Selection.Words[1]*/;
-            curRange = selection.Range;
+            //Word.Range curRange/* = Globals.ThisAddIn.Application.Selection.Words[1]*/;
+            //curRange = selection.Range;
+            string rangeText = "";
+            if (selection.Range.Text == null)
+                rangeText = Globals.ThisAddIn.Application.ActiveDocument.Range(selection.Range.Start, selection.Range.Start + 1).Text;
+            else
+                rangeText = selection.Range.Text;
+            rangeText += " ";
             UserControl.Instance.SynchronizedInvoke(UserControl.Instance.lblWrong, delegate ()
             {
-                if (curRange.Text.Trim().ToLower().Equals(UserControl.Instance.lblWrong.Text.Trim()))
-                {
+                //Sửa lỗi hiện tại
+                if (rangeText.Trim().Equals(UserControl.Instance.lblWrong.Text))
                     EnableFixError(true);
-                   
-                }
-                else
-                {
+                else {
+                    foreach(var item in FindError.Instance.lstErrorRange.Keys)
+                        //Sửa lỗi bất kỳ khác
+                        if (rangeText.Trim().Equals(item.TOKEN))
+                        {
+                            EnableFixError(true);
+                            Word.Words words = Globals.ThisAddIn.Application.Selection.Words;
+                            Word.Sentences sentences = Globals.ThisAddIn.Application.Selection.Sentences;
+                            UserControl.Instance.startFixError(words, sentences);
+                            return;
+                        } 
+                    //Không phải là lỗi
                     EnableFixError(false);
                 }
             });
@@ -60,9 +75,9 @@ namespace Spell
             {
                 UserControl.Instance.btnChange.Visible = enable;
             });
-            UserControl.Instance.SynchronizedInvoke(UserControl.Instance.btnIgnore, delegate ()
+            UserControl.Instance.SynchronizedInvoke(UserControl.Instance.btnResume, delegate ()
             {
-                UserControl.Instance.btnIgnore.Visible = enable;
+                UserControl.Instance.btnResume.Visible = !enable;
             });
         }
 
