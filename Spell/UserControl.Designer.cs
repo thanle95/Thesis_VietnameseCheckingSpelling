@@ -298,11 +298,11 @@
 
         #endregion
 
-        private System.Windows.Forms.Button btnIgnore;
-        private System.Windows.Forms.Label lblWrong;
-        private System.Windows.Forms.ListBox lstbCandidate;
-        private System.Windows.Forms.Button btnStart;
-        private System.Windows.Forms.Button btnChange;
+        public System.Windows.Forms.Button btnIgnore;
+        public System.Windows.Forms.Label lblWrong;
+        public System.Windows.Forms.ListBox lstbCandidate;
+        public System.Windows.Forms.Button btnStart;
+        public System.Windows.Forms.Button btnChange;
         private System.Windows.Forms.DataGridView gridLog;
         private System.Windows.Forms.Label lblWrongContext;
         private System.Windows.Forms.Label lblRightContext;

@@ -62,6 +62,8 @@
             this.showSumError = this.Factory.CreateRibbonButton();
             this.tbtnShowTaskpane = this.Factory.CreateRibbonToggleButton();
             this.btnFixAll = this.Factory.CreateRibbonButton();
+            this.button1 = this.Factory.CreateRibbonButton();
+            this.button2 = this.Factory.CreateRibbonButton();
             this.tab1.SuspendLayout();
             this.group1.SuspendLayout();
             this.box1.SuspendLayout();
@@ -148,6 +150,8 @@
             this.group2.Items.Add(this.tbtnShowTaskpane);
             this.group2.Items.Add(this.btnFixAll);
             this.group2.Items.Add(this.dropDockPosition);
+            this.group2.Items.Add(this.button1);
+            this.group2.Items.Add(this.button2);
             this.group2.Label = "Sửa lỗi";
             this.group2.Name = "group2";
             // 
@@ -218,6 +222,18 @@
             this.btnFixAll.ShowImage = true;
             this.btnFixAll.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.btnFixAll_Click);
             // 
+            // button1
+            // 
+            this.button1.Label = "button1";
+            this.button1.Name = "button1";
+            this.button1.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.button1_Click);
+            // 
+            // button2
+            // 
+            this.button2.Label = "button2";
+            this.button2.Name = "button2";
+            this.button2.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.button2_Click);
+            // 
             // Ribbon
             // 
             this.Name = "Ribbon";
@@ -255,6 +271,8 @@
         internal Microsoft.Office.Tools.Ribbon.RibbonSeparator separator2;
         internal Microsoft.Office.Tools.Ribbon.RibbonGroup group2;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton btnFixAll;
+        internal Microsoft.Office.Tools.Ribbon.RibbonButton button1;
+        internal Microsoft.Office.Tools.Ribbon.RibbonButton button2;
     }
 
     partial class ThisRibbonCollection

@@ -2,14 +2,16 @@
 using Word = Microsoft.Office.Interop.Word;
 using Office = Microsoft.Office.Core;
 using System;
+using Microsoft.Office.Tools.Word;
 
 namespace Spell
 {
+
     public partial class ThisAddIn
     {
+        event SelectionEventHandler SelectionChange;
         Word.Application myApplication;
         private string TAG = "CANDIDATE";
-        private int count = 1;
         private Office.CommandBarButton myControl;
         private string WrongWord
         {
@@ -23,8 +25,47 @@ namespace Spell
             //AddMenuItem();
             myApplication.WindowBeforeRightClick +=
                 new Word.ApplicationEvents4_WindowBeforeRightClickEventHandler(application_WindowBeforeRightClick);
-
+              myApplication.WindowSelectionChange +=
+                    new Word.ApplicationEvents4_WindowSelectionChangeEventHandler(ThisDocument_SelectionChange);
         }
+        private void ThisDocument_SelectionChange(Word.Selection selection)
+        {
+            Word.Range curRange/* = Globals.ThisAddIn.Application.Selection.Words[1]*/;
+            curRange = selection.Range;
+            UserControl.Instance.SynchronizedInvoke(UserControl.Instance.lblWrong, delegate ()
+            {
+                if (curRange.Text.Trim().ToLower().Equals(UserControl.Instance.lblWrong.Text.Trim()))
+                {
+                    EnableFixError(true);
+                   
+                }
+                else
+                {
+                    EnableFixError(false);
+                }
+            });
+        }
+
+        private void EnableFixError(bool enable)
+        {
+            UserControl.Instance.SynchronizedInvoke(UserControl.Instance.lstbCandidate, delegate ()
+            {
+                UserControl.Instance.lstbCandidate.Enabled = enable;
+            });
+            UserControl.Instance.SynchronizedInvoke(UserControl.Instance.btnStart, delegate ()
+            {
+                UserControl.Instance.btnStart.Visible = enable;
+            });
+            UserControl.Instance.SynchronizedInvoke(UserControl.Instance.btnChange, delegate ()
+            {
+                UserControl.Instance.btnChange.Visible = enable;
+            });
+            UserControl.Instance.SynchronizedInvoke(UserControl.Instance.btnIgnore, delegate ()
+            {
+                UserControl.Instance.btnIgnore.Visible = enable;
+            });
+        }
+
         private void RemoveExistingMenuItem()
         {
             Office.CommandBar contextMenu = myApplication.CommandBars["Text"];

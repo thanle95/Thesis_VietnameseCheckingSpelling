@@ -298,7 +298,7 @@ namespace Spell
                 });
             a.Start();
         }
-
+        
         private void btnFixAll_Click(object sender, RibbonControlEventArgs e)
         {
             if (FindError.Instance.CountError > 0)
@@ -314,6 +314,31 @@ namespace Spell
                 myCustomTaskPane.Visible = false;
                 btnDeleteFormat.Enabled = false;
             }
+        }
+        private Microsoft.Office.Tools.Word.GroupContentControl groupControl1;
+        private void button1_Click(object sender, RibbonControlEventArgs e)
+        {
+            //Globals.ThisAddIn.Application.ActiveDocument.Protect(
+            // Word.WdProtectionType.wdAllowOnlyReading,
+            // false, System.String.Empty, false, false);
+            
+            Microsoft.Office.Tools.Word.Document vstoDocument =
+                Globals.Factory.GetVstoObject(Globals.ThisAddIn.Application.ActiveDocument);
+
+
+            vstoDocument.Paragraphs[1].Range.InsertParagraphBefore();
+
+            Word.Range range1 = vstoDocument.Paragraphs[1].Range;
+            range1.Text = "You cannot edit or change the formatting of text " +
+                "in this sentence, because this sentence is in a GroupContentControl.";
+            range1.Select();
+
+            groupControl1 = vstoDocument.Controls.AddGroupContentControl("groupControl1");
+        }
+
+        private void button2_Click(object sender, RibbonControlEventArgs e)
+        {
+            Globals.Factory.GetVstoObject(Globals.ThisAddIn.Application.ActiveDocument).Controls.Remove("groupControl1");
         }
     }
 }

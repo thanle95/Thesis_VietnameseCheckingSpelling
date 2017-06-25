@@ -116,7 +116,11 @@ namespace Spell
                 }
                 else
                 {
-                    SynchronizedInvoke(lblWrong, delegate () { lblWrong.Text = fixError.Token; });
+                    SynchronizedInvoke(lblWrong, delegate ()
+                    {
+                        lblWrong.Text = fixError.Token;
+                        
+                    });
                     SynchronizedInvoke(lstbCandidate, delegate () { lstbCandidate.Items.Clear(); });
 
                     foreach (string item in fixError.hSetCandidate)
@@ -132,7 +136,7 @@ namespace Spell
 
         }
 
-        private void SynchronizedInvoke(ISynchronizeInvoke sync, Action action)
+        public void SynchronizedInvoke(ISynchronizeInvoke sync, Action action)
         {
             // If the invoke is not required, then invoke here and get out.
             if (!sync.InvokeRequired)
@@ -533,7 +537,7 @@ namespace Spell
                 yGridLog = 60;
                 yShowMore = 0;
             }
-            else if(IsFixAll)
+            else if (IsFixAll)
             {
                 yGridLog = 150;
                 yShowMore = 90;
