@@ -35,6 +35,9 @@
             this.lstbCandidate = new System.Windows.Forms.ListBox();
             this.btnChange = new System.Windows.Forms.Button();
             this.gridLog = new System.Windows.Forms.DataGridView();
+            this.STT = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.wrongContext = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.rightContext = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.lblWrongContext = new System.Windows.Forms.Label();
             this.lblRightContext = new System.Windows.Forms.Label();
             this.lblRightArrow = new System.Windows.Forms.Label();
@@ -46,9 +49,6 @@
             this.pnlAutoFix = new System.Windows.Forms.Panel();
             this.pnlButtonAutoFix = new System.Windows.Forms.Panel();
             this.pnlShowMore = new System.Windows.Forms.Panel();
-            this.STT = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.wrongContext = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.rightContext = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.gridLog)).BeginInit();
             this.pnlSequenceFix.SuspendLayout();
             this.pnlAutoFix.SuspendLayout();
@@ -136,6 +136,29 @@
             this.gridLog.TabIndex = 20;
             this.gridLog.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.gridLog_CellDoubleClick);
             // 
+            // STT
+            // 
+            this.STT.HeaderText = "STT";
+            this.STT.MaxInputLength = 10000;
+            this.STT.Name = "STT";
+            this.STT.ReadOnly = true;
+            this.STT.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.STT.Width = 40;
+            // 
+            // wrongContext
+            // 
+            this.wrongContext.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.wrongContext.HeaderText = "Ngữ cảnh sai";
+            this.wrongContext.Name = "wrongContext";
+            this.wrongContext.ReadOnly = true;
+            // 
+            // rightContext
+            // 
+            this.rightContext.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.rightContext.HeaderText = "Ngữ cảnh đúng";
+            this.rightContext.Name = "rightContext";
+            this.rightContext.ReadOnly = true;
+            // 
             // lblWrongContext
             // 
             this.lblWrongContext.AutoSize = true;
@@ -201,8 +224,7 @@
             // 
             // btnResume
             // 
-            this.btnResume.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnResume.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnResume.AutoSize = true;
             this.btnResume.BackColor = System.Drawing.Color.White;
             this.btnResume.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -275,29 +297,6 @@
             this.pnlShowMore.Name = "pnlShowMore";
             this.pnlShowMore.Size = new System.Drawing.Size(285, 55);
             this.pnlShowMore.TabIndex = 25;
-            // 
-            // STT
-            // 
-            this.STT.HeaderText = "STT";
-            this.STT.MaxInputLength = 10000;
-            this.STT.Name = "STT";
-            this.STT.ReadOnly = true;
-            this.STT.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.STT.Width = 40;
-            // 
-            // wrongContext
-            // 
-            this.wrongContext.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.wrongContext.HeaderText = "Ngữ cảnh sai";
-            this.wrongContext.Name = "wrongContext";
-            this.wrongContext.ReadOnly = true;
-            // 
-            // rightContext
-            // 
-            this.rightContext.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.rightContext.HeaderText = "Ngữ cảnh đúng";
-            this.rightContext.Name = "rightContext";
-            this.rightContext.ReadOnly = true;
             // 
             // UserControl
             // 

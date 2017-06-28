@@ -102,6 +102,7 @@ namespace Spell
 
                 Globals.ThisAddIn.Application.ActiveDocument.Range(0, 0).Select();
                 FindError.Instance.StopFindError = false;
+                FindError.Instance.setResume();
                 threadFindError = new Thread(threadStartFindError);
                 threadFindError.Priority = ThreadPriority.Highest;
                 threadFindError.Start();
@@ -285,10 +286,10 @@ namespace Spell
 
         private void btnStop_Click(object sender, RibbonControlEventArgs e)
         {
-            if (btnCheckError.Label.Equals("Tiếp tục"))
-            {
-                threadFindError.Resume();
-            }
+            //if (btnCheckError.Label.Equals("Tiếp tục"))
+            //{
+            //    threadFindError.Resume();
+            //}
             FindError.Instance.StopFindError = true;
             btnStop.Enabled = false;
             tbtnShowTaskpane.Enabled = true;

@@ -28,6 +28,7 @@ namespace Spell.Algorithm
         private static FindError instance = new FindError();
         private int _typeFindError = 0;
         private int _typeError = 0;
+        private bool _isResume = false;
         private bool isNoChange = false;
         public int ISentence { get; set; }
         public override string ToString()
@@ -66,6 +67,11 @@ namespace Spell.Algorithm
             _typeFindError = typeFindError;
             _typeError = typeError;
             ISentence = iSentence;
+            _isResume = false;
+        }
+        public void setResume()
+        {
+            _isResume = true;
         }
         public int CountError
         {
@@ -90,24 +96,49 @@ namespace Spell.Algorithm
         {
             showWrongWithSuggest(_typeFindError, _typeError);
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="typeFindError"></param>
+        /// <param name="typeError"></param>
+        /// <param name="isResume"></param>
         public void showWrongWithSuggest(int typeFindError, int typeError)
         {
             try
             {
                 //sửa lỗi kiểm tra lần 2 không hiện được gợi ý
 
-                bool isSelected = false;
-                curSentences = Globals.ThisAddIn.Application.Selection.Sentences;
-                if (typeFindError == IS_TYPING_TYPE)
-                    //lấy câu dựa trên vị trí con trỏ
-                    curSentences = Globals.ThisAddIn.Application.Selection.Sentences;
+                bool isSelected = true; // biến dùng để đánh dấu có select range câu đang kiểm tra hay không
+                Word.Range selectionRange = Globals.ThisAddIn.Application.Selection.Range;
+                curSentences = Globals.ThisAddIn.Application.ActiveDocument.Sentences;
+               //nếu không phải đang resume, thì xác định giá trị ISentence
+                if (!_isResume)
+                    //nếu bắt đầu và kết thúc bằng nhau
+                    //kiểm tra từ câu chứa vị trí con trỏ đến cuối văn bản
+                    if (selectionRange.Start == selectionRange.End)
+                    {
+                        for(ISentence = 1; ISentence < curSentences.Count; ISentence++)
+                            //nếu câu đang xét có độ dài lớn hơn vị trí con trỏ
+                            //Isentence hiện tại là giá trị đang tìm
+                            if (curSentences[ISentence].End > selectionRange.Start)
+                                break;
+                    }
+                    else {
+                        //ngược lại
+                        //kiểm tra những câu được chọn
+                        curSentences = Globals.ThisAddIn.Application.Selection.Sentences;
+                        isSelected = false;
+                    }
+                //if (typeFindError == IS_TYPING_TYPE)
+                //    //lấy câu dựa trên vị trí con trỏ
+                //    curSentences = Globals.ThisAddIn.Application.Selection.Sentences;
 
-                else if (curSentences[1].Start == 0)
-                {
-                    //chọn toàn bộ văn bản
-                    curSentences = Globals.ThisAddIn.Application.ActiveDocument.Sentences;
-                    isSelected = true;
-                }
+                //else if (curSentences[1].Start == 0)
+                //{
+                //    //chọn toàn bộ văn bản
+                //    curSentences = Globals.ThisAddIn.Application.ActiveDocument.Sentences;
+                //    isSelected = true;
+                //}
 
                 int start = 0, end = 0;
                 string iWord = "";
