@@ -17,6 +17,15 @@ namespace Spell
         {
             get { return instance; }
         }
+        public Word.Range GetWordByCursorSelection()
+        {
+            Word.Words words = Globals.ThisAddIn.Application.Selection.Words;
+       
+            Word.Range range = null;
+            
+            range = Globals.ThisAddIn.Application.ActiveDocument.Range(words[1].Start, words[1].End);
+            return range;
+        }
         public Word.Range HighLight_Mistake(Context context, Word.Sentences sentencesList, Word.WdColorIndex colorIndex, Word.WdColor color)
         {
             Word.Range range = null;

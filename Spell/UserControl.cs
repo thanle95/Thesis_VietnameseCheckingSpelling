@@ -535,8 +535,11 @@ namespace Spell
         private void btnResume_Click(object sender, EventArgs e)
         {
             string text = CurRannge.Text;
-            if (CurRannge.Text.Equals(Error))
-                CurRannge.Select();
+            if (CurRannge.Text != null)
+            {
+                if (CurRannge.Text.Equals(Error))
+                    CurRannge.Select();
+            }
             else {
                 ignore();
                 btnResume.Visible = false;

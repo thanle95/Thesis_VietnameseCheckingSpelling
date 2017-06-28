@@ -10,10 +10,11 @@ namespace Spell
 
     public partial class ThisAddIn
     {
-        event SelectionEventHandler SelectionChange;
         Word.Application myApplication;
         private string TAG = "CANDIDATE";
         private Office.CommandBarButton myControl;
+        private int PreSelectedRangeStart = 0;
+        private string PreSelectedRangeText = "";
         private string WrongWord
         {
             get; set;
@@ -31,30 +32,32 @@ namespace Spell
         }
         private void ThisDocument_SelectionChange(Word.Selection selection)
         {
-            //Word.Range curRange/* = Globals.ThisAddIn.Application.Selection.Words[1]*/;
-            //curRange = selection.Range;
-            string rangeText = "";
-            if (selection.Range.Text == null)
-                rangeText = Globals.ThisAddIn.Application.ActiveDocument.Range(selection.Range.Start, selection.Range.Start + 1).Text;
-            else
-                rangeText = selection.Range.Text;
-            rangeText += " ";
+            Word.Range selectedRange = DocumentHandling.Instance.GetWordByCursorSelection();
+
+            //Xử lý remove hightLight lỗi hiện tại
+                if (!selectedRange.Text.Equals(PreSelectedRangeText) && selectedRange.Start == PreSelectedRangeStart)
+                {
+                    DocumentHandling.Instance.DeHighLight_Mistake(selectedRange.Start, selectedRange.End);
+                }
+            PreSelectedRangeText = selectedRange.Text;
+            PreSelectedRangeStart = selectedRange.Start;
+
             UserControl.Instance.SynchronizedInvoke(UserControl.Instance.lblWrong, delegate ()
             {
                 //Sửa lỗi hiện tại
-                if (rangeText.Trim().Equals(UserControl.Instance.lblWrong.Text))
+                if (selectedRange.Text.Trim().Equals(UserControl.Instance.lblWrong.Text))
                     EnableFixError(true);
                 else {
-                    foreach(var item in FindError.Instance.lstErrorRange.Keys)
+                    foreach (var item in FindError.Instance.lstErrorRange.Keys)
                         //Sửa lỗi bất kỳ khác
-                        if (rangeText.Trim().Equals(item.TOKEN))
+                        if (selectedRange.Text.Trim().Equals(item.TOKEN))
                         {
                             EnableFixError(true);
                             Word.Words words = Globals.ThisAddIn.Application.Selection.Words;
                             Word.Sentences sentences = Globals.ThisAddIn.Application.Selection.Sentences;
                             UserControl.Instance.startFixError(words, sentences);
                             return;
-                        } 
+                        }
                     //Không phải là lỗi
                     EnableFixError(false);
                 }

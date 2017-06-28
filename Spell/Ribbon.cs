@@ -44,7 +44,7 @@ namespace Spell
             typeFindError = dropTypeFindError.SelectedItemIndex;
             //Ngram.Instance.runFirst();
             //Bắt đầu từ câu đầu tiên
-            
+
             threadStartFindError = new ThreadStart(check);
         }
 
@@ -113,7 +113,7 @@ namespace Spell
             if (checkButton == CheckButton.CHECKING)
             {
                 DocumentHandling.Instance.DeHighLight_All_Mistake();
-                
+
                 typeFindError = dropTypeFindError.SelectedItemIndex;
                 typeError = dropTypeError.SelectedItemIndex;
                 FindError.Instance.createValue(typeFindError, typeError, 1);
@@ -231,29 +231,25 @@ namespace Spell
 
         private void btnDeleteFormat_Click(object sender, RibbonControlEventArgs e)
         {
-            //string message = SysMessage.Instance.Message_Notify_Delete_Format;
-            //string caption = SysMessage.Instance.Caption_Notify_Fix_Error;
-            //MessageBoxButtons buttons = MessageBoxButtons.YesNo;
-            //DialogResult result;
-
-            //// Displays the MessageBox.
-
-            //result = MessageBox.Show(message, caption, buttons);
-            ////UserControl.Instance.changeUIStart();
-            //myCustomTaskPane.Visible = true;
-            //if (result == DialogResult.Yes)
-            //{
-            if (FindError.Instance.CountError > 0)
+            
+            Word.Range selectionRange = Globals.ThisAddIn.Application.Selection.Range;
+            //nếu người dùng đang chọn một vùng nào đó
+            //thì dehighlight vùng đó
+            if (selectionRange.Start < selectionRange.End)
+            {
+                DocumentHandling.Instance.DeHighLight_Mistake(selectionRange.Start, selectionRange.End);
+            }
+            else if (FindError.Instance.CountError > 0)
             {
                 DocumentHandling.Instance.DeHighLight_All_Mistake();
                 FindError.Instance.Clear();
                 UserControl.Instance.IsFixAll = false;
+                myCustomTaskPane.Visible = false;
+                btnDeleteFormat.Enabled = false;
+                btnDeleteFormat.Enabled = false;
+                tbtnShowTaskpane.Enabled = false;
+                btnFixAll.Enabled = false;
             }
-            myCustomTaskPane.Visible = false;
-            btnDeleteFormat.Enabled = false;
-            btnDeleteFormat.Enabled = false;
-            tbtnShowTaskpane.Enabled = false;
-            btnFixAll.Enabled = false;
 
             //}
 
