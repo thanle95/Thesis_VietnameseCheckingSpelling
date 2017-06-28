@@ -112,7 +112,7 @@ namespace Spell
         {
             if (checkButton == CheckButton.CHECKING)
             {
-                DocumentHandling.Instance.DeHighLight_All_Mistake();
+                DocumentHandling.Instance.RemoveUnderline_AllMistake();
 
                 typeFindError = dropTypeFindError.SelectedItemIndex;
                 typeError = dropTypeError.SelectedItemIndex;
@@ -237,11 +237,11 @@ namespace Spell
             //thì dehighlight vùng đó
             if (selectionRange.Start < selectionRange.End)
             {
-                DocumentHandling.Instance.DeHighLight_Mistake(selectionRange.Start, selectionRange.End);
+                DocumentHandling.Instance.RemoveUnderline_Mistake(selectionRange.Start, selectionRange.End);
             }
             else if (FindError.Instance.CountError > 0)
             {
-                DocumentHandling.Instance.DeHighLight_All_Mistake();
+                DocumentHandling.Instance.RemoveUnderline_AllMistake();
                 FindError.Instance.Clear();
                 UserControl.Instance.IsFixAll = false;
                 myCustomTaskPane.Visible = false;

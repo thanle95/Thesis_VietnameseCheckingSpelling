@@ -26,7 +26,7 @@ namespace Spell
             range = Globals.ThisAddIn.Application.ActiveDocument.Range(words[1].Start, words[1].End);
             return range;
         }
-        public Word.Range HighLight_Mistake(Context context, Word.Sentences sentencesList, Word.WdColorIndex colorIndex, Word.WdColor color)
+        public Word.Range UnderlineWord(Context context, Word.Sentences sentencesList, Word.WdColorIndex colorIndex, Word.WdColor color)
         {
             Word.Range range = null;
             //Word.Lines lines = Globals.ThisAddIn.Application.ActiveDocument.Words.l;
@@ -87,45 +87,49 @@ namespace Spell
             }
             return range;
         }
-        public Word.Range HighLight_Mistake(int start, int end, Word.WdColorIndex colorIndex, Word.WdColor color)
+        public Word.Range UnderlineWord(int start, int end, Word.WdColor color)
         {
             Word.Range range = null;
             range = Globals.ThisAddIn.Application.ActiveDocument.Range(start, end);
-            range.HighlightColorIndex = colorIndex;
-            range.Font.Color = color;
+            //range.HighlightColorIndex = colorIndex;
+            //range.Font.Color = color;
+            range.Underline = Word.WdUnderline.wdUnderlineWavy;
+            range.Font.UnderlineColor = color;
             return range;
         }
 
-        public Word.Range HighLight_MistakeWrongWord(Context context, Word.Sentences sentencesList)
+        public Word.Range UnderlineWrongWord(Context context, Word.Sentences sentencesList)
         {
-            return HighLight_Mistake(context, sentencesList, Word.WdColorIndex.wdRed, Word.WdColor.wdColorYellow);
+            return UnderlineWord(context, sentencesList, Word.WdColorIndex.wdRed, Word.WdColor.wdColorYellow);
         }
-        public Word.Range HighLight_MistakeWrongWord(int start, int end)
+        public Word.Range UnderlineWrongWord(int start, int end)
         {
-            return HighLight_Mistake(start, end, Word.WdColorIndex.wdRed, Word.WdColor.wdColorYellow);
+            return UnderlineWord(start, end, Word.WdColor.wdColorRed);
         }
-        public Word.Range HighLight_MistakeRightWord(Context context, Word.Sentences sentencesList)
+        public Word.Range UnderlineRightWord(Context context, Word.Sentences sentencesList)
         {
-            return HighLight_Mistake(context, sentencesList, Word.WdColorIndex.wdYellow, Word.WdColor.wdColorAutomatic);
+            return UnderlineWord(context, sentencesList, Word.WdColorIndex.wdYellow, Word.WdColor.wdColorAutomatic);
         }
-        public Word.Range HighLight_MistakeRightWord(int start, int end)
+        public Word.Range UnderlineRightWord(int start, int end)
         {
-            return HighLight_Mistake(start, end , Word.WdColorIndex.wdYellow, Word.WdColor.wdColorAutomatic);
+            return UnderlineWord(start, end ,Word.WdColor.wdColorBlue);
         }
 
-        public void DeHighLight_All_Mistake()
+        public void RemoveUnderline_AllMistake()
         {
             int count = Globals.ThisAddIn.Application.ActiveDocument.Characters.Count;
             //int count = characters.Count;
             Word.Range range = Globals.ThisAddIn.Application.ActiveDocument.Range(0, count);
-            range.HighlightColorIndex = Word.WdColorIndex.wdNoHighlight;
-            range.Font.Color = Word.WdColor.wdColorAutomatic;
+            //range.HighlightColorIndex = Word.WdColorIndex.wdNoHighlight;
+            //range.Font.Color = Word.WdColor.wdColorAutomatic;
+            range.Underline = Word.WdUnderline.wdUnderlineNone;
         }
-        public void DeHighLight_Mistake(int startIndex, int endIndex)
+        public void RemoveUnderline_Mistake(int startIndex, int endIndex)
         {
             Word.Range range = Globals.ThisAddIn.Application.ActiveDocument.Range(startIndex, endIndex);
-            range.HighlightColorIndex = Word.WdColorIndex.wdNoHighlight;
-            range.Font.Color = Word.WdColor.wdColorAutomatic;
+            //range.HighlightColorIndex = Word.WdColorIndex.wdNoHighlight;
+            //range.Font.Color = Word.WdColor.wdColorAutomatic;
+            range.Underline = Word.WdUnderline.wdUnderlineNone;
         }
 
 

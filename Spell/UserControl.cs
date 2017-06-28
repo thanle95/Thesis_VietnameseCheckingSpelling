@@ -193,7 +193,7 @@ namespace Spell
                 //    break;
                 //}
 
-            DocumentHandling.Instance.DeHighLight_Mistake(startIndex, endIndex);
+            DocumentHandling.Instance.RemoveUnderline_Mistake(startIndex, endIndex);
             if (FindError.Instance.lstErrorRange.Count == 0)
             {
                 MessageBox.Show(SysMessage.Instance.No_error);
@@ -264,7 +264,7 @@ namespace Spell
                 lblWrong.Text = "\"Từ sai\"";
                 lstbCandidate.Items.Clear();
             }
-            DocumentHandling.Instance.DeHighLight_Mistake(startIndex, endIndex);
+            DocumentHandling.Instance.RemoveUnderline_Mistake(startIndex, endIndex);
             curRangeTextShowInTaskPane.Select();
             Index++;
             //UpdateProgressBar();

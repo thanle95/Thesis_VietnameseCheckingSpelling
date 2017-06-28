@@ -290,7 +290,7 @@ namespace Spell.Algorithm
                                             if (FirstError_Context == null)
                                                 FirstError_Context = context;
                                             isError = true;
-                                            lstErrorRange.Add(context, (DocumentHandling.Instance.HighLight_MistakeRightWord(start, end)));
+                                            lstErrorRange.Add(context, (DocumentHandling.Instance.UnderlineRightWord(start, end)));
                                         }
                                     }
 
@@ -302,7 +302,7 @@ namespace Spell.Algorithm
                                         if (lstErrorRange.ContainsKey(context))
                                         {
                                             lstErrorRange.Remove(context);
-                                            DocumentHandling.Instance.DeHighLight_Mistake(start, end);
+                                            DocumentHandling.Instance.RemoveUnderline_Mistake(start, end);
                                         }
                                     }
                                 }

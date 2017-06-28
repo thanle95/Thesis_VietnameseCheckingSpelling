@@ -35,12 +35,14 @@ namespace Spell
             Word.Range selectedRange = DocumentHandling.Instance.GetWordByCursorSelection();
 
             //Xử lý remove hightLight lỗi hiện tại
+            {
                 if (!selectedRange.Text.Equals(PreSelectedRangeText) && selectedRange.Start == PreSelectedRangeStart)
                 {
-                    DocumentHandling.Instance.DeHighLight_Mistake(selectedRange.Start, selectedRange.End);
+                    DocumentHandling.Instance.RemoveUnderline_Mistake(selectedRange.Start, selectedRange.End);
                 }
-            PreSelectedRangeText = selectedRange.Text;
-            PreSelectedRangeStart = selectedRange.Start;
+                PreSelectedRangeText = selectedRange.Text;
+                PreSelectedRangeStart = selectedRange.Start;
+            }
 
             UserControl.Instance.SynchronizedInvoke(UserControl.Instance.lblWrong, delegate ()
             {
