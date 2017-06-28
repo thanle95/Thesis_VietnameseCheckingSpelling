@@ -186,12 +186,12 @@ namespace Spell
             //        startIndex = range.Start;
             //        endIndex = range.End;
             var item = FindError.Instance.lstErrorRange.First();
-                    //var item = FindError.Instance.lstErrorRange.First(kvp => kvp.Value == range);
-                    FindError.Instance.lstErrorRange.Remove(item.Key);
+            //var item = FindError.Instance.lstErrorRange.First(kvp => kvp.Value == range);
+            FindError.Instance.lstErrorRange.Remove(item.Key);
             startIndex = item.Value.Start;
             endIndex = item.Value.End;
-                //    break;
-                //}
+            //    break;
+            //}
 
             DocumentHandling.Instance.RemoveUnderline_Mistake(startIndex, endIndex);
             if (FindError.Instance.lstErrorRange.Count == 0)
@@ -225,17 +225,27 @@ namespace Spell
         }
         public void change(string wrongText, string fixText, bool isRightClick)
         {
-            //if (isRightClick)
-            //{
-            //    FixError fixError = new FixError();
+            {
+                Context context = new Context();
+                context.getContext();
 
-            //    fixError.getCandidatesWithContext(FindError.Instance.FirstError_Context, FindError.Instance.lstErrorRange);
-            //    Word.Range range = FindError.Instance.lstErrorRange[FindError.Instance.FirstError_Context];
-            //    range.Select();
+                FixError fixError = new FixError();
 
-            //    oldString = FindError.Instance.ToString().Trim();
-            //    newString = fixError.ToString().Trim();
-            //}
+                fixError.getCandidatesWithContext(context, FindError.Instance.lstErrorRange);
+                Word.Range range = null;
+                foreach (var pair in FindError.Instance.lstErrorRange)
+                    if (pair.Key.Equals(context))
+                    {
+                        range = pair.Value;
+                        range.Select();
+                        break;
+                    }
+
+                range.Select();
+
+                oldString = context.ToString();
+                newString = fixError.ToString().Trim();
+            }
             addRowGridLog();
             int startIndex = 0;
             int endIndex = 0;
@@ -280,13 +290,13 @@ namespace Spell
             //
             //sửa lỗi tiếp theo
             //
-            if (!isRightClick)
-            {
+            //if (!isRightClick)
+            //{
                 FindError.Instance.FirstError_Context = FindError.Instance.lstErrorRange.First().Key;
                 FindError.Instance.lstErrorRange[FindError.Instance.FirstError_Context].Select();
                 if (!IsFixAll)
                     showCandidateInTaskPane();
-            }
+            //}
         }
         private void btnChange_KeyDown(object sender, KeyEventArgs e)
         {

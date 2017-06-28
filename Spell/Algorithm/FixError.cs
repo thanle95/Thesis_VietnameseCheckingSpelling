@@ -30,24 +30,27 @@ namespace Spell.Algorithm
             _context = context;
             hSetCandidate = new HashSet<string>();
             if (dictError.Count > 0)
-                if (dictError.ContainsKey(context))
-                {
-                    //nếu có lỗi trong danh sách
-                    if (dictError.Count > 0)
+            {
+                foreach (var key in dictError.Keys)
+                    if (key.Equals(context))
                     {
-                        //lấy lỗi đầu tiên tìm được với startIndex
-                        //Token = dictError[context].Text.ToLower().Trim();
-                        Token = context.TOKEN;
-                        hSetCandidate = Candidate.getInstance.createCandidate(context);
-                        if (hSetCandidate.Count > 0)
-                            _candidate = hSetCandidate.ElementAt(0);
+                        //nếu có lỗi trong danh sách
+                        if (dictError.Count > 0)
+                        {
+                            //lấy lỗi đầu tiên tìm được với startIndex
+                            //Token = dictError[context].Text.ToLower().Trim();
+                            Token = context.TOKEN;
+                            hSetCandidate = Candidate.getInstance.createCandidate(context);
+                            if (hSetCandidate.Count > 0)
+                                _candidate = hSetCandidate.ElementAt(0);
+                        }
+                        return;
                     }
-                }
-
+            }
         }
         public override string ToString()
         {
-            string pp = _context.PREPRE.Equals(Ngram.Instance.START_STRING) ? 
+            string pp = _context.PREPRE.Equals(Ngram.Instance.START_STRING) ?
                 "" : _context.PREPRE;
             string p = _context.PRE.Equals(Ngram.Instance.START_STRING) ?
                 "" : _context.PRE;

@@ -68,7 +68,27 @@ namespace Spell.Algorithm
         {
             PREPRE = PRE = TOKEN = NEXT = NEXTNEXT = "";
         }
+        /// <summary>
+        /// getContext by selectionWord
+        /// </summary>
+        public void getContext()
+        {
+            Word.Words words = Globals.ThisAddIn.Application.Selection.Words;
+            Word.Sentences sentences = Globals.ThisAddIn.Application.Selection.Sentences;
 
+            string[] wordArray = sentences.First.Text.Trim().Split(' ');
+            string iWord = words.First.Text.Trim();
+            int i = 0;
+
+            int wordStart = words.First.Start - sentences.First.Start;
+            for(int iFor= 0; iFor < wordStart; iFor++)
+            {
+                if (sentences.First.Text[iFor] == ' ')
+                    i++;
+            }
+            getContext(i, wordArray);
+
+        }
         public void getContext(int iWord, string[] words)
         {
             string token = words[iWord].Trim();
@@ -273,7 +293,15 @@ namespace Spell.Algorithm
         }
         public override string ToString()
         {
-            return string.Format("{0} {1} {2} {3} {4}", PREPRE, PRE, TOKEN, NEXT, NEXTNEXT);
+            string pp = PREPRE.Equals(Ngram.Instance.START_STRING) ?
+                 "" : PREPRE;
+            string p = PRE.Equals(Ngram.Instance.START_STRING) ?
+                "" : PRE;
+            string n = NEXT.Equals(Ngram.Instance.END_STRING) ?
+                "" : NEXT;
+            string nn = NEXTNEXT.Equals(Ngram.Instance.END_STRING) ?
+                "" : NEXTNEXT;
+            return string.Format("{0} {1} {2} {3} {4}", pp, p, TOKEN, n, nn).Trim();
         }
         public override bool Equals(object obj)
         {

@@ -147,7 +147,6 @@ namespace Spell.Algorithm
                 int length;
                 bool isError = false;
                 Context tmpContext = new Context();
-
                 HashSet<string> hSetCand = new HashSet<string>();
                 Word.Range range = null;
                 //lấy toàn bộ danh sách các từ trong Active Document, để lấy được ngữ cảnh
@@ -156,6 +155,7 @@ namespace Spell.Algorithm
                     for (; ISentence <= curSentences.Count; ISentence++)
                     {
                         words = curSentences[ISentence].Text.TrimEnd().Split(' ');
+                        
                         start = curSentences[ISentence].Start;
                         end = curSentences[ISentence].End;
                         range = Globals.ThisAddIn.Application.ActiveDocument.Range(start, end);
@@ -252,7 +252,7 @@ namespace Spell.Algorithm
                                         if (FirstError_Context == null)
                                             FirstError_Context = context;
                                         isError = true;
-                                        lstErrorRange.Add(context, (DocumentHandling.Instance.HighLight_MistakeWrongWord(start, end)));
+                                        lstErrorRange.Add(context, (DocumentHandling.Instance.UnderlineWrongWord(start, end)));
                                     }
                                 }//end if wrong word
 

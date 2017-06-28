@@ -23,7 +23,7 @@ namespace Spell
        
             Word.Range range = null;
             
-            range = Globals.ThisAddIn.Application.ActiveDocument.Range(words[1].Start, words[1].End);
+            range = Globals.ThisAddIn.Application.ActiveDocument.Range(words.First.Start, words.First.End);
             return range;
         }
         public Word.Range UnderlineWord(Context context, Word.Sentences sentencesList, Word.WdColorIndex colorIndex, Word.WdColor color)
