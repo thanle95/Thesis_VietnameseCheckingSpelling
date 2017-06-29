@@ -62,7 +62,7 @@ namespace Spell
             SynchronizedInvoke(gridLog, delegate ()
             {
                 gridLog.Rows.Clear();
-                gridLog.Size = new System.Drawing.Size(287, 85);
+                gridLog.Size = new System.Drawing.Size(287, 35);
             });
         }
         public static string WRONG_TEXT
@@ -225,6 +225,7 @@ namespace Spell
         }
         public void change(string wrongText, string fixText, bool isRightClick)
         {
+            if (IsFixAll)
             {
                 Context context = new Context();
                 context.getContext();
@@ -241,7 +242,7 @@ namespace Spell
                         break;
                     }
 
-                range.Select();
+                //range.Select();
 
                 oldString = context.ToString();
                 newString = fixError.ToString().Trim();
@@ -292,10 +293,10 @@ namespace Spell
             //
             //if (!isRightClick)
             //{
-                FindError.Instance.FirstError_Context = FindError.Instance.lstErrorRange.First().Key;
-                FindError.Instance.lstErrorRange[FindError.Instance.FirstError_Context].Select();
-                if (!IsFixAll)
-                    showCandidateInTaskPane();
+            FindError.Instance.FirstError_Context = FindError.Instance.lstErrorRange.First().Key;
+            FindError.Instance.lstErrorRange[FindError.Instance.FirstError_Context].Select();
+            if (!IsFixAll)
+                showCandidateInTaskPane();
             //}
         }
         private void btnChange_KeyDown(object sender, KeyEventArgs e)
@@ -474,13 +475,12 @@ namespace Spell
                 {
 
                     if (gridLog.Size.Height <= 310)
-                        gridLog.Size = new System.Drawing.Size(gridLog.Size.Width, gridLog.Size.Height + 22);
+                        gridLog.Size = new System.Drawing.Size(gridLog.Size.Width, gridLog.Size.Height + 20);
                 }
-                else
-                    if (gridLog.Size.Height <= 250)
+                else if (gridLog.Size.Height <= 250)
                 {
 
-                    gridLog.Size = new System.Drawing.Size(gridLog.Size.Width, gridLog.Size.Height + 22);
+                    gridLog.Size = new System.Drawing.Size(gridLog.Size.Width, gridLog.Size.Height + 20);
                     for (int i = gridLog.Location.Y; i >= 0; i--)
                     {
                         gridLog.Location = new System.Drawing.Point(0, i);

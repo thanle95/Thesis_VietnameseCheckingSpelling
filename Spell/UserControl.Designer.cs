@@ -29,7 +29,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.btnIgnore = new System.Windows.Forms.Button();
             this.lblWrong = new System.Windows.Forms.Label();
             this.lstbCandidate = new System.Windows.Forms.ListBox();
@@ -118,8 +118,8 @@
             this.gridLog.AllowUserToAddRows = false;
             this.gridLog.AllowUserToDeleteRows = false;
             this.gridLog.AllowUserToResizeRows = false;
-            dataGridViewCellStyle1.BackColor = System.Drawing.Color.Aqua;
-            this.gridLog.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle2.BackColor = System.Drawing.Color.Aqua;
+            this.gridLog.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle2;
             this.gridLog.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.gridLog.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.DisplayedCells;
             this.gridLog.BackgroundColor = System.Drawing.Color.SkyBlue;
@@ -132,7 +132,7 @@
             this.gridLog.MultiSelect = false;
             this.gridLog.Name = "gridLog";
             this.gridLog.ReadOnly = true;
-            this.gridLog.Size = new System.Drawing.Size(287, 90);
+            this.gridLog.Size = new System.Drawing.Size(287, 35);
             this.gridLog.TabIndex = 20;
             this.gridLog.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.gridLog_CellDoubleClick);
             // 
@@ -175,7 +175,7 @@
             this.lblRightContext.AutoSize = true;
             this.lblRightContext.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblRightContext.ForeColor = System.Drawing.Color.ForestGreen;
-            this.lblRightContext.Location = new System.Drawing.Point(40, 30);
+            this.lblRightContext.Location = new System.Drawing.Point(30, 30);
             this.lblRightContext.Name = "lblRightContext";
             this.lblRightContext.Size = new System.Drawing.Size(51, 16);
             this.lblRightContext.TabIndex = 22;
@@ -240,6 +240,7 @@
             // 
             // btnPauseResumeAutoFix
             // 
+            this.btnPauseResumeAutoFix.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.btnPauseResumeAutoFix.BackgroundImage = global::Spell.Properties.Resources.pause;
             this.btnPauseResumeAutoFix.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.btnPauseResumeAutoFix.Location = new System.Drawing.Point(117, 3);
@@ -251,6 +252,7 @@
             // 
             // lblPauseResumeAutoFix
             // 
+            this.lblPauseResumeAutoFix.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.lblPauseResumeAutoFix.AutoSize = true;
             this.lblPauseResumeAutoFix.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblPauseResumeAutoFix.ForeColor = System.Drawing.Color.DodgerBlue;
