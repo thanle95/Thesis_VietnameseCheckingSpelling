@@ -4,6 +4,7 @@ using Office = Microsoft.Office.Core;
 using System;
 using Microsoft.Office.Tools.Word;
 using System.IO;
+using System.Collections.Generic;
 
 namespace Spell
 {
@@ -21,29 +22,33 @@ namespace Spell
         }
         private void ThisAddIn_Startup(object sender, System.EventArgs e)
         {
+            //khởi tạo dữ liệu
             VNDictionary.getInstance.runFirst();
             Ngram.Instance.runFirst();
-            myApplication = this.Application;
-            //AddMenuItem();
+
+            myApplication = Application;
+            //thêm sự kiện click chuột phải
             myApplication.WindowBeforeRightClick +=
                 new Word.ApplicationEvents4_WindowBeforeRightClickEventHandler(application_WindowBeforeRightClick);
+            //thêm sự kiện đổi vùng được chọn
             myApplication.WindowSelectionChange +=
                   new Word.ApplicationEvents4_WindowSelectionChangeEventHandler(ThisDocument_SelectionChange);
         }
         private void ThisDocument_SelectionChange(Word.Selection selection)
         {
+            //Lấy từ đang chọn
             Word.Range selectedRange = DocumentHandling.Instance.GetWordByCursorSelection();
 
-            //Xử lý remove hightLight lỗi hiện tại
+            //Xử lý remove underline lỗi hiện tại
+            //Bằng việc so sánh với từ được chọn lần trước
             {
                 if (!selectedRange.Text.Equals(PreSelectedRangeText) && selectedRange.Start == PreSelectedRangeStart)
-                {
                     DocumentHandling.Instance.RemoveUnderline_Mistake(selectedRange.Start, selectedRange.End);
-                }
                 PreSelectedRangeText = selectedRange.Text;
                 PreSelectedRangeStart = selectedRange.Start;
             }
 
+            //Truy cập vào label lblWrong
             UserControl.Instance.SynchronizedInvoke(UserControl.Instance.lblWrong, delegate ()
             {
                 //Sửa lỗi hiện tại
@@ -81,11 +86,12 @@ namespace Spell
                 UserControl.Instance.btnResume.Visible = !enable;
             });
         }
-
+        /// <summary>
+        /// Bỏ những item có tag là CANDIDATE trước đó
+        /// </summary>
         private void RemoveExistingMenuItem()
         {
             Office.CommandBar contextMenu = myApplication.CommandBars["Text"];
-            //myApplication.CustomizationContext = customTemplate;
             while (true)
             {
                 Office.CommandBarButton control =
@@ -103,65 +109,70 @@ namespace Spell
         {
 
         }
-
+        /// <summary>
+        /// Xử lý sự kiện chọn CANDIDATE khi chuột phải
+        /// </summary>
+        /// <param name="Ctrl"></param>
+        /// <param name="CancelDefault"></param>
         void myControl_Click(Microsoft.Office.Core.CommandBarButton Ctrl, ref bool CancelDefault)
         {
             UserControl.Instance.Start(false);
             UserControl.Instance.change(WrongWord, Ctrl.Caption, true);
         }
+        /// <summary>
+        /// Xử lý sự kiện chuột phải
+        /// </summary>
+        /// <param name="selection"></param>
+        /// <param name="Cancel"></param>
         public void application_WindowBeforeRightClick(Word.Selection selection, ref bool Cancel)
         {
+            //bỏ những MenuItem tồn tại trước đó
             RemoveExistingMenuItem();
+
             Word.Words words = Globals.ThisAddIn.Application.Selection.Words;
             Word.Sentences sentences = Globals.ThisAddIn.Application.Selection.Sentences;
+
+            //Tìm lỗi trong danh sách
             FixError fixError = new FixError();
             FindError.Instance.GetSeletedContext(words, sentences);
+            //Sửa lỗi đã tìm được
             fixError.getCandidatesWithContext(FindError.Instance.SelectedError_Context, FindError.Instance.lstErrorRange);
             WrongWord = fixError.Token.ToLower();
-            string[] candidateArr = new string[fixError.hSetCandidate.Count];
-            int i = 0;
-            string candidate = "";
+
+            //dùng List để reverse hashSet
+            List<string> candidates = new List<string>();
             if (fixError.hSetCandidate.Count > 0)
             {
                 foreach (string item in fixError.hSetCandidate)
+                    candidates.Add(item);
 
-                    candidateArr[i++] = item;
-                for (i = fixError.hSetCandidate.Count - 1; i >= 0; i--)
-                {
-                    candidate = candidateArr[i];
+                candidates.Reverse();
+
+                foreach (string candidate in candidates)
                     if (!candidate.ToLower().Equals(fixError.Token.ToLower()))
                         if (candidate.Length > 1)
                             addCandidate(candidate.Trim());
-                }
             }
             else
-            {
                 System.Windows.Forms.MessageBox.Show(SysMessage.Instance.IsNotError(FindError.Instance.SelectedError_Context.TOKEN));
-            }
-            //for (int i = 0; i < 3; i++)
-            //{
-
-            //}
         }
+        /// <summary>
+        /// Thêm một candidate vào MenuItem
+        /// </summary>
+        /// <param name="candidate"></param>
         private void addCandidate(string candidate)
         {
-
             Office.MsoControlType menuItem =
                        Office.MsoControlType.msoControlButton;
-
             myControl =
                 (Office.CommandBarButton)myApplication.CommandBars["Text"].Controls.Add
                 (menuItem, missing, missing, 1, true);
             myControl.Style = Office.MsoButtonStyle.msoButtonCaption;
             myControl.Caption = candidate;
             myControl.Tag = TAG;
-
             myControl.Click +=
                 new Microsoft.Office.Core._CommandBarButtonEvents_ClickEventHandler
                     (myControl_Click);
-
-            //customTemplate.Saved = true;
-
             GC.Collect();
         }
         #region VSTO generated code

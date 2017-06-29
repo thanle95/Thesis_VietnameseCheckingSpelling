@@ -69,6 +69,8 @@ namespace Spell
                 threadFindError.Priority = ThreadPriority.Highest;
                 threadFindError.Start();
                 btnCheckError.Label = "Tạm dừng";
+                btnCheckError.ScreenTip = "Tạm dừng kiểm lỗi";
+                btnCheckError.SuperTip = "Tạm dừng lại việc kiểm lỗi\n\nNhấn nút xem gợi ý hoặc chuột phải vào lỗi (nếu có) để sửa lỗi";
                 btnCheckError.Image = global::Spell.Properties.Resources.pause;
                 //if (FindError.Instance.CountError > 0)
                 //    showSuggest(FindError.Instance.CountError);
@@ -84,6 +86,8 @@ namespace Spell
                 btnFixAll.Enabled = true;
                 btnDeleteFormat.Enabled = true;
                 btnCheckError.Label = "Tiếp tục";
+                btnCheckError.ScreenTip = "Tiếp tục kiểm lỗi";
+                btnCheckError.SuperTip = "Tiếp tục lại việc kiểm lỗi\n\nVăn bản của bạn sẽ tiếp tục kiểm lỗi tại vị trí mà nó dừng trước đó";
                 btnCheckError.Image = global::Spell.Properties.Resources.play;
 
             }
@@ -96,6 +100,8 @@ namespace Spell
                 tbtnShowTaskpane.Enabled = false;
                 btnFixAll.Enabled = false;
                 btnCheckError.Label = "Tạm dừng";
+                btnCheckError.ScreenTip = "Tạm dừng kiểm lỗi";
+                btnCheckError.SuperTip = "Tạm dừng lại việc kiểm lỗi\n\nNhấn nút xem gợi ý hoặc chuột phải vào lỗi (nếu có) để sửa lỗi";
                 btnCheckError.Image = global::Spell.Properties.Resources.pause;
                 if (FindError.Instance.CountError > 0)
                     showSuggest(FindError.Instance.CountError);
@@ -143,6 +149,9 @@ namespace Spell
             tbtnShowTaskpane.Enabled = true;
             btnFixAll.Enabled = true;
             btnCheckError.Label = "Kiểm lỗi";
+            btnCheckError.ScreenTip = "Kiểm lỗi";
+            btnCheckError.SuperTip = "Bôi đen vùng văn bản trước khi nhấn nút để kiểm tra vùng văn bản đó\n\nHoặc để con " +
+    "trỏ tại bất cứ đâu trong văn bản, hệ thống sẽ kiểm lỗi từ đó trở về sau";
             btnCheckError.Image = global::Spell.Properties.Resources.check;
             //
             //-------------------------------
