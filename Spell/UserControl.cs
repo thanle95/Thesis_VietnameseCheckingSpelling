@@ -314,10 +314,6 @@ namespace Spell
             }
         }
 
-        private void gridLog_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
-        {
-            showMoreInfoContext();
-        }
         private void showMoreInfoContext()
         {
             SynchronizedInvoke(gridLog, delegate ()
@@ -554,6 +550,36 @@ namespace Spell
                 ignore();
                 btnResume.Visible = false;
             }
+        }
+
+        private void gridLog_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            showMoreInfoContext();
+        }
+
+        private void gridLog_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        {
+            var cell = gridLog.Rows[e.RowIndex].Cells[e.ColumnIndex];
+            cell.ToolTipText = cell.Value.ToString() + "\n\nClick vào ô đầu dòng để xem chi tiết";
+
+        }
+
+        private void btnCloseBtnShowMore_Click(object sender, EventArgs e)
+        {
+            SynchronizedInvoke(pnlShowMore, delegate ()
+            {
+                pnlShowMore.Visible = false;
+            });
+            SynchronizedInvoke(gridLog, delegate ()
+            {
+                gridLog.Visible = true;
+                for (int i = gridLog.Location.Y; i >= 0; i--)
+                {
+                    gridLog.Location = new System.Drawing.Point(0, i);
+                    Thread.Sleep(5);
+                }
+                gridLog.Location = new System.Drawing.Point(0, 0);
+            });
         }
 
         private void changeUI_ShowMoreInfo()

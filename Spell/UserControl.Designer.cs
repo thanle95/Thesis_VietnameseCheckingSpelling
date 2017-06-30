@@ -29,7 +29,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.btnIgnore = new System.Windows.Forms.Button();
             this.lblWrong = new System.Windows.Forms.Label();
             this.lstbCandidate = new System.Windows.Forms.ListBox();
@@ -49,6 +49,7 @@
             this.pnlAutoFix = new System.Windows.Forms.Panel();
             this.pnlButtonAutoFix = new System.Windows.Forms.Panel();
             this.pnlShowMore = new System.Windows.Forms.Panel();
+            this.btnCloseBtnShowMore = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.gridLog)).BeginInit();
             this.pnlSequenceFix.SuspendLayout();
             this.pnlAutoFix.SuspendLayout();
@@ -118,8 +119,8 @@
             this.gridLog.AllowUserToAddRows = false;
             this.gridLog.AllowUserToDeleteRows = false;
             this.gridLog.AllowUserToResizeRows = false;
-            dataGridViewCellStyle2.BackColor = System.Drawing.Color.Aqua;
-            this.gridLog.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle1.BackColor = System.Drawing.Color.Aqua;
+            this.gridLog.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
             this.gridLog.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.gridLog.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.DisplayedCells;
             this.gridLog.BackgroundColor = System.Drawing.Color.SkyBlue;
@@ -132,9 +133,10 @@
             this.gridLog.MultiSelect = false;
             this.gridLog.Name = "gridLog";
             this.gridLog.ReadOnly = true;
-            this.gridLog.Size = new System.Drawing.Size(287, 35);
+            this.gridLog.Size = new System.Drawing.Size(282, 35);
             this.gridLog.TabIndex = 20;
-            this.gridLog.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.gridLog_CellDoubleClick);
+            this.gridLog.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.gridLog_CellClick);
+            this.gridLog.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.gridLog_CellFormatting);
             // 
             // STT
             // 
@@ -166,9 +168,9 @@
             this.lblWrongContext.ForeColor = System.Drawing.Color.Red;
             this.lblWrongContext.Location = new System.Drawing.Point(0, 3);
             this.lblWrongContext.Name = "lblWrongContext";
-            this.lblWrongContext.Size = new System.Drawing.Size(51, 16);
+            this.lblWrongContext.Size = new System.Drawing.Size(98, 16);
             this.lblWrongContext.TabIndex = 21;
-            this.lblWrongContext.Text = "label1";
+            this.lblWrongContext.Text = "Ngữ cảnh sai";
             // 
             // lblRightContext
             // 
@@ -177,9 +179,9 @@
             this.lblRightContext.ForeColor = System.Drawing.Color.ForestGreen;
             this.lblRightContext.Location = new System.Drawing.Point(30, 30);
             this.lblRightContext.Name = "lblRightContext";
-            this.lblRightContext.Size = new System.Drawing.Size(51, 16);
+            this.lblRightContext.Size = new System.Drawing.Size(111, 16);
             this.lblRightContext.TabIndex = 22;
-            this.lblRightContext.Text = "label1";
+            this.lblRightContext.Text = "Ngữ cảnh đúng";
             // 
             // lblRightArrow
             // 
@@ -199,7 +201,7 @@
             this.btnGo.BackColor = System.Drawing.Color.White;
             this.btnGo.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnGo.ForeColor = System.Drawing.Color.Black;
-            this.btnGo.Location = new System.Drawing.Point(196, 23);
+            this.btnGo.Location = new System.Drawing.Point(192, 23);
             this.btnGo.Name = "btnGo";
             this.btnGo.Size = new System.Drawing.Size(90, 30);
             this.btnGo.TabIndex = 24;
@@ -291,6 +293,8 @@
             // pnlShowMore
             // 
             this.pnlShowMore.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.pnlShowMore.BackColor = System.Drawing.SystemColors.Menu;
+            this.pnlShowMore.Controls.Add(this.btnCloseBtnShowMore);
             this.pnlShowMore.Controls.Add(this.btnGo);
             this.pnlShowMore.Controls.Add(this.lblWrongContext);
             this.pnlShowMore.Controls.Add(this.lblRightArrow);
@@ -299,6 +303,22 @@
             this.pnlShowMore.Name = "pnlShowMore";
             this.pnlShowMore.Size = new System.Drawing.Size(285, 55);
             this.pnlShowMore.TabIndex = 25;
+            // 
+            // btnCloseBtnShowMore
+            // 
+            this.btnCloseBtnShowMore.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnCloseBtnShowMore.AutoSize = true;
+            this.btnCloseBtnShowMore.BackColor = System.Drawing.Color.Red;
+            this.btnCloseBtnShowMore.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnCloseBtnShowMore.ForeColor = System.Drawing.Color.Black;
+            this.btnCloseBtnShowMore.Location = new System.Drawing.Point(258, 0);
+            this.btnCloseBtnShowMore.Margin = new System.Windows.Forms.Padding(0);
+            this.btnCloseBtnShowMore.Name = "btnCloseBtnShowMore";
+            this.btnCloseBtnShowMore.Size = new System.Drawing.Size(24, 23);
+            this.btnCloseBtnShowMore.TabIndex = 25;
+            this.btnCloseBtnShowMore.Text = "X";
+            this.btnCloseBtnShowMore.UseVisualStyleBackColor = false;
+            this.btnCloseBtnShowMore.Click += new System.EventHandler(this.btnCloseBtnShowMore_Click);
             // 
             // UserControl
             // 
@@ -344,6 +364,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn STT;
         private System.Windows.Forms.DataGridViewTextBoxColumn wrongContext;
         private System.Windows.Forms.DataGridViewTextBoxColumn rightContext;
+        private System.Windows.Forms.Button btnCloseBtnShowMore;
     }
 }
 

@@ -36,39 +36,43 @@ namespace Spell
         }
         private void ThisDocument_SelectionChange(Word.Selection selection)
         {
-            //Lấy từ đang chọn
-            Word.Range selectedRange = DocumentHandling.Instance.GetWordByCursorSelection();
-
-            //Xử lý remove underline lỗi hiện tại
-            //Bằng việc so sánh với từ được chọn lần trước
+            //Nếu văn bản có lỗi
+            if (FindError.Instance.CountError > 0)
             {
-                if (!selectedRange.Text.Equals(PreSelectedRangeText) && selectedRange.Start == PreSelectedRangeStart)
-                    DocumentHandling.Instance.RemoveUnderline_Mistake(selectedRange.Start, selectedRange.End);
-                PreSelectedRangeText = selectedRange.Text;
-                PreSelectedRangeStart = selectedRange.Start;
-            }
+                //Lấy từ đang chọn
+                Word.Range selectedRange = DocumentHandling.Instance.GetWordByCursorSelection();
 
-            //Truy cập vào label lblWrong
-            UserControl.Instance.SynchronizedInvoke(UserControl.Instance.lblWrong, delegate ()
-            {
+                //Xử lý remove underline lỗi hiện tại
+                //Bằng việc so sánh với từ được chọn lần trước
+                {
+                    if (!selectedRange.Text.Equals(PreSelectedRangeText) && selectedRange.Start == PreSelectedRangeStart)
+                        DocumentHandling.Instance.RemoveUnderline_Mistake(selectedRange.Start, selectedRange.End);
+                    PreSelectedRangeText = selectedRange.Text;
+                    PreSelectedRangeStart = selectedRange.Start;
+                }
+
+                //Truy cập vào label lblWrong
+                UserControl.Instance.SynchronizedInvoke(UserControl.Instance.lblWrong, delegate ()
+                {
                 //Sửa lỗi hiện tại
                 if (selectedRange.Text.Trim().Equals(UserControl.Instance.lblWrong.Text))
-                    EnableFixError(true);
-                else {
-                    foreach (var item in FindError.Instance.lstErrorRange.Keys)
+                        EnableFixError(true);
+                    else {
+                        foreach (var item in FindError.Instance.lstErrorRange.Keys)
                         //Sửa lỗi bất kỳ khác
                         if (selectedRange.Text.Trim().Equals(item.TOKEN))
-                        {
-                            EnableFixError(true);
-                            Word.Words words = Globals.ThisAddIn.Application.Selection.Words;
-                            Word.Sentences sentences = Globals.ThisAddIn.Application.Selection.Sentences;
-                            UserControl.Instance.startFixError(words, sentences);
-                            return;
-                        }
+                            {
+                                EnableFixError(true);
+                                Word.Words words = Globals.ThisAddIn.Application.Selection.Words;
+                                Word.Sentences sentences = Globals.ThisAddIn.Application.Selection.Sentences;
+                                UserControl.Instance.startFixError(words, sentences);
+                                return;
+                            }
                     //Không phải là lỗi
                     EnableFixError(false);
-                }
-            });
+                    }
+                });
+            }
         }
 
         private void EnableFixError(bool enable)
@@ -129,32 +133,36 @@ namespace Spell
             //bỏ những MenuItem tồn tại trước đó
             RemoveExistingMenuItem();
 
-            Word.Words words = Globals.ThisAddIn.Application.Selection.Words;
-            Word.Sentences sentences = Globals.ThisAddIn.Application.Selection.Sentences;
-
-            //Tìm lỗi trong danh sách
-            FixError fixError = new FixError();
-            FindError.Instance.GetSeletedContext(words, sentences);
-            //Sửa lỗi đã tìm được
-            fixError.getCandidatesWithContext(FindError.Instance.SelectedError_Context, FindError.Instance.lstErrorRange);
-            WrongWord = fixError.Token.ToLower();
-
-            //dùng List để reverse hashSet
-            List<string> candidates = new List<string>();
-            if (fixError.hSetCandidate.Count > 0)
+            //Nếu văn bản có lỗi
+            if (FindError.Instance.CountError > 0)
             {
-                foreach (string item in fixError.hSetCandidate)
-                    candidates.Add(item);
+                Word.Words words = Globals.ThisAddIn.Application.Selection.Words;
+                Word.Sentences sentences = Globals.ThisAddIn.Application.Selection.Sentences;
 
-                candidates.Reverse();
+                //Tìm lỗi trong danh sách
+                FixError fixError = new FixError();
+                FindError.Instance.GetSeletedContext(words, sentences);
+                //Sửa lỗi đã tìm được
+                fixError.getCandidatesWithContext(FindError.Instance.SelectedError_Context, FindError.Instance.lstErrorRange);
+                WrongWord = fixError.Token.ToLower();
 
-                foreach (string candidate in candidates)
-                    if (!candidate.ToLower().Equals(fixError.Token.ToLower()))
-                        if (candidate.Length > 1)
-                            addCandidate(candidate.Trim());
+                //dùng List để reverse hashSet
+                List<string> candidates = new List<string>();
+                if (fixError.hSetCandidate.Count > 0)
+                {
+                    foreach (string item in fixError.hSetCandidate)
+                        candidates.Add(item);
+
+                    candidates.Reverse();
+
+                    foreach (string candidate in candidates)
+                        if (!candidate.ToLower().Equals(fixError.Token.ToLower()))
+                            if (candidate.Length > 1)
+                                addCandidate(candidate.Trim());
+                }
+                else
+                    System.Windows.Forms.MessageBox.Show(SysMessage.Instance.IsNotError(FindError.Instance.SelectedError_Context.TOKEN));
             }
-            else
-                System.Windows.Forms.MessageBox.Show(SysMessage.Instance.IsNotError(FindError.Instance.SelectedError_Context.TOKEN));
         }
         /// <summary>
         /// Thêm một candidate vào MenuItem

@@ -352,6 +352,7 @@ namespace Spell
                 {
                     myCustomTaskPane.Visible = false;
                     btnDeleteFormat.Enabled = false;
+                    btnShowTaskpane.Enabled = false;
                 }
                
             }
@@ -370,6 +371,7 @@ namespace Spell
                 else {
                     myCustomTaskPane.Visible = false;
                     btnDeleteFormat.Enabled = false;
+                    btnShowTaskpane.Enabled = false;
                 }
                 
             }
