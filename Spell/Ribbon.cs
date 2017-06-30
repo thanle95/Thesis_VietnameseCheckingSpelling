@@ -27,8 +27,6 @@ namespace Spell
         private const int IS_TYPING_SELECTION = 0;
         private const int WHOLE_DOCUMENT_SELECTION = 1;
 
-        private enum CheckButton { CHECKING, PAUSE, RESUME };
-        private CheckButton checkButton;
         Thread threadFindError;
         ThreadStart threadStartFindError;
         private void Ribbon1_Load(object sender, RibbonUIEventArgs e)
@@ -54,93 +52,54 @@ namespace Spell
         /// <param name="e"></param>
         private void btnCheckError_Click(object sender, RibbonControlEventArgs e)
         {
-            //if (Properties.Resources.ShowAgain.Equals("0"))
-            //{
-            //    Usage usage = new Usage();
-            //    usage.ShowDialog();
-            //}
-            //-------------------
-            //------------Tạm dừng kiểm lỗi--------------
-            //-------------------
+            //Kiểm lỗi
             if (btnCheckError.Label.Equals("Kiểm lỗi"))
             {
-                checkButton = CheckButton.CHECKING;
                 threadFindError = new Thread(threadStartFindError);
                 threadFindError.Priority = ThreadPriority.Highest;
                 threadFindError.Start();
-                btnCheckError.Label = "Tạm dừng";
-                btnCheckError.ScreenTip = "Tạm dừng kiểm lỗi";
-                btnCheckError.SuperTip = "Tạm dừng lại việc kiểm lỗi\n\nNhấn nút xem gợi ý hoặc chuột phải vào lỗi (nếu có) để sửa lỗi";
-                btnCheckError.Image = global::Spell.Properties.Resources.pause;
-                //if (FindError.Instance.CountError > 0)
-                //    showSuggest(FindError.Instance.CountError);
+                btnCheckError.Label = "Dừng kiểm lỗi";
+                btnCheckError.ScreenTip = "Dừng kiểm lỗi";
+                btnCheckError.SuperTip = "Bạn sẽ sửa lỗi sau khi dừng kiểm lỗi";
+                btnCheckError.Image = global::Spell.Properties.Resources.stop;
             }
-            //-------------------
-            //------------Tiếp tục kiểm lỗi--------------
-            //-------------------
-            else if (btnCheckError.Label.Equals("Tạm dừng"))
-            {
-                checkButton = CheckButton.PAUSE;
-                FindError.Instance.StopFindError = true;
-                btnShowTaskpane.Enabled = true;
-                btnDeleteFormat.Enabled = true;
-                btnCheckError.Label = "Tiếp tục";
-                btnCheckError.ScreenTip = "Tiếp tục kiểm lỗi";
-                btnCheckError.SuperTip = "Tiếp tục lại việc kiểm lỗi\n\nVăn bản của bạn sẽ tiếp tục kiểm lỗi tại vị trí mà nó dừng trước đó";
-                btnCheckError.Image = global::Spell.Properties.Resources.play;
-
-            }
-            //-------------------
-            //------------Tạm dừng kiểm lỗi--------------
-            //-------------------
+            //Dừng kiểm lỗi
             else
             {
-                checkButton = CheckButton.RESUME;
-                btnShowTaskpane.Enabled = false;
-                btnCheckError.Label = "Tạm dừng";
-                btnCheckError.ScreenTip = "Tạm dừng kiểm lỗi";
-                btnCheckError.SuperTip = "Tạm dừng lại việc kiểm lỗi\n\nNhấn nút xem gợi ý hoặc chuột phải vào lỗi (nếu có) để sửa lỗi";
-                btnCheckError.Image = global::Spell.Properties.Resources.pause;
-                if (FindError.Instance.CountError > 0)
-                    showSuggest(FindError.Instance.CountError);
-
-                Globals.ThisAddIn.Application.ActiveDocument.Range(0, 0).Select();
-                FindError.Instance.StopFindError = false;
-                FindError.Instance.setResume();
-                threadFindError = new Thread(threadStartFindError);
-                threadFindError.Priority = ThreadPriority.Highest;
-                threadFindError.Start();
+                FindError.Instance.StopFindError = true;
+                btnShowTaskpane.Enabled = true;
+                btnCheckError.Label = "Kiểm lỗi";
+                btnCheckError.ScreenTip = "Kiểm lỗi";
+                btnCheckError.SuperTip = "Bôi đen vùng văn bản trước khi nhấn nút để kiểm tra vùng văn bản đó\n\nHoặc để con " +
+        "trỏ tại bất cứ đâu trong văn bản, hệ thống sẽ kiểm lỗi từ đó trở về sau";
+                btnCheckError.Image = global::Spell.Properties.Resources.check;
+                UserControl.Instance.Clear();
+                
             }
+            myCustomTaskPane.Visible = false;
         }
         private void check()
         {
-            if (checkButton == CheckButton.CHECKING)
-            {
-                DocumentHandling.Instance.RemoveUnderline_AllMistake();
+            DocumentHandling.Instance.RemoveUnderline_AllMistake();
 
-                typeFindError = dropTypeFindError.SelectedItemIndex;
-                typeError = dropTypeError.SelectedItemIndex;
-                FindError.Instance.createValue(typeFindError, typeError, 1);
-                btnDeleteFormat.Enabled = false;
-                btnStop.Enabled = true;
-                dropCorpus.Enabled = false;
-                dropTypeError.Enabled = false;
-                dropTypeFindError.Enabled = false;
-                FindError.Instance.StopFindError = false;
-                btnShowTaskpane.Enabled = false;
+            typeFindError = dropTypeFindError.SelectedItemIndex;
+            typeError = dropTypeError.SelectedItemIndex;
+            FindError.Instance.createValue(typeFindError, typeError, 1);
+            btnDeleteFormat.Enabled = false;
+            dropCorpus.Enabled = false;
+            dropTypeError.Enabled = false;
+            dropTypeFindError.Enabled = false;
+            FindError.Instance.StopFindError = false;
+            btnShowTaskpane.Enabled = false;
 
-                UserControl.Instance.grigLogCount = 0;
-            }
+            UserControl.Instance.grigLogCount = 0;
             myCustomTaskPane.Visible = false;
             //Stopwatch stopwatch = new Stopwatch();
 
             //stopwatch.Start();
             FindError.Instance.startFindError();
             //stopwatch.Stop();
-            if (checkButton == CheckButton.PAUSE)
-                return;
             //thiết lập kiểm lỗi lần sau
-            btnStop.Enabled = false;
             dropCorpus.Enabled = true;
             dropTypeError.Enabled = true;
             dropTypeFindError.Enabled = true;
@@ -266,24 +225,6 @@ namespace Spell
             //MessageBox.Show(text + ": " + text.Length);
             myCustomTaskPane.Visible = true;
         }
-
-
-
-        private void btnStop_Click(object sender, RibbonControlEventArgs e)
-        {
-            //if (btnCheckError.Label.Equals("Tiếp tục"))
-            //{
-            //    threadFindError.Resume();
-            //}
-            FindError.Instance.StopFindError = true;
-            btnStop.Enabled = false;
-            btnShowTaskpane.Enabled = true;
-            btnCheckError.Label = "Kiểm lỗi";
-            btnCheckError.Image = global::Spell.Properties.Resources.check;
-            UserControl.Instance.Clear();
-            myCustomTaskPane.Visible = false;
-        }
-
         private void showSumError_Click(object sender, RibbonControlEventArgs e)
         {
             int sum = 0;
@@ -302,7 +243,7 @@ namespace Spell
 
         private void btnFixAll_Click(object sender, RibbonControlEventArgs e)
         {
-            
+
         }
         private Microsoft.Office.Tools.Word.GroupContentControl groupControl1;
         private void button1_Click(object sender, RibbonControlEventArgs e)
@@ -354,7 +295,7 @@ namespace Spell
                     btnDeleteFormat.Enabled = false;
                     btnShowTaskpane.Enabled = false;
                 }
-               
+
             }
             else
             {
@@ -373,7 +314,7 @@ namespace Spell
                     btnDeleteFormat.Enabled = false;
                     btnShowTaskpane.Enabled = false;
                 }
-                
+
             }
         }
     }
