@@ -110,25 +110,22 @@ namespace Spell.Algorithm
 
                 bool isSelected = true; // biến dùng để đánh dấu có select range câu đang kiểm tra hay không
                 Word.Range selectionRange = Globals.ThisAddIn.Application.Selection.Range;
-                curSentences = Globals.ThisAddIn.Application.ActiveDocument.Sentences;
-               //nếu không phải đang resume, thì xác định giá trị ISentence
-                if (!_isResume)
-                    //nếu bắt đầu và kết thúc bằng nhau
-                    //kiểm tra từ câu chứa vị trí con trỏ đến cuối văn bản
-                    if (selectionRange.Start == selectionRange.End)
-                    {
-                        for(ISentence = 1; ISentence < curSentences.Count; ISentence++)
-                            //nếu câu đang xét có độ dài lớn hơn vị trí con trỏ
-                            //Isentence hiện tại là giá trị đang tìm
-                            if (curSentences[ISentence].End > selectionRange.Start)
-                                break;
-                    }
-                    else {
-                        //ngược lại
-                        //kiểm tra những câu được chọn
-                        curSentences = Globals.ThisAddIn.Application.Selection.Sentences;
-                        isSelected = false;
-                    }
+                //nếu bắt đầu và kết thúc bằng nhau
+                //kiểm tra từ câu chứa vị trí con trỏ đến cuối văn bản
+                if (selectionRange.Start == selectionRange.End)
+                {
+                    for (ISentence = 1; ISentence < curSentences.Count; ISentence++)
+                        //nếu câu đang xét có độ dài lớn hơn vị trí con trỏ
+                        //Isentence hiện tại là giá trị đang tìm
+                        if (curSentences[ISentence].End > selectionRange.Start)
+                            break;
+                }
+                else {
+                    //ngược lại
+                    //kiểm tra những câu được chọn
+                    curSentences = Globals.ThisAddIn.Application.Selection.Sentences;
+                    isSelected = false;
+                }
                 //if (typeFindError == IS_TYPING_TYPE)
                 //    //lấy câu dựa trên vị trí con trỏ
                 //    curSentences = Globals.ThisAddIn.Application.Selection.Sentences;
@@ -155,7 +152,7 @@ namespace Spell.Algorithm
                     for (; ISentence <= curSentences.Count; ISentence++)
                     {
                         words = curSentences[ISentence].Text.TrimEnd().Split(' ');
-                        
+
                         start = curSentences[ISentence].Start;
                         end = curSentences[ISentence].End;
                         range = Globals.ThisAddIn.Application.ActiveDocument.Range(start, end);
