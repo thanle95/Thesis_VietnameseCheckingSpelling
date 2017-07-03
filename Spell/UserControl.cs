@@ -470,7 +470,6 @@ namespace Spell
                 gridLog.Visible = true;
                 if (IsFixAll)
                 {
-
                     if (gridLog.Size.Height <= 310)
                         gridLog.Size = new System.Drawing.Size(gridLog.Size.Width, gridLog.Size.Height + 20);
                 }
@@ -574,12 +573,14 @@ namespace Spell
             SynchronizedInvoke(gridLog, delegate ()
             {
                 gridLog.Visible = true;
-                for (int i = gridLog.Location.Y; i >= 0; i--)
+                int min = 0;
+                if (IsPause && IsFixAll)
+                    min = 90;
+                for (int i = gridLog.Location.Y; i >= min; i--)
                 {
                     gridLog.Location = new System.Drawing.Point(0, i);
                     Thread.Sleep(5);
                 }
-                gridLog.Location = new System.Drawing.Point(0, 0);
             });
         }
 
