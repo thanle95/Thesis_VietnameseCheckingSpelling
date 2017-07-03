@@ -29,6 +29,8 @@ namespace Spell
 
         Thread threadFindError;
         ThreadStart threadStartFindError;
+        Word.Range rangeRestore = null; 
+        StringBuilder textRestore = new StringBuilder();
         private void Ribbon1_Load(object sender, RibbonUIEventArgs e)
         {
             myCustomTaskPane = Globals.ThisAddIn.CustomTaskPanes.Add(UserControl.Instance, "Chính tả");
@@ -52,9 +54,15 @@ namespace Spell
         /// <param name="e"></param>
         private void btnCheckError_Click(object sender, RibbonControlEventArgs e)
         {
+            
             //Kiểm lỗi
             if (btnCheckError.Label.Equals("Kiểm lỗi"))
             {
+                //dùng để phục hồi văn bản
+                int count = Globals.ThisAddIn.Application.ActiveDocument.Characters.Count;
+                rangeRestore = Globals.ThisAddIn.Application.ActiveDocument.Range(0, count);
+                textRestore.Append(Globals.ThisAddIn.Application.ActiveDocument.Range(0, count).Text);
+
                 threadFindError = new Thread(threadStartFindError);
                 threadFindError.Priority = ThreadPriority.Highest;
                 threadFindError.Start();
@@ -199,7 +207,7 @@ namespace Spell
 
             Word.Range selectionRange = Globals.ThisAddIn.Application.Selection.Range;
             //nếu người dùng đang chọn một vùng nào đó
-            //thì dehighlight vùng đó
+            //thì bỏ gạch dưới vùng đó
             if (selectionRange.Start < selectionRange.End)
             {
                 DocumentHandling.Instance.RemoveUnderline_Mistake(selectionRange.Text, selectionRange.Start, selectionRange.End);
@@ -218,8 +226,6 @@ namespace Spell
 
         private void btnShowTaskpane_Click(object sender, RibbonControlEventArgs e)
         {
-            //string text = Globals.ThisAddIn.Application.Selection.Sentences[1].Text;
-            //MessageBox.Show(text + ": " + text.Length);
             myCustomTaskPane.Visible = true;
         }
         private void showSumError_Click(object sender, RibbonControlEventArgs e)
@@ -292,10 +298,11 @@ namespace Spell
                     btnDeleteFormat.Enabled = false;
                     btnShowTaskpane.Enabled = false;
                 }
-
+                btnUndoAll.Enabled = true;
             }
             else
             {
+                btnUndoAll.Enabled = false;
                 btnShowTaskpane.Label = "Sửa tất cả";
                 btnShowTaskpane.ScreenTip = "Hiện Task Pane để sửa tất cả lỗi có trong văn bản bằng gợi ý tốt nhất được chọn";
                 btnShowTaskpane.Image = Properties.Resources.change_all;
@@ -313,6 +320,12 @@ namespace Spell
                 }
 
             }
+        }
+
+        private void btnUndoAll_Click(object sender, RibbonControlEventArgs e)
+        {
+            rangeRestore.Text = textRestore.ToString();
+            rangeRestore.Select();
         }
     }
 }
