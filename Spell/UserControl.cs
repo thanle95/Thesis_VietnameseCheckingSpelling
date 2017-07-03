@@ -119,7 +119,7 @@ namespace Spell
                 if (!IsPause)
                 {
                     change(fixError.Token.ToLower(), fixError.hSetCandidate.ElementAt(0), false);
-                    CurRannge.Select();
+                    //CurRannge.Select();
                 }
                 else
                 {
@@ -128,7 +128,7 @@ namespace Spell
                         lblWrong.Text = fixError.Token;
 
                     });
-                    CurRannge.Select();
+                    //CurRannge.Select();
                     SynchronizedInvoke(lstbCandidate, delegate () { lstbCandidate.Items.Clear(); });
 
                     foreach (string item in fixError.hSetCandidate)
