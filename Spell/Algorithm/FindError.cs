@@ -33,6 +33,10 @@ namespace Spell.Algorithm
         public int ISentence { get; set; }
         public override string ToString()
         {
+            if(SelectedError_Context!= null)
+            {
+                return SelectedError_Context.ToString();
+            }
             string pp = FirstError_Context.PREPRE.Equals(Ngram.Instance.START_STRING) ?
                 "" : FirstError_Context.PREPRE;
             string p = FirstError_Context.PRE.Equals(Ngram.Instance.START_STRING) ?
@@ -91,10 +95,24 @@ namespace Spell.Algorithm
                     return;
                 }
             }
+            //Context context = new Context();
+            //context.getContext();
+            //SelectedError_Context.CopyForm(context);
         }
         public void startFindError()
         {
             showWrongWithSuggest(_typeFindError, _typeError);
+        }
+        public void showWrongWithSuggest_Typing(int typeError)
+        {
+            //Lấy danh sách câu đang được chọn
+            curSentences = Globals.ThisAddIn.Application.Selection.Sentences;
+            //Trong những câu đang được chọn, lấy câu đầu tiên
+            //------
+            //......
+            //Kiểm tra cho đến khi gặp từ còn đang đánh máy dang dở
+            //Tức là cho đến khi gặp ký tự xuống dòng
+
         }
         /// <summary>
         /// 
@@ -110,6 +128,8 @@ namespace Spell.Algorithm
 
                 bool isSelected = true; // biến dùng để đánh dấu có select range câu đang kiểm tra hay không
                 Word.Range selectionRange = Globals.ThisAddIn.Application.Selection.Range;
+                //dùng để tìm ISentence
+                curSentences = Globals.ThisAddIn.Application.ActiveDocument.Sentences;
                 //nếu bắt đầu và kết thúc bằng nhau
                 //kiểm tra từ câu chứa vị trí con trỏ đến cuối văn bản
                 if (selectionRange.Start == selectionRange.End)
@@ -313,8 +333,10 @@ namespace Spell.Algorithm
                     {
                         Thread.Sleep(1000);
                     }
-                    else
+                    else {
+                        StopFindError = true;
                         break; // break while true
+                    }
                 }//end while true
 
             }

@@ -42,7 +42,7 @@ namespace Spell
             {
                 //Lấy từ đang chọn
                 Word.Range selectedRange = DocumentHandling.Instance.GetWordByCursorSelection();
-
+                //Trường hợp người dùng tự sửa lỗi
                 //Xử lý remove underline lỗi hiện tại
                 //Bằng việc so sánh với từ được chọn lần trước
                 {

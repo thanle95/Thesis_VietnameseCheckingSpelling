@@ -16,7 +16,7 @@ namespace Spell
     public partial class UserControl : System.Windows.Forms.UserControl
     {
         private Word.Range curRangeTextShowInTaskPane;
-        private string oldString = "", newString = "";
+        private string _oldString = "", _newString = "";
         public bool IsFixAll { get; set; }
         public int grigLogCount { get; set; }
         private static UserControl instance = new UserControl();
@@ -77,14 +77,15 @@ namespace Spell
         /// </summary>
         public void showCandidateInTaskPane(Word.Words words, Word.Sentences sentences)
         {
+            //lỗi: chưa lấy ngữ cảnh tại vị trí con trỏ
             FixError fixError = new FixError();
             FindError.Instance.GetSeletedContext(words, sentences);
             fixError.getCandidatesWithContext(FindError.Instance.SelectedError_Context, FindError.Instance.lstErrorRange);
 
             if (fixError.hSetCandidate.Count > 0)
             {
-                oldString = FindError.Instance.ToString().Trim();
-                newString = fixError.ToString().Trim();
+                _oldString = FindError.Instance.ToString().Trim();
+                _newString = fixError.ToString().Trim();
                 lblWrong.Text = fixError.Token;
                 lstbCandidate.Items.Clear();
                 foreach (string item in fixError.hSetCandidate)
@@ -113,8 +114,8 @@ namespace Spell
                 CurRannge = FindError.Instance.lstErrorRange[FindError.Instance.FirstError_Context];
                 Error = fixError.Token;
                 //MessageBox.Show(string.Format("\"{0}\"-\"{1}\"", range.Text, fixError.Token));
-                oldString = FindError.Instance.ToString().Trim();
-                newString = fixError.ToString().Trim();
+                _oldString = FindError.Instance.ToString().Trim();
+                _newString = fixError.ToString().Trim();
                 if (!IsPause)
                 {
                     change(fixError.Token.ToLower(), fixError.hSetCandidate.ElementAt(0), false);
@@ -225,28 +226,28 @@ namespace Spell
         }
         public void change(string wrongText, string fixText, bool isRightClick)
         {
-            if (IsFixAll)
-            {
-                Context context = new Context();
-                context.getContext();
+            //if (IsFixAll)
+            //{
+            //    Context context = new Context();
+            //    context.getContext();
 
-                FixError fixError = new FixError();
+            //    FixError fixError = new FixError();
 
-                fixError.getCandidatesWithContext(context, FindError.Instance.lstErrorRange);
-                Word.Range range = null;
-                foreach (var pair in FindError.Instance.lstErrorRange)
-                    if (pair.Key.Equals(context))
-                    {
-                        range = pair.Value;
-                        range.Select();
-                        break;
-                    }
+            //    fixError.getCandidatesWithContext(context, FindError.Instance.lstErrorRange);
+            //    Word.Range range = null;
+            //    foreach (var pair in FindError.Instance.lstErrorRange)
+            //        if (pair.Key.Equals(context))
+            //        {
+            //            range = pair.Value;
+            //            range.Select();
+            //            break;
+            //        }
 
-                //range.Select();
+            //    //range.Select();
 
-                oldString = context.ToString();
-                newString = fixError.ToString().Trim();
-            }
+            //    _oldString = context.ToString();
+            //    _newString = fixError.ToString().Trim();
+            //}
             addRowGridLog();
             int startIndex = 0;
             int endIndex = 0;
@@ -484,7 +485,7 @@ namespace Spell
                     }
                     gridLog.Location = new System.Drawing.Point(0, 0);
                 }
-                gridLog.Rows.Add(++grigLogCount, oldString, newString);
+                gridLog.Rows.Add(++grigLogCount, _oldString, _newString);
             });
 
         }
