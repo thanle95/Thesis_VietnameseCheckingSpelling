@@ -324,8 +324,17 @@ namespace Spell
 
         private void btnUndoAll_Click(object sender, RibbonControlEventArgs e)
         {
+            PrepareForStart();
             rangeRestore.Text = textRestore.ToString();
             rangeRestore.Select();
+        }
+        private void PrepareForStart()
+        {
+            FindError.Instance.Clear();
+            myCustomTaskPane.Visible = false;
+            btnShowTaskpane.Enabled = false;
+            btnUndoAll.Enabled = false;
+            btnDeleteFormat.Enabled = false;
         }
     }
 }
