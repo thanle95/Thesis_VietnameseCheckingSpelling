@@ -194,10 +194,10 @@ namespace Spell
             //    break;
             //}
 
-            DocumentHandling.Instance.RemoveUnderline_Mistake(startIndex, endIndex);
+            DocumentHandling.Instance.RemoveUnderline_Mistake(item.Value.Text, startIndex, endIndex);
             if (FindError.Instance.lstErrorRange.Count == 0)
             {
-                MessageBox.Show(SysMessage.Instance.No_error);
+                //MessageBox.Show(SysMessage.Instance.No_error);
                 this.Visible = false;
                 return;
             }
@@ -276,7 +276,7 @@ namespace Spell
                 lblWrong.Text = "\"Từ sai\"";
                 lstbCandidate.Items.Clear();
             }
-            DocumentHandling.Instance.RemoveUnderline_Mistake(startIndex, endIndex);
+            DocumentHandling.Instance.RemoveUnderline_Mistake(curRangeTextShowInTaskPane.Text,startIndex, endIndex);
             curRangeTextShowInTaskPane.Select();
             Index++;
             //UpdateProgressBar();
@@ -292,13 +292,10 @@ namespace Spell
             //
             //sửa lỗi tiếp theo
             //
-            //if (!isRightClick)
-            //{
             FindError.Instance.FirstError_Context = FindError.Instance.lstErrorRange.First().Key;
             FindError.Instance.lstErrorRange[FindError.Instance.FirstError_Context].Select();
             if (!IsFixAll)
                 showCandidateInTaskPane();
-            //}
         }
         private void btnChange_KeyDown(object sender, KeyEventArgs e)
         {
@@ -352,6 +349,8 @@ namespace Spell
                 DataGridViewRow rowNext = null;
                 findText = lblRightContext.Text;
                 int count = 0;
+                //xét duyệt để tránh trường hợp
+                //lỗi ở dòng hiện tại, là ngữ cảnh ở dòng dưới
                 if (gridLog.RowCount > SELECTED_ERROR + 1)
                 {
                     rowNext = gridLog.Rows[SELECTED_ERROR + 1];
@@ -364,6 +363,7 @@ namespace Spell
                         {
                             if (++count == 2)
                             {
+                                //dùng kết quả sửa lỗi cuối cùng làm chuỗi tìm kiếm
                                 findText = rowNext.Cells[2].Value.ToString();
                                 break;
                             }

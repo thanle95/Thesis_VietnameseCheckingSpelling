@@ -47,7 +47,7 @@ namespace Spell
                 //Bằng việc so sánh với từ được chọn lần trước
                 {
                     if (!selectedRange.Text.Equals(PreSelectedRangeText) && selectedRange.Start == PreSelectedRangeStart)
-                        DocumentHandling.Instance.RemoveUnderline_Mistake(selectedRange.Start, selectedRange.End);
+                        DocumentHandling.Instance.RemoveUnderline_Mistake(selectedRange.Text, selectedRange.Start, selectedRange.End);
                     PreSelectedRangeText = selectedRange.Text;
                     PreSelectedRangeStart = selectedRange.Start;
                 }

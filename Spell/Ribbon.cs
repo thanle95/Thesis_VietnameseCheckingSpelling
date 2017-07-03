@@ -117,7 +117,7 @@ namespace Spell
                 showSuggest(count);
             else
             {
-                MessageBox.Show(SysMessage.Instance.No_error);
+                //MessageBox.Show(SysMessage.Instance.No_error);
                 btnDeleteFormat.Enabled = false;
             }
             //TimeSpan ts = stopwatch.Elapsed;
@@ -202,21 +202,18 @@ namespace Spell
             //thì dehighlight vùng đó
             if (selectionRange.Start < selectionRange.End)
             {
-                DocumentHandling.Instance.RemoveUnderline_Mistake(selectionRange.Start, selectionRange.End);
+                DocumentHandling.Instance.RemoveUnderline_Mistake(selectionRange.Text, selectionRange.Start, selectionRange.End);
             }
             else if (FindError.Instance.CountError > 0)
             {
                 DocumentHandling.Instance.RemoveUnderline_AllMistake();
                 FindError.Instance.Clear();
                 UserControl.Instance.IsFixAll = false;
+            }
                 myCustomTaskPane.Visible = false;
                 btnDeleteFormat.Enabled = false;
                 btnDeleteFormat.Enabled = false;
                 btnShowTaskpane.Enabled = false;
-            }
-
-            //}
-
         }
 
         private void btnShowTaskpane_Click(object sender, RibbonControlEventArgs e)

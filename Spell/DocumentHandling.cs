@@ -87,10 +87,14 @@ namespace Spell
             }
             return range;
         }
-        public Word.Range UnderlineWord(int start, int end, Word.WdColor color)
+        public Word.Range UnderlineWord(string token, int start, int end, Word.WdColor color)
         {
             Word.Range range = null;
             range = Globals.ThisAddIn.Application.ActiveDocument.Range(start, end);
+            while (!range.Text.Equals(token))
+            {
+                range = Globals.ThisAddIn.Application.ActiveDocument.Range(++start, ++end);
+            }
             //range.HighlightColorIndex = colorIndex;
             //range.Font.Color = color;
             range.Underline = Word.WdUnderline.wdUnderlineWavy;
@@ -102,17 +106,17 @@ namespace Spell
         {
             return UnderlineWord(context, sentencesList, Word.WdColorIndex.wdRed, Word.WdColor.wdColorYellow);
         }
-        public Word.Range UnderlineWrongWord(int start, int end)
+        public Word.Range UnderlineWrongWord(string token, int start, int end)
         {
-            return UnderlineWord(start, end, Word.WdColor.wdColorRed);
+            return UnderlineWord(token, start, end, Word.WdColor.wdColorRed);
         }
         public Word.Range UnderlineRightWord(Context context, Word.Sentences sentencesList)
         {
             return UnderlineWord(context, sentencesList, Word.WdColorIndex.wdYellow, Word.WdColor.wdColorAutomatic);
         }
-        public Word.Range UnderlineRightWord(int start, int end)
+        public Word.Range UnderlineRightWord(string token, int start, int end)
         {
-            return UnderlineWord(start, end ,Word.WdColor.wdColorBlue);
+            return UnderlineWord(token, start, end ,Word.WdColor.wdColorBlue);
         }
 
         public void RemoveUnderline_AllMistake()
@@ -124,9 +128,13 @@ namespace Spell
             //range.Font.Color = Word.WdColor.wdColorAutomatic;
             range.Underline = Word.WdUnderline.wdUnderlineNone;
         }
-        public void RemoveUnderline_Mistake(int startIndex, int endIndex)
+        public void RemoveUnderline_Mistake(string fixText, int startIndex, int endIndex)
         {
             Word.Range range = Globals.ThisAddIn.Application.ActiveDocument.Range(startIndex, endIndex);
+            while (!range.Text.Equals(fixText))
+            {
+                range = Globals.ThisAddIn.Application.ActiveDocument.Range(++startIndex, ++endIndex);
+            }
             //range.HighlightColorIndex = Word.WdColorIndex.wdNoHighlight;
             //range.Font.Color = Word.WdColor.wdColorAutomatic;
             range.Underline = Word.WdUnderline.wdUnderlineNone;

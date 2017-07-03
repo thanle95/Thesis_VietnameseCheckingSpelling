@@ -28,13 +28,13 @@ namespace Spell.Algorithm
                 return "Tính năng đang được cập nhật.";
             }
         }
-        public string No_error
-        {
-            get
-            {
-                return "Chúc mừng. Tài liệu của bạn không có lỗi.";
-            }
-        }
+        //public string No_error
+        //{
+        //    get
+        //    {
+        //        return "Chúc mừng. Tài liệu của bạn không có lỗi.";
+        //    }
+        //}
         public string Caption_Notify_Fix_Error
         {
             get

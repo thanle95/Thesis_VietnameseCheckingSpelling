@@ -156,7 +156,6 @@ namespace Spell.Algorithm
                 //    curSentences = Globals.ThisAddIn.Application.ActiveDocument.Sentences;
                 //    isSelected = true;
                 //}
-
                 int start = 0, end = 0;
                 string iWord = "";
                 string iWordReplaced = "";
@@ -269,7 +268,7 @@ namespace Spell.Algorithm
                                         if (FirstError_Context == null)
                                             FirstError_Context = context;
                                         isError = true;
-                                        lstErrorRange.Add(context, (DocumentHandling.Instance.UnderlineWrongWord(start, end)));
+                                        lstErrorRange.Add(context, (DocumentHandling.Instance.UnderlineWrongWord(context.TOKEN, start, end)));
                                     }
                                 }//end if wrong word
 
@@ -307,7 +306,7 @@ namespace Spell.Algorithm
                                             if (FirstError_Context == null)
                                                 FirstError_Context = context;
                                             isError = true;
-                                            lstErrorRange.Add(context, (DocumentHandling.Instance.UnderlineRightWord(start, end)));
+                                            lstErrorRange.Add(context, (DocumentHandling.Instance.UnderlineRightWord(context.TOKEN, start, end)));
                                         }
                                     }
 
@@ -319,7 +318,7 @@ namespace Spell.Algorithm
                                         if (lstErrorRange.ContainsKey(context))
                                         {
                                             lstErrorRange.Remove(context);
-                                            DocumentHandling.Instance.RemoveUnderline_Mistake(start, end);
+                                            DocumentHandling.Instance.RemoveUnderline_Mistake(context.TOKEN, start, end);
                                         }
                                     }
                                 }
