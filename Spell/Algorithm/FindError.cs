@@ -13,10 +13,10 @@ namespace Spell.Algorithm
     {
         public Dictionary<Context, Word.Range> lstErrorRange = new Dictionary<Context, Word.Range>();
         private Word.Sentences curSentences;
-        public List<string> MySentences
-        {
-            get; set;
-        }
+        //public List<string> MySentences
+        //{
+        //    get; set;
+        //}
         private const int IS_TYPING_TYPE = 0;
 
         private const int WRONG_RIGHT_ERROR = 0;
@@ -124,8 +124,6 @@ namespace Spell.Algorithm
         {
             try
             {
-                //sửa lỗi kiểm tra lần 2 không hiện được gợi ý
-
                 bool isSelected = true; // biến dùng để đánh dấu có select range câu đang kiểm tra hay không
                 Word.Range selectionRange = Globals.ThisAddIn.Application.Selection.Range;
                 //dùng để tìm ISentence
@@ -160,6 +158,7 @@ namespace Spell.Algorithm
                 string iWord = "";
                 string iWordReplaced = "";
                 string[] words;
+                string[] originWords;
                 int length;
                 bool isError = false;
                 Context tmpContext = new Context();
@@ -171,7 +170,7 @@ namespace Spell.Algorithm
                     for (; ISentence <= curSentences.Count; ISentence++)
                     {
                         words = curSentences[ISentence].Text.TrimEnd().Split(' ');
-
+                        originWords = curSentences[ISentence].Text.TrimEnd().Split(' ');
                         start = curSentences[ISentence].Start;
                         end = curSentences[ISentence].End;
                         range = Globals.ThisAddIn.Application.ActiveDocument.Range(start, end);
@@ -265,6 +264,9 @@ namespace Spell.Algorithm
                                         //tự động thay thế bằng candidate tốt nhất
                                         //tránh làm sai những gram phía sau
                                         words[i] = hSetCand.ElementAt(0);
+
+                                        //lấy ngữ cảnh gốc
+                                        context.getContext(i, originWords);
                                         if (FirstError_Context == null)
                                             FirstError_Context = context;
                                         isError = true;
@@ -303,6 +305,8 @@ namespace Spell.Algorithm
                                             //tự động thay thế bằng candidate tốt nhất
                                             //tránh làm sai những gram phía sau
                                             words[i] = hSetCand.ElementAt(0);
+                                            //lấy ngữ cảnh gốc
+                                            context.getContext(i, originWords);
                                             if (FirstError_Context == null)
                                                 FirstError_Context = context;
                                             isError = true;

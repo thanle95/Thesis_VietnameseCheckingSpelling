@@ -62,6 +62,7 @@ namespace Spell
                 int count = Globals.ThisAddIn.Application.ActiveDocument.Characters.Count;
                 rangeRestore = Globals.ThisAddIn.Application.ActiveDocument.Range(0, count);
                 textRestore.Append(Globals.ThisAddIn.Application.ActiveDocument.Range(0, count).Text);
+                btnRestore.Enabled = false;
 
                 threadFindError = new Thread(threadStartFindError);
                 threadFindError.Priority = ThreadPriority.Highest;
@@ -75,6 +76,7 @@ namespace Spell
             else
             {
                 FindError.Instance.StopFindError = true;
+                if(FindError.Instance.CountError > 0)
                 btnShowTaskpane.Enabled = true;
                 btnCheckError.Label = "Kiểm lỗi";
                 btnCheckError.ScreenTip = "Kiểm lỗi";
@@ -298,11 +300,11 @@ namespace Spell
                     btnDeleteFormat.Enabled = false;
                     btnShowTaskpane.Enabled = false;
                 }
-                btnUndoAll.Enabled = true;
+                btnRestore.Enabled = true;
             }
             else
             {
-                btnUndoAll.Enabled = false;
+                btnRestore.Enabled = false;
                 btnShowTaskpane.Label = "Sửa tất cả";
                 btnShowTaskpane.ScreenTip = "Hiện Task Pane để sửa tất cả lỗi có trong văn bản bằng gợi ý tốt nhất được chọn";
                 btnShowTaskpane.Image = Properties.Resources.change_all;
@@ -322,7 +324,7 @@ namespace Spell
             }
         }
 
-        private void btnUndoAll_Click(object sender, RibbonControlEventArgs e)
+        private void btnRestore_Click(object sender, RibbonControlEventArgs e)
         {
             PrepareForStart();
             rangeRestore.Text = textRestore.ToString();
@@ -333,7 +335,6 @@ namespace Spell
             FindError.Instance.Clear();
             myCustomTaskPane.Visible = false;
             btnShowTaskpane.Enabled = false;
-            btnUndoAll.Enabled = false;
             btnDeleteFormat.Enabled = false;
         }
     }

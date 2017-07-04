@@ -58,7 +58,7 @@
             this.lblSumError = this.Factory.CreateRibbonLabel();
             this.group2 = this.Factory.CreateRibbonGroup();
             this.btnShowTaskpane = this.Factory.CreateRibbonButton();
-            this.btnUndoAll = this.Factory.CreateRibbonButton();
+            this.btnRestore = this.Factory.CreateRibbonButton();
             this.dropDockPosition = this.Factory.CreateRibbonDropDown();
             this.tab1.SuspendLayout();
             this.group1.SuspendLayout();
@@ -175,7 +175,7 @@
             // group2
             // 
             this.group2.Items.Add(this.btnShowTaskpane);
-            this.group2.Items.Add(this.btnUndoAll);
+            this.group2.Items.Add(this.btnRestore);
             this.group2.Items.Add(this.dropDockPosition);
             this.group2.Label = "Sửa lỗi";
             this.group2.Name = "group2";
@@ -191,15 +191,16 @@
             this.btnShowTaskpane.ShowImage = true;
             this.btnShowTaskpane.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.btnShowTaskPane_Click_1);
             // 
-            // btnUndoAll
+            // btnRestore
             // 
-            this.btnUndoAll.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
-            this.btnUndoAll.Enabled = false;
-            this.btnUndoAll.Image = global::Spell.Properties.Resources.undo;
-            this.btnUndoAll.Label = "Phục hồi văn bản";
-            this.btnUndoAll.Name = "btnUndoAll";
-            this.btnUndoAll.ShowImage = true;
-            this.btnUndoAll.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.btnUndoAll_Click);
+            this.btnRestore.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
+            this.btnRestore.Enabled = false;
+            this.btnRestore.Image = global::Spell.Properties.Resources.undo;
+            this.btnRestore.Label = "Phục hồi văn bản";
+            this.btnRestore.Name = "btnRestore";
+            this.btnRestore.ScreenTip = "Phục hồi lại văn bản trước lần sửa lỗi gần nhất";
+            this.btnRestore.ShowImage = true;
+            this.btnRestore.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.btnRestore_Click);
             // 
             // dropDockPosition
             // 
@@ -249,7 +250,7 @@
         internal Microsoft.Office.Tools.Ribbon.RibbonLabel lblSumError;
         internal Microsoft.Office.Tools.Ribbon.RibbonGroup group2;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton btnShowTaskpane;
-        internal Microsoft.Office.Tools.Ribbon.RibbonButton btnUndoAll;
+        internal Microsoft.Office.Tools.Ribbon.RibbonButton btnRestore;
     }
 
     partial class ThisRibbonCollection

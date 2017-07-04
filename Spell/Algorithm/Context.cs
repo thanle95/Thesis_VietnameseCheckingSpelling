@@ -46,9 +46,9 @@ namespace Spell.Algorithm
         }
         public Context(Word.Words words, Word.Sentences sentences)
         {
-            string[] wordArr = sentences[1].Text.Split(' ');
+            string[] wordArr = sentences.First.Text.Split(' ');
             for (int i = 0; i < wordArr.Length; i++)
-                if (wordArr[i].Trim().Equals(words[1].Text.Trim()))
+                if (wordArr[i].Trim().Equals(words.First.Text.Trim()))
                 {
                     getContext(i, wordArr);
                     return;
@@ -309,17 +309,20 @@ namespace Spell.Algorithm
             if (obj.GetType() != this.GetType())
                 return false;
             else c = (Context)obj;
-            if (!PREPRE.Equals(c.PREPRE))
-                return false;
-            if (!PRE.Equals(c.PRE))
-                return false;
-            if (!TOKEN.Equals(c.TOKEN))
-                return false;
-            if (!NEXT.Equals(c.NEXT))
-                return false;
-            if (!NEXTNEXT.Equals(c.NEXTNEXT))
-                return false;
-            return true;
+            //if (!PREPRE.Equals(c.PREPRE))
+            //    return false;
+            //if (!PRE.Equals(c.PRE))
+            //    return false;
+            //if (!TOKEN.Equals(c.TOKEN))
+            //    return false;
+            //if (!NEXT.Equals(c.NEXT))
+            //    return false;
+            //if (!NEXTNEXT.Equals(c.NEXTNEXT))
+            //    return false;
+            //return true;
+            if (TOKEN.Equals(c.TOKEN))
+                return true;
+            return false;
         }
     }
 }
