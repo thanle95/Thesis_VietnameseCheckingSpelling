@@ -320,8 +320,7 @@ namespace Spell
                 changeUI_ShowMoreInfo();
 
             });
-
-            DataGridViewRow row = gridLog.SelectedRows[0];
+            DataGridViewRow row = gridLog.CurrentRow;
             SELECTED_ERROR = row.Index;
             SynchronizedInvoke(lblWrongContext, delegate ()
             {
@@ -510,8 +509,8 @@ namespace Spell
         private void scrollGridLog()
         {
             int rowVisible = gridLog.DisplayedRowCount(true);
-            if (gridLog.FirstDisplayedScrollingRowIndex + rowVisible < gridLog.Rows.Count) 
-            gridLog.FirstDisplayedScrollingRowIndex++;
+            if (gridLog.FirstDisplayedScrollingRowIndex + rowVisible < gridLog.Rows.Count)
+                gridLog.FirstDisplayedScrollingRowIndex++;
             else gridLog.FirstDisplayedScrollingRowIndex = 0;
         }
         private void btnPauseResumeAutoFix_Click(object sender, EventArgs e)
@@ -585,10 +584,13 @@ namespace Spell
         private void gridLog_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
             var cell = gridLog.Rows[e.RowIndex].Cells[e.ColumnIndex];
-            cell.ToolTipText = cell.Value.ToString() + "\n\nClick vào ô đầu dòng để xem chi tiết";
+            cell.ToolTipText = cell.Value.ToString();
 
         }
-
+        private void gridLog_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            showMoreInfoContext();
+        }
         private void btnCloseBtnShowMore_Click(object sender, EventArgs e)
         {
             SynchronizedInvoke(pnlShowMore, delegate ()
