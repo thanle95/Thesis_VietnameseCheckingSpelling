@@ -189,6 +189,8 @@
     <Compile Include="Algorithm\RightWordCandidate.cs" />
     <Compile Include="Algorithm\StringConstant.cs" />
     <Compile Include="Algorithm\Ngram.cs" />
+    <Compile Include="UndoRedo\FixErrorCommand.cs" />
+    <Compile Include="UndoRedo\ICommand.cs" />
     <Compile Include="Algorithm\VNDictionary.cs" />
     <Compile Include="Algorithm\WrongWordCandidate.cs" />
     <Compile Include="DocumentHandling.cs" />

@@ -63,7 +63,7 @@ namespace Spell
             SynchronizedInvoke(gridLog, delegate ()
             {
                 gridLog.Rows.Clear();
-                gridLog.Size = new System.Drawing.Size(287, 35);
+                gridLog.Size = new System.Drawing.Size(282, 42);
             });
         }
         public static string WRONG_TEXT
@@ -504,7 +504,7 @@ namespace Spell
                 //scroll gridlog đến lỗi cuối cùng
                 scrollGridLog();
             });
-
+            
         }
         private void scrollGridLog()
         {
