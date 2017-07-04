@@ -18,7 +18,7 @@ namespace Spell
         private Word.Range curRangeTextShowInTaskPane;
         private string _oldString = "", _newString = "";
         public bool IsFixAll { get; set; }
-        public int grigLogCount { get; set; }
+        public int gridLogCount { get; set; }
         private static UserControl instance = new UserControl();
         private const string ERROR_SPACE = "\"Lỗi dư khoảng trắng\"";
         private int SELECTED_ERROR { get; set; }
@@ -58,6 +58,7 @@ namespace Spell
         }
         public void Clear()
         {
+            gridLogCount = 0;
             TotalError = 0;
             SynchronizedInvoke(gridLog, delegate ()
             {
@@ -276,7 +277,7 @@ namespace Spell
                 lblWrong.Text = "\"Từ sai\"";
                 lstbCandidate.Items.Clear();
             }
-            DocumentHandling.Instance.RemoveUnderline_Mistake(curRangeTextShowInTaskPane.Text,startIndex, endIndex);
+            DocumentHandling.Instance.RemoveUnderline_Mistake(curRangeTextShowInTaskPane.Text, startIndex, endIndex);
             curRangeTextShowInTaskPane.Select();
             Index++;
             //UpdateProgressBar();
@@ -335,50 +336,65 @@ namespace Spell
 
         private void btnGo_Click(object sender, EventArgs e)
         {
-            //Word.Find findObject = Globals.ThisAddIn.Application.Selection.Find;
-            //findObject.ClearFormatting();
-            //SynchronizedInvoke(lblRightContext, delegate () {
-            //    findObject.Text = lblRightContext.Text;
-            //});
             Word.Document oWordDoc = Globals.ThisAddIn.Application.ActiveDocument;
             Word.Range rng = oWordDoc.Content;
             rng.Find.ClearFormatting();
             object findText = "";
-            SynchronizedInvoke(lblRightContext, delegate ()
-            {
-                DataGridViewRow rowNext = null;
-                findText = lblRightContext.Text;
-                int count = 0;
-                //xét duyệt để tránh trường hợp
-                //lỗi ở dòng hiện tại, là ngữ cảnh ở dòng dưới
-                if (gridLog.RowCount > SELECTED_ERROR + 1)
-                {
-                    rowNext = gridLog.Rows[SELECTED_ERROR + 1];
-                    string wrongRowNext = rowNext.Cells[1].Value.ToString();
-                    string[] wrongRowNextArr = wrongRowNext.Split(' ');
-
-                    foreach (string i in wrongRowNextArr)
-                    {
-                        if (lblRightContext.Text.ToLower().Contains(i.ToLower()))
-                        {
-                            if (++count == 2)
-                            {
-                                //dùng kết quả sửa lỗi cuối cùng làm chuỗi tìm kiếm
-                                findText = rowNext.Cells[2].Value.ToString();
-                                break;
-                            }
-
-                        }
-                    }
-                }
-
-            });
+            bool isFound = false;
+            int min = -1;
             object oTrue = true;
             object oFalse = false;
             object oFindStop = Word.WdFindWrap.wdFindStop;
-            rng.Find.Execute(ref findText, ref oTrue, ref oFalse, ref oTrue,
-                    ref oFalse, ref oFalse, ref oTrue, ref oFindStop, ref oFalse,
-                    null, null, null, null, null, null);
+            string rangeText = "";
+            SynchronizedInvoke(lblRightContext, delegate ()
+            {
+                findText = lblRightContext.Text;
+                rng.Find.Execute(ref findText, ref oTrue, ref oFalse, ref oTrue,
+                        ref oFalse, ref oFalse, ref oTrue, ref oFindStop, ref oFalse,
+                        null, null, null, null, null, null);
+                rangeText = rng.Text;
+                if (rangeText.Equals(findText))
+                    isFound = true;
+            });
+            //nếu không tìm thấy được lblRightContext
+            //tìm rightContext gần giống với lblRightContext nhất
+            if (!isFound)
+            {
+                bool isInitial = true;
+                int distance;
+                int rowIndex = SELECTED_ERROR;
+                DataGridViewRow rowNext = null;
+                foreach (DataGridViewRow row in gridLog.Rows)
+                {
+                    if (row.Index != SELECTED_ERROR)
+                    {
+                        if (isInitial)
+                        {
+                            min = Levenshtein.Instance.calDistance(row.Cells[2].Value.ToString(), findText.ToString());
+                            rowIndex = row.Index;
+                            isInitial = false;
+                            continue;
+                        }
+                        distance = Levenshtein.Instance.calDistance(row.Cells[2].Value.ToString(), findText.ToString());
+                        if (distance <= min)
+                        {
+                            min = distance;
+                            rowIndex = row.Index;
+                        }
+                    }
+                }
+                ////dùng kết quả sửa lỗi cuối cùng làm chuỗi tìm kiếm
+                findText = gridLog.Rows[rowIndex].Cells[2].Value.ToString();
+                rng.Find.Execute(ref findText, ref oTrue, ref oFalse, ref oTrue,
+                            ref oFalse, ref oFalse, ref oTrue, ref oFindStop, ref oFalse,
+                            null, null, null, null, null, null);
+                rangeText = rng.Text;
+                if (rangeText.Equals(findText))
+                    isFound = true;
+                if (!isFound)
+                    MessageBox.Show(SysMessage.Instance.NoFound);
+            }
+
             rng.Select();
 
         }
@@ -484,11 +500,20 @@ namespace Spell
                     }
                     gridLog.Location = new System.Drawing.Point(0, 0);
                 }
-                gridLog.Rows.Add(++grigLogCount, _oldString, _newString);
+                gridLog.Rows.Add(++gridLogCount, _oldString, _newString);
+                //
+                //scroll gridlog đến lỗi cuối cùng
+                scrollGridLog();
             });
 
         }
-
+        private void scrollGridLog()
+        {
+            int rowVisible = gridLog.DisplayedRowCount(true);
+            if (gridLog.FirstDisplayedScrollingRowIndex + rowVisible < gridLog.Rows.Count) 
+            gridLog.FirstDisplayedScrollingRowIndex++;
+            else gridLog.FirstDisplayedScrollingRowIndex = 0;
+        }
         private void btnPauseResumeAutoFix_Click(object sender, EventArgs e)
         {
             Pause_Resume();
@@ -583,6 +608,8 @@ namespace Spell
                 }
             });
         }
+
+
 
         private void changeUI_ShowMoreInfo()
         {

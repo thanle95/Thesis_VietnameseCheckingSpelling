@@ -61,6 +61,7 @@ namespace Spell.Algorithm
         }
         public void Clear()
         {
+            StopFindError = false;
             lstErrorRange.Clear();
             FirstError_Context = null;
         }
@@ -265,8 +266,8 @@ namespace Spell.Algorithm
                                         //tránh làm sai những gram phía sau
                                         words[i] = hSetCand.ElementAt(0);
 
-                                        //lấy ngữ cảnh gốc
-                                        context.getContext(i, originWords);
+                                        ////lấy ngữ cảnh gốc
+                                        //context.getContext(i, originWords);
                                         if (FirstError_Context == null)
                                             FirstError_Context = context;
                                         isError = true;
@@ -305,8 +306,8 @@ namespace Spell.Algorithm
                                             //tự động thay thế bằng candidate tốt nhất
                                             //tránh làm sai những gram phía sau
                                             words[i] = hSetCand.ElementAt(0);
-                                            //lấy ngữ cảnh gốc
-                                            context.getContext(i, originWords);
+                                            ////lấy ngữ cảnh gốc
+                                            //context.getContext(i, originWords);
                                             if (FirstError_Context == null)
                                                 FirstError_Context = context;
                                             isError = true;

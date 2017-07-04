@@ -53,6 +53,15 @@ namespace Spell.Algorithm
                 return "Hành động này sẽ xóa đánh dấu tất cả những lỗi tìm được, cũng như dừng lại hoạt động sửa lỗi. Bạn có muốn tiếp tục?";
             }
         }
+
+        public string NoFound
+        {
+            get
+            {
+                return "Không tìm thấy ngữ cảnh";
+            }
+        }
+
         public string IsNotError(string word)
         {
             return string.Format("\"{0}\" không phải là một lỗi!", word);

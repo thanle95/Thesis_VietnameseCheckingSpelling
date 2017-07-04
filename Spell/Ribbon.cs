@@ -90,20 +90,8 @@ namespace Spell
         }
         private void check()
         {
-            DocumentHandling.Instance.RemoveUnderline_AllMistake();
-
-            typeFindError = dropTypeFindError.SelectedItemIndex;
-            typeError = dropTypeError.SelectedItemIndex;
-            FindError.Instance.createValue(typeFindError, typeError, 1);
-            btnDeleteFormat.Enabled = false;
-            dropCorpus.Enabled = false;
-            dropTypeError.Enabled = false;
-            dropTypeFindError.Enabled = false;
-            FindError.Instance.StopFindError = false;
-            btnShowTaskpane.Enabled = false;
-
-            UserControl.Instance.grigLogCount = 0;
-            myCustomTaskPane.Visible = false;
+            PrepareForStart();
+          
             //Stopwatch stopwatch = new Stopwatch();
 
             //stopwatch.Start();
@@ -332,10 +320,25 @@ namespace Spell
         }
         private void PrepareForStart()
         {
+            typeFindError = dropTypeFindError.SelectedItemIndex;
+            typeError = dropTypeError.SelectedItemIndex;
+            FindError.Instance.createValue(typeFindError, typeError, 1);
             FindError.Instance.Clear();
-            myCustomTaskPane.Visible = false;
+           
             btnShowTaskpane.Enabled = false;
             btnDeleteFormat.Enabled = false;
+            btnShowTaskpane.Label = "Sửa tất cả";
+            btnShowTaskpane.ScreenTip = "Hiện Task Pane để sửa tất cả lỗi có trong văn bản bằng gợi ý tốt nhất được chọn";
+            btnShowTaskpane.Image = Properties.Resources.change_all;
+
+            dropCorpus.Enabled = false;
+            dropTypeError.Enabled = false;
+            dropTypeFindError.Enabled = false;
+
+            UserControl.Instance.Clear();
+            myCustomTaskPane.Visible = false;
+
+            DocumentHandling.Instance.RemoveUnderline_AllMistake();
         }
     }
 }

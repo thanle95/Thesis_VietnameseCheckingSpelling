@@ -183,6 +183,7 @@
     <Compile Include="Algorithm\FileManager.cs" />
     <Compile Include="Algorithm\FindError.cs" />
     <Compile Include="Algorithm\FixError.cs" />
+    <Compile Include="Algorithm\Levenshtein.cs" />
     <Compile Include="Algorithm\ProgressReport.cs" />
     <Compile Include="Algorithm\SysMessage.cs" />
     <Compile Include="Algorithm\RightWordCandidate.cs" />
