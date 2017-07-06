@@ -170,8 +170,8 @@ namespace Spell.Algorithm
                 {
                     for (; ISentence <= curSentences.Count; ISentence++)
                     {
-                        words = curSentences[ISentence].Text.TrimEnd().ToLower().Split(' ');
-                        originWords = curSentences[ISentence].Text.TrimEnd().ToLower().Split(' ');
+                        words = curSentences[ISentence].Text.TrimEnd().Split(' ');
+                        originWords = curSentences[ISentence].Text.TrimEnd().Split(' ');
                         start = curSentences[ISentence].Start;
                         end = curSentences[ISentence].End;
                         range = Globals.ThisAddIn.Application.ActiveDocument.Range(start, end);
