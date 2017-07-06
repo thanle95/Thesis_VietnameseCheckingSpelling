@@ -279,26 +279,41 @@ namespace Spell.Algorithm
 
                                 else if ((typeError == WRONG_RIGHT_ERROR || typeError == RIGHT_ERROR) && !RightWordCandidate.getInstance.checkRightWord(context))
                                 {
-                                    context.PRE = tmpContext.TOKEN;
-                                    context.TOKEN = tmpContext.NEXT;
-                                    context.NEXT = tmpContext.NEXTNEXT;
-                                    string tmpNext = "";
-                                    //
-                                    //thay words[i+1] bằng candidate tốt nhất
-                                    hSetCand.Clear();
-                                    hSetCand = RightWordCandidate.getInstance.createCandidate(context, false);
-                                    if (hSetCand.Count > 0)
-                                        tmpNext = hSetCand.ElementAt(0);
-                                    context.PRE = tmpContext.PRE;
-                                    context.TOKEN = tmpContext.TOKEN;
-                                    context.NEXT = tmpNext;
-                                    //kiểm tra words[i] bị sai có do ảnh hưởng của words[i+1] hay không
-                                    if (!RightWordCandidate.getInstance.checkRightWord(context))
+                                    if (i < length - 1)
                                     {
+                                        context.getContext(i + 1, words);
+                                        string tmpNext = "";
+                                        //
+                                        //thay words[i+1] bằng candidate tốt nhất
+                                        hSetCand.Clear();
+                                        hSetCand = RightWordCandidate.getInstance.createCandidate(context, false);
+                                        if (hSetCand.Count > 0)
+                                            tmpNext = hSetCand.ElementAt(0);
+                                        context.CopyForm(tmpContext);
+                                        context.NEXT = tmpNext;
 
-                                        context.PRE = tmpContext.PRE;
-                                        context.TOKEN = tmpContext.TOKEN;
-                                        context.NEXT = tmpContext.NEXT;
+                                        //kiểm tra words[i] bị sai có do ảnh hưởng của words[i+1] hay không
+                                        if (!RightWordCandidate.getInstance.checkRightWord(context))
+                                        {
+                                            context.CopyForm(tmpContext);
+                                            hSetCand.Clear();
+                                            hSetCand = RightWordCandidate.getInstance.createCandidate(context, false);
+                                            if (hSetCand.Count > 0)
+                                            {
+                                                //tự động thay thế bằng candidate tốt nhất
+                                                //tránh làm sai những gram phía sau
+                                                words[i] = hSetCand.ElementAt(0);
+                                                ////lấy ngữ cảnh gốc
+                                                //context.getContext(i, originWords);
+                                                if (FirstError_Context == null)
+                                                    FirstError_Context = context;
+                                                isError = true;
+                                                lstErrorRange.Add(context, (DocumentHandling.Instance.UnderlineRightWord(context.TOKEN, start, end)));
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
                                         hSetCand.Clear();
                                         hSetCand = RightWordCandidate.getInstance.createCandidate(context, false);
                                         if (hSetCand.Count > 0)
