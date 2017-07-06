@@ -106,6 +106,7 @@ namespace Spell
         }
         public void showCandidateInTaskPane()
         {
+            FindError.Instance.lstErrorRange[FindError.Instance.FirstError_Context].Select();
             while (FindError.Instance.lstErrorRange.Count > 0)
             {
                 IsOutOfError = false;
