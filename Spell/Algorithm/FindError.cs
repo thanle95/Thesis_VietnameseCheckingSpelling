@@ -102,7 +102,7 @@ namespace Spell.Algorithm
         }
         public void startFindError()
         {
-            showWrongWithSuggest(_typeFindError, _typeError);
+            Find(_typeFindError, _typeError);
         }
         public void showWrongWithSuggest_Typing(int typeError)
         {
@@ -121,7 +121,7 @@ namespace Spell.Algorithm
         /// <param name="typeFindError"></param>
         /// <param name="typeError"></param>
         /// <param name="isResume"></param>
-        public void showWrongWithSuggest(int typeFindError, int typeError)
+        public void Find(int typeFindError, int typeError)
         {
             try
             {
@@ -170,8 +170,8 @@ namespace Spell.Algorithm
                 {
                     for (; ISentence <= curSentences.Count; ISentence++)
                     {
-                        words = curSentences[ISentence].Text.TrimEnd().Split(' ');
-                        originWords = curSentences[ISentence].Text.TrimEnd().Split(' ');
+                        words = curSentences[ISentence].Text.TrimEnd().ToLower().Split(' ');
+                        originWords = curSentences[ISentence].Text.TrimEnd().ToLower().Split(' ');
                         start = curSentences[ISentence].Start;
                         end = curSentences[ISentence].End;
                         range = Globals.ThisAddIn.Application.ActiveDocument.Range(start, end);

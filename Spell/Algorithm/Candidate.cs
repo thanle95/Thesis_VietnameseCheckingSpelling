@@ -753,9 +753,9 @@ namespace Spell.Algorithm
                 if (key.Contains(Ngram.Instance.START_STRING) || key.Contains(Ngram.Instance.END_STRING))
                     continue;
                 string[] word = key.Split(' ');
-                if (word[0].Equals(context.PRE) && word[1].Length > 0)
+                if (!word[1].Equals(context.TOKEN) && word[0].Equals(context.PRE) && word[1].Length > 0)
                     lstCandidate.Add(word[1]);
-                else if (word[1].Equals(context.NEXT) && word[0].Length > 0)
+                else if (!word[0].Equals(context.TOKEN) && word[1].Equals(context.NEXT) && word[0].Length > 0)
                     lstCandidate.Add(word[0]);
                 if (lstCandidate.Count > 50)
                     return lstCandidate;

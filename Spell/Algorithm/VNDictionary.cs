@@ -103,7 +103,7 @@ namespace Spell.Algorithm
             {
                 //duyệt qua tất cả trường hợp, với value là token
                 foreach (KeyValuePair<string, List<string>> pair in CompoundWordVn.Instance.compoundWordVnDict)
-                    if (pair.Value.Contains(context.NEXT) && Candidate.getInstance.IsLikeLy(context.TOKEN, pair.Key))
+                    if (!pair.Key.Equals(context.TOKEN) && pair.Value.Contains(context.NEXT) && Candidate.getInstance.IsLikeLy(context.TOKEN, pair.Key))
                         hSetResult.Add(pair.Key);
             }
             return hSetResult;
@@ -122,7 +122,7 @@ namespace Spell.Algorithm
                 {
                     string[] iArr = i.Trim().Split(' ');
                     //từ ghép có 2 âm tiết dạng: token iArr[0]
-                    if (iArr.Length == 1 && iArr[0].Length > 0 && Candidate.getInstance.IsLikeLy(context.TOKEN, iArr[0]))
+                    if (!iArr[0].Equals(context.TOKEN) && iArr.Length == 1 && iArr[0].Length > 0 && Candidate.getInstance.IsLikeLy(context.TOKEN, iArr[0]))
                         hSetResult.Add(iArr[0]);
                 }
             return hSetResult;
@@ -141,7 +141,7 @@ namespace Spell.Algorithm
                 {
                     string[] iArr = i.Trim().Split(' ');
                     //từ ghép có 3 âm tiết dạng: w_2 w_1 iArr[1]
-                    if (iArr.Length == 2
+                    if (!iArr[1].Equals(context.TOKEN) && iArr.Length == 2
                         && iArr[0].Equals(context.PRE.Trim())
                         && iArr[1].Length > 0
                         && Candidate.getInstance.IsLikeLy(context.TOKEN, iArr[1]))
@@ -163,7 +163,7 @@ namespace Spell.Algorithm
                 {
                     string[] iArr = i.Trim().Split(' ');
                     //từ ghép có 3 âm tiết dạng: w_1 iArr[0] _w_1
-                    if (iArr.Length == 2 && iArr[1].Equals(context.NEXT.Trim()) && iArr[0].Length > 0 && Candidate.getInstance.IsLikeLy(context.TOKEN, iArr[0]))
+                    if (!iArr[0].Equals(context.TOKEN) && iArr.Length == 2 && iArr[1].Equals(context.NEXT.Trim()) && iArr[0].Length > 0 && Candidate.getInstance.IsLikeLy(context.TOKEN, iArr[0]))
                         hSetResult.Add(iArr[0]);
                 }
             return hSetResult;
@@ -183,7 +183,7 @@ namespace Spell.Algorithm
                     {
                         string[] iArr = i.Trim().Split(' ');
                         //từ ghép có 3 âm tiết dạng: key next nextnexxt
-                        if (iArr.Length == 2 && iArr[0].Equals(context.NEXT.Trim()) && iArr[1].Equals(context.NEXTNEXT.Trim()) && Candidate.getInstance.IsLikeLy(context.TOKEN, pair.Key))
+                        if (!pair.Key.Equals(context.TOKEN) && iArr.Length == 2 && iArr[0].Equals(context.NEXT.Trim()) && iArr[1].Equals(context.NEXTNEXT.Trim()) && Candidate.getInstance.IsLikeLy(context.TOKEN, pair.Key))
                             hSetResult.Add(pair.Key);
                     }
             return hSetResult;
