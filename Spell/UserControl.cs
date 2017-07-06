@@ -181,21 +181,22 @@ namespace Spell
         {
             int startIndex = 0;
             int endIndex = 0;
+            foreach (var item in FindError.Instance.lstErrorRange)
+            {
+                if (item.Value.Text.Trim().ToLower().Equals(lblWrong.Text.ToLower()))
+                {
+                    startIndex = item.Value.Start;
+                    endIndex = item.Value.End;
+                    FindError.Instance.lstErrorRange.Remove(item.Key);
+                    startIndex = item.Value.Start;
+                    endIndex = item.Value.End;
 
-            //foreach (Word.Range range in FindError.Instance.lstErrorRange.Values)
-            //    if (range.Text.Trim().ToLower().Equals(lblWrong.Text.ToLower()))
-            //    {
-            //        startIndex = range.Start;
-            //        endIndex = range.End;
-            var item = FindError.Instance.lstErrorRange.First();
-            //var item = FindError.Instance.lstErrorRange.First(kvp => kvp.Value == range);
-            FindError.Instance.lstErrorRange.Remove(item.Key);
-            startIndex = item.Value.Start;
-            endIndex = item.Value.End;
-            //    break;
-            //}
+                    DocumentHandling.Instance.RemoveUnderline_Mistake(item.Value.Text, startIndex, endIndex);
+                    break;
+                }
 
-            DocumentHandling.Instance.RemoveUnderline_Mistake(item.Value.Text, startIndex, endIndex);
+             
+            }
             if (FindError.Instance.lstErrorRange.Count == 0)
             {
                 //MessageBox.Show(SysMessage.Instance.No_error);
@@ -222,6 +223,10 @@ namespace Spell
             showCandidateInTaskPane(words, sentences);
         }
         private void btnChange_Click(object sender, EventArgs e)
+        {
+            change(lblWrong.Text.ToLower(), lstbCandidate.SelectedItem.ToString(), false);
+        }
+        private void lstbCandidate_MouseDoubleClick(object sender, MouseEventArgs e)
         {
             change(lblWrong.Text.ToLower(), lstbCandidate.SelectedItem.ToString(), false);
         }
@@ -504,7 +509,7 @@ namespace Spell
                 //scroll gridlog đến lỗi cuối cùng
                 scrollGridLog();
             });
-            
+
         }
         private void scrollGridLog()
         {
@@ -611,7 +616,7 @@ namespace Spell
             });
         }
 
-
+       
 
         private void changeUI_ShowMoreInfo()
         {

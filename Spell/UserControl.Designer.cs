@@ -98,6 +98,7 @@
             this.lstbCandidate.Size = new System.Drawing.Size(285, 100);
             this.lstbCandidate.TabIndex = 4;
             this.lstbCandidate.KeyDown += new System.Windows.Forms.KeyEventHandler(this.lstbCandidate_KeyDown);
+            this.lstbCandidate.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.lstbCandidate_MouseDoubleClick);
             // 
             // btnChange
             // 
