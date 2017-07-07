@@ -324,13 +324,15 @@ namespace Spell
             typeError = dropTypeError.SelectedItemIndex;
             FindError.Instance.createValue(typeFindError, typeError, 1);
             FindError.Instance.Clear();
-           
-            btnShowTaskpane.Enabled = false;
-            btnDeleteFormat.Enabled = false;
-            btnShowTaskpane.Label = "Sửa tất cả";
-            btnShowTaskpane.ScreenTip = "Hiện Task Pane để sửa tất cả lỗi có trong văn bản bằng gợi ý tốt nhất được chọn";
-            btnShowTaskpane.Image = Properties.Resources.change_all;
 
+            btnDeleteFormat.Enabled = false;
+            btnShowTaskpane.Enabled = false;
+            if (!btnShowTaskpane.Label.Equals("Sửa tất cả"))
+            {
+                btnShowTaskpane.Label = "Sửa tất cả";
+                btnShowTaskpane.ScreenTip = "Hiện Task Pane để sửa tất cả lỗi có trong văn bản bằng gợi ý tốt nhất được chọn";
+                btnShowTaskpane.Image = Properties.Resources.change_all;
+            }
             dropCorpus.Enabled = false;
             dropTypeError.Enabled = false;
             dropTypeFindError.Enabled = false;

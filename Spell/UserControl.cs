@@ -37,7 +37,7 @@ namespace Spell
             }
         }
         private bool IsPause { get; set; }
-        private int Index { get; set; }
+        //private int Index { get; set; }
         private int TotalError { get; set; }
         public void Start(bool isFixAll)
         {
@@ -183,7 +183,6 @@ namespace Spell
             int startIndex = 0;
             int endIndex = 0;
             foreach (var item in FindError.Instance.lstErrorRange)
-            {
                 if (item.Value.Text.Trim().ToLower().Equals(lblWrong.Text.ToLower()))
                 {
                     startIndex = item.Value.Start;
@@ -195,22 +194,7 @@ namespace Spell
                     DocumentHandling.Instance.RemoveUnderline_Mistake(item.Value.Text, startIndex, endIndex);
                     break;
                 }
-
-             
-            }
-            if (FindError.Instance.lstErrorRange.Count == 0)
-            {
-                //MessageBox.Show(SysMessage.Instance.No_error);
-                this.Visible = false;
-                return;
-            }
-
-            //
-            //sửa lỗi tiếp theo
-            //
-            FindError.Instance.FirstError_Context = FindError.Instance.lstErrorRange.First().Key;
-            FindError.Instance.lstErrorRange[FindError.Instance.FirstError_Context].Select();
-            showCandidateInTaskPane();
+            CheckOutOfError_ShowCandidateNextTime();
         }
 
         private void btnAdd_Click(object sender, EventArgs e)
@@ -285,15 +269,21 @@ namespace Spell
             }
             DocumentHandling.Instance.RemoveUnderline_Mistake(curRangeTextShowInTaskPane.Text, startIndex, endIndex);
             curRangeTextShowInTaskPane.Select();
-            Index++;
+            //Index++;
             //UpdateProgressBar();
-            if (Index == TotalError)
+            CheckOutOfError_ShowCandidateNextTime();
+        }
+        private void CheckOutOfError_ShowCandidateNextTime()
+        {
+            if (/*Index == TotalError || */FindError.Instance.CountError == 0)
             {
                 IsOutOfError = true;
                 Thread.Sleep(500);
                 //MessageBox.Show(SysMessage.Instance.No_error);
                 changeUI_OutOfError();
-                Index = 0;
+                //Index = 0;
+                if (gridLog.RowCount == 0)
+                    Globals.ThisAddIn.CustomTaskPanes[0].Visible = false;
                 return;
             }
             //
@@ -303,6 +293,7 @@ namespace Spell
             FindError.Instance.lstErrorRange[FindError.Instance.FirstError_Context].Select();
             if (!IsFixAll)
                 showCandidateInTaskPane();
+          
         }
         private void btnChange_KeyDown(object sender, KeyEventArgs e)
         {
@@ -587,12 +578,12 @@ namespace Spell
             showMoreInfoContext();
         }
 
-        private void gridLog_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
-        {
-            var cell = gridLog.Rows[e.RowIndex].Cells[e.ColumnIndex];
-            cell.ToolTipText = cell.Value.ToString();
+        //private void gridLog_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        //{
+        //    var cell = gridLog.Rows[e.RowIndex].Cells[e.ColumnIndex];
+        //    cell.ToolTipText = cell.Value.ToString();
 
-        }
+        //}
         private void gridLog_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
             showMoreInfoContext();
@@ -617,7 +608,7 @@ namespace Spell
             });
         }
 
-       
+
 
         private void changeUI_ShowMoreInfo()
         {
