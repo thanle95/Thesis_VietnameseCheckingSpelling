@@ -58,19 +58,16 @@ namespace Spell
             //Kiểm lỗi
             if (btnCheckError.Label.Equals("Kiểm lỗi"))
             {
-                //dùng để phục hồi văn bản
-                int count = Globals.ThisAddIn.Application.ActiveDocument.Characters.Count;
-                rangeRestore = Globals.ThisAddIn.Application.ActiveDocument.Range(0, count);
-                textRestore.Append(Globals.ThisAddIn.Application.ActiveDocument.Range(0, count).Text);
-                btnRestore.Enabled = false;
-
                 threadFindError = new Thread(threadStartFindError);
                 threadFindError.Priority = ThreadPriority.Highest;
                 threadFindError.Start();
+
                 btnCheckError.Label = "Dừng kiểm lỗi";
                 btnCheckError.ScreenTip = "Dừng kiểm lỗi";
                 btnCheckError.SuperTip = "Bạn sẽ sửa lỗi sau khi dừng kiểm lỗi";
                 btnCheckError.Image = global::Spell.Properties.Resources.stop;
+
+                //Globals.ThisAddIn.Application.StatusBar = "Đang lưu trạng thái văn bản";
             }
             //Dừng kiểm lỗi
             else
@@ -88,6 +85,14 @@ namespace Spell
             }
             myCustomTaskPane.Visible = false;
         }
+        private void PrepareRestore()
+        {
+            //dùng để phục hồi văn bản
+            int count = Globals.ThisAddIn.Application.ActiveDocument.Characters.Count;
+            rangeRestore = Globals.ThisAddIn.Application.ActiveDocument.Range(0, count);
+            textRestore.Append(Globals.ThisAddIn.Application.ActiveDocument.Range(0, count).Text);
+            btnRestore.Enabled = false;
+        }
         private void check()
         {
             PrepareForStart();
@@ -96,6 +101,9 @@ namespace Spell
 
             //stopwatch.Start();
             FindError.Instance.startFindError();
+            ThreadStart tsPrepareRestore = new ThreadStart(PrepareRestore);
+            Thread tPrepareRestore = new Thread(tsPrepareRestore);
+            tPrepareRestore.Start();
             //stopwatch.Stop();
             //thiết lập kiểm lỗi lần sau
             dropCorpus.Enabled = true;
@@ -206,7 +214,7 @@ namespace Spell
             {
                 DocumentHandling.Instance.RemoveUnderline_AllMistake();
                 FindError.Instance.Clear();
-                UserControl.Instance.IsFixAll = false;
+                //UserControl.Instance.IsFixAll = false;
             }
                 myCustomTaskPane.Visible = false;
                 btnDeleteFormat.Enabled = false;

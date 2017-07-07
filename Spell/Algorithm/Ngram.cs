@@ -530,19 +530,19 @@ namespace Spell.Algorithm
         /// và muốn bỏ qua lỗi đó cho những lần sau
         /// </summary>
         /// <param name="X">từ cần thêm vào từ điển</param>
-        public bool addToDictionary(string X, string x1, string x2, Position pos)
-        {
-            switch (pos)
-            {
-                case Position.X:
-                case Position.xX:
-                case Position.Xx:
-                case Position.xxX:
-                case Position.xXx:
-                case Position.Xxx:
-                    break;
-            }
-            return false;
-        }
+        //public bool addToDictionary(string X, string x1, string x2, Position pos)
+        //{
+        //    switch (pos)
+        //    {
+        //        case Position.X:
+        //        case Position.xX:
+        //        case Position.Xx:
+        //        case Position.xxX:
+        //        case Position.xXx:
+        //        case Position.Xxx:
+        //            break;
+        //    }
+        //    return false;
+        //}
     }
 }

@@ -11,20 +11,19 @@ using System.Collections.Generic;
 namespace Spell
 {
     //phục vụ cho việc thêm vào từ điển
-    public enum Position { xxX, xXx, Xxx, xX, Xx, X };
+    //public enum Position { xxX, xXx, Xxx, xX, Xx, X };
 
     public partial class UserControl : System.Windows.Forms.UserControl
     {
         private Word.Range curRangeTextShowInTaskPane;
         private string _oldString = "", _newString = "";
-        public bool IsFixAll { get; set; }
-        public int gridLogCount { get; set; }
-        private static UserControl instance = new UserControl();
-        private const string ERROR_SPACE = "\"Lỗi dư khoảng trắng\"";
-        private int SELECTED_ERROR { get; set; }
-        private bool IsOutOfError { get; set; }
-        private Word.Range CurRannge = null;
-        private string Error { get; set; }
+        private bool _IsFixAll { get; set; }
+        private static UserControl _instance = new UserControl();
+        private const string _ERROR_SPACE = "\"Lỗi dư khoảng trắng\"";
+        private int _SelectedError { get; set; }
+        private bool _IsOutOfError { get; set; }
+        private Word.Range _curRange = null;
+        private string _Error { get; set; }
         private UserControl()
         {
             InitializeComponent();
@@ -33,39 +32,10 @@ namespace Spell
         {
             get
             {
-                return instance;
+                return _instance;
             }
         }
-        private bool IsPause { get; set; }
-        //private int Index { get; set; }
-        private int TotalError { get; set; }
-        public void Start(bool isFixAll)
-        {
-            if (TotalError == 0)
-                TotalError = FindError.Instance.lstErrorRange.Count;
-            IsFixAll = isFixAll;
-
-            if (IsFixAll)
-            {
-                changeUI_IsAutoFix();
-                IsPause = false;
-            }
-            else {
-                changeUI_IsSequenceFix();
-                IsPause = true;
-            }
-
-        }
-        public void Clear()
-        {
-            gridLogCount = 0;
-            TotalError = 0;
-            SynchronizedInvoke(gridLog, delegate ()
-            {
-                gridLog.Rows.Clear();
-                gridLog.Size = new System.Drawing.Size(282, 42);
-            });
-        }
+        private bool _IsPause { get; set; }
         public static string WRONG_TEXT
         {
             get
@@ -73,6 +43,43 @@ namespace Spell
                 return "\"Từ sai\"";
             }
         }
+        //private int Index { get; set; }
+        //private int _TotalError { get; set; }
+
+        /// <summary>
+        /// Khởi tạo giao diện UserControl
+        /// </summary>
+        /// <param name="isFixAll"></param>
+        public void Start(bool isFixAll)
+        {
+            //if (_TotalError == 0)
+            //    _TotalError = FindError.Instance.lstErrorRange.Count;
+
+            _IsFixAll = isFixAll;
+            if (_IsFixAll)
+            {
+                changeUI_IsAutoFix();
+                _IsPause = false;
+            }
+            else {
+                changeUI_IsManuallyFix();
+                _IsPause = true;
+            }
+
+        }
+
+        /// <summary>
+        /// Xóa gridlog
+        /// </summary>
+        public void Clear()
+        {
+            SynchronizedInvoke(gridLog, delegate ()
+            {
+                gridLog.Rows.Clear();
+                gridLog.Size = new System.Drawing.Size(282, 42);
+            });
+        }
+
         /// <summary>
         /// hiện gợi ý sữa lỗi lên taskpane, tự duyệt ngữ cảnh
         /// </summary>
@@ -109,16 +116,16 @@ namespace Spell
             FindError.Instance.lstErrorRange[FindError.Instance.FirstError_Context].Select();
             while (FindError.Instance.lstErrorRange.Count > 0)
             {
-                IsOutOfError = false;
+                _IsOutOfError = false;
                 FixError fixError = new FixError();
 
                 fixError.getCandidatesWithContext(FindError.Instance.FirstError_Context, FindError.Instance.lstErrorRange);
-                CurRannge = FindError.Instance.lstErrorRange[FindError.Instance.FirstError_Context];
-                Error = fixError.Token;
+                _curRange = FindError.Instance.lstErrorRange[FindError.Instance.FirstError_Context];
+                _Error = fixError.Token;
                 //MessageBox.Show(string.Format("\"{0}\"-\"{1}\"", range.Text, fixError.Token));
                 _oldString = FindError.Instance.ToString().Trim();
                 _newString = fixError.ToString().Trim();
-                if (!IsPause)
+                if (!_IsPause)
                 {
                     change(fixError.Token.ToLower(), fixError.hSetCandidate.ElementAt(0), false);
                     //CurRannge.Select();
@@ -197,11 +204,11 @@ namespace Spell
             CheckOutOfError_ShowCandidateNextTime();
         }
 
-        private void btnAdd_Click(object sender, EventArgs e)
-        {
-            ignore();
-            Ngram.Instance.addToDictionary(lblWrong.Text, null, null, Position.X);
-        }
+        //private void btnAdd_Click(object sender, EventArgs e)
+        //{
+        //    ignore();
+        //    Ngram.Instance.addToDictionary(lblWrong.Text, null, null, Position.X);
+        //}
 
         public void startFixError(Word.Words words, Word.Sentences sentences)
         {
@@ -242,7 +249,7 @@ namespace Spell
             addRowGridLog();
             int startIndex = 0;
             int endIndex = 0;
-            if (lblWrong.Text.Equals(ERROR_SPACE))
+            if (lblWrong.Text.Equals(_ERROR_SPACE))
                 wrongText = " ";
             bool isMajuscule = false;
             foreach (Word.Range range in FindError.Instance.lstErrorRange.Values)
@@ -262,7 +269,7 @@ namespace Spell
             else curRangeTextShowInTaskPane.Text = fixText;
 
             endIndex = startIndex + curRangeTextShowInTaskPane.Text.Length;
-            if (!IsFixAll)
+            if (!_IsFixAll)
             {
                 lblWrong.Text = "\"Từ sai\"";
                 lstbCandidate.Items.Clear();
@@ -277,7 +284,7 @@ namespace Spell
         {
             if (/*Index == TotalError || */FindError.Instance.CountError == 0)
             {
-                IsOutOfError = true;
+                _IsOutOfError = true;
                 Thread.Sleep(500);
                 //MessageBox.Show(SysMessage.Instance.No_error);
                 changeUI_OutOfError();
@@ -291,9 +298,9 @@ namespace Spell
             //
             FindError.Instance.FirstError_Context = FindError.Instance.lstErrorRange.First().Key;
             FindError.Instance.lstErrorRange[FindError.Instance.FirstError_Context].Select();
-            if (!IsFixAll)
+            if (!_IsFixAll)
                 showCandidateInTaskPane();
-          
+
         }
         private void btnChange_KeyDown(object sender, KeyEventArgs e)
         {
@@ -318,7 +325,7 @@ namespace Spell
 
             });
             DataGridViewRow row = gridLog.CurrentRow;
-            SELECTED_ERROR = row.Index;
+            _SelectedError = row.Index;
             SynchronizedInvoke(lblWrongContext, delegate ()
             {
                 lblWrongContext.Text = row.Cells[1].Value.ToString();
@@ -358,11 +365,11 @@ namespace Spell
             {
                 bool isInitial = true;
                 int distance;
-                int rowIndex = SELECTED_ERROR;
+                int rowIndex = _SelectedError;
                 DataGridViewRow rowNext = null;
                 foreach (DataGridViewRow row in gridLog.Rows)
                 {
-                    if (row.Index != SELECTED_ERROR)
+                    if (row.Index != _SelectedError)
                     {
                         if (isInitial)
                         {
@@ -413,7 +420,7 @@ namespace Spell
             SynchronizedInvoke(pnlShowMore, delegate () { pnlShowMore.Visible = false; });
         }
         //Sửa lỗi tuần tự
-        private void changeUI_IsSequenceFix()
+        private void changeUI_IsManuallyFix()
         {
             SynchronizedInvoke(pnlAutoFix, delegate ()
             {
@@ -439,9 +446,15 @@ namespace Spell
             //SynchronizedInvoke(pnlProgressBar, delegate () { pnlProgressBar.Visible = false; });
             SynchronizedInvoke(pnlAutoFix, delegate ()
             {
+                int delta = pnlAutoFix.Location.Y - 5;
                 for (int i = pnlAutoFix.Location.Y; i > 5; i--)
                 {
                     pnlAutoFix.Location = new System.Drawing.Point(14, i);
+                    if (pnlAutoFix.Location.Y < delta * 2 / 7)
+                        i--;
+                    else if (pnlAutoFix.Location.Y < delta * 3 / 7 || pnlAutoFix.Location.Y > delta * 4 / 7)
+                        i = i - 2;
+                    else i = i - 3;
                     Thread.Sleep(1);
                 }
             });
@@ -480,23 +493,28 @@ namespace Spell
             SynchronizedInvoke(gridLog, delegate ()
             {
                 gridLog.Visible = true;
-                if (IsFixAll)
+                if (_IsFixAll)
                 {
                     if (gridLog.Size.Height <= 310)
                         gridLog.Size = new System.Drawing.Size(gridLog.Size.Width, gridLog.Size.Height + 20);
                 }
                 else if (gridLog.Size.Height <= 250)
                 {
-
+                    int delta = gridLog.Location.Y;
                     gridLog.Size = new System.Drawing.Size(gridLog.Size.Width, gridLog.Size.Height + 20);
                     for (int i = gridLog.Location.Y; i >= 0; i--)
                     {
                         gridLog.Location = new System.Drawing.Point(0, i);
+                        if (pnlAutoFix.Location.Y < delta * 2 / 7)
+                            i--;
+                        else if (pnlAutoFix.Location.Y < delta * 4 / 7)
+                            i = i - 2;
+                        else i = i - 3;
                         Thread.Sleep(5);
                     }
                     gridLog.Location = new System.Drawing.Point(0, 0);
                 }
-                gridLog.Rows.Add(++gridLogCount, _oldString, _newString);
+                gridLog.Rows.Add(gridLog.RowCount + 1, _oldString, _newString);
                 //
                 //scroll gridlog đến lỗi cuối cùng
                 scrollGridLog();
@@ -520,7 +538,7 @@ namespace Spell
             {
                 if (lblPauseResumeAutoFix.Text.Contains("dừng"))
                 {
-                    IsPause = true;
+                    _IsPause = true;
                     lblPauseResumeAutoFix.Text = "Tiếp tục";
                     SynchronizedInvoke(btnPauseResumeAutoFix, delegate ()
                     {
@@ -542,7 +560,7 @@ namespace Spell
                         }
                     });
 
-                    IsPause = false;
+                    _IsPause = false;
                     lblPauseResumeAutoFix.Text = "Tạm dừng";
                     SynchronizedInvoke(btnPauseResumeAutoFix, delegate ()
                     {
@@ -561,11 +579,11 @@ namespace Spell
 
         private void btnResume_Click(object sender, EventArgs e)
         {
-            string text = CurRannge.Text;
-            if (CurRannge.Text != null)
+            string text = _curRange.Text;
+            if (_curRange.Text != null)
             {
-                if (CurRannge.Text.Equals(Error))
-                    CurRannge.Select();
+                if (_curRange.Text.Equals(_Error))
+                    _curRange.Select();
             }
             else {
                 ignore();
@@ -598,11 +616,19 @@ namespace Spell
             {
                 gridLog.Visible = true;
                 int min = 0;
-                if (IsPause && IsFixAll)
+                if (_IsPause && _IsFixAll)
                     min = 90;
+                int delta = gridLog.Location.Y - min;
                 for (int i = gridLog.Location.Y; i >= min; i--)
                 {
                     gridLog.Location = new System.Drawing.Point(0, i);
+                    if (pnlAutoFix.Location.Y < delta * 2 / 7)
+                        ;
+                    if (pnlAutoFix.Location.Y < delta * 3 / 7)
+                        i--;
+                    else if (pnlAutoFix.Location.Y < delta * 4 / 7)
+                        i = i - 2;
+                    else i = i - 3;
                     Thread.Sleep(5);
                 }
             });
@@ -613,12 +639,12 @@ namespace Spell
         private void changeUI_ShowMoreInfo()
         {
             int yGridLog, yShowMore;
-            if (IsOutOfError)
+            if (_IsOutOfError)
             {
                 yGridLog = 60;
                 yShowMore = 0;
             }
-            else if (IsFixAll)
+            else if (_IsFixAll)
             {
                 yGridLog = 150;
                 yShowMore = 90;
@@ -630,10 +656,15 @@ namespace Spell
             }
             SynchronizedInvoke(gridLog, delegate ()
             {
-
+                int delta = yGridLog - gridLog.Location.Y;
                 for (int i = gridLog.Location.Y; i <= yGridLog; i++)
                 {
                     gridLog.Location = new System.Drawing.Point(0, i);
+                    if (pnlAutoFix.Location.Y > delta * 5 / 7)
+                        i++;
+                    else if (pnlAutoFix.Location.Y > delta * 3 / 7)
+                        i = i + 2;
+                    else i = i + 3;
                     Thread.Sleep(5);
                 }
             });
