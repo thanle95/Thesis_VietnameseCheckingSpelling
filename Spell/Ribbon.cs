@@ -74,21 +74,21 @@ namespace Spell
             }
             //Dừng kiểm lỗi
             else
-            {
-                FindError.Instance.StopFindError = true;
-                if (FindError.Instance.CountError > 0)
-                    btnShowTaskpane.Enabled = true;
-                btnCheckError.Label = "Kiểm lỗi";
-                btnCheckError.ScreenTip = "Kiểm lỗi";
-                btnCheckError.SuperTip = "Bôi đen vùng văn bản trước khi nhấn nút để kiểm tra vùng văn bản đó\n\nHoặc để con " +
-        "trỏ tại bất cứ đâu trong văn bản, hệ thống sẽ kiểm lỗi từ đó trở về sau";
-                btnCheckError.Image = global::Spell.Properties.Resources.check;
-                UserControl.Instance.Clear();
-
-            }
+                stopFindError();
 
         }
+        private void stopFindError()
+        {
+            FindError.Instance.StopFindError = true;
+            if (FindError.Instance.CountError > 0)
+                btnShowTaskpane.Enabled = true;
+            btnCheckError.Label = "Kiểm lỗi";
+            btnCheckError.ScreenTip = "Kiểm lỗi";
+            btnCheckError.SuperTip = "Bôi đen vùng văn bản trước khi nhấn nút để kiểm tra vùng văn bản đó\n\nHoặc để con " +
+    "trỏ tại bất cứ đâu trong văn bản, hệ thống sẽ kiểm lỗi từ đó trở về sau";
+            btnCheckError.Image = global::Spell.Properties.Resources.check;
 
+        }
         private void PrepareRestore()
         {
             //dùng để phục hồi văn bản
@@ -128,7 +128,7 @@ namespace Spell
             }
             else
                 btnDeleteFormat.Enabled = false;
-
+            stopFindError();
         }
         private void showSuggest(int count)
         {
