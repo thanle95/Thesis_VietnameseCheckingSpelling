@@ -446,16 +446,17 @@ namespace Spell
             //SynchronizedInvoke(pnlProgressBar, delegate () { pnlProgressBar.Visible = false; });
             SynchronizedInvoke(pnlAutoFix, delegate ()
             {
-                int delta = pnlAutoFix.Location.Y - 5;
-                for (int i = pnlAutoFix.Location.Y; i > 5; i--)
+                int min = 5;
+                int delta = pnlAutoFix.Location.Y - min;
+                for (int i = pnlAutoFix.Location.Y; i > min; i--)
                 {
                     pnlAutoFix.Location = new System.Drawing.Point(14, i);
-                    if (pnlAutoFix.Location.Y < delta * 2 / 7)
+                    if (pnlAutoFix.Location.Y < (delta / 7 + min))
+                        ;
+                    if (pnlAutoFix.Location.Y < (delta * 3 / 7 + min))
                         i--;
-                    else if (pnlAutoFix.Location.Y < delta * 3 / 7 || pnlAutoFix.Location.Y > delta * 4 / 7)
-                        i = i - 2;
-                    else i = i - 3;
-                    Thread.Sleep(1);
+                    else i = i - 2;
+                    Thread.Sleep(7);
                 }
             });
             SynchronizedInvoke(gridLog, delegate ()
@@ -505,11 +506,11 @@ namespace Spell
                     for (int i = gridLog.Location.Y; i >= 0; i--)
                     {
                         gridLog.Location = new System.Drawing.Point(0, i);
-                        if (pnlAutoFix.Location.Y < delta * 2 / 7)
+                        if (pnlAutoFix.Location.Y < (delta / 7))
+                            ;
+                        if (pnlAutoFix.Location.Y < (delta * 3 / 7))
                             i--;
-                        else if (pnlAutoFix.Location.Y < delta * 4 / 7)
-                            i = i - 2;
-                        else i = i - 3;
+                        else i = i - 2;
                         Thread.Sleep(5);
                     }
                     gridLog.Location = new System.Drawing.Point(0, 0);
@@ -618,17 +619,9 @@ namespace Spell
                 int min = 0;
                 if (_IsPause && _IsFixAll)
                     min = 90;
-                int delta = gridLog.Location.Y - min;
                 for (int i = gridLog.Location.Y; i >= min; i--)
                 {
                     gridLog.Location = new System.Drawing.Point(0, i);
-                    if (pnlAutoFix.Location.Y < delta * 2 / 7)
-                        ;
-                    if (pnlAutoFix.Location.Y < delta * 3 / 7)
-                        i--;
-                    else if (pnlAutoFix.Location.Y < delta * 4 / 7)
-                        i = i - 2;
-                    else i = i - 3;
                     Thread.Sleep(5);
                 }
             });
@@ -660,11 +653,6 @@ namespace Spell
                 for (int i = gridLog.Location.Y; i <= yGridLog; i++)
                 {
                     gridLog.Location = new System.Drawing.Point(0, i);
-                    if (pnlAutoFix.Location.Y > delta * 5 / 7)
-                        i++;
-                    else if (pnlAutoFix.Location.Y > delta * 3 / 7)
-                        i = i + 2;
-                    else i = i + 3;
                     Thread.Sleep(5);
                 }
             });
