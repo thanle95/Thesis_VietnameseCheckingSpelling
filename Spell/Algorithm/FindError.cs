@@ -31,9 +31,21 @@ namespace Spell.Algorithm
         private bool _isResume = false;
         private bool isNoChange = false;
         public int ISentence { get; set; }
+        private int Start { get; set; }
+        private int End { get; set; }
+        private string iWord { get; set; }
+        private string iWordReplaced { get; set; }
+        private string[] words { get; set; }
+        private string[] originWords { get; set; }
+        private int length { get; set; }
+        private bool isError { get; set; }
+        private Context tmpContext { get; set; }
+        private HashSet<string> hSetCand { get; set; }
+        private Word.Range range { get; set; }
+        private Regex r = new Regex(StringConstant.Instance.patternCheckSpecialChar);
         public override string ToString()
         {
-            if(SelectedError_Context!= null)
+            if (SelectedError_Context != null)
             {
                 return SelectedError_Context.ToString();
             }
@@ -51,6 +63,8 @@ namespace Spell.Algorithm
         {
             StopFindError = false;
             lstErrorRange = new Dictionary<Context, Word.Range>();
+            tmpContext = new Context();
+            hSetCand = new HashSet<string>();
         }
         public static FindError Instance
         {
@@ -62,17 +76,20 @@ namespace Spell.Algorithm
         public void Clear()
         {
             StopFindError = false;
-            lstErrorRange.Clear();
+            if (lstErrorRange.Count > 0)
+                lstErrorRange.Clear();
             FirstError_Context = null;
         }
         public void createValue(int typeFindError, int typeError, int iSentence)
         {
-            lstErrorRange.Clear();
+            if (lstErrorRange.Count > 0)
+                lstErrorRange.Clear();
             FirstError_Context = null;
             _typeFindError = typeFindError;
             _typeError = typeError;
             ISentence = iSentence;
             _isResume = false;
+            StopFindError = false;
         }
         public void setResume()
         {
@@ -104,7 +121,7 @@ namespace Spell.Algorithm
         {
             Find(_typeFindError, _typeError);
         }
-        public void showWrongWithSuggest_Typing(int typeError)
+        public void Find_Typing(int typeError)
         {
             //Lấy danh sách câu đang được chọn
             curSentences = Globals.ThisAddIn.Application.Selection.Sentences;
@@ -155,16 +172,8 @@ namespace Spell.Algorithm
                 //    curSentences = Globals.ThisAddIn.Application.ActiveDocument.Sentences;
                 //    isSelected = true;
                 //}
-                int start = 0, end = 0;
-                string iWord = "";
-                string iWordReplaced = "";
-                string[] words;
-                string[] originWords;
-                int length;
-                bool isError = false;
-                Context tmpContext = new Context();
-                HashSet<string> hSetCand = new HashSet<string>();
-                Word.Range range = null;
+                isError = false;
+
                 //lấy toàn bộ danh sách các từ trong Active Document, để lấy được ngữ cảnh
                 while (true)
                 {
@@ -172,9 +181,9 @@ namespace Spell.Algorithm
                     {
                         words = curSentences[ISentence].Text.TrimEnd().Split(' ');
                         originWords = curSentences[ISentence].Text.TrimEnd().Split(' ');
-                        start = curSentences[ISentence].Start;
-                        end = curSentences[ISentence].End;
-                        range = Globals.ThisAddIn.Application.ActiveDocument.Range(start, end);
+                        Start = curSentences[ISentence].Start;
+                        End = curSentences[ISentence].End;
+                        range = Globals.ThisAddIn.Application.ActiveDocument.Range(Start, End);
                         if (typeFindError != IS_TYPING_TYPE && isSelected)
                             range.Select();
                         //số lượng các từ trong cụm
@@ -201,21 +210,21 @@ namespace Spell.Algorithm
                             tmpContext.TOKEN = iWord.Trim().ToLower();
                             if (tmpContext.TOKEN.Length < 1)
                             {
-                                start += iWord.Length + 1;
+                                Start += iWord.Length + 1;
                                 continue;
                             }
                             //Kiểm tra các kí tự đặc biệt, mail, số, tên riêng, viết tắt
-                            Regex r = new Regex(StringConstant.Instance.patternCheckSpecialChar);
+
                             Match m = r.Match(tmpContext.TOKEN);
                             if (m.Success)
                             {
-                                start += iWord.Length + 1;
+                                Start += iWord.Length + 1;
                                 continue;
                             }
                             //viết hoa giữa câu
                             if (char.IsUpper(iWord.Trim()[0]) && i != 0)
                             {
-                                start += iWord.Length + 1;
+                                Start += iWord.Length + 1;
                                 continue;
                             }
                             else
@@ -229,14 +238,14 @@ namespace Spell.Algorithm
                                     //nếu loại bỏ ký tự đặc biệt xong, độ dài của từ bằng 0, thì bắt đầu vòng lặp sau
                                     || iWordReplaced.Length == 0)
                                 {
-                                    start += words[i].Length + 1;
+                                    Start += words[i].Length + 1;
                                     continue;
                                 }
                                 if (words[i].Length != iWordReplaced.Length)
                                     context.TOKEN = iWordReplaced;
                                 if (!iWord.Contains("\r"))
-                                    start += iWord.Length - iWordReplaced.Length;
-                                end = start + iWordReplaced.Length;
+                                    Start += iWord.Length - iWordReplaced.Length;
+                                End = Start + iWordReplaced.Length;
 
                                 tmpContext.CopyForm(context);
 
@@ -271,7 +280,7 @@ namespace Spell.Algorithm
                                         if (FirstError_Context == null)
                                             FirstError_Context = context;
                                         isError = true;
-                                        lstErrorRange.Add(context, (DocumentHandling.Instance.UnderlineWrongWord(context.TOKEN, start, end)));
+                                        lstErrorRange.Add(context, (DocumentHandling.Instance.UnderlineWrongWord(context.TOKEN, Start, End)));
                                     }
                                 }//end if wrong word
 
@@ -308,7 +317,7 @@ namespace Spell.Algorithm
                                                 if (FirstError_Context == null)
                                                     FirstError_Context = context;
                                                 isError = true;
-                                                lstErrorRange.Add(context, (DocumentHandling.Instance.UnderlineRightWord(context.TOKEN, start, end)));
+                                                lstErrorRange.Add(context, (DocumentHandling.Instance.UnderlineRightWord(context.TOKEN, Start, End)));
                                             }
                                         }
                                     }
@@ -326,7 +335,7 @@ namespace Spell.Algorithm
                                             if (FirstError_Context == null)
                                                 FirstError_Context = context;
                                             isError = true;
-                                            lstErrorRange.Add(context, (DocumentHandling.Instance.UnderlineRightWord(context.TOKEN, start, end)));
+                                            lstErrorRange.Add(context, (DocumentHandling.Instance.UnderlineRightWord(context.TOKEN, Start, End)));
                                         }
                                     }
 
@@ -338,14 +347,14 @@ namespace Spell.Algorithm
                                         if (lstErrorRange.ContainsKey(context))
                                         {
                                             lstErrorRange.Remove(context);
-                                            DocumentHandling.Instance.RemoveUnderline_Mistake(context.TOKEN, start, end);
+                                            DocumentHandling.Instance.RemoveUnderline_Mistake(context.TOKEN, Start, End);
                                         }
                                     }
                                 }
 
 
                             }
-                            start += iWord.Length + 1;
+                            Start += iWord.Length + 1;
                         }//end for: duyệt từng từ trong câu
                     }//end for: duyệt từng câu
                     if (typeFindError == IS_TYPING_TYPE)

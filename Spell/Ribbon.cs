@@ -29,8 +29,10 @@ namespace Spell
 
         Thread threadFindError;
         ThreadStart threadStartFindError;
-        Word.Range rangeRestore = null; 
+        Word.Range rangeRestore = null;
         StringBuilder textRestore = new StringBuilder();
+        Stopwatch watch;
+        private bool isFirst = true;
         private void Ribbon1_Load(object sender, RibbonUIEventArgs e)
         {
             myCustomTaskPane = Globals.ThisAddIn.CustomTaskPanes.Add(UserControl.Instance, "Chính tả");
@@ -39,13 +41,13 @@ namespace Spell
             myCustomTaskPane.Width = 320;
             myCustomTaskPane.Height = 600;
             myCustomTaskPane.DockPosition = Office.MsoCTPDockPosition.msoCTPDockPositionRight;
+
             myCustomTaskPane.Width = 320;
             dropTypeFindError.SelectedItemIndex = WHOLE_DOCUMENT_SELECTION;
             typeFindError = dropTypeFindError.SelectedItemIndex;
-            //Ngram.Instance.runFirst();
-            //Bắt đầu từ câu đầu tiên
-
             threadStartFindError = new ThreadStart(check);
+
+
         }
 
         /// <summary>
@@ -54,7 +56,7 @@ namespace Spell
         /// <param name="e"></param>
         private void btnCheckError_Click(object sender, RibbonControlEventArgs e)
         {
-            
+
             //Kiểm lỗi
             if (btnCheckError.Label.Equals("Kiểm lỗi"))
             {
@@ -62,10 +64,14 @@ namespace Spell
                 threadFindError.Priority = ThreadPriority.Highest;
                 threadFindError.Start();
 
-                btnCheckError.Label = "Dừng kiểm lỗi";
-                btnCheckError.ScreenTip = "Dừng kiểm lỗi";
-                btnCheckError.SuperTip = "Bạn sẽ sửa lỗi sau khi dừng kiểm lỗi";
-                btnCheckError.Image = global::Spell.Properties.Resources.stop;
+                new Thread(delegate ()
+                {
+                    btnCheckError.Label = "Dừng kiểm lỗi";
+                    btnCheckError.ScreenTip = "Dừng kiểm lỗi";
+                    btnCheckError.SuperTip = "Bạn sẽ sửa lỗi sau khi dừng kiểm lỗi";
+                    btnCheckError.Image = global::Spell.Properties.Resources.stop;
+                }).Start();
+
 
                 //Globals.ThisAddIn.Application.StatusBar = "Đang lưu trạng thái văn bản";
             }
@@ -73,18 +79,19 @@ namespace Spell
             else
             {
                 FindError.Instance.StopFindError = true;
-                if(FindError.Instance.CountError > 0)
-                btnShowTaskpane.Enabled = true;
+                if (FindError.Instance.CountError > 0)
+                    btnShowTaskpane.Enabled = true;
                 btnCheckError.Label = "Kiểm lỗi";
                 btnCheckError.ScreenTip = "Kiểm lỗi";
                 btnCheckError.SuperTip = "Bôi đen vùng văn bản trước khi nhấn nút để kiểm tra vùng văn bản đó\n\nHoặc để con " +
         "trỏ tại bất cứ đâu trong văn bản, hệ thống sẽ kiểm lỗi từ đó trở về sau";
                 btnCheckError.Image = global::Spell.Properties.Resources.check;
                 UserControl.Instance.Clear();
-                
+
             }
-            myCustomTaskPane.Visible = false;
+
         }
+
         private void PrepareRestore()
         {
             //dùng để phục hồi văn bản
@@ -96,41 +103,34 @@ namespace Spell
         private void check()
         {
             PrepareForStart();
-          
+
             //Stopwatch stopwatch = new Stopwatch();
 
             //stopwatch.Start();
             FindError.Instance.startFindError();
-            ThreadStart tsPrepareRestore = new ThreadStart(PrepareRestore);
-            Thread tPrepareRestore = new Thread(tsPrepareRestore);
-            tPrepareRestore.Start();
+
             //stopwatch.Stop();
             //thiết lập kiểm lỗi lần sau
             dropCorpus.Enabled = true;
             dropTypeError.Enabled = true;
             dropTypeFindError.Enabled = true;
             btnShowTaskpane.Enabled = true;
-            btnCheckError.Label = "Kiểm lỗi";
-            btnCheckError.ScreenTip = "Kiểm lỗi";
-            btnCheckError.SuperTip = "Bôi đen vùng văn bản trước khi nhấn nút để kiểm tra vùng văn bản đó\n\nHoặc để con " +
-    "trỏ tại bất cứ đâu trong văn bản, hệ thống sẽ kiểm lỗi từ đó trở về sau";
-            btnCheckError.Image = global::Spell.Properties.Resources.check;
-            //
-            //-------------------------------
-            //
+            //        btnCheckError.Label = "Kiểm lỗi";
+            //        btnCheckError.ScreenTip = "Kiểm lỗi";
+            //        btnCheckError.SuperTip = "Bôi đen vùng văn bản trước khi nhấn nút để kiểm tra vùng văn bản đó\n\nHoặc để con " +
+            //"trỏ tại bất cứ đâu trong văn bản, hệ thống sẽ kiểm lỗi từ đó trở về sau";
+            //        btnCheckError.Image = global::Spell.Properties.Resources.check;
             int count = FindError.Instance.CountError;
+
             if (count > 0)
-                showSuggest(count);
-            else
             {
-                //MessageBox.Show(SysMessage.Instance.No_error);
-                btnDeleteFormat.Enabled = false;
+                ThreadStart tsPrepareRestore = new ThreadStart(PrepareRestore);
+                Thread tPrepareRestore = new Thread(tsPrepareRestore);
+                tPrepareRestore.Start();
+                showSuggest(count);
             }
-            //TimeSpan ts = stopwatch.Elapsed;
-            //string elapseTime = string.Format("{0:00}:{1:00}:{2:00}.{3:00}",
-            //                    ts.Hours, ts.Minutes, ts.Seconds,
-            //                    ts.Milliseconds / 10);
-            //MessageBox.Show(elapseTime);
+            else
+                btnDeleteFormat.Enabled = false;
 
         }
         private void showSuggest(int count)
@@ -216,10 +216,10 @@ namespace Spell
                 FindError.Instance.Clear();
                 //UserControl.Instance.IsFixAll = false;
             }
-                myCustomTaskPane.Visible = false;
-                btnDeleteFormat.Enabled = false;
-                btnDeleteFormat.Enabled = false;
-                btnShowTaskpane.Enabled = false;
+            myCustomTaskPane.Visible = false;
+            btnDeleteFormat.Enabled = false;
+            btnDeleteFormat.Enabled = false;
+            btnShowTaskpane.Enabled = false;
         }
 
         private void btnShowTaskpane_Click(object sender, RibbonControlEventArgs e)
@@ -229,17 +229,16 @@ namespace Spell
         private void showSumError_Click(object sender, RibbonControlEventArgs e)
         {
             int sum = 0;
-            Thread a = new Thread(
-                delegate ()
-                {
-                    foreach (Word.Range range in Globals.ThisAddIn.Application.ActiveDocument.Words)
-                        if (range.Font.Color == Word.WdColor.wdColorRed)
-                        {
-                            sum++;
-                            lblSumError.Label = sum.ToString() + " lỗi";
-                        }
-                });
-            a.Start();
+            new Thread(
+                 delegate ()
+                 {
+                     foreach (Word.Range range in Globals.ThisAddIn.Application.ActiveDocument.Words)
+                         if (range.Font.Color == Word.WdColor.wdColorRed)
+                         {
+                             sum++;
+                             lblSumError.Label = sum.ToString() + " lỗi";
+                         }
+                 }).Start();
         }
 
         private void btnFixAll_Click(object sender, RibbonControlEventArgs e)
@@ -247,6 +246,8 @@ namespace Spell
 
         }
         private Microsoft.Office.Tools.Word.GroupContentControl groupControl1;
+
+
         private void button1_Click(object sender, RibbonControlEventArgs e)
         {
             //Globals.ThisAddIn.Application.ActiveDocument.Protect(
@@ -325,13 +326,13 @@ namespace Spell
             PrepareForStart();
             rangeRestore.Text = textRestore.ToString();
             rangeRestore.Select();
+            DocumentHandling.Instance.RemoveUnderline_AllMistake();
         }
         private void PrepareForStart()
         {
             typeFindError = dropTypeFindError.SelectedItemIndex;
             typeError = dropTypeError.SelectedItemIndex;
             FindError.Instance.createValue(typeFindError, typeError, 1);
-            FindError.Instance.Clear();
 
             btnDeleteFormat.Enabled = false;
             btnShowTaskpane.Enabled = false;
@@ -348,7 +349,13 @@ namespace Spell
             UserControl.Instance.Clear();
             myCustomTaskPane.Visible = false;
 
-            DocumentHandling.Instance.RemoveUnderline_AllMistake();
+
+            if (isFirst)
+            {
+                DocumentHandling.Instance.RemoveUnderline_AllMistake();
+                isFirst = false;
+            }
+
         }
     }
 }
