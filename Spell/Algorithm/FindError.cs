@@ -12,6 +12,7 @@ namespace Spell.Algorithm
     class FindError
     {
         public Dictionary<Context, Word.Range> lstErrorRange = new Dictionary<Context, Word.Range>();
+        public Dictionary<Context, string> lstError = new Dictionary<Context, string>();
         private Word.Sentences curSentences;
         //public List<string> MySentences
         //{
@@ -43,6 +44,7 @@ namespace Spell.Algorithm
         private HashSet<string> hSetCand { get; set; }
         private Word.Range range { get; set; }
         private Regex r = new Regex(StringConstant.Instance.patternCheckSpecialChar);
+        
         public override string ToString()
         {
             if (SelectedError_Context != null)
@@ -83,7 +85,10 @@ namespace Spell.Algorithm
         public void createValue(int typeFindError, int typeError, int iSentence)
         {
             if (lstErrorRange.Count > 0)
+            {
                 lstErrorRange.Clear();
+                lstError.Clear();
+            }
             FirstError_Context = null;
             _typeFindError = typeFindError;
             _typeError = typeError;
@@ -367,6 +372,8 @@ namespace Spell.Algorithm
                     }
                 }//end while true
 
+                foreach (var item in lstErrorRange)
+                    lstError.Add(item.Key, item.Value.Text);
             }
             catch (Exception e)
             {

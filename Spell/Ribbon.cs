@@ -64,13 +64,10 @@ namespace Spell
                 threadFindError.Priority = ThreadPriority.Highest;
                 threadFindError.Start();
 
-                new Thread(delegate ()
-                {
-                    btnCheckError.Label = "Dừng kiểm lỗi";
-                    btnCheckError.ScreenTip = "Dừng kiểm lỗi";
-                    btnCheckError.SuperTip = "Bạn sẽ sửa lỗi sau khi dừng kiểm lỗi";
-                    btnCheckError.Image = global::Spell.Properties.Resources.stop;
-                }).Start();
+                btnCheckError.Label = "Dừng kiểm lỗi";
+                btnCheckError.ScreenTip = "Dừng kiểm lỗi";
+                btnCheckError.SuperTip = "Bạn sẽ sửa lỗi sau khi dừng kiểm lỗi";
+                btnCheckError.Image = global::Spell.Properties.Resources.stop;
 
 
                 //Globals.ThisAddIn.Application.StatusBar = "Đang lưu trạng thái văn bản";

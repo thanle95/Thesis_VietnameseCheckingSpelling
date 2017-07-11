@@ -139,7 +139,11 @@ namespace Spell
             //range.Font.Color = Word.WdColor.wdColorAutomatic;
             range.Underline = Word.WdUnderline.wdUnderlineNone;
         }
-
+        public void RemoveUnderline_Mistake( int startIndex, int endIndex)
+        {
+            Word.Range range = Globals.ThisAddIn.Application.ActiveDocument.Range(startIndex, endIndex);
+            range.Underline = Word.WdUnderline.wdUnderlineNone;
+        }
 
         public string getActiveDocument(Word.Words words, int start, int end)
         {

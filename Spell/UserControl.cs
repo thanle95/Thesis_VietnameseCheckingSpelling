@@ -189,18 +189,51 @@ namespace Spell
         {
             int startIndex = 0;
             int endIndex = 0;
-            foreach (var item in FindError.Instance.lstErrorRange)
-                if (item.Value.Text.Trim().ToLower().Equals(lblWrong.Text.ToLower()))
+            string wrong = lblWrong.Text.Trim().ToLower();
+            //2 trường hợp bỏ qua
+            //khi người dùng không chỉnh sửa, tức range.text không đổi, dùng selection.words.first
+            Word.Range range = Globals.ThisAddIn.Application.Selection.Words.First;
+            string text = range.Text.Trim().ToLower();
+            if (text.Equals(wrong))
+            {
+                foreach(var item in FindError.Instance.lstErrorRange)
                 {
-                    startIndex = item.Value.Start;
-                    endIndex = item.Value.End;
-                    FindError.Instance.lstErrorRange.Remove(item.Key);
-                    startIndex = item.Value.Start;
-                    endIndex = item.Value.End;
-
-                    DocumentHandling.Instance.RemoveUnderline_Mistake(item.Value.Text, startIndex, endIndex);
-                    break;
+                    if(range.Start == item.Value.Start)
+                    {
+                        FindError.Instance.lstErrorRange.Remove(item.Key);
+                        FindError.Instance.lstError.Remove(item.Key);
+                        startIndex = item.Value.Start;
+                        endIndex = item.Value.End;
+                            DocumentHandling.Instance.RemoveUnderline_Mistake(item.Value.Text, startIndex, endIndex);
+                        break;
+                    }
                 }
+                //không tìm thấy
+            }
+            //khi người dùng chỉnh sửa, kiểm tra trong những range.value.text của lstErrorRange
+            //nếu có range không bằng với phần tử trong lstError
+            //thì bỏ qua lỗi tại đó
+            else
+            {
+                string iErrorRange;
+                string iError;
+                for(int i = 0; i < FindError.Instance.CountError; i++)
+                {
+                    var item = FindError.Instance.lstErrorRange.ElementAt(i);
+                    iErrorRange = FindError.Instance.lstErrorRange.ElementAt(i).Value.Text;
+                    iError = FindError.Instance.lstError.ElementAt(i).Value;
+                    if (iErrorRange == null || !iErrorRange.Equals(iError) )
+                    {
+                        FindError.Instance.lstErrorRange.Remove(item.Key);
+                        FindError.Instance.lstError.Remove(item.Key);
+                        startIndex = item.Value.Start;
+                        endIndex = item.Value.End;
+                        DocumentHandling.Instance.RemoveUnderline_Mistake(startIndex, endIndex);
+                        break;
+                    }
+                    
+                }
+            }
             CheckOutOfError_ShowCandidateNextTime();
         }
 
@@ -262,6 +295,7 @@ namespace Spell
                     var item = FindError.Instance.lstErrorRange.First(kvp => kvp.Value == range);
 
                     FindError.Instance.lstErrorRange.Remove(item.Key);
+                    FindError.Instance.lstError.Remove(item.Key);
                     break;
                 }
             if (isMajuscule)
@@ -581,10 +615,9 @@ namespace Spell
         private void btnResume_Click(object sender, EventArgs e)
         {
             string text = _curRange.Text;
-            if (_curRange.Text != null)
+            if (text != null && text.Equals(_Error))
             {
-                if (_curRange.Text.Equals(_Error))
-                    _curRange.Select();
+                _curRange.Select();
             }
             else {
                 ignore();
