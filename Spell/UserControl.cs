@@ -279,7 +279,8 @@ namespace Spell
             //    _oldString = context.ToString();
             //    _newString = fixError.ToString().Trim();
             //}
-            addRowGridLog();
+            
+            
             int startIndex = 0;
             int endIndex = 0;
             if (lblWrong.Text.Equals(_ERROR_SPACE))
@@ -310,6 +311,11 @@ namespace Spell
             }
             DocumentHandling.Instance.RemoveUnderline_Mistake(curRangeTextShowInTaskPane.Text, startIndex, endIndex);
             curRangeTextShowInTaskPane.Select();
+
+            Context context = new Context();
+            context.getContext();
+            _newString = context.ToString();
+            addRowGridLog();
             //Index++;
             //UpdateProgressBar();
             CheckOutOfError_ShowCandidateNextTime();

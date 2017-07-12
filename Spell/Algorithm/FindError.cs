@@ -11,8 +11,8 @@ namespace Spell.Algorithm
 {
     class FindError
     {
-        public Dictionary<Context, Word.Range> lstErrorRange = new Dictionary<Context, Word.Range>();
-        public Dictionary<Context, string> lstError = new Dictionary<Context, string>();
+        public Dictionary<Context, Word.Range> lstErrorRange;
+        public Dictionary<Context, string> lstError;
         private Word.Sentences curSentences;
         //public List<string> MySentences
         //{
@@ -65,6 +65,7 @@ namespace Spell.Algorithm
         {
             StopFindError = false;
             lstErrorRange = new Dictionary<Context, Word.Range>();
+            lstError = new Dictionary<Context, string>();
             tmpContext = new Context();
             hSetCand = new HashSet<string>();
         }
@@ -79,7 +80,10 @@ namespace Spell.Algorithm
         {
             StopFindError = false;
             if (lstErrorRange.Count > 0)
+            {
                 lstErrorRange.Clear();
+                lstError.Clear();
+            }
             FirstError_Context = null;
         }
         public void createValue(int typeFindError, int typeError, int iSentence)
@@ -182,8 +186,12 @@ namespace Spell.Algorithm
                 //lấy toàn bộ danh sách các từ trong Active Document, để lấy được ngữ cảnh
                 while (true)
                 {
+                    if (StopFindError)
+                        break;
                     for (; ISentence <= curSentences.Count; ISentence++)
                     {
+                        if (StopFindError)
+                            break;
                         words = curSentences[ISentence].Text.TrimEnd().Split(' ');
                         originWords = curSentences[ISentence].Text.TrimEnd().Split(' ');
                         Start = curSentences[ISentence].Start;
@@ -196,21 +204,8 @@ namespace Spell.Algorithm
                         //duyệt qua từng từ trong cụm
                         for (int i = 0; i < length; i++)
                         {
-
                             if (StopFindError)
-                            {
-                                //using (FileStream aFile = new FileStream((FileManager.Instance.RightWordCand), FileMode.Append, FileAccess.Write))
-                                //using (StreamWriter sw = new StreamWriter(aFile))
-                                //{
-                                //    foreach (var pair in lstErrorRange)
-                                //    {
-                                //        sw.WriteLine();
-                                //        sw.WriteLine(string.Format("{0}]", pair.Key.ToString()));
-                                //        sw.WriteLine("**********************************************************************");
-                                //    }
-                                //}
-                                return;
-                            }
+                                break;
                             iWord = words[i];
                             tmpContext.TOKEN = iWord.Trim().ToLower();
                             if (tmpContext.TOKEN.Length < 1)

@@ -60,6 +60,18 @@ namespace Spell.Algorithm
                 "" : _context.NEXTNEXT;
             return string.Format("{0} {1} {2} {3} {4}", pp, p, _candidate, n, nn);
         }
+        public string getStringNewContext(string candidate)
+        {
+            string pp = _context.PREPRE.Equals(Ngram.Instance.START_STRING) ?
+                "" : _context.PREPRE;
+            string p = _context.PRE.Equals(Ngram.Instance.START_STRING) ?
+                "" : _context.PRE;
+            string n = _context.NEXT.Equals(Ngram.Instance.END_STRING) ?
+                "" : _context.NEXT;
+            string nn = _context.NEXTNEXT.Equals(Ngram.Instance.END_STRING) ?
+                "" : _context.NEXTNEXT;
+            return string.Format("{0} {1} {2} {3} {4}", pp, p, candidate, n, nn);
+        }
         private Word.Range findErrorRangeByStartIndex(int startIndex, Dictionary<Context, Word.Range> dictError)
         {
             List<Word.Range> temp = new List<Word.Range>();
