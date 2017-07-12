@@ -91,6 +91,7 @@ namespace Spell.Algorithm
         }
         public void getContext(int iWord, string[] words)
         {
+            PREPRE = PRE = TOKEN = NEXT = NEXTNEXT = "";
             string token = words[iWord].Trim();
             //1
             TOKEN = regexSPEC.Replace(token, "");
@@ -293,6 +294,14 @@ namespace Spell.Algorithm
         }
         public override string ToString()
         {
+            if (PREPRE == null)
+                PREPRE = "";
+            if (PRE == null)
+                PRE = "";
+            if (NEXT == null)
+                NEXT = "";
+            if (NEXTNEXT == null)
+                NEXTNEXT = "";
             string pp = PREPRE.Equals(Ngram.Instance.START_STRING) ?
                  "" : PREPRE;
             string p = PRE.Equals(Ngram.Instance.START_STRING) ?

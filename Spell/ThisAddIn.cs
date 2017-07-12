@@ -161,8 +161,8 @@ namespace Spell
                             if (candidate.Length > 1)
                                 addCandidate(candidate.Trim());
                 }
-                else
-                    System.Windows.Forms.MessageBox.Show(SysMessage.Instance.IsNotError(FindError.Instance.SelectedError_Context.TOKEN));
+                else;
+                //System.Windows.Forms.MessageBox.Show(SysMessage.Instance.IsNotError(FindError.Instance.SelectedError_Context.TOKEN));
             }
         }
         /// <summary>

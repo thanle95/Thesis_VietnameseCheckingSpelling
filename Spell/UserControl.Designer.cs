@@ -29,12 +29,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-            this.btnIgnore = new System.Windows.Forms.Button();
-            this.lblWrong = new System.Windows.Forms.Label();
-            this.lstbCandidate = new System.Windows.Forms.ListBox();
-            this.btnChange = new System.Windows.Forms.Button();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             this.gridLog = new System.Windows.Forms.DataGridView();
             this.STT = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.wrongContext = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -43,97 +39,44 @@
             this.lblRightContext = new System.Windows.Forms.Label();
             this.lblRightArrow = new System.Windows.Forms.Label();
             this.btnGo = new System.Windows.Forms.Button();
-            this.pnlSequenceFix = new System.Windows.Forms.Panel();
-            this.btnResume = new System.Windows.Forms.Button();
             this.btnPauseResumeAutoFix = new System.Windows.Forms.Button();
             this.lblPauseResumeAutoFix = new System.Windows.Forms.Label();
             this.pnlAutoFix = new System.Windows.Forms.Panel();
             this.pnlButtonAutoFix = new System.Windows.Forms.Panel();
             this.pnlShowMore = new System.Windows.Forms.Panel();
             this.btnCloseBtnShowMore = new System.Windows.Forms.Button();
+            this.btnChange = new System.Windows.Forms.Button();
+            this.lblWrong = new System.Windows.Forms.Label();
+            this.btnIgnore = new System.Windows.Forms.Button();
+            this.btnResume = new System.Windows.Forms.Button();
+            this.pnlSequenceFix = new System.Windows.Forms.Panel();
+            this.lstbCandidate = new System.Windows.Forms.ListBox();
+            this.txtManualFix = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.gridLog)).BeginInit();
-            this.pnlSequenceFix.SuspendLayout();
             this.pnlAutoFix.SuspendLayout();
             this.pnlButtonAutoFix.SuspendLayout();
             this.pnlShowMore.SuspendLayout();
+            this.pnlSequenceFix.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // btnIgnore
-            // 
-            this.btnIgnore.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnIgnore.AutoSize = true;
-            this.btnIgnore.BackColor = System.Drawing.Color.White;
-            this.btnIgnore.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnIgnore.ForeColor = System.Drawing.Color.Black;
-            this.btnIgnore.Location = new System.Drawing.Point(195, 0);
-            this.btnIgnore.Name = "btnIgnore";
-            this.btnIgnore.Size = new System.Drawing.Size(90, 30);
-            this.btnIgnore.TabIndex = 0;
-            this.btnIgnore.Text = "Bỏ qua";
-            this.btnIgnore.UseVisualStyleBackColor = false;
-            this.btnIgnore.Click += new System.EventHandler(this.btnIgnore_Click);
-            // 
-            // lblWrong
-            // 
-            this.lblWrong.AutoSize = true;
-            this.lblWrong.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblWrong.ForeColor = System.Drawing.Color.Black;
-            this.lblWrong.Location = new System.Drawing.Point(-4, 1);
-            this.lblWrong.Name = "lblWrong";
-            this.lblWrong.Size = new System.Drawing.Size(71, 21);
-            this.lblWrong.TabIndex = 3;
-            this.lblWrong.Text = "\"Từ sai\"";
-            // 
-            // lstbCandidate
-            // 
-            this.lstbCandidate.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.lstbCandidate.BackColor = System.Drawing.SystemColors.InactiveBorder;
-            this.lstbCandidate.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lstbCandidate.FormattingEnabled = true;
-            this.lstbCandidate.ItemHeight = 16;
-            this.lstbCandidate.Location = new System.Drawing.Point(0, 34);
-            this.lstbCandidate.Name = "lstbCandidate";
-            this.lstbCandidate.Size = new System.Drawing.Size(285, 100);
-            this.lstbCandidate.TabIndex = 4;
-            this.lstbCandidate.KeyDown += new System.Windows.Forms.KeyEventHandler(this.lstbCandidate_KeyDown);
-            this.lstbCandidate.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.lstbCandidate_MouseDoubleClick);
-            // 
-            // btnChange
-            // 
-            this.btnChange.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnChange.AutoSize = true;
-            this.btnChange.BackColor = System.Drawing.Color.White;
-            this.btnChange.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnChange.ForeColor = System.Drawing.Color.Black;
-            this.btnChange.Location = new System.Drawing.Point(196, 147);
-            this.btnChange.Name = "btnChange";
-            this.btnChange.Size = new System.Drawing.Size(90, 30);
-            this.btnChange.TabIndex = 19;
-            this.btnChange.Text = "Sửa";
-            this.btnChange.UseVisualStyleBackColor = false;
-            this.btnChange.Click += new System.EventHandler(this.btnChange_Click);
-            this.btnChange.KeyDown += new System.Windows.Forms.KeyEventHandler(this.btnChange_KeyDown);
             // 
             // gridLog
             // 
             this.gridLog.AllowUserToAddRows = false;
             this.gridLog.AllowUserToDeleteRows = false;
             this.gridLog.AllowUserToResizeRows = false;
-            dataGridViewCellStyle1.BackColor = System.Drawing.Color.Aqua;
-            this.gridLog.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle3.BackColor = System.Drawing.Color.Aqua;
+            this.gridLog.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle3;
             this.gridLog.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.gridLog.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.DisplayedCells;
             this.gridLog.BackgroundColor = System.Drawing.Color.SkyBlue;
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.gridLog.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle4.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.gridLog.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle4;
             this.gridLog.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.gridLog.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.STT,
@@ -148,7 +91,6 @@
             this.gridLog.TabIndex = 20;
             this.gridLog.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.gridLog_CellClick);
             this.gridLog.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.gridLog_CellContentClick);
-            //this.gridLog.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.gridLog_CellFormatting);
             // 
             // STT
             // 
@@ -220,37 +162,6 @@
             this.btnGo.Text = "Đi đến lỗi...";
             this.btnGo.UseVisualStyleBackColor = false;
             this.btnGo.Click += new System.EventHandler(this.btnGo_Click);
-            // 
-            // pnlSequenceFix
-            // 
-            this.pnlSequenceFix.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.pnlSequenceFix.BackColor = System.Drawing.SystemColors.Window;
-            this.pnlSequenceFix.Controls.Add(this.btnResume);
-            this.pnlSequenceFix.Controls.Add(this.lstbCandidate);
-            this.pnlSequenceFix.Controls.Add(this.btnIgnore);
-            this.pnlSequenceFix.Controls.Add(this.lblWrong);
-            this.pnlSequenceFix.Controls.Add(this.btnChange);
-            this.pnlSequenceFix.Location = new System.Drawing.Point(14, 7);
-            this.pnlSequenceFix.Name = "pnlSequenceFix";
-            this.pnlSequenceFix.Size = new System.Drawing.Size(285, 176);
-            this.pnlSequenceFix.TabIndex = 25;
-            // 
-            // btnResume
-            // 
-            this.btnResume.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnResume.AutoSize = true;
-            this.btnResume.BackColor = System.Drawing.Color.White;
-            this.btnResume.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnResume.ForeColor = System.Drawing.Color.Black;
-            this.btnResume.Location = new System.Drawing.Point(93, 0);
-            this.btnResume.Name = "btnResume";
-            this.btnResume.Size = new System.Drawing.Size(90, 30);
-            this.btnResume.TabIndex = 20;
-            this.btnResume.Text = "Trở lại";
-            this.btnResume.UseVisualStyleBackColor = false;
-            this.btnResume.Visible = false;
-            this.btnResume.Click += new System.EventHandler(this.btnResume_Click);
             // 
             // btnPauseResumeAutoFix
             // 
@@ -332,6 +243,104 @@
             this.btnCloseBtnShowMore.UseVisualStyleBackColor = false;
             this.btnCloseBtnShowMore.Click += new System.EventHandler(this.btnCloseBtnShowMore_Click);
             // 
+            // btnChange
+            // 
+            this.btnChange.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnChange.AutoSize = true;
+            this.btnChange.BackColor = System.Drawing.Color.White;
+            this.btnChange.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnChange.ForeColor = System.Drawing.Color.Black;
+            this.btnChange.Location = new System.Drawing.Point(196, 147);
+            this.btnChange.Name = "btnChange";
+            this.btnChange.Size = new System.Drawing.Size(90, 30);
+            this.btnChange.TabIndex = 19;
+            this.btnChange.Text = "Sửa";
+            this.btnChange.UseVisualStyleBackColor = false;
+            this.btnChange.Click += new System.EventHandler(this.btnChange_Click);
+            this.btnChange.KeyDown += new System.Windows.Forms.KeyEventHandler(this.btnChange_KeyDown);
+            // 
+            // lblWrong
+            // 
+            this.lblWrong.AutoSize = true;
+            this.lblWrong.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblWrong.ForeColor = System.Drawing.Color.Black;
+            this.lblWrong.Location = new System.Drawing.Point(-4, 1);
+            this.lblWrong.Name = "lblWrong";
+            this.lblWrong.Size = new System.Drawing.Size(71, 21);
+            this.lblWrong.TabIndex = 3;
+            this.lblWrong.Text = "\"Từ sai\"";
+            // 
+            // btnIgnore
+            // 
+            this.btnIgnore.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnIgnore.AutoSize = true;
+            this.btnIgnore.BackColor = System.Drawing.Color.White;
+            this.btnIgnore.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnIgnore.ForeColor = System.Drawing.Color.Black;
+            this.btnIgnore.Location = new System.Drawing.Point(195, 0);
+            this.btnIgnore.Name = "btnIgnore";
+            this.btnIgnore.Size = new System.Drawing.Size(90, 30);
+            this.btnIgnore.TabIndex = 0;
+            this.btnIgnore.Text = "Bỏ qua";
+            this.btnIgnore.UseVisualStyleBackColor = false;
+            this.btnIgnore.Click += new System.EventHandler(this.btnIgnore_Click);
+            // 
+            // btnResume
+            // 
+            this.btnResume.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnResume.AutoSize = true;
+            this.btnResume.BackColor = System.Drawing.Color.White;
+            this.btnResume.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnResume.ForeColor = System.Drawing.Color.Black;
+            this.btnResume.Location = new System.Drawing.Point(93, 0);
+            this.btnResume.Name = "btnResume";
+            this.btnResume.Size = new System.Drawing.Size(90, 30);
+            this.btnResume.TabIndex = 20;
+            this.btnResume.Text = "Trở lại";
+            this.btnResume.UseVisualStyleBackColor = false;
+            this.btnResume.Visible = false;
+            this.btnResume.Click += new System.EventHandler(this.btnResume_Click);
+            // 
+            // pnlSequenceFix
+            // 
+            this.pnlSequenceFix.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.pnlSequenceFix.BackColor = System.Drawing.SystemColors.Window;
+            this.pnlSequenceFix.Controls.Add(this.txtManualFix);
+            this.pnlSequenceFix.Controls.Add(this.btnResume);
+            this.pnlSequenceFix.Controls.Add(this.lstbCandidate);
+            this.pnlSequenceFix.Controls.Add(this.btnIgnore);
+            this.pnlSequenceFix.Controls.Add(this.lblWrong);
+            this.pnlSequenceFix.Controls.Add(this.btnChange);
+            this.pnlSequenceFix.Location = new System.Drawing.Point(14, 7);
+            this.pnlSequenceFix.Name = "pnlSequenceFix";
+            this.pnlSequenceFix.Size = new System.Drawing.Size(285, 176);
+            this.pnlSequenceFix.TabIndex = 25;
+            // 
+            // lstbCandidate
+            // 
+            this.lstbCandidate.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.lstbCandidate.BackColor = System.Drawing.SystemColors.InactiveBorder;
+            this.lstbCandidate.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lstbCandidate.FormattingEnabled = true;
+            this.lstbCandidate.ItemHeight = 16;
+            this.lstbCandidate.Location = new System.Drawing.Point(0, 34);
+            this.lstbCandidate.Name = "lstbCandidate";
+            this.lstbCandidate.Size = new System.Drawing.Size(285, 100);
+            this.lstbCandidate.TabIndex = 4;
+            this.lstbCandidate.KeyDown += new System.Windows.Forms.KeyEventHandler(this.lstbCandidate_KeyDown);
+            this.lstbCandidate.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.lstbCandidate_MouseDoubleClick);
+            // 
+            // txtManualFix
+            // 
+            this.txtManualFix.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtManualFix.Location = new System.Drawing.Point(0, 151);
+            this.txtManualFix.Name = "txtManualFix";
+            this.txtManualFix.Size = new System.Drawing.Size(131, 22);
+            this.txtManualFix.TabIndex = 21;
+            // 
             // UserControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -344,39 +353,39 @@
             this.Name = "UserControl";
             this.Size = new System.Drawing.Size(320, 600);
             ((System.ComponentModel.ISupportInitialize)(this.gridLog)).EndInit();
-            this.pnlSequenceFix.ResumeLayout(false);
-            this.pnlSequenceFix.PerformLayout();
             this.pnlAutoFix.ResumeLayout(false);
             this.pnlButtonAutoFix.ResumeLayout(false);
             this.pnlButtonAutoFix.PerformLayout();
             this.pnlShowMore.ResumeLayout(false);
             this.pnlShowMore.PerformLayout();
+            this.pnlSequenceFix.ResumeLayout(false);
+            this.pnlSequenceFix.PerformLayout();
             this.ResumeLayout(false);
 
         }
 
         #endregion
-
-        public System.Windows.Forms.Button btnIgnore;
-        public System.Windows.Forms.Label lblWrong;
-        public System.Windows.Forms.ListBox lstbCandidate;
-        public System.Windows.Forms.Button btnChange;
         private System.Windows.Forms.DataGridView gridLog;
         private System.Windows.Forms.Label lblWrongContext;
         private System.Windows.Forms.Label lblRightContext;
         private System.Windows.Forms.Label lblRightArrow;
         private System.Windows.Forms.Button btnGo;
-        private System.Windows.Forms.Panel pnlSequenceFix;
         private System.Windows.Forms.Button btnPauseResumeAutoFix;
         private System.Windows.Forms.Label lblPauseResumeAutoFix;
         private System.Windows.Forms.Panel pnlAutoFix;
         private System.Windows.Forms.Panel pnlShowMore;
         private System.Windows.Forms.Panel pnlButtonAutoFix;
-        public System.Windows.Forms.Button btnResume;
         private System.Windows.Forms.DataGridViewTextBoxColumn STT;
         private System.Windows.Forms.DataGridViewTextBoxColumn wrongContext;
         private System.Windows.Forms.DataGridViewTextBoxColumn rightContext;
         private System.Windows.Forms.Button btnCloseBtnShowMore;
+        public System.Windows.Forms.Button btnChange;
+        public System.Windows.Forms.Label lblWrong;
+        public System.Windows.Forms.Button btnIgnore;
+        public System.Windows.Forms.Button btnResume;
+        private System.Windows.Forms.Panel pnlSequenceFix;
+        private System.Windows.Forms.TextBox txtManualFix;
+        public System.Windows.Forms.ListBox lstbCandidate;
     }
 }
 

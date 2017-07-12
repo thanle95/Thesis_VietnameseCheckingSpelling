@@ -58,7 +58,7 @@ namespace Spell.Algorithm
                 "" : _context.NEXT;
             string nn = _context.NEXTNEXT.Equals(Ngram.Instance.END_STRING) ?
                 "" : _context.NEXTNEXT;
-            return string.Format("{0} {1} {2} {3} {4}", pp, p, _candidate, n, nn);
+            return string.Format("{0} {1} {2} {3} {4}", pp, p, _candidate, n, nn).Trim();
         }
         public string getStringNewContext(string candidate)
         {

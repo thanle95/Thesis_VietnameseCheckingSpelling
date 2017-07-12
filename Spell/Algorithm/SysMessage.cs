@@ -62,9 +62,9 @@ namespace Spell.Algorithm
             }
         }
 
-        public string IsNotError(string word)
-        {
-            return string.Format("\"{0}\" không phải là một lỗi!", word);
-        }
+        //public string IsNotError(string word)
+        //{
+        //    return string.Format("\"{0}\" không phải là một lỗi!", word);
+        //}
     }
 }

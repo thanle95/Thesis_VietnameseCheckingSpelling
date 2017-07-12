@@ -10,41 +10,38 @@ using System.Collections.Generic;
 
 namespace Spell
 {
-    //phục vụ cho việc thêm vào từ điển
-    //public enum Position { xxX, xXx, Xxx, xX, Xx, X };
-
     public partial class UserControl : System.Windows.Forms.UserControl
     {
-        //Ngữ cảnh trước khi sửa lỗi
+        // Ngữ cảnh trước khi sửa lỗi
         private string _oldContextString = "",
-            //Ngữ cảnh sau sửa lỗi
+            // Ngữ cảnh sau sửa lỗi
             _newContextString = "";
 
-        //Cờ đánh dấu đang ở chế độ tự động sửa lỗi
+        // Cờ đánh dấu đang ở chế độ tự động sửa lỗi
         private bool _IsFixAll { get; set; }
 
-        //Lỗi dư khoảng trắng
+        // Lỗi dư khoảng trắng
         private const string _ERROR_SPACE = "\"Lỗi dư khoảng trắng\"";
 
-        //Dòng hiện tại đang chọn trong gridlog
+        // Dòng hiện tại đang chọn trong gridlog
         private int _SelectedRowGridLog { get; set; }
 
-        //Cờ đánh dấu sửa hết lỗi
+        // Cờ đánh dấu sửa hết lỗi
         private bool _IsOutOfError { get; set; }
 
-        //Range hiện tại đang sửa lỗi
+        // Range hiện tại đang sửa lỗi
         private Word.Range _curRange = null;
 
-        //Lỗi hiện tại đang sửa
+        // Lỗi hiện tại đang sửa
         private string _ErrorString { get; set; }
 
-        //Thể hiện của UserControl khi dùng design pattern Singleton
+        // Thể hiện của UserControl khi dùng design pattern Singleton
         private static UserControl _instance = new UserControl();
 
-        //Cờ đánh dấu có tiếp tục sửa lỗi hay không
+        // Cờ đánh dấu có tiếp tục sửa lỗi hay không
         private bool _IsPause { get; set; }
 
-        //Gán nhãn cho lblWrongContext
+        // Gán nhãn cho lblWrongContext
         public static string WRONG_TEXT
         {
             get
@@ -69,9 +66,6 @@ namespace Spell
         /// <param name="isFixAll"></param>
         public void Start(bool isFixAll)
         {
-            //if (_TotalError == 0)
-            //    _TotalError = FindError.Instance.lstErrorRange.Count;
-
             _IsFixAll = isFixAll;
             if (_IsFixAll)
             {
@@ -100,7 +94,6 @@ namespace Spell
         /// </summary>
         public void showCandidateInTaskPane(Word.Words words, Word.Sentences sentences)
         {
-            //lỗi: chưa lấy ngữ cảnh tại vị trí con trỏ
             FixError fixError = new FixError();
             FindError.Instance.GetSeletedContext(words, sentences);
             fixError.getCandidatesWithContext(FindError.Instance.SelectedError_Context, FindError.Instance.lstErrorRange);
@@ -123,7 +116,7 @@ namespace Spell
             }
             else
             {
-                MessageBox.Show(SysMessage.Instance.IsNotError(FindError.Instance.SelectedError_Context.TOKEN));
+                //MessageBox.Show(SysMessage.Instance.IsNotError(FindError.Instance.SelectedError_Context.TOKEN));
             }
         }
         public void showCandidateInTaskPane()
@@ -151,7 +144,6 @@ namespace Spell
                     SynchronizedInvoke(lblWrong, delegate ()
                     {
                         lblWrong.Text = fixError.Token;
-
                     });
                     
                     Globals.ThisAddIn.CustomTaskPanes[0].Visible = true;
@@ -316,6 +308,9 @@ namespace Spell
                     FindError.Instance.lstError.Remove(item.Key);
                     break;
                 }
+
+            if (txtManualFix.Text.Trim().Length > 0)
+                fixText = txtManualFix.Text;
             if (isMajuscule)
                 _curRange.Text = fixText[0].ToString().ToUpper() + fixText.Substring(1);
             else _curRange.Text = fixText;
@@ -338,6 +333,8 @@ namespace Spell
             //Index++;
             //UpdateProgressBar();
             CheckOutOfError_ShowCandidateNextTime();
+
+            txtManualFix.Text = "";
         }
         private void CheckOutOfError_ShowCandidateNextTime()
         {
