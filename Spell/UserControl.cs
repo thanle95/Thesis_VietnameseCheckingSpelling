@@ -60,6 +60,7 @@ namespace Spell
                 return _instance;
             }
         }
+
         /// <summary>
         /// Khởi tạo giao diện UserControl
         /// </summary>
@@ -145,7 +146,7 @@ namespace Spell
                     {
                         lblWrong.Text = fixError.Token;
                     });
-                    
+
                     Globals.ThisAddIn.CustomTaskPanes[0].Visible = true;
                     SynchronizedInvoke(lstbCandidate, delegate () { lstbCandidate.Items.Clear(); });
 
@@ -153,8 +154,9 @@ namespace Spell
                         if (!item.ToLower().Equals(fixError.Token.ToLower()))
                             if (item.Length > 1)
                                 SynchronizedInvoke(lstbCandidate, delegate () { lstbCandidate.Items.Add(item.Trim()); });
-                    if (lstbCandidate.Items.Count > 0)
-                        SynchronizedInvoke(lstbCandidate, delegate () { lstbCandidate.SetSelected(0, true); });
+                    //if (lstbCandidate.Items.Count > 0)
+                    SynchronizedInvoke(lstbCandidate, delegate () { lstbCandidate.SetSelected(0, true); });
+                    SynchronizedInvoke(txtManualFix, delegate () { txtManualFix.Text = lstbCandidate.SelectedItem.ToString(); });
                     SynchronizedInvoke(btnChange, delegate () { btnChange.Focus(); });
                     return;
                 }
@@ -682,7 +684,21 @@ namespace Spell
             });
         }
 
+        private void txtManualFix_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+                change(lblWrong.Text.ToLower(), lstbCandidate.SelectedItem.ToString(), false);
+        }
 
+        private void lstbCandidate_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            SynchronizedInvoke(txtManualFix, delegate () { txtManualFix.Text = lstbCandidate.SelectedItem.ToString(); });
+        }
+
+        private void txtManualFix_Click(object sender, EventArgs e)
+        {
+
+        }
 
         private void changeUI_ShowMoreInfo()
         {

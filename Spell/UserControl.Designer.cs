@@ -29,8 +29,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle12 = new System.Windows.Forms.DataGridViewCellStyle();
             this.gridLog = new System.Windows.Forms.DataGridView();
             this.STT = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.wrongContext = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -50,13 +50,15 @@
             this.btnIgnore = new System.Windows.Forms.Button();
             this.btnResume = new System.Windows.Forms.Button();
             this.pnlSequenceFix = new System.Windows.Forms.Panel();
-            this.lstbCandidate = new System.Windows.Forms.ListBox();
+            this.pnlTxtManualFix = new System.Windows.Forms.Panel();
             this.txtManualFix = new System.Windows.Forms.TextBox();
+            this.lstbCandidate = new System.Windows.Forms.ListBox();
             ((System.ComponentModel.ISupportInitialize)(this.gridLog)).BeginInit();
             this.pnlAutoFix.SuspendLayout();
             this.pnlButtonAutoFix.SuspendLayout();
             this.pnlShowMore.SuspendLayout();
             this.pnlSequenceFix.SuspendLayout();
+            this.pnlTxtManualFix.SuspendLayout();
             this.SuspendLayout();
             // 
             // gridLog
@@ -64,19 +66,19 @@
             this.gridLog.AllowUserToAddRows = false;
             this.gridLog.AllowUserToDeleteRows = false;
             this.gridLog.AllowUserToResizeRows = false;
-            dataGridViewCellStyle3.BackColor = System.Drawing.Color.Aqua;
-            this.gridLog.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle11.BackColor = System.Drawing.Color.Aqua;
+            this.gridLog.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle11;
             this.gridLog.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.gridLog.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.DisplayedCells;
             this.gridLog.BackgroundColor = System.Drawing.Color.SkyBlue;
-            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle4.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.gridLog.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle12.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle12.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle12.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle12.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle12.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle12.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle12.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.gridLog.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle12;
             this.gridLog.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.gridLog.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.STT,
@@ -250,7 +252,7 @@
             this.btnChange.BackColor = System.Drawing.Color.White;
             this.btnChange.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnChange.ForeColor = System.Drawing.Color.Black;
-            this.btnChange.Location = new System.Drawing.Point(196, 147);
+            this.btnChange.Location = new System.Drawing.Point(195, 146);
             this.btnChange.Name = "btnChange";
             this.btnChange.Size = new System.Drawing.Size(90, 30);
             this.btnChange.TabIndex = 19;
@@ -306,7 +308,7 @@
             this.pnlSequenceFix.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.pnlSequenceFix.BackColor = System.Drawing.SystemColors.Window;
-            this.pnlSequenceFix.Controls.Add(this.txtManualFix);
+            this.pnlSequenceFix.Controls.Add(this.pnlTxtManualFix);
             this.pnlSequenceFix.Controls.Add(this.btnResume);
             this.pnlSequenceFix.Controls.Add(this.lstbCandidate);
             this.pnlSequenceFix.Controls.Add(this.btnIgnore);
@@ -317,6 +319,30 @@
             this.pnlSequenceFix.Size = new System.Drawing.Size(285, 176);
             this.pnlSequenceFix.TabIndex = 25;
             // 
+            // pnlTxtManualFix
+            // 
+            this.pnlTxtManualFix.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.pnlTxtManualFix.BackColor = System.Drawing.Color.SkyBlue;
+            this.pnlTxtManualFix.Controls.Add(this.txtManualFix);
+            this.pnlTxtManualFix.Location = new System.Drawing.Point(1, 40);
+            this.pnlTxtManualFix.Name = "pnlTxtManualFix";
+            this.pnlTxtManualFix.Size = new System.Drawing.Size(281, 19);
+            this.pnlTxtManualFix.TabIndex = 22;
+            // 
+            // txtManualFix
+            // 
+            this.txtManualFix.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtManualFix.BackColor = System.Drawing.SystemColors.Window;
+            this.txtManualFix.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txtManualFix.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtManualFix.Location = new System.Drawing.Point(2, 2);
+            this.txtManualFix.Name = "txtManualFix";
+            this.txtManualFix.Size = new System.Drawing.Size(277, 15);
+            this.txtManualFix.TabIndex = 21;
+            this.txtManualFix.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.txtManualFix.Click += new System.EventHandler(this.txtManualFix_Click);
+            this.txtManualFix.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtManualFix_KeyDown);
+            // 
             // lstbCandidate
             // 
             this.lstbCandidate.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -326,20 +352,13 @@
             this.lstbCandidate.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lstbCandidate.FormattingEnabled = true;
             this.lstbCandidate.ItemHeight = 16;
-            this.lstbCandidate.Location = new System.Drawing.Point(0, 34);
+            this.lstbCandidate.Location = new System.Drawing.Point(1, 70);
             this.lstbCandidate.Name = "lstbCandidate";
-            this.lstbCandidate.Size = new System.Drawing.Size(285, 100);
+            this.lstbCandidate.Size = new System.Drawing.Size(281, 68);
             this.lstbCandidate.TabIndex = 4;
+            this.lstbCandidate.SelectedIndexChanged += new System.EventHandler(this.lstbCandidate_SelectedIndexChanged);
             this.lstbCandidate.KeyDown += new System.Windows.Forms.KeyEventHandler(this.lstbCandidate_KeyDown);
             this.lstbCandidate.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.lstbCandidate_MouseDoubleClick);
-            // 
-            // txtManualFix
-            // 
-            this.txtManualFix.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtManualFix.Location = new System.Drawing.Point(0, 151);
-            this.txtManualFix.Name = "txtManualFix";
-            this.txtManualFix.Size = new System.Drawing.Size(131, 22);
-            this.txtManualFix.TabIndex = 21;
             // 
             // UserControl
             // 
@@ -360,6 +379,8 @@
             this.pnlShowMore.PerformLayout();
             this.pnlSequenceFix.ResumeLayout(false);
             this.pnlSequenceFix.PerformLayout();
+            this.pnlTxtManualFix.ResumeLayout(false);
+            this.pnlTxtManualFix.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -386,6 +407,7 @@
         private System.Windows.Forms.Panel pnlSequenceFix;
         private System.Windows.Forms.TextBox txtManualFix;
         public System.Windows.Forms.ListBox lstbCandidate;
+        private System.Windows.Forms.Panel pnlTxtManualFix;
     }
 }
 
