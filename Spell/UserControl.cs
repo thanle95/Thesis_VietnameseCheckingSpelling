@@ -15,15 +15,43 @@ namespace Spell
 
     public partial class UserControl : System.Windows.Forms.UserControl
     {
-        private Word.Range curRangeTextShowInTaskPane;
-        private string _oldString = "", _newString = "";
+        //Ngữ cảnh trước khi sửa lỗi
+        private string _oldContextString = "",
+            //Ngữ cảnh sau sửa lỗi
+            _newContextString = "";
+
+        //Cờ đánh dấu đang ở chế độ tự động sửa lỗi
         private bool _IsFixAll { get; set; }
-        private static UserControl _instance = new UserControl();
+
+        //Lỗi dư khoảng trắng
         private const string _ERROR_SPACE = "\"Lỗi dư khoảng trắng\"";
-        private int _SelectedError { get; set; }
+
+        //Dòng hiện tại đang chọn trong gridlog
+        private int _SelectedRowGridLog { get; set; }
+
+        //Cờ đánh dấu sửa hết lỗi
         private bool _IsOutOfError { get; set; }
+
+        //Range hiện tại đang sửa lỗi
         private Word.Range _curRange = null;
-        private string _Error { get; set; }
+
+        //Lỗi hiện tại đang sửa
+        private string _ErrorString { get; set; }
+
+        //Thể hiện của UserControl khi dùng design pattern Singleton
+        private static UserControl _instance = new UserControl();
+
+        //Cờ đánh dấu có tiếp tục sửa lỗi hay không
+        private bool _IsPause { get; set; }
+
+        //Gán nhãn cho lblWrongContext
+        public static string WRONG_TEXT
+        {
+            get
+            {
+                return "\"Từ sai\"";
+            }
+        }
         private UserControl()
         {
             InitializeComponent();
@@ -35,17 +63,6 @@ namespace Spell
                 return _instance;
             }
         }
-        private bool _IsPause { get; set; }
-        public static string WRONG_TEXT
-        {
-            get
-            {
-                return "\"Từ sai\"";
-            }
-        }
-        //private int Index { get; set; }
-        //private int _TotalError { get; set; }
-
         /// <summary>
         /// Khởi tạo giao diện UserControl
         /// </summary>
@@ -65,9 +82,7 @@ namespace Spell
                 changeUI_IsManuallyFix();
                 _IsPause = true;
             }
-
         }
-
         /// <summary>
         /// Xóa gridlog
         /// </summary>
@@ -92,8 +107,8 @@ namespace Spell
 
             if (fixError.hSetCandidate.Count > 0)
             {
-                _oldString = FindError.Instance.ToString().Trim();
-                _newString = fixError.ToString().Trim();
+                _oldContextString = FindError.Instance.ToString().Trim();
+                _newContextString = fixError.ToString().Trim();
                 lblWrong.Text = fixError.Token;
                 lstbCandidate.Items.Clear();
                 foreach (string item in fixError.hSetCandidate)
@@ -121,12 +136,13 @@ namespace Spell
 
                 fixError.getCandidatesWithContext(FindError.Instance.FirstError_Context, FindError.Instance.lstErrorRange);
                 _curRange = FindError.Instance.lstErrorRange[FindError.Instance.FirstError_Context];
-                _Error = fixError.Token;
+                _ErrorString = fixError.Token;
                 //MessageBox.Show(string.Format("\"{0}\"-\"{1}\"", range.Text, fixError.Token));
-                _oldString = FindError.Instance.ToString().Trim();
-                _newString = fixError.ToString().Trim();
+                _oldContextString = FindError.Instance.ToString().Trim();
+                _newContextString = fixError.ToString().Trim();
                 if (!_IsPause)
                 {
+                    Globals.ThisAddIn.CustomTaskPanes[0].Visible = true;
                     change(fixError.Token.ToLower(), fixError.hSetCandidate.ElementAt(0), false);
                     //CurRannge.Select();
                 }
@@ -137,7 +153,8 @@ namespace Spell
                         lblWrong.Text = fixError.Token;
 
                     });
-                    //CurRannge.Select();
+                    
+                    Globals.ThisAddIn.CustomTaskPanes[0].Visible = true;
                     SynchronizedInvoke(lstbCandidate, delegate () { lstbCandidate.Items.Clear(); });
 
                     foreach (string item in fixError.hSetCandidate)
@@ -196,15 +213,15 @@ namespace Spell
             string text = range.Text.Trim().ToLower();
             if (text.Equals(wrong))
             {
-                foreach(var item in FindError.Instance.lstErrorRange)
+                foreach (var item in FindError.Instance.lstErrorRange)
                 {
-                    if(range.Start == item.Value.Start)
+                    if (range.Start == item.Value.Start)
                     {
                         FindError.Instance.lstErrorRange.Remove(item.Key);
                         FindError.Instance.lstError.Remove(item.Key);
                         startIndex = item.Value.Start;
                         endIndex = item.Value.End;
-                            DocumentHandling.Instance.RemoveUnderline_Mistake(item.Value.Text, startIndex, endIndex);
+                        DocumentHandling.Instance.RemoveUnderline_Mistake(item.Value.Text, startIndex, endIndex);
                         break;
                     }
                 }
@@ -217,12 +234,12 @@ namespace Spell
             {
                 string iErrorRange;
                 string iError;
-                for(int i = 0; i < FindError.Instance.CountError; i++)
+                for (int i = 0; i < FindError.Instance.CountError; i++)
                 {
                     var item = FindError.Instance.lstErrorRange.ElementAt(i);
                     iErrorRange = FindError.Instance.lstErrorRange.ElementAt(i).Value.Text;
                     iError = FindError.Instance.lstError.ElementAt(i).Value;
-                    if (iErrorRange == null || !iErrorRange.Equals(iError) )
+                    if (iErrorRange == null || !iErrorRange.Equals(iError))
                     {
                         FindError.Instance.lstErrorRange.Remove(item.Key);
                         FindError.Instance.lstError.Remove(item.Key);
@@ -231,7 +248,7 @@ namespace Spell
                         DocumentHandling.Instance.RemoveUnderline_Mistake(startIndex, endIndex);
                         break;
                     }
-                    
+
                 }
             }
             CheckOutOfError_ShowCandidateNextTime();
@@ -279,8 +296,8 @@ namespace Spell
             //    _oldString = context.ToString();
             //    _newString = fixError.ToString().Trim();
             //}
-            
-            
+
+
             int startIndex = 0;
             int endIndex = 0;
             if (lblWrong.Text.Equals(_ERROR_SPACE))
@@ -292,7 +309,7 @@ namespace Spell
                     if (!range.Text.Equals(wrongText))
                         isMajuscule = true;
                     startIndex = range.Start;
-                    curRangeTextShowInTaskPane = range;
+                    _curRange = range;
                     var item = FindError.Instance.lstErrorRange.First(kvp => kvp.Value == range);
 
                     FindError.Instance.lstErrorRange.Remove(item.Key);
@@ -300,21 +317,23 @@ namespace Spell
                     break;
                 }
             if (isMajuscule)
-                curRangeTextShowInTaskPane.Text = fixText[0].ToString().ToUpper() + fixText.Substring(1);
-            else curRangeTextShowInTaskPane.Text = fixText;
+                _curRange.Text = fixText[0].ToString().ToUpper() + fixText.Substring(1);
+            else _curRange.Text = fixText;
 
-            endIndex = startIndex + curRangeTextShowInTaskPane.Text.Length;
+            endIndex = startIndex + _curRange.Text.Length;
             if (!_IsFixAll)
             {
                 lblWrong.Text = "\"Từ sai\"";
                 lstbCandidate.Items.Clear();
             }
-            DocumentHandling.Instance.RemoveUnderline_Mistake(curRangeTextShowInTaskPane.Text, startIndex, endIndex);
-            curRangeTextShowInTaskPane.Select();
+            DocumentHandling.Instance.RemoveUnderline_Mistake(_curRange.Text, startIndex, endIndex);
+            _curRange.Select();
 
+            //Lấy ngữ cảnh mới sau khi sửa lỗi
             Context context = new Context();
             context.getContext();
-            _newString = context.ToString();
+            _newContextString = context.ToString();
+
             addRowGridLog();
             //Index++;
             //UpdateProgressBar();
@@ -365,7 +384,7 @@ namespace Spell
 
             });
             DataGridViewRow row = gridLog.CurrentRow;
-            _SelectedError = row.Index;
+            _SelectedRowGridLog = row.Index;
             SynchronizedInvoke(lblWrongContext, delegate ()
             {
                 lblWrongContext.Text = row.Cells[1].Value.ToString();
@@ -405,11 +424,11 @@ namespace Spell
             {
                 bool isInitial = true;
                 int distance;
-                int rowIndex = _SelectedError;
+                int rowIndex = _SelectedRowGridLog;
                 DataGridViewRow rowNext = null;
                 foreach (DataGridViewRow row in gridLog.Rows)
                 {
-                    if (row.Index != _SelectedError)
+                    if (row.Index != _SelectedRowGridLog)
                     {
                         if (isInitial)
                         {
@@ -555,7 +574,7 @@ namespace Spell
                     }
                     gridLog.Location = new System.Drawing.Point(0, 0);
                 }
-                gridLog.Rows.Add(gridLog.RowCount + 1, _oldString, _newString);
+                gridLog.Rows.Add(gridLog.RowCount + 1, _oldContextString, _newContextString);
                 //
                 //scroll gridlog đến lỗi cuối cùng
                 scrollGridLog();
@@ -621,7 +640,7 @@ namespace Spell
         private void btnResume_Click(object sender, EventArgs e)
         {
             string text = _curRange.Text;
-            if (text != null && text.Equals(_Error))
+            if (text != null && text.Equals(_ErrorString))
             {
                 _curRange.Select();
             }
