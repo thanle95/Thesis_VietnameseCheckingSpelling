@@ -86,7 +86,7 @@ namespace Spell
             SynchronizedInvoke(gridLog, delegate ()
             {
                 gridLog.Rows.Clear();
-                gridLog.Size = new System.Drawing.Size(282, 42);
+                gridLog.Size = new System.Drawing.Size(gridLog.Size.Width, 23);
             });
         }
 
@@ -109,9 +109,10 @@ namespace Spell
                 {
                     if (!item.ToLower().Equals(fixError.Token.ToLower()))
                         if (item.Length > 1)
+
                             lstbCandidate.Items.Add(item.Trim());
-                    if (lstbCandidate.Items.Count > 0)
-                        lstbCandidate.SetSelected(0, true);
+                    lstbCandidate.SetSelected(0, true);
+                    txtManualFix.Text = lstbCandidate.SelectedIndex.ToString();
                     btnChange.Focus();
                 }
             }
@@ -154,7 +155,6 @@ namespace Spell
                         if (!item.ToLower().Equals(fixError.Token.ToLower()))
                             if (item.Length > 1)
                                 SynchronizedInvoke(lstbCandidate, delegate () { lstbCandidate.Items.Add(item.Trim()); });
-                    //if (lstbCandidate.Items.Count > 0)
                     SynchronizedInvoke(lstbCandidate, delegate () { lstbCandidate.SetSelected(0, true); });
                     SynchronizedInvoke(txtManualFix, delegate () { txtManualFix.Text = lstbCandidate.SelectedItem.ToString(); });
                     SynchronizedInvoke(btnChange, delegate () { btnChange.Focus(); });
@@ -260,11 +260,11 @@ namespace Spell
         }
         private void btnChange_Click(object sender, EventArgs e)
         {
-            change(lblWrong.Text.ToLower(), lstbCandidate.SelectedItem.ToString(), false);
+            change(lblWrong.Text.ToLower(), txtManualFix.Text, false);
         }
         private void lstbCandidate_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            change(lblWrong.Text.ToLower(), lstbCandidate.SelectedItem.ToString(), false);
+            change(lblWrong.Text.ToLower(), txtManualFix.Text, false);
         }
         public void change(string wrongText, string fixText, bool isRightClick)
         {
@@ -311,8 +311,6 @@ namespace Spell
                     break;
                 }
 
-            if (txtManualFix.Text.Trim().Length > 0)
-                fixText = txtManualFix.Text;
             if (isMajuscule)
                 _curRange.Text = fixText[0].ToString().ToUpper() + fixText.Substring(1);
             else _curRange.Text = fixText;
@@ -336,7 +334,6 @@ namespace Spell
             //UpdateProgressBar();
             CheckOutOfError_ShowCandidateNextTime();
 
-            txtManualFix.Text = "";
         }
         private void CheckOutOfError_ShowCandidateNextTime()
         {
@@ -363,7 +360,7 @@ namespace Spell
         private void btnChange_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
-                change(lblWrong.Text.ToLower(), lstbCandidate.SelectedItem.ToString(), false);
+                change(lblWrong.Text.ToLower(), txtManualFix.Text, false);
         }
 
         private void lstbCandidate_KeyDown(object sender, KeyEventArgs e)
@@ -371,7 +368,7 @@ namespace Spell
             if (e.KeyCode == Keys.Enter)
             {
                 btnChange.Focus();
-                change(lblWrong.Text.ToLower(), lstbCandidate.SelectedItem.ToString(), false);
+                change(lblWrong.Text.ToLower(), txtManualFix.Text, false);
             }
         }
 
@@ -687,7 +684,7 @@ namespace Spell
         private void txtManualFix_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
-                change(lblWrong.Text.ToLower(), lstbCandidate.SelectedItem.ToString(), false);
+                change(lblWrong.Text.ToLower(), txtManualFix.Text, false);
         }
 
         private void lstbCandidate_SelectedIndexChanged(object sender, EventArgs e)
@@ -698,6 +695,11 @@ namespace Spell
         private void txtManualFix_Click(object sender, EventArgs e)
         {
             txtManualFix.SelectAll();
+        }
+
+        private void lstbCandidate_SelectedValueChanged(object sender, EventArgs e)
+        {
+            txtManualFix.Text = lstbCandidate.SelectedIndex.ToString();
         }
 
         private void changeUI_ShowMoreInfo()
