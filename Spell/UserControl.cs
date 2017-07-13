@@ -322,7 +322,7 @@ namespace Spell
                 lstbCandidate.Items.Clear();
             }
             DocumentHandling.Instance.RemoveUnderline_Mistake(_curRange.Text, startIndex, endIndex);
-            _curRange.Select();
+            //_curRange.Select();
 
             //Lấy ngữ cảnh mới sau khi sửa lỗi
             Context context = new Context();
@@ -330,10 +330,8 @@ namespace Spell
             _newContextString = context.ToString();
 
             addRowGridLog();
-            //Index++;
-            //UpdateProgressBar();
-            CheckOutOfError_ShowCandidateNextTime();
 
+            CheckOutOfError_ShowCandidateNextTime();
         }
         private void CheckOutOfError_ShowCandidateNextTime()
         {

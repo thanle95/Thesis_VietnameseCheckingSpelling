@@ -348,11 +348,9 @@ namespace Spell
 
 
             if (isFirst)
-            {
-                DocumentHandling.Instance.RemoveUnderline_AllMistake();
                 isFirst = false;
-            }
-
+            else
+                DocumentHandling.Instance.RemoveUnderline_AllMistake();
         }
     }
 }

@@ -30,7 +30,6 @@ namespace Spell.Algorithm
         private int _typeFindError = 0;
         private int _typeError = 0;
         private bool _isResume = false;
-        private bool isNoChange = false;
         public int ISentence { get; set; }
         private int Start { get; set; }
         private int End { get; set; }
@@ -151,7 +150,8 @@ namespace Spell.Algorithm
         {
             try
             {
-                bool isSelected = true; // biến dùng để đánh dấu có select range câu đang kiểm tra hay không
+                // Cờ dùng để đánh dấu có select range câu đang kiểm tra hay không
+                bool isSelected = true;
                 Word.Range selectionRange = Globals.ThisAddIn.Application.Selection.Range;
                 //dùng để tìm ISentence
                 curSentences = Globals.ThisAddIn.Application.ActiveDocument.Sentences;
@@ -248,22 +248,6 @@ namespace Spell.Algorithm
                                 End = Start + iWordReplaced.Length;
 
                                 tmpContext.CopyForm(context);
-
-                                isNoChange = false;
-                                if (typeFindError == IS_TYPING_TYPE)
-                                {
-                                    foreach (Context iContext in lstErrorRange.Keys)
-                                        if (iContext.Equals(context))
-                                        {
-                                            isNoChange = true;
-                                            hSetCand = Candidate.getInstance.createCandidate(context);
-                                            if (hSetCand.Count > 0)
-                                                words[i] = hSetCand.ElementAt(0);
-                                            break;
-                                        }
-                                }
-                                if (isNoChange)
-                                    continue;
                                 //Kiểm tra trên từ điển âm tiết
                                 if ((typeError == WRONG_RIGHT_ERROR || typeError == WRONG_ERROR) && !VNDictionary.getInstance.isSyllableVN(iWordReplaced))
                                 {
