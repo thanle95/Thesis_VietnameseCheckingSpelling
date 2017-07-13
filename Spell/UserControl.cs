@@ -697,7 +697,7 @@ namespace Spell
 
         private void txtManualFix_Click(object sender, EventArgs e)
         {
-
+            txtManualFix.SelectAll();
         }
 
         private void changeUI_ShowMoreInfo()

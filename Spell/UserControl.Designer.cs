@@ -29,8 +29,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle12 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.gridLog = new System.Windows.Forms.DataGridView();
             this.STT = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.wrongContext = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -66,19 +66,19 @@
             this.gridLog.AllowUserToAddRows = false;
             this.gridLog.AllowUserToDeleteRows = false;
             this.gridLog.AllowUserToResizeRows = false;
-            dataGridViewCellStyle11.BackColor = System.Drawing.Color.Aqua;
-            this.gridLog.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle11;
+            dataGridViewCellStyle1.BackColor = System.Drawing.Color.Aqua;
+            this.gridLog.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
             this.gridLog.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.gridLog.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.DisplayedCells;
             this.gridLog.BackgroundColor = System.Drawing.Color.SkyBlue;
-            dataGridViewCellStyle12.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle12.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle12.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle12.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle12.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle12.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle12.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.gridLog.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle12;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.gridLog.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
             this.gridLog.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.gridLog.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.STT,
@@ -155,11 +155,13 @@
             this.btnGo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnGo.AutoSize = true;
             this.btnGo.BackColor = System.Drawing.Color.White;
+            this.btnGo.FlatAppearance.BorderColor = System.Drawing.Color.Teal;
+            this.btnGo.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnGo.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnGo.ForeColor = System.Drawing.Color.Black;
-            this.btnGo.Location = new System.Drawing.Point(192, 23);
+            this.btnGo.Location = new System.Drawing.Point(191, 23);
             this.btnGo.Name = "btnGo";
-            this.btnGo.Size = new System.Drawing.Size(90, 30);
+            this.btnGo.Size = new System.Drawing.Size(91, 30);
             this.btnGo.TabIndex = 24;
             this.btnGo.Text = "Đi đến lỗi...";
             this.btnGo.UseVisualStyleBackColor = false;
@@ -232,14 +234,15 @@
             // btnCloseBtnShowMore
             // 
             this.btnCloseBtnShowMore.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnCloseBtnShowMore.AutoSize = true;
             this.btnCloseBtnShowMore.BackColor = System.Drawing.Color.Red;
+            this.btnCloseBtnShowMore.FlatAppearance.BorderSize = 0;
+            this.btnCloseBtnShowMore.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnCloseBtnShowMore.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnCloseBtnShowMore.ForeColor = System.Drawing.Color.Black;
-            this.btnCloseBtnShowMore.Location = new System.Drawing.Point(258, 0);
+            this.btnCloseBtnShowMore.ForeColor = System.Drawing.Color.White;
+            this.btnCloseBtnShowMore.Location = new System.Drawing.Point(260, 1);
             this.btnCloseBtnShowMore.Margin = new System.Windows.Forms.Padding(0);
             this.btnCloseBtnShowMore.Name = "btnCloseBtnShowMore";
-            this.btnCloseBtnShowMore.Size = new System.Drawing.Size(24, 23);
+            this.btnCloseBtnShowMore.Size = new System.Drawing.Size(20, 20);
             this.btnCloseBtnShowMore.TabIndex = 25;
             this.btnCloseBtnShowMore.Text = "X";
             this.btnCloseBtnShowMore.UseVisualStyleBackColor = false;
@@ -249,12 +252,15 @@
             // 
             this.btnChange.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnChange.AutoSize = true;
-            this.btnChange.BackColor = System.Drawing.Color.White;
+            this.btnChange.BackColor = System.Drawing.SystemColors.Window;
+            this.btnChange.FlatAppearance.BorderColor = System.Drawing.Color.Teal;
+            this.btnChange.FlatAppearance.BorderSize = 0;
+            this.btnChange.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnChange.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnChange.ForeColor = System.Drawing.Color.Black;
-            this.btnChange.Location = new System.Drawing.Point(195, 146);
+            this.btnChange.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.btnChange.Location = new System.Drawing.Point(189, -2);
             this.btnChange.Name = "btnChange";
-            this.btnChange.Size = new System.Drawing.Size(90, 30);
+            this.btnChange.Size = new System.Drawing.Size(90, 35);
             this.btnChange.TabIndex = 19;
             this.btnChange.Text = "Sửa";
             this.btnChange.UseVisualStyleBackColor = false;
@@ -277,9 +283,11 @@
             this.btnIgnore.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnIgnore.AutoSize = true;
             this.btnIgnore.BackColor = System.Drawing.Color.White;
+            this.btnIgnore.FlatAppearance.BorderColor = System.Drawing.Color.Teal;
+            this.btnIgnore.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnIgnore.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnIgnore.ForeColor = System.Drawing.Color.Black;
-            this.btnIgnore.Location = new System.Drawing.Point(195, 0);
+            this.btnIgnore.Location = new System.Drawing.Point(191, 2);
             this.btnIgnore.Name = "btnIgnore";
             this.btnIgnore.Size = new System.Drawing.Size(90, 30);
             this.btnIgnore.TabIndex = 0;
@@ -292,9 +300,11 @@
             this.btnResume.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnResume.AutoSize = true;
             this.btnResume.BackColor = System.Drawing.Color.White;
+            this.btnResume.FlatAppearance.BorderColor = System.Drawing.Color.Teal;
+            this.btnResume.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnResume.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnResume.ForeColor = System.Drawing.Color.Black;
-            this.btnResume.Location = new System.Drawing.Point(93, 0);
+            this.btnResume.Location = new System.Drawing.Point(93, 1);
             this.btnResume.Name = "btnResume";
             this.btnResume.Size = new System.Drawing.Size(90, 30);
             this.btnResume.TabIndex = 20;
@@ -313,7 +323,6 @@
             this.pnlSequenceFix.Controls.Add(this.lstbCandidate);
             this.pnlSequenceFix.Controls.Add(this.btnIgnore);
             this.pnlSequenceFix.Controls.Add(this.lblWrong);
-            this.pnlSequenceFix.Controls.Add(this.btnChange);
             this.pnlSequenceFix.Location = new System.Drawing.Point(14, 7);
             this.pnlSequenceFix.Name = "pnlSequenceFix";
             this.pnlSequenceFix.Size = new System.Drawing.Size(285, 176);
@@ -322,11 +331,13 @@
             // pnlTxtManualFix
             // 
             this.pnlTxtManualFix.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.pnlTxtManualFix.BackColor = System.Drawing.Color.SkyBlue;
+            this.pnlTxtManualFix.BackColor = System.Drawing.SystemColors.Window;
+            this.pnlTxtManualFix.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pnlTxtManualFix.Controls.Add(this.txtManualFix);
-            this.pnlTxtManualFix.Location = new System.Drawing.Point(1, 40);
+            this.pnlTxtManualFix.Controls.Add(this.btnChange);
+            this.pnlTxtManualFix.Location = new System.Drawing.Point(1, 141);
             this.pnlTxtManualFix.Name = "pnlTxtManualFix";
-            this.pnlTxtManualFix.Size = new System.Drawing.Size(281, 19);
+            this.pnlTxtManualFix.Size = new System.Drawing.Size(281, 35);
             this.pnlTxtManualFix.TabIndex = 22;
             // 
             // txtManualFix
@@ -335,11 +346,11 @@
             this.txtManualFix.BackColor = System.Drawing.SystemColors.Window;
             this.txtManualFix.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txtManualFix.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtManualFix.Location = new System.Drawing.Point(2, 2);
+            this.txtManualFix.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.txtManualFix.Location = new System.Drawing.Point(13, 8);
             this.txtManualFix.Name = "txtManualFix";
-            this.txtManualFix.Size = new System.Drawing.Size(277, 15);
+            this.txtManualFix.Size = new System.Drawing.Size(175, 15);
             this.txtManualFix.TabIndex = 21;
-            this.txtManualFix.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.txtManualFix.Click += new System.EventHandler(this.txtManualFix_Click);
             this.txtManualFix.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtManualFix_KeyDown);
             // 
@@ -352,9 +363,9 @@
             this.lstbCandidate.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lstbCandidate.FormattingEnabled = true;
             this.lstbCandidate.ItemHeight = 16;
-            this.lstbCandidate.Location = new System.Drawing.Point(1, 70);
+            this.lstbCandidate.Location = new System.Drawing.Point(1, 38);
             this.lstbCandidate.Name = "lstbCandidate";
-            this.lstbCandidate.Size = new System.Drawing.Size(281, 68);
+            this.lstbCandidate.Size = new System.Drawing.Size(281, 100);
             this.lstbCandidate.TabIndex = 4;
             this.lstbCandidate.SelectedIndexChanged += new System.EventHandler(this.lstbCandidate_SelectedIndexChanged);
             this.lstbCandidate.KeyDown += new System.Windows.Forms.KeyEventHandler(this.lstbCandidate_KeyDown);

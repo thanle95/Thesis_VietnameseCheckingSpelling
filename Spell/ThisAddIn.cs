@@ -82,9 +82,9 @@ namespace Spell
             {
                 UserControl.Instance.lstbCandidate.Enabled = enable;
             });
-            UserControl.Instance.SynchronizedInvoke(UserControl.Instance.btnChange, delegate ()
+            UserControl.Instance.SynchronizedInvoke(UserControl.Instance.pnlTxtManualFix, delegate ()
             {
-                UserControl.Instance.btnChange.Visible = enable;
+                UserControl.Instance.pnlTxtManualFix.Visible = enable;
             });
             UserControl.Instance.SynchronizedInvoke(UserControl.Instance.btnResume, delegate ()
             {
