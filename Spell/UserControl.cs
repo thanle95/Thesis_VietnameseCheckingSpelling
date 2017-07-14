@@ -317,7 +317,6 @@ namespace Spell
             //
             //sửa lỗi tiếp theo
             //
-            FindError.Instance.FirstError_Context = FindError.Instance.dictContext_ErrorRange.First().Key;
             FindError.Instance.dictContext_ErrorRange[FindError.Instance.FirstError_Context].Select();
             if (!_IsFixAll)
                 showCandidateInTaskPane();

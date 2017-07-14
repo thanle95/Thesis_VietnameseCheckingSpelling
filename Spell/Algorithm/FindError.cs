@@ -11,16 +11,50 @@ namespace Spell.Algorithm
 {
     class FindError
     {
+        // Từ điển với key là ngữ cảnh, value là range lỗi
         public Dictionary<Context, Word.Range> dictContext_ErrorRange;
+
+        // Từ điển với key là ngữ cảnh, value là từ lỗi
+        // dùng để bỏ qua lỗi khi người dùng đã chỉnh sửa lỗi đó. 
         public Dictionary<Context, string> dictContext_ErrorString;
-        private Word.Sentences curSentences;
+
+        // Danh sách câu được select trong document
+        private Word.Sentences _SelectionSentences;
+
+        // Toàn bộ câu trong document
         private Word.Sentences _AllSentences = Globals.ThisAddIn.Application.ActiveDocument.Sentences;
+
+        // Cờ đánh dấu có phải chế độ "Đang đánh máy" hay không
         private const int IS_TYPING_TYPE = 0;
 
+        // Hằng số đánh dấu đang ở chế độ kiểm lỗi chính tả và ngữ cảnh
         private const int WRONG_RIGHT_ERROR = 0;
+        // Hằng số đánh dấu đang ở chế độ kiểm lỗi chính tả
         private const int WRONG_ERROR = 1;
+        // Hằng số đánh dấu đang ở chế độ kiểm lỗi ngữ cảnh
         private const int RIGHT_ERROR = 2;
-        public Context FirstError_Context { get; set; }
+
+        // Ngữ cảnh chứa lỗi đầu tiên trong danh sách
+        public Context FirstError_Context
+        {
+            get
+            {
+                return FindFirstError_Context();
+            }
+        }
+        private Context FindFirstError_Context()
+        {
+            int min = dictContext_ErrorRange.First().Value.Start;
+            Context ret = dictContext_ErrorRange.First().Key;
+            foreach(var item in dictContext_ErrorRange)
+                if(item.Value.Start < min)
+                {
+                    min = item.Value.Start;
+                    ret = item.Key;
+                }
+            return ret;
+            
+        }
         public Context SelectedError_Context { get; set; }
         public bool StopFindError { get; set; }
         private static FindError instance = new FindError();
@@ -82,7 +116,6 @@ namespace Spell.Algorithm
                 dictContext_ErrorRange.Clear();
                 dictContext_ErrorString.Clear();
             }
-            FirstError_Context = null;
         }
         public void createValue(int typeFindError, int typeError)
         {
@@ -91,7 +124,6 @@ namespace Spell.Algorithm
                 dictContext_ErrorRange.Clear();
                 dictContext_ErrorString.Clear();
             }
-            FirstError_Context = null;
             _typeFindError = typeFindError;
             _typeError = typeError;
             _isResume = false;
@@ -132,13 +164,13 @@ namespace Spell.Algorithm
         {
             int min = 1;
             int max = _AllSentences.Count;
-            int key = curSentences[1].Start;
-            while(min <= max)
+            int key = _SelectionSentences[1].Start;
+            while (min <= max)
             {
                 ISentence = (min + max) / 2;
                 if (key == _AllSentences[ISentence].Start)
                 {
-                    return ;
+                    return;
                 }
                 else if (key < _AllSentences[ISentence].Start)
                 {
@@ -153,7 +185,7 @@ namespace Spell.Algorithm
         public void Find_Typing(int typeError)
         {
             //Lấy danh sách câu đang được chọn
-            curSentences = Globals.ThisAddIn.Application.Selection.Sentences;
+            _SelectionSentences = Globals.ThisAddIn.Application.Selection.Sentences;
             //Trong những câu đang được chọn, lấy câu đầu tiên
             //------
             //......
@@ -175,15 +207,15 @@ namespace Spell.Algorithm
                 bool isSelected = true;
                 Word.Range selectionRange = Globals.ThisAddIn.Application.Selection.Range;
                 //dùng để tìm ISentence
-                curSentences = Globals.ThisAddIn.Application.Selection.Sentences;
-                
+                _SelectionSentences = Globals.ThisAddIn.Application.Selection.Sentences;
+
                 //nếu bắt đầu và kết thúc bằng nhau
                 //kiểm tra từ câu chứa vị trí con trỏ đến cuối văn bản
                 if (selectionRange.Start == selectionRange.End)
                 {
                     FindISentence();
                     isSelected = true;
-                    curSentences = _AllSentences;
+                    _SelectionSentences = _AllSentences;
                 }
                 else {
                     //ngược lại
@@ -192,18 +224,8 @@ namespace Spell.Algorithm
                     isSelected = false;
                     ISentence = 1;
                 }
-                //if (typeFindError == IS_TYPING_TYPE)
-                //    //lấy câu dựa trên vị trí con trỏ
-                //    curSentences = Globals.ThisAddIn.Application.Selection.Sentences;
-
-                //else if (curSentences[1].Start == 0)
-                //{
-                //    //chọn toàn bộ văn bản
-                //    curSentences = Globals.ThisAddIn.Application.ActiveDocument.Sentences;
-                //    isSelected = true;
-                //}
                 isError = false;
-                _countSentence = curSentences.Count;
+                _countSentence = _SelectionSentences.Count;
                 //lấy toàn bộ danh sách các từ trong Active Document, để lấy được ngữ cảnh
                 while (true)
                 {
@@ -213,7 +235,7 @@ namespace Spell.Algorithm
                     {
                         if (StopFindError)
                             break;
-                        range = curSentences[ISentence];
+                        range = _SelectionSentences[ISentence];
                         _Sentence = range.Text.TrimEnd();
 
                         // Kiểm tra trường hợp thiếu khoảng trắng giữa 2 dấu câu liên tiếp
@@ -298,8 +320,6 @@ namespace Spell.Algorithm
 
                                         ////lấy ngữ cảnh gốc
                                         //context.getContext(i, originWords);
-                                        if (FirstError_Context == null)
-                                            FirstError_Context = context;
                                         isError = true;
                                         dictContext_ErrorRange.Add(context, (DocumentHandling.Instance.UnderlineWrongWord(context.TOKEN, Start, End)));
                                     }
@@ -335,8 +355,6 @@ namespace Spell.Algorithm
                                                 words[i] = hSetCand.ElementAt(0);
                                                 ////lấy ngữ cảnh gốc
                                                 //context.getContext(i, originWords);
-                                                if (FirstError_Context == null)
-                                                    FirstError_Context = context;
                                                 isError = true;
                                                 dictContext_ErrorRange.Add(context, (DocumentHandling.Instance.UnderlineRightWord(context.TOKEN, Start, End)));
                                             }
@@ -353,8 +371,6 @@ namespace Spell.Algorithm
                                             words[i] = hSetCand.ElementAt(0);
                                             ////lấy ngữ cảnh gốc
                                             //context.getContext(i, originWords);
-                                            if (FirstError_Context == null)
-                                                FirstError_Context = context;
                                             isError = true;
                                             dictContext_ErrorRange.Add(context, (DocumentHandling.Instance.UnderlineRightWord(context.TOKEN, Start, End)));
                                         }
