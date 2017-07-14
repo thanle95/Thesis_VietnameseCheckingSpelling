@@ -182,11 +182,8 @@ namespace Spell.Algorithm
                 if (selectionRange.Start == selectionRange.End)
                 {
                     FindISentence();
-                    //for (ISentence = 1; ISentence < curSentences.Count; ISentence++)
-                    //    //nếu câu đang xét có độ dài lớn hơn vị trí con trỏ
-                    //    //Isentence hiện tại là giá trị đang tìm
-                    //    if (curSentences[ISentence].End > selectionRange.Start)
-                    //        break;
+                    isSelected = true;
+                    curSentences = _AllSentences;
                 }
                 else {
                     //ngược lại
@@ -206,7 +203,7 @@ namespace Spell.Algorithm
                 //    isSelected = true;
                 //}
                 isError = false;
-                _countSentence = _AllSentences.Count;
+                _countSentence = curSentences.Count;
                 //lấy toàn bộ danh sách các từ trong Active Document, để lấy được ngữ cảnh
                 while (true)
                 {
@@ -216,7 +213,7 @@ namespace Spell.Algorithm
                     {
                         if (StopFindError)
                             break;
-                        range = _AllSentences[ISentence];
+                        range = curSentences[ISentence];
                         _Sentence = range.Text.TrimEnd();
 
                         // Kiểm tra trường hợp thiếu khoảng trắng giữa 2 dấu câu liên tiếp
@@ -225,7 +222,7 @@ namespace Spell.Algorithm
                         Match mHasWord = regexHasWord.Match(_Sentence);
                         if (!mHasWord.Success)
                         {
-                            // Dừng kiểm lỗi, vì có thể không cắt được câu đang có lỗi
+                            // Kiểm lỗi từ đầu, vì có thể không cắt được câu đang có lỗi
 
                             range.Text = " " + range.Text;
                             if (isSelected)
@@ -234,7 +231,7 @@ namespace Spell.Algorithm
                             ISentence = 0;
                             continue;
                         }
-
+                        Start = range.Start;
                         words = _Sentence.Split(' ');
                         originWords = _Sentence.Split(' ');
                         if (typeFindError != IS_TYPING_TYPE && isSelected)
