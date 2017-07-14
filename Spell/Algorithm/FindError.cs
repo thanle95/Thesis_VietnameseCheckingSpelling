@@ -33,6 +33,7 @@ namespace Spell.Algorithm
         public int ISentence { get; set; }
         private int Start { get; set; }
         private int End { get; set; }
+        private string _Sentence { get; set; }
         private string iWord { get; set; }
         private string iWordReplaced { get; set; }
         private string[] words { get; set; }
@@ -85,7 +86,7 @@ namespace Spell.Algorithm
             }
             FirstError_Context = null;
         }
-        public void createValue(int typeFindError, int typeError, int iSentence)
+        public void createValue(int typeFindError, int typeError)
         {
             if (lstErrorRange.Count > 0)
             {
@@ -95,7 +96,6 @@ namespace Spell.Algorithm
             FirstError_Context = null;
             _typeFindError = typeFindError;
             _typeError = typeError;
-            ISentence = iSentence;
             _isResume = false;
             StopFindError = false;
         }
@@ -170,6 +170,7 @@ namespace Spell.Algorithm
                     //kiểm tra những câu được chọn
                     curSentences = Globals.ThisAddIn.Application.Selection.Sentences;
                     isSelected = false;
+                    ISentence = 1;
                 }
                 //if (typeFindError == IS_TYPING_TYPE)
                 //    //lấy câu dựa trên vị trí con trỏ
@@ -192,8 +193,9 @@ namespace Spell.Algorithm
                     {
                         if (StopFindError)
                             break;
-                        words = curSentences[ISentence].Text.TrimEnd().Split(' ');
-                        originWords = curSentences[ISentence].Text.TrimEnd().Split(' ');
+                        _Sentence = curSentences[ISentence].Text.TrimEnd();
+                        words = _Sentence.Split(' ');
+                        originWords = _Sentence.Split(' ');
                         Start = curSentences[ISentence].Start;
                         End = curSentences[ISentence].End;
                         range = Globals.ThisAddIn.Application.ActiveDocument.Range(Start, End);
@@ -350,6 +352,9 @@ namespace Spell.Algorithm
                         break; // break while true
                     }
                 }//end while true
+
+                // Sắp xếp lại danh sách lỗi theo Range.Start
+                lstErrorRange.OrderBy(x => x.Value.Start).ToDictionary(x => x.Key, x => x.Value);
 
                 foreach (var item in lstErrorRange)
                     lstError.Add(item.Key, item.Value.Text);

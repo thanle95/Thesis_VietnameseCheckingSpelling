@@ -80,8 +80,8 @@ namespace Spell
         private void stopFindError()
         {
             FindError.Instance.StopFindError = true;
-            if (FindError.Instance.CountError > 0)
-                btnShowTaskpane.Enabled = true;
+            //if (FindError.Instance.CountError > 0)
+            //    btnShowTaskpane.Enabled = true;
             btnCheckError.Label = "Kiểm lỗi";
             btnCheckError.ScreenTip = "Kiểm lỗi";
             btnCheckError.SuperTip = "Bôi đen vùng văn bản trước khi nhấn nút để kiểm tra vùng văn bản đó\n\nHoặc để con " +
@@ -329,7 +329,7 @@ namespace Spell
         {
             typeFindError = dropTypeFindError.SelectedItemIndex;
             typeError = dropTypeError.SelectedItemIndex;
-            FindError.Instance.createValue(typeFindError, typeError, 1);
+            FindError.Instance.createValue(typeFindError, typeError);
 
             btnDeleteFormat.Enabled = false;
             btnShowTaskpane.Enabled = false;

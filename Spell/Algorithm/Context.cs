@@ -149,7 +149,8 @@ namespace Spell.Algorithm
                 
                 bool isUpper = char.IsUpper(PRE[0]) ? true : false;
                 //9
-                if (preSPEC.Length < PRE.Length || preClose.Length < PRE.Length || (isUpper && iWord != 0))
+                // Theo chũ trương
+                if (preSPEC.Length < PRE.Length || preClose.Length < PRE.Length || (isUpper && iWord != 1))
                 {
                     if (preSPEC.Length < PRE.Length)
                         PRE = preSPEC;
@@ -184,7 +185,7 @@ namespace Spell.Algorithm
                            
                             isUpper = char.IsUpper(PREPRE[0]) ? true : false;
                             //14
-                            if (prepreSPEC.Length < PREPRE.Length || prepreClose.Length < PREPRE.Length || (isUpper && iWord != 0))
+                            if (prepreSPEC.Length < PREPRE.Length || prepreClose.Length < PREPRE.Length || (isUpper && iWord != 2))
                             {
                                 PREPRE = "";
                                 //12
