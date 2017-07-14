@@ -14,6 +14,7 @@ namespace Spell.Algorithm
         public Dictionary<Context, Word.Range> dictContext_ErrorRange;
         public Dictionary<Context, string> dictContext_ErrorString;
         private Word.Sentences curSentences;
+        private Word.Sentences _AllSentences = Globals.ThisAddIn.Application.ActiveDocument.Sentences;
         private const int IS_TYPING_TYPE = 0;
 
         private const int WRONG_RIGHT_ERROR = 0;
@@ -126,6 +127,29 @@ namespace Spell.Algorithm
         {
             Find(_typeFindError, _typeError);
         }
+
+        private void FindISentence()
+        {
+            int min = 1;
+            int max = _AllSentences.Count;
+            int key = curSentences[1].Start;
+            while(min <= max)
+            {
+                ISentence = (min + max) / 2;
+                if (key == _AllSentences[ISentence].Start)
+                {
+                    return ;
+                }
+                else if (key < _AllSentences[ISentence].Start)
+                {
+                    max = ISentence - 1;
+                }
+                else
+                {
+                    min = ISentence + 1;
+                }
+            }
+        }
         public void Find_Typing(int typeError)
         {
             //Lấy danh sách câu đang được chọn
@@ -151,21 +175,23 @@ namespace Spell.Algorithm
                 bool isSelected = true;
                 Word.Range selectionRange = Globals.ThisAddIn.Application.Selection.Range;
                 //dùng để tìm ISentence
-                curSentences = Globals.ThisAddIn.Application.ActiveDocument.Sentences;
+                curSentences = Globals.ThisAddIn.Application.Selection.Sentences;
+                
                 //nếu bắt đầu và kết thúc bằng nhau
                 //kiểm tra từ câu chứa vị trí con trỏ đến cuối văn bản
                 if (selectionRange.Start == selectionRange.End)
                 {
-                    for (ISentence = 1; ISentence < curSentences.Count; ISentence++)
-                        //nếu câu đang xét có độ dài lớn hơn vị trí con trỏ
-                        //Isentence hiện tại là giá trị đang tìm
-                        if (curSentences[ISentence].End > selectionRange.Start)
-                            break;
+                    FindISentence();
+                    //for (ISentence = 1; ISentence < curSentences.Count; ISentence++)
+                    //    //nếu câu đang xét có độ dài lớn hơn vị trí con trỏ
+                    //    //Isentence hiện tại là giá trị đang tìm
+                    //    if (curSentences[ISentence].End > selectionRange.Start)
+                    //        break;
                 }
                 else {
                     //ngược lại
                     //kiểm tra những câu được chọn
-                    curSentences = Globals.ThisAddIn.Application.Selection.Sentences;
+                    //curSentences = Globals.ThisAddIn.Application.Selection.Sentences;
                     isSelected = false;
                     ISentence = 1;
                 }
@@ -180,7 +206,7 @@ namespace Spell.Algorithm
                 //    isSelected = true;
                 //}
                 isError = false;
-                _countSentence = curSentences.Count;
+                _countSentence = _AllSentences.Count;
                 //lấy toàn bộ danh sách các từ trong Active Document, để lấy được ngữ cảnh
                 while (true)
                 {
@@ -190,7 +216,8 @@ namespace Spell.Algorithm
                     {
                         if (StopFindError)
                             break;
-                        _Sentence = curSentences[ISentence].Text.TrimEnd();
+                        range = _AllSentences[ISentence];
+                        _Sentence = range.Text.TrimEnd();
 
                         // Kiểm tra trường hợp thiếu khoảng trắng giữa 2 dấu câu liên tiếp
                         // Tôi có bút chì, bút bi...; tất cả chúng đều được mua tháng trước
@@ -200,9 +227,9 @@ namespace Spell.Algorithm
                         {
                             // Dừng kiểm lỗi, vì có thể không cắt được câu đang có lỗi
 
-                            curSentences[ISentence].Text = " " + curSentences[ISentence].Text;
+                            range.Text = " " + range.Text;
                             if (isSelected)
-                                curSentences[ISentence].Select();
+                                range.Select();
                             MessageBox.Show(SysMessage.Instance.Message_Space_Expected);
                             ISentence = 0;
                             continue;
@@ -210,9 +237,6 @@ namespace Spell.Algorithm
 
                         words = _Sentence.Split(' ');
                         originWords = _Sentence.Split(' ');
-                        Start = curSentences[ISentence].Start;
-                        End = curSentences[ISentence].End;
-                        range = Globals.ThisAddIn.Application.ActiveDocument.Range(Start, End);
                         if (typeFindError != IS_TYPING_TYPE && isSelected)
                             range.Select();
                         //số lượng các từ trong cụm
