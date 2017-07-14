@@ -466,16 +466,10 @@ namespace Spell
             SynchronizedInvoke(pnlAutoFix, delegate ()
             {
                 int min = 5;
-                int delta = pnlAutoFix.Location.Y - min;
                 for (int i = pnlAutoFix.Location.Y; i > min; i--)
                 {
                     pnlAutoFix.Location = new System.Drawing.Point(14, i);
-                    if (pnlAutoFix.Location.Y < (delta / 7 + min))
-                        ;
-                    if (pnlAutoFix.Location.Y < (delta * 3 / 7 + min))
-                        i--;
-                    else i = i - 2;
-                    Thread.Sleep(7);
+                    Thread.Sleep(1);
                 }
             });
             SynchronizedInvoke(gridLog, delegate ()
@@ -520,20 +514,15 @@ namespace Spell
                 }
                 else if (gridLog.Size.Height <= 250)
                 {
-                    int delta = gridLog.Location.Y;
+                    
                     gridLog.Size = new System.Drawing.Size(gridLog.Size.Width, gridLog.Size.Height + 20);
-                    for (int i = gridLog.Location.Y; i >= 0; i--)
-                    {
-                        gridLog.Location = new System.Drawing.Point(0, i);
-                        if (pnlAutoFix.Location.Y < (delta / 7))
-                            ;
-                        if (pnlAutoFix.Location.Y < (delta * 3 / 7))
-                            i--;
-                        else i = i - 2;
-                        Thread.Sleep(5);
-                    }
-                    gridLog.Location = new System.Drawing.Point(0, 0);
                 }
+                for (int i = gridLog.Location.Y; i >= 0; i--)
+                {
+                    gridLog.Location = new System.Drawing.Point(0, i);
+                    Thread.Sleep(3);
+                }
+
                 gridLog.Rows.Add(gridLog.RowCount + 1, _oldContextString, _newContextString);
                 //
                 //scroll gridlog đến lỗi cuối cùng
@@ -686,7 +675,6 @@ namespace Spell
             }
             SynchronizedInvoke(gridLog, delegate ()
             {
-                int delta = yGridLog - gridLog.Location.Y;
                 for (int i = gridLog.Location.Y; i <= yGridLog; i++)
                 {
                     gridLog.Location = new System.Drawing.Point(0, i);
