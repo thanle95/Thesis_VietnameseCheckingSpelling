@@ -97,7 +97,7 @@ namespace Spell
         {
             FixError fixError = new FixError();
             FindError.Instance.GetSeletedContext(words, sentences);
-            fixError.getCandidatesWithContext(FindError.Instance.SelectedError_Context, FindError.Instance.lstErrorRange);
+            fixError.getCandidatesWithContext(FindError.Instance.SelectedError_Context, FindError.Instance.dictContext_ErrorRange);
 
             if (fixError.hSetCandidate.Count > 0)
             {
@@ -123,14 +123,14 @@ namespace Spell
         }
         public void showCandidateInTaskPane()
         {
-            FindError.Instance.lstErrorRange[FindError.Instance.FirstError_Context].Select();
-            while (FindError.Instance.lstErrorRange.Count > 0)
+            FindError.Instance.dictContext_ErrorRange[FindError.Instance.FirstError_Context].Select();
+            while (FindError.Instance.dictContext_ErrorRange.Count > 0)
             {
                 _IsOutOfError = false;
                 FixError fixError = new FixError();
 
-                fixError.getCandidatesWithContext(FindError.Instance.FirstError_Context, FindError.Instance.lstErrorRange);
-                _curRange = FindError.Instance.lstErrorRange[FindError.Instance.FirstError_Context];
+                fixError.getCandidatesWithContext(FindError.Instance.FirstError_Context, FindError.Instance.dictContext_ErrorRange);
+                _curRange = FindError.Instance.dictContext_ErrorRange[FindError.Instance.FirstError_Context];
                 _ErrorString = fixError.Token;
                 //MessageBox.Show(string.Format("\"{0}\"-\"{1}\"", range.Text, fixError.Token));
                 _oldContextString = FindError.Instance.ToString().Trim();
@@ -207,12 +207,12 @@ namespace Spell
             string text = range.Text.Trim().ToLower();
             if (text.Equals(wrong))
             {
-                foreach (var item in FindError.Instance.lstErrorRange)
+                foreach (var item in FindError.Instance.dictContext_ErrorRange)
                 {
                     if (range.Start == item.Value.Start)
                     {
-                        FindError.Instance.lstErrorRange.Remove(item.Key);
-                        FindError.Instance.lstError.Remove(item.Key);
+                        FindError.Instance.dictContext_ErrorRange.Remove(item.Key);
+                        FindError.Instance.dictContext_ErrorString.Remove(item.Key);
                         startIndex = item.Value.Start;
                         endIndex = item.Value.End;
                         DocumentHandling.Instance.RemoveUnderline_Mistake(item.Value.Text, startIndex, endIndex);
@@ -230,13 +230,13 @@ namespace Spell
                 string iError;
                 for (int i = 0; i < FindError.Instance.CountError; i++)
                 {
-                    var item = FindError.Instance.lstErrorRange.ElementAt(i);
-                    iErrorRange = FindError.Instance.lstErrorRange.ElementAt(i).Value.Text;
-                    iError = FindError.Instance.lstError.ElementAt(i).Value;
+                    var item = FindError.Instance.dictContext_ErrorRange.ElementAt(i);
+                    iErrorRange = FindError.Instance.dictContext_ErrorRange.ElementAt(i).Value.Text;
+                    iError = FindError.Instance.dictContext_ErrorString.ElementAt(i).Value;
                     if (iErrorRange == null || !iErrorRange.Equals(iError))
                     {
-                        FindError.Instance.lstErrorRange.Remove(item.Key);
-                        FindError.Instance.lstError.Remove(item.Key);
+                        FindError.Instance.dictContext_ErrorRange.Remove(item.Key);
+                        FindError.Instance.dictContext_ErrorString.Remove(item.Key);
                         startIndex = item.Value.Start;
                         endIndex = item.Value.End;
                         DocumentHandling.Instance.RemoveUnderline_Mistake(startIndex, endIndex);
@@ -268,61 +268,29 @@ namespace Spell
         }
         public void change(string wrongText, string fixText, bool isRightClick)
         {
-            //if (IsFixAll)
-            //{
-            //    Context context = new Context();
-            //    context.getContext();
-
-            //    FixError fixError = new FixError();
-
-            //    fixError.getCandidatesWithContext(context, FindError.Instance.lstErrorRange);
-            //    Word.Range range = null;
-            //    foreach (var pair in FindError.Instance.lstErrorRange)
-            //        if (pair.Key.Equals(context))
-            //        {
-            //            range = pair.Value;
-            //            range.Select();
-            //            break;
-            //        }
-
-            //    //range.Select();
-
-            //    _oldString = context.ToString();
-            //    _newString = fixError.ToString().Trim();
-            //}
-
-
-            int startIndex = 0;
-            int endIndex = 0;
             if (lblWrong.Text.Equals(_ERROR_SPACE))
                 wrongText = " ";
-            bool isMajuscule = false;
-            foreach (Word.Range range in FindError.Instance.lstErrorRange.Values)
-                if (range.Text.ToLower().Equals(wrongText))
+            foreach (var item in FindError.Instance.dictContext_ErrorRange)
+                if (item.Value.Text.ToLower().Equals(wrongText))
                 {
-                    if (!range.Text.Equals(wrongText))
-                        isMajuscule = true;
-                    startIndex = range.Start;
-                    _curRange = range;
-                    var item = FindError.Instance.lstErrorRange.First(kvp => kvp.Value == range);
 
-                    FindError.Instance.lstErrorRange.Remove(item.Key);
-                    FindError.Instance.lstError.Remove(item.Key);
+                    FindError.Instance.dictContext_ErrorRange.Remove(item.Key);
+                    FindError.Instance.dictContext_ErrorString.Remove(item.Key);
+
+                    if (!item.Value.Text.Equals(wrongText))
+                        _curRange.Text = fixText[0].ToString().ToUpper() + fixText.Substring(1);
+                    else _curRange.Text = fixText;
+
+
+                    DocumentHandling.Instance.RemoveUnderline_Mistake(_curRange.Text, item.Value.Start, item.Value.Start + _curRange.Text.Length);
                     break;
                 }
 
-            if (isMajuscule)
-                _curRange.Text = fixText[0].ToString().ToUpper() + fixText.Substring(1);
-            else _curRange.Text = fixText;
-
-            endIndex = startIndex + _curRange.Text.Length;
             if (!_IsFixAll)
             {
                 lblWrong.Text = "\"Từ sai\"";
                 lstbCandidate.Items.Clear();
             }
-            DocumentHandling.Instance.RemoveUnderline_Mistake(_curRange.Text, startIndex, endIndex);
-            //_curRange.Select();
 
             //Lấy ngữ cảnh mới sau khi sửa lỗi
             Context context = new Context();
@@ -349,8 +317,8 @@ namespace Spell
             //
             //sửa lỗi tiếp theo
             //
-            FindError.Instance.FirstError_Context = FindError.Instance.lstErrorRange.First().Key;
-            FindError.Instance.lstErrorRange[FindError.Instance.FirstError_Context].Select();
+            FindError.Instance.FirstError_Context = FindError.Instance.dictContext_ErrorRange.First().Key;
+            FindError.Instance.dictContext_ErrorRange[FindError.Instance.FirstError_Context].Select();
             if (!_IsFixAll)
                 showCandidateInTaskPane();
 
@@ -419,7 +387,6 @@ namespace Spell
                 bool isInitial = true;
                 int distance;
                 int rowIndex = _SelectedRowGridLog;
-                DataGridViewRow rowNext = null;
                 foreach (DataGridViewRow row in gridLog.Rows)
                 {
                     if (row.Index != _SelectedRowGridLog)

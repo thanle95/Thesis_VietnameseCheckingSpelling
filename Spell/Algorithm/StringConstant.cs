@@ -179,7 +179,7 @@ namespace Spell.Algorithm
         public string patternEndSentenceCharacter = "[.!?;:…]";
 
         public string patternCheckSpecialChar = "[-|\\/|\\|>|<|\\[|\\]|\"|(|)|“|”|@|#|$|%|^|&|\\*|\\d|\\W]";
-        public string patternNotAWord = "[\\W]";
+        public string patternHasWord = "[\\w]";
         public string[] VNAcronym = new string[]
         {
             "XHCN", "CNXH", "ĐCS", "CHXHCNVN", "MTDTGPMNVN", "QDND","QLVNCH","VNQDĐ","VNQDD","VNCH","VNDCCH",

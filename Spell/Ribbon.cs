@@ -302,7 +302,7 @@ namespace Spell
                 btnShowTaskpane.Label = "Sửa tất cả";
                 btnShowTaskpane.ScreenTip = "Hiện Task Pane để sửa tất cả lỗi có trong văn bản bằng gợi ý tốt nhất được chọn";
                 btnShowTaskpane.Image = Properties.Resources.change_all;
-                if (FindError.Instance.lstErrorRange.Count > 0)
+                if (FindError.Instance.dictContext_ErrorRange.Count > 0)
                 {
                     showSuggest(FindError.Instance.CountError);
                     //FindError.Instance.FirstError_Context = FindError.Instance.lstErrorRange.First().Key;

@@ -59,7 +59,7 @@ namespace Spell
                 if (selectedRange.Text.Trim().Equals(UserControl.Instance.lblWrong.Text))
                         EnableFixError(true);
                     else {
-                        foreach (var item in FindError.Instance.lstErrorRange.Keys)
+                        foreach (var item in FindError.Instance.dictContext_ErrorRange.Keys)
                         //Sửa lỗi bất kỳ khác
                         if (selectedRange.Text.Trim().Equals(item.TOKEN))
                             {
@@ -144,7 +144,7 @@ namespace Spell
                 FixError fixError = new FixError();
                 FindError.Instance.GetSeletedContext(words, sentences);
                 //Sửa lỗi đã tìm được
-                fixError.getCandidatesWithContext(FindError.Instance.SelectedError_Context, FindError.Instance.lstErrorRange);
+                fixError.getCandidatesWithContext(FindError.Instance.SelectedError_Context, FindError.Instance.dictContext_ErrorRange);
                 WrongWord = fixError.Token.ToLower();
 
                 //dùng List để reverse hashSet

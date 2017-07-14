@@ -62,6 +62,14 @@ namespace Spell.Algorithm
             }
         }
 
+        public string Message_Space_Expected
+        {
+            get
+            {
+                return "Lỗi thiếu khoảng trắng";
+            }
+        }
+
         //public string IsNotError(string word)
         //{
         //    return string.Format("\"{0}\" không phải là một lỗi!", word);

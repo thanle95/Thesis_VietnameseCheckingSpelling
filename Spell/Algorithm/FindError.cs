@@ -11,13 +11,9 @@ namespace Spell.Algorithm
 {
     class FindError
     {
-        public Dictionary<Context, Word.Range> lstErrorRange;
-        public Dictionary<Context, string> lstError;
+        public Dictionary<Context, Word.Range> dictContext_ErrorRange;
+        public Dictionary<Context, string> dictContext_ErrorString;
         private Word.Sentences curSentences;
-        //public List<string> MySentences
-        //{
-        //    get; set;
-        //}
         private const int IS_TYPING_TYPE = 0;
 
         private const int WRONG_RIGHT_ERROR = 0;
@@ -44,7 +40,8 @@ namespace Spell.Algorithm
         private HashSet<string> hSetCand { get; set; }
         private Word.Range range { get; set; }
         private Regex r = new Regex(StringConstant.Instance.patternCheckSpecialChar);
-        
+        private Regex regexHasWord = new Regex(StringConstant.Instance.patternHasWord);
+        private int _countSentence;
         public override string ToString()
         {
             if (SelectedError_Context != null)
@@ -64,8 +61,8 @@ namespace Spell.Algorithm
         private FindError()
         {
             StopFindError = false;
-            lstErrorRange = new Dictionary<Context, Word.Range>();
-            lstError = new Dictionary<Context, string>();
+            dictContext_ErrorRange = new Dictionary<Context, Word.Range>();
+            dictContext_ErrorString = new Dictionary<Context, string>();
             tmpContext = new Context();
             hSetCand = new HashSet<string>();
         }
@@ -79,19 +76,19 @@ namespace Spell.Algorithm
         public void Clear()
         {
             StopFindError = false;
-            if (lstErrorRange.Count > 0)
+            if (dictContext_ErrorRange.Count > 0)
             {
-                lstErrorRange.Clear();
-                lstError.Clear();
+                dictContext_ErrorRange.Clear();
+                dictContext_ErrorString.Clear();
             }
             FirstError_Context = null;
         }
         public void createValue(int typeFindError, int typeError)
         {
-            if (lstErrorRange.Count > 0)
+            if (dictContext_ErrorRange.Count > 0)
             {
-                lstErrorRange.Clear();
-                lstError.Clear();
+                dictContext_ErrorRange.Clear();
+                dictContext_ErrorString.Clear();
             }
             FirstError_Context = null;
             _typeFindError = typeFindError;
@@ -107,13 +104,13 @@ namespace Spell.Algorithm
         {
             get
             {
-                return lstErrorRange.Count;
+                return dictContext_ErrorRange.Count;
             }
         }
         public void GetSeletedContext(Word.Words words, Word.Sentences sentences)
         {
             SelectedError_Context = new Context(words, sentences);
-            foreach (Context context in lstErrorRange.Keys)
+            foreach (Context context in dictContext_ErrorRange.Keys)
             {
                 if (context.Equals(SelectedError_Context))
                 {
@@ -183,17 +180,34 @@ namespace Spell.Algorithm
                 //    isSelected = true;
                 //}
                 isError = false;
-
+                _countSentence = curSentences.Count;
                 //lấy toàn bộ danh sách các từ trong Active Document, để lấy được ngữ cảnh
                 while (true)
                 {
                     if (StopFindError)
                         break;
-                    for (; ISentence <= curSentences.Count; ISentence++)
+                    for (; ISentence <= _countSentence; ISentence++)
                     {
                         if (StopFindError)
                             break;
                         _Sentence = curSentences[ISentence].Text.TrimEnd();
+
+                        // Kiểm tra trường hợp thiếu khoảng trắng giữa 2 dấu câu liên tiếp
+                        // Tôi có bút chì, bút bi...; tất cả chúng đều được mua tháng trước
+
+                        Match mHasWord = regexHasWord.Match(_Sentence);
+                        if (!mHasWord.Success)
+                        {
+                            // Dừng kiểm lỗi, vì có thể không cắt được câu đang có lỗi
+
+                            curSentences[ISentence].Text = " " + curSentences[ISentence].Text;
+                            if (isSelected)
+                                curSentences[ISentence].Select();
+                            MessageBox.Show(SysMessage.Instance.Message_Space_Expected);
+                            ISentence = 0;
+                            continue;
+                        }
+
                         words = _Sentence.Split(' ');
                         originWords = _Sentence.Split(' ');
                         Start = curSentences[ISentence].Start;
@@ -266,7 +280,7 @@ namespace Spell.Algorithm
                                         if (FirstError_Context == null)
                                             FirstError_Context = context;
                                         isError = true;
-                                        lstErrorRange.Add(context, (DocumentHandling.Instance.UnderlineWrongWord(context.TOKEN, Start, End)));
+                                        dictContext_ErrorRange.Add(context, (DocumentHandling.Instance.UnderlineWrongWord(context.TOKEN, Start, End)));
                                     }
                                 }//end if wrong word
 
@@ -303,7 +317,7 @@ namespace Spell.Algorithm
                                                 if (FirstError_Context == null)
                                                     FirstError_Context = context;
                                                 isError = true;
-                                                lstErrorRange.Add(context, (DocumentHandling.Instance.UnderlineRightWord(context.TOKEN, Start, End)));
+                                                dictContext_ErrorRange.Add(context, (DocumentHandling.Instance.UnderlineRightWord(context.TOKEN, Start, End)));
                                             }
                                         }
                                     }
@@ -321,7 +335,7 @@ namespace Spell.Algorithm
                                             if (FirstError_Context == null)
                                                 FirstError_Context = context;
                                             isError = true;
-                                            lstErrorRange.Add(context, (DocumentHandling.Instance.UnderlineRightWord(context.TOKEN, Start, End)));
+                                            dictContext_ErrorRange.Add(context, (DocumentHandling.Instance.UnderlineRightWord(context.TOKEN, Start, End)));
                                         }
                                     }
 
@@ -330,9 +344,9 @@ namespace Spell.Algorithm
                                 {
                                     if (!isError)
                                     {
-                                        if (lstErrorRange.ContainsKey(context))
+                                        if (dictContext_ErrorRange.ContainsKey(context))
                                         {
-                                            lstErrorRange.Remove(context);
+                                            dictContext_ErrorRange.Remove(context);
                                             DocumentHandling.Instance.RemoveUnderline_Mistake(context.TOKEN, Start, End);
                                         }
                                     }
@@ -354,10 +368,10 @@ namespace Spell.Algorithm
                 }//end while true
 
                 // Sắp xếp lại danh sách lỗi theo Range.Start
-                lstErrorRange.OrderBy(x => x.Value.Start).ToDictionary(x => x.Key, x => x.Value);
+                dictContext_ErrorRange.OrderBy(x => x.Value.Start).ToDictionary(x => x.Key, x => x.Value);
 
-                foreach (var item in lstErrorRange)
-                    lstError.Add(item.Key, item.Value.Text);
+                foreach (var item in dictContext_ErrorRange)
+                    dictContext_ErrorString.Add(item.Key, item.Value.Text);
             }
             catch (Exception e)
             {
