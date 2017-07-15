@@ -773,9 +773,9 @@ namespace Spell.Algorithm
                 if (IsLikely(context.TOKEN, pair.Key) &&(pair.Key.Contains(context.PRE) || pair.Key.Contains(context.NEXT)))
                 {
                     string[] word = pair.Key.Split(' ');
-                    if (word[0].Equals(context.PRE) && word[1].Length > 0)
+                    if (!word[1].Equals(context.TOKEN.ToLower()) &&word[0].Equals(context.PRE) && word[1].Length > 0)
                         lstCandidate.Add(word[1]);
-                    else if (word[1].Equals(context.NEXT) && word[0].Length > 0)
+                    else if (!word[0].Equals(context.TOKEN.ToLower()) && word[1].Equals(context.NEXT) && word[0].Length > 0)
                         lstCandidate.Add(word[0]);
                 }
             }
