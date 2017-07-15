@@ -15,6 +15,7 @@ namespace Spell.Algorithm
         {
             hSetCandidate = new HashSet<string>();
         }
+        // 
         public static FixError Instance
         {
             get

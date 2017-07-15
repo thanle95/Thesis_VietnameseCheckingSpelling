@@ -516,12 +516,12 @@ namespace Spell
                 if (_IsFixAll)
                 {
                     if (gridLog.Size.Height <= 310)
-                        gridLog.Size = new System.Drawing.Size(gridLog.Size.Width, gridLog.Size.Height + 20);
+                        gridLog.Size = new System.Drawing.Size(gridLog.Size.Width, gridLog.Size.Height + 22);
                 }
                 else if (gridLog.Size.Height <= 250)
                 {
                     
-                    gridLog.Size = new System.Drawing.Size(gridLog.Size.Width, gridLog.Size.Height + 20);
+                    gridLog.Size = new System.Drawing.Size(gridLog.Size.Width, gridLog.Size.Height + 22);
                 }
                 for (int i = gridLog.Location.Y; i >= 0; i--)
                 {
