@@ -109,7 +109,7 @@ namespace Spell
 
                 if (FixError.Instance.Count > 0)
                 {
-                    wordsDocument.First.Select();   
+                    wordsDocument.First.Select();
                     _oldContextString = context.ToString().Trim();
                     _newContextString = FixError.Instance.ToString().Trim();
                     SynchronizedInvoke(lblWrong, delegate ()
@@ -311,7 +311,7 @@ namespace Spell
                 lstbCandidate.Items.Clear();
             }
 
-           
+
             addRowGridLog();
 
             CheckOutOfError_ShowCandidateNextTime();
@@ -520,7 +520,7 @@ namespace Spell
                 }
                 else if (gridLog.Size.Height <= 250)
                 {
-                    
+
                     gridLog.Size = new System.Drawing.Size(gridLog.Size.Width, gridLog.Size.Height + 22);
                 }
                 for (int i = gridLog.Location.Y; i >= 0; i--)
@@ -656,9 +656,20 @@ namespace Spell
             txtManualFix.SelectAll();
         }
 
-        private void lstbCandidate_SelectedValueChanged(object sender, EventArgs e)
+    
+
+        private void txtManualFix_TextChanged(object sender, EventArgs e)
         {
-            txtManualFix.Text = lstbCandidate.SelectedIndex.ToString();
+            if (!txtManualFix.Text.Equals(lstbCandidate.SelectedIndex.ToString()))
+                for (int i = 0; i < lstbCandidate.Items.Count; i++)
+                {
+
+                    if (txtManualFix.Text.Trim().ToLower().Equals(lstbCandidate.Items[i]))
+                    {
+                        lstbCandidate.SetSelected(i, true);
+                        return;
+                    }
+                }
         }
 
         private void changeUI_ShowMoreInfo()
