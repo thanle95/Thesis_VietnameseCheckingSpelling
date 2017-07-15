@@ -42,10 +42,13 @@ namespace Spell.Algorithm
                 return FindFirstError_Context();
             }
         }
+        // Tìm ngữ cảnh đầu tiên trong danh sách
         private Context FindFirstError_Context()
         {
             int min = dictContext_ErrorRange.First().Value.Start;
             Context ret = dictContext_ErrorRange.First().Key;
+
+            // Ngữ cảnh đầu tiên là ngữ cảnh có range.Start nhỏ nhất
             foreach(var item in dictContext_ErrorRange)
                 if(item.Value.Start < min)
                 {
@@ -53,9 +56,8 @@ namespace Spell.Algorithm
                     ret = item.Key;
                 }
             return ret;
-            
         }
-        public Context SelectedError_Context { get; set; }
+        //public Context SelectedError_Context { get; set; }
         public bool StopFindError { get; set; }
         private static FindError instance = new FindError();
         private int _typeFindError = 0;
@@ -79,10 +81,6 @@ namespace Spell.Algorithm
         private int _countSentence;
         public override string ToString()
         {
-            if (SelectedError_Context != null)
-            {
-                return SelectedError_Context.ToString();
-            }
             string pp = FirstError_Context.PREPRE.Equals(Ngram.Instance.START_STRING) ?
                 "" : FirstError_Context.PREPRE;
             string p = FirstError_Context.PRE.Equals(Ngram.Instance.START_STRING) ?
@@ -140,20 +138,19 @@ namespace Spell.Algorithm
                 return dictContext_ErrorRange.Count;
             }
         }
-        public void GetSeletedContext(Word.Words words, Word.Sentences sentences)
+        /// <summary>
+        /// Kiểm tra dictErrorRange có chứa context và có range.Start == start hay không
+        /// </summary>
+        /// <param name="context"></param>
+        /// <param name="start"></param>
+        /// <returns></returns>
+        public bool IsContainError(Context context, int start)
         {
-            SelectedError_Context = new Context(words, sentences);
-            foreach (Context context in dictContext_ErrorRange.Keys)
-            {
-                if (context.Equals(SelectedError_Context))
-                {
-                    SelectedError_Context = context;
-                    return;
-                }
-            }
-            //Context context = new Context();
-            //context.getContext();
-            //SelectedError_Context.CopyForm(context);
+            foreach(var item in dictContext_ErrorRange)
+                if (item.Value.Start == start)
+                    if (item.Key.Equals(context))
+                        return true;
+            return false;            
         }
         public void startFindError()
         {

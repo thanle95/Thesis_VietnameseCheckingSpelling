@@ -96,29 +96,39 @@ namespace Spell
         public void showCandidateInTaskPane(Word.Words words, Word.Sentences sentences)
         {
             FixError fixError = new FixError();
-            FindError.Instance.GetSeletedContext(words, sentences);
-            fixError.getCandidatesWithContext(FindError.Instance.SelectedError_Context, FindError.Instance.dictContext_ErrorRange);
-
-            if (fixError.hSetCandidate.Count > 0)
+            Context context = new Context();
+            context.getContext();
+            Word.Words wordsDocument = Globals.ThisAddIn.Application.Selection.Words;
+            if (FindError.Instance.IsContainError(context, wordsDocument.First.Start))
             {
-                _oldContextString = FindError.Instance.ToString().Trim();
-                _newContextString = fixError.ToString().Trim();
-                lblWrong.Text = fixError.Token;
-                lstbCandidate.Items.Clear();
-                foreach (string item in fixError.hSetCandidate)
+                fixError.getCandidatesWithContext(context, FindError.Instance.dictContext_ErrorRange);
+
+                if (fixError.hSetCandidate.Count > 0)
                 {
-                    if (!item.ToLower().Equals(fixError.Token.ToLower()))
-                        if (item.Length > 1)
+                    wordsDocument.First.Select();   
+                    _oldContextString = context.ToString().Trim();
+                    _newContextString = fixError.ToString().Trim();
+                    SynchronizedInvoke(lblWrong, delegate ()
+                    {
+                        lblWrong.Text = fixError.Token;
+                    });
+                    SynchronizedInvoke(lstbCandidate, delegate () { lstbCandidate.Items.Clear(); });
 
-                            lstbCandidate.Items.Add(item.Trim());
-                    lstbCandidate.SetSelected(0, true);
-                    txtManualFix.Text = lstbCandidate.SelectedIndex.ToString();
-                    btnChange.Focus();
+                    foreach (string item in fixError.hSetCandidate)
+                    {
+                        if (!item.ToLower().Equals(fixError.Token.ToLower()))
+                            if (item.Length > 1)
+
+                                lstbCandidate.Items.Add(item.Trim());
+                        SynchronizedInvoke(lstbCandidate, delegate () { lstbCandidate.SetSelected(0, true); });
+                        SynchronizedInvoke(txtManualFix, delegate () { txtManualFix.Text = lstbCandidate.SelectedItem.ToString(); });
+                        SynchronizedInvoke(btnChange, delegate () { btnChange.Focus(); });
+                    }
                 }
-            }
-            else
-            {
-                //MessageBox.Show(SysMessage.Instance.IsNotError(FindError.Instance.SelectedError_Context.TOKEN));
+                else
+                {
+                    //MessageBox.Show(SysMessage.Instance.IsNotError(FindError.Instance.SelectedError_Context.TOKEN));
+                }
             }
         }
         public void showCandidateInTaskPane()
@@ -273,14 +283,21 @@ namespace Spell
             foreach (var item in FindError.Instance.dictContext_ErrorRange)
                 if (item.Value.Text.ToLower().Equals(wrongText))
                 {
+                    //_oldContextString = FindError.Instance.FirstError_Context.ToString();
 
                     FindError.Instance.dictContext_ErrorRange.Remove(item.Key);
                     FindError.Instance.dictContext_ErrorString.Remove(item.Key);
 
+                    _curRange = Globals.ThisAddIn.Application.Selection.Words.First;
                     if (!item.Value.Text.Equals(wrongText))
-                        _curRange.Text = fixText[0].ToString().ToUpper() + fixText.Substring(1);
-                    else _curRange.Text = fixText;
+                        _curRange.Text = fixText[0].ToString().ToUpper() + fixText.Substring(1) + " ";
+                    else _curRange.Text = fixText + " ";
 
+
+                    //Lấy ngữ cảnh mới sau khi sửa lỗi
+                    Context context = new Context();
+                    context.getContext();
+                    _newContextString = context.ToString();
 
                     DocumentHandling.Instance.RemoveUnderline_Mistake(_curRange.Text, item.Value.Start, item.Value.Start + _curRange.Text.Length);
                     break;
@@ -292,11 +309,7 @@ namespace Spell
                 lstbCandidate.Items.Clear();
             }
 
-            //Lấy ngữ cảnh mới sau khi sửa lỗi
-            Context context = new Context();
-            context.getContext();
-            _newContextString = context.ToString();
-
+           
             addRowGridLog();
 
             CheckOutOfError_ShowCandidateNextTime();
@@ -485,16 +498,7 @@ namespace Spell
 
         private void addRowGridLog()
         {
-            //SynchronizedInvoke(pnlProgressBar, delegate ()
-            //{
-            //    if (!IsFixAll)
-            //        if (pnlProgressBar.Size.Width != 285)
-            //        {
-            //            pnlProgressBar.Size = new System.Drawing.Size(285, 90);
-            //            progressBar1.Width = 275;
-            //            pnlProgressBar.Visible = true;
-            //        }
-            //});
+
             SynchronizedInvoke(pnlShowMore, delegate ()
             {
                 pnlShowMore.Visible = false;
@@ -520,7 +524,7 @@ namespace Spell
                 for (int i = gridLog.Location.Y; i >= 0; i--)
                 {
                     gridLog.Location = new System.Drawing.Point(0, i);
-                    Thread.Sleep(3);
+                    Thread.Sleep(5);
                 }
 
                 gridLog.Rows.Add(gridLog.RowCount + 1, _oldContextString, _newContextString);

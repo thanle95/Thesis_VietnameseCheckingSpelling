@@ -55,13 +55,13 @@ namespace Spell
                 //Truy cập vào label lblWrong
                 UserControl.Instance.SynchronizedInvoke(UserControl.Instance.lblWrong, delegate ()
                 {
-                //Sửa lỗi hiện tại
-                if (selectedRange.Text.Trim().Equals(UserControl.Instance.lblWrong.Text))
+                    //Sửa lỗi hiện tại
+                    if (selectedRange.Text.Trim().Equals(UserControl.Instance.lblWrong.Text))
                         EnableFixError(true);
                     else {
                         foreach (var item in FindError.Instance.dictContext_ErrorRange.Keys)
-                        //Sửa lỗi bất kỳ khác
-                        if (selectedRange.Text.Trim().Equals(item.TOKEN))
+                            //Sửa lỗi bất kỳ khác
+                            if (selectedRange.Text.Trim().Equals(item.TOKEN))
                             {
                                 EnableFixError(true);
                                 Word.Words words = Globals.ThisAddIn.Application.Selection.Words;
@@ -69,8 +69,8 @@ namespace Spell
                                 UserControl.Instance.startFixError(words, sentences);
                                 return;
                             }
-                    //Không phải là lỗi
-                    EnableFixError(false);
+                        //Không phải là lỗi
+                        EnableFixError(false);
                     }
                 });
             }
@@ -138,30 +138,33 @@ namespace Spell
             if (FindError.Instance.CountError > 0)
             {
                 Word.Words words = Globals.ThisAddIn.Application.Selection.Words;
-                Word.Sentences sentences = Globals.ThisAddIn.Application.Selection.Sentences;
+
+                Context context = new Context();
+                context.getContext();
 
                 //Tìm lỗi trong danh sách
-                FixError fixError = new FixError();
-                FindError.Instance.GetSeletedContext(words, sentences);
-                //Sửa lỗi đã tìm được
-                fixError.getCandidatesWithContext(FindError.Instance.SelectedError_Context, FindError.Instance.dictContext_ErrorRange);
-                WrongWord = fixError.Token.ToLower();
+                if (FindError.Instance.IsContainError(context, words.First.Start)){
+                    //Sửa lỗi đã tìm được
+                    FixError fixError = new FixError();
+                    fixError.getCandidatesWithContext(context, FindError.Instance.dictContext_ErrorRange);
+                    WrongWord = fixError.Token.ToLower();
 
-                //dùng List để reverse hashSet
-                List<string> candidates = new List<string>();
-                if (fixError.hSetCandidate.Count > 0)
-                {
-                    foreach (string item in fixError.hSetCandidate)
-                        candidates.Add(item);
+                    //dùng List để reverse hashSet
+                    List<string> candidates = new List<string>();
+                    if (fixError.hSetCandidate.Count > 0)
+                    {
+                        foreach (string item in fixError.hSetCandidate)
+                            candidates.Add(item);
 
-                    candidates.Reverse();
+                        candidates.Reverse();
 
-                    foreach (string candidate in candidates)
-                        if (!candidate.ToLower().Equals(fixError.Token.ToLower()))
-                            if (candidate.Length > 1)
-                                addCandidate(candidate.Trim());
+                        foreach (string candidate in candidates)
+                            if (!candidate.ToLower().Equals(fixError.Token.ToLower()))
+                                if (candidate.Length > 1)
+                                    addCandidate(candidate.Trim());
+                    }
+                    else;
                 }
-                else;
                 //System.Windows.Forms.MessageBox.Show(SysMessage.Instance.IsNotError(FindError.Instance.SelectedError_Context.TOKEN));
             }
         }
