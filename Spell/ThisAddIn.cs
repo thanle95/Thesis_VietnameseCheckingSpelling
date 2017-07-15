@@ -38,7 +38,7 @@ namespace Spell
         {
             //Nếu văn bản có lỗi
             //và đã kết thúc kiểm lỗi
-            if (FindError.Instance.CountError > 0 && FindError.Instance.StopFindError)
+            if (FindError.Instance.CountError > 0 && FindError.Instance.IsStopFindError)
             {
                 //Lấy từ đang chọn
                 Word.Range selectedRange = DocumentHandling.Instance.GetWordByCursorSelection();

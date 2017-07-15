@@ -143,7 +143,7 @@ namespace Spell
                 _curRange = FindError.Instance.dictContext_ErrorRange[FindError.Instance.FirstError_Context];
                 _ErrorString = fixError.Token;
                 //MessageBox.Show(string.Format("\"{0}\"-\"{1}\"", range.Text, fixError.Token));
-                _oldContextString = FindError.Instance.ToString().Trim();
+                _oldContextString = FindError.Instance.FirstError_Context.ToString().Trim();
                 _newContextString = fixError.ToString().Trim();
                 if (!_IsPause)
                 {
@@ -283,7 +283,6 @@ namespace Spell
             foreach (var item in FindError.Instance.dictContext_ErrorRange)
                 if (item.Value.Text.ToLower().Equals(wrongText))
                 {
-                    //_oldContextString = FindError.Instance.FirstError_Context.ToString();
 
                     FindError.Instance.dictContext_ErrorRange.Remove(item.Key);
                     FindError.Instance.dictContext_ErrorString.Remove(item.Key);

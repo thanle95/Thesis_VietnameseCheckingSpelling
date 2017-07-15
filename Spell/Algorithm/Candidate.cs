@@ -744,24 +744,24 @@ namespace Spell.Algorithm
         /// <param name="nextnext"></param>
         /// <param name="isMajuscule"></param>
         /// <returns></returns>
-        public HashSet<string> createCandidateByNgram(Context context, bool isMajuscule)
-        {
-            HashSet<string> lstCandidate = new HashSet<string>();
-            List<string> bi = Ngram.Instance._biAmount.Keys.Where(key => IsLikeLy(context.TOKEN, key) && (key.Contains(context.PRE) || key.Contains(context.NEXT))).ToList();
-            foreach (string key in bi)
-            {
-                if (key.Contains(Ngram.Instance.START_STRING) || key.Contains(Ngram.Instance.END_STRING))
-                    continue;
-                string[] word = key.Split(' ');
-                if (!word[1].ToLower().Equals(context.TOKEN.ToLower()) && word[0].Equals(context.PRE) && word[1].Length > 0)
-                    lstCandidate.Add(word[1]);
-                else if (!word[0].ToLower().Equals(context.TOKEN.ToLower()) && word[1].Equals(context.NEXT) && word[0].Length > 0)
-                    lstCandidate.Add(word[0]);
-                if (lstCandidate.Count > 50)
-                    return lstCandidate;
-            }
-            return lstCandidate;
-        }
+        //public HashSet<string> createCandidateByNgram(Context context, bool isMajuscule)
+        //{
+        //    HashSet<string> lstCandidate = new HashSet<string>();
+        //    List<string> bi = Ngram.Instance._biAmount.Keys.Where(key => IsLikeLy(context.TOKEN, key) && (key.Contains(context.PRE) || key.Contains(context.NEXT))).ToList();
+        //    foreach (string key in bi)
+        //    {
+        //        if (key.Contains(Ngram.Instance.START_STRING) || key.Contains(Ngram.Instance.END_STRING))
+        //            continue;
+        //        string[] word = key.Split(' ');
+        //        if (!word[1].ToLower().Equals(context.TOKEN.ToLower()) && word[0].Equals(context.PRE) && word[1].Length > 0)
+        //            lstCandidate.Add(word[1]);
+        //        else if (!word[0].ToLower().Equals(context.TOKEN.ToLower()) && word[1].Equals(context.NEXT) && word[0].Length > 0)
+        //            lstCandidate.Add(word[0]);
+        //        if (lstCandidate.Count > 50)
+        //            return lstCandidate;
+        //    }
+        //    return lstCandidate;
+        //}
         public HashSet<string> createCandidateByNgram_NoUseLamdaExp(Context context, bool isMajuscule)
         {
             HashSet<string> lstCandidate = new HashSet<string>();

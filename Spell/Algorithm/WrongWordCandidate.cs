@@ -43,7 +43,7 @@ namespace Spell.Algorithm
             //candidate chưa chọn lọc dựa vào số điểm
             HashSet<string> hSetCandidate = new HashSet<string>();
 
-            hSetCandidate.UnionWith(Candidate.getInstance.createCandidateByNgram(context, isMajuscule));
+            hSetCandidate.UnionWith(Candidate.getInstance.createCandidateByNgram_NoUseLamdaExp(context, isMajuscule));
             hSetCandidate.UnionWith(Candidate.getInstance.createCandByCompoundWord(context, isMajuscule));
             //giá trị lamda có được do thống kê
             double lamda1 = 0.1;
