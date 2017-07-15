@@ -91,32 +91,36 @@ namespace Spell
         }
 
         /// <summary>
-        /// hiện gợi ý sữa lỗi lên taskpane, tự duyệt ngữ cảnh
+        /// Hiện gợi ý sửa lỗi trường hợp chọn lỗi sửa bất kỳ
         /// </summary>
+        /// <param name="words"></param>
+        /// <param name="sentences"></param>
         public void showCandidateInTaskPane(Word.Words words, Word.Sentences sentences)
         {
-            FixError fixError = new FixError();
+            // Lấy ngữ cảnh ở vị trí hiện tại
             Context context = new Context();
             context.getContext();
+
             Word.Words wordsDocument = Globals.ThisAddIn.Application.Selection.Words;
+
             if (FindError.Instance.IsContainError(context, wordsDocument.First.Start))
             {
-                fixError.getCandidatesWithContext(context, FindError.Instance.dictContext_ErrorRange);
+                FixError.Instance.getCandidatesWithContext(context, FindError.Instance.dictContext_ErrorRange);
 
-                if (fixError.hSetCandidate.Count > 0)
+                if (FixError.Instance.Count > 0)
                 {
                     wordsDocument.First.Select();   
                     _oldContextString = context.ToString().Trim();
-                    _newContextString = fixError.ToString().Trim();
+                    _newContextString = FixError.Instance.ToString().Trim();
                     SynchronizedInvoke(lblWrong, delegate ()
                     {
-                        lblWrong.Text = fixError.Token;
+                        lblWrong.Text = FixError.Instance.Token;
                     });
                     SynchronizedInvoke(lstbCandidate, delegate () { lstbCandidate.Items.Clear(); });
 
-                    foreach (string item in fixError.hSetCandidate)
+                    foreach (string item in FixError.Instance.hSetCandidate)
                     {
-                        if (!item.ToLower().Equals(fixError.Token.ToLower()))
+                        if (!item.ToLower().Equals(FixError.Instance.Token.ToLower()))
                             if (item.Length > 1)
 
                                 lstbCandidate.Items.Add(item.Trim());
@@ -137,32 +141,31 @@ namespace Spell
             while (FindError.Instance.dictContext_ErrorRange.Count > 0)
             {
                 _IsOutOfError = false;
-                FixError fixError = new FixError();
 
-                fixError.getCandidatesWithContext(FindError.Instance.FirstError_Context, FindError.Instance.dictContext_ErrorRange);
+                FixError.Instance.getCandidatesWithContext(FindError.Instance.FirstError_Context, FindError.Instance.dictContext_ErrorRange);
                 _curRange = FindError.Instance.dictContext_ErrorRange[FindError.Instance.FirstError_Context];
-                _ErrorString = fixError.Token;
+                _ErrorString = FixError.Instance.Token;
                 //MessageBox.Show(string.Format("\"{0}\"-\"{1}\"", range.Text, fixError.Token));
                 _oldContextString = FindError.Instance.FirstError_Context.ToString().Trim();
-                _newContextString = fixError.ToString().Trim();
+                _newContextString = FixError.Instance.ToString().Trim();
                 if (!_IsPause)
                 {
                     Globals.ThisAddIn.CustomTaskPanes[0].Visible = true;
-                    change(fixError.Token.ToLower(), fixError.hSetCandidate.ElementAt(0), false);
+                    change(FixError.Instance.Token.ToLower(), FixError.Instance.hSetCandidate.ElementAt(0), false);
                     //CurRannge.Select();
                 }
                 else
                 {
                     SynchronizedInvoke(lblWrong, delegate ()
                     {
-                        lblWrong.Text = fixError.Token;
+                        lblWrong.Text = FixError.Instance.Token;
                     });
 
                     Globals.ThisAddIn.CustomTaskPanes[0].Visible = true;
                     SynchronizedInvoke(lstbCandidate, delegate () { lstbCandidate.Items.Clear(); });
 
-                    foreach (string item in fixError.hSetCandidate)
-                        if (!item.ToLower().Equals(fixError.Token.ToLower()))
+                    foreach (string item in FixError.Instance.hSetCandidate)
+                        if (!item.ToLower().Equals(FixError.Instance.Token.ToLower()))
                             if (item.Length > 1)
                                 SynchronizedInvoke(lstbCandidate, delegate () { lstbCandidate.Items.Add(item.Trim()); });
                     SynchronizedInvoke(lstbCandidate, delegate () { lstbCandidate.SetSelected(0, true); });

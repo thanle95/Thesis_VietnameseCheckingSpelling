@@ -11,10 +11,19 @@ namespace Spell.Algorithm
 {
     class FixError
     {
-        public FixError()
+        private FixError()
         {
-            //getCandidatesWithStartIndex(startIndex, dictError, mySentences);
+            hSetCandidate = new HashSet<string>();
         }
+        public static FixError Instance
+        {
+            get
+            {
+                return _instance;
+            }
+        }
+        private static FixError _instance = new FixError();
+
         public HashSet<string> hSetCandidate
         {
             get; set;
@@ -23,12 +32,19 @@ namespace Spell.Algorithm
         {
             get; set;
         }
+        public int Count
+        {
+            get
+            {
+                return hSetCandidate.Count;
+            }
+        }
         private Context _context;
         private string _candidate = "";
         public void getCandidatesWithContext(Context context, Dictionary<Context, Word.Range> dictError)
         {
             _context = context;
-            hSetCandidate = new HashSet<string>();
+            hSetCandidate.Clear();
             if (dictError.Count > 0)
             {
                 foreach (var key in dictError.Keys)

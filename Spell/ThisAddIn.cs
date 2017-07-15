@@ -145,21 +145,20 @@ namespace Spell
                 //Tìm lỗi trong danh sách
                 if (FindError.Instance.IsContainError(context, words.First.Start)){
                     //Sửa lỗi đã tìm được
-                    FixError fixError = new FixError();
-                    fixError.getCandidatesWithContext(context, FindError.Instance.dictContext_ErrorRange);
-                    WrongWord = fixError.Token.ToLower();
+                    FixError.Instance.getCandidatesWithContext(context, FindError.Instance.dictContext_ErrorRange);
+                    WrongWord = FixError.Instance.Token.ToLower();
 
                     //dùng List để reverse hashSet
                     List<string> candidates = new List<string>();
-                    if (fixError.hSetCandidate.Count > 0)
+                    if (FixError.Instance.hSetCandidate.Count > 0)
                     {
-                        foreach (string item in fixError.hSetCandidate)
+                        foreach (string item in FixError.Instance.hSetCandidate)
                             candidates.Add(item);
 
                         candidates.Reverse();
 
                         foreach (string candidate in candidates)
-                            if (!candidate.ToLower().Equals(fixError.Token.ToLower()))
+                            if (!candidate.ToLower().Equals(FixError.Instance.Token.ToLower()))
                                 if (candidate.Length > 1)
                                     addCandidate(candidate.Trim());
                     }

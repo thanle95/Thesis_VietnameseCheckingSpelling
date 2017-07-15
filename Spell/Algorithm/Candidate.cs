@@ -505,6 +505,7 @@ namespace Spell.Algorithm
         }
         private bool isRegionMistake(char c1, char c12, char c2, char c22)
         {
+            // TODO: trường hợp ch, tr, và c, t
             int iC1 = -1, iC2 = -1;
             bool isFoundC1_12 = false, isFoundC2_22 = false;
             for (int i = 0; i < StringConstant.MAXGROUP_REGION_CONFUSED; i++)
@@ -769,7 +770,7 @@ namespace Spell.Algorithm
             {
                 if (pair.Key.Contains(Ngram.Instance.START_STRING) || pair.Key.Contains(Ngram.Instance.END_STRING))
                     continue;
-                if (IsLikeLy(context.TOKEN, pair.Key) &&(pair.Key.Contains(context.PRE) || pair.Key.Contains(context.NEXT)))
+                if (IsLikely(context.TOKEN, pair.Key) &&(pair.Key.Contains(context.PRE) || pair.Key.Contains(context.NEXT)))
                 {
                     string[] word = pair.Key.Split(' ');
                     if (word[0].Equals(context.PRE) && word[1].Length > 0)
@@ -780,7 +781,7 @@ namespace Spell.Algorithm
             }
             return lstCandidate;
         }
-        public bool IsLikeLy(string syll, string cand)
+        public bool IsLikely(string syll, string cand)
         {
             int lenght = syll.Length;
             bool isLongWord = lenght > 3 ? true : false;
