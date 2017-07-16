@@ -272,11 +272,11 @@ namespace Spell.Algorithm
                     // Nếu không phải chế độ bôi đen để kiểm tra văn bản
                     // và chế độ đang đánh máy
                     // thì select range đang chọn.
-                    //if (isSelected)
+                    if (isSelected)
                         DocumentHandling.Instance.HighLight(_range.Start, _range.End);
-                    //else
-                    ////if (_typeFindError != IS_TYPING_TYPE && !isSelected)
-                    //    _range.Select();
+                    else
+                    //if (_typeFindError != IS_TYPING_TYPE && !isSelected)
+                        _range.Select();
 
                     _length = _words.Length;
                     // Duyệt qua từng từ trong câu.

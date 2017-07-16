@@ -333,8 +333,15 @@ namespace Spell
             //
             //sửa lỗi tiếp theo
             //
-            string text = FindError.Instance.dictContext_ErrorRange[FindError.Instance.FirstError_Context].Text;
-            FindError.Instance.dictContext_ErrorRange[FindError.Instance.FirstError_Context].Select();
+            string textErrorRange = FindError.Instance.dictContext_ErrorRange[FindError.Instance.FirstError_Context].Text;
+
+            // HACK: sửa lỗi select range sai bị dính range lỗi trước
+            string textError = FindError.Instance.dictContext_ErrorString[FindError.Instance.FirstError_Context];
+
+            Word.Range tmpRange = FindError.Instance.dictContext_ErrorRange[FindError.Instance.FirstError_Context];
+            tmpRange.Start +=(textErrorRange.Length - textError.Length);
+            tmpRange.Select();
+
             if (!_IsFixAll)
                 showCandidateInTaskPane();
 
