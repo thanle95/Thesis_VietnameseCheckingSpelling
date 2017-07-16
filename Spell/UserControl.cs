@@ -291,6 +291,7 @@ namespace Spell
                     FindError.Instance.dictContext_ErrorString.Remove(item.Key);
 
                     _curRange = Globals.ThisAddIn.Application.Selection.Words.First;
+                    DocumentHandling.Instance.RemoveUnderline_Mistake(_curRange.Text, item.Value.Start, item.Value.Start + _curRange.Text.Length);
                     if (!item.Value.Text.Equals(wrongText))
                         _curRange.Text = fixText[0].ToString().ToUpper() + fixText.Substring(1) + " ";
                     else _curRange.Text = fixText + " ";
@@ -301,13 +302,13 @@ namespace Spell
                     context.getContext();
                     _newContextString = context.ToString();
 
-                    DocumentHandling.Instance.RemoveUnderline_Mistake(_curRange.Text, item.Value.Start, item.Value.Start + _curRange.Text.Length);
+                    
                     break;
                 }
 
             if (!_IsFixAll)
             {
-                lblWrong.Text = "\"Từ sai\"";
+                //lblWrong.Text = "\"Từ sai\"";
                 lstbCandidate.Items.Clear();
             }
 
@@ -332,6 +333,7 @@ namespace Spell
             //
             //sửa lỗi tiếp theo
             //
+            string text = FindError.Instance.dictContext_ErrorRange[FindError.Instance.FirstError_Context].Text;
             FindError.Instance.dictContext_ErrorRange[FindError.Instance.FirstError_Context].Select();
             if (!_IsFixAll)
                 showCandidateInTaskPane();

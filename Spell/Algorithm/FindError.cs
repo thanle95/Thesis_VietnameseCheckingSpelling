@@ -179,12 +179,12 @@ namespace Spell.Algorithm
         /// <summary>
         /// Tìm vị trí câu đầu tiên để kiểm lỗi
         /// </summary>
-        private void FindISentence()
+        private void FindISentence(int start)
         {
             // Dùng binary sort để tìm kiếm dựa trên range.Start
             int min = 1;
             int max = _AllSentences.Count;
-            int key = _SelectionSentences[1].Start;
+            int key = start;
             while (min <= max)
             {
                 _iSentence = (min + max) / 2;
@@ -230,15 +230,15 @@ namespace Spell.Algorithm
                 //kiểm tra từ câu chứa vị trí con trỏ đến cuối văn bản
                 if (selectionRange.Start == selectionRange.End)
                 {
-                    FindISentence();
-                    isSelected = true;
+                    FindISentence(selectionRange.Start);
+                    isSelected = false;
                     _SelectionSentences = _AllSentences;
                 }
                 else {
                     //ngược lại
                     //kiểm tra những câu được chọn
                     //curSentences = Globals.ThisAddIn.Application.Selection.Sentences;
-                    isSelected = false;
+                    isSelected = true;
                     _iSentence = 1;
                 }
                 _countSentence = _SelectionSentences.Count;
@@ -272,8 +272,11 @@ namespace Spell.Algorithm
                     // Nếu không phải chế độ bôi đen để kiểm tra văn bản
                     // và chế độ đang đánh máy
                     // thì select range đang chọn.
-                    if (_typeFindError != IS_TYPING_TYPE && isSelected)
-                        _range.Select();
+                    //if (isSelected)
+                        DocumentHandling.Instance.HighLight(_range.Start, _range.End);
+                    //else
+                    ////if (_typeFindError != IS_TYPING_TYPE && !isSelected)
+                    //    _range.Select();
 
                     _length = _words.Length;
                     // Duyệt qua từng từ trong câu.
@@ -393,6 +396,7 @@ namespace Spell.Algorithm
                         }
                         _start += _iWord.Length + 1;
                     }//end for: duyệt từng từ trong câu
+                    DocumentHandling.Instance.RemoveHighLight(_range.Start, _range.End);
                 }//end for: duyệt từng câu
 
                 // Kết thúc kiểm lỗi

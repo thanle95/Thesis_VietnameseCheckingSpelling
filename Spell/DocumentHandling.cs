@@ -158,12 +158,15 @@ namespace Spell
         //       
 
         // overload dehighlight
-        public void DeHighLight_All_Mistake(int start, int end)
+        public void RemoveHighLight(int start, int end)
         {
-            //int count = Globals.ThisAddIn.Application.ActiveDocument.Characters.Count;
-            //int count = characters.Count;
             Word.Range range = Globals.ThisAddIn.Application.ActiveDocument.Range(start, end);
             range.HighlightColorIndex = Microsoft.Office.Interop.Word.WdColorIndex.wdNoHighlight;
+        }
+        public void HighLight(int start, int end)
+        {
+            Word.Range range = Globals.ThisAddIn.Application.ActiveDocument.Range(start, end);
+            range.HighlightColorIndex = Microsoft.Office.Interop.Word.WdColorIndex.wdYellow;
         }
         //
         //---Kiet End
