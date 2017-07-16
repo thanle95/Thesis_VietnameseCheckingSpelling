@@ -158,12 +158,14 @@ namespace Spell.Algorithm
 
         public string[,] VNRegion_Confused_Matrix_LowerCase = new string[,]
         {
+            
             {"i", "y", "",""},
             {"s", "x", "",""},
             {"l", "n", "",""},
             {"n", "ng", "nh",""},
-            {"v","r", "d", "gi" },
-            {"ch", "tr", "",""}
+            {"d", "gi" ,"v","r"},
+            {"ch", "tr", "",""},
+            {"t", "c", "", "" }
         };
 
         public string[,] VNRegion_Confused_Matrix_UperCase = new string[,]

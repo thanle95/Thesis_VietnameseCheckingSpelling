@@ -89,7 +89,7 @@ namespace Spell.Algorithm
             return ret;
         }
 
-        /// <summary>region
+        /// <summary>
         /// Sinh candidate cho token
         /// </summary>
         public HashSet<string> createCandidate(Context context)
@@ -505,7 +505,7 @@ namespace Spell.Algorithm
         }
         private bool isRegionMistake(char c1, char c12, char c2, char c22)
         {
-            // TODO: trường hợp ch, tr, và c, t
+            // TODO: trường hợp ch/tr và d/gi/r/v
             int iC1 = -1, iC2 = -1;
             bool isFoundC1_12 = false, isFoundC2_22 = false;
             for (int i = 0; i < StringConstant.MAXGROUP_REGION_CONFUSED; i++)
