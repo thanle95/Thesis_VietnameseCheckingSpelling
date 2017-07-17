@@ -342,10 +342,11 @@ namespace Spell.Algorithm
 
         private double calNumeratorForStringDiff(string extX, string extY)
         {
-
+            // TODO: lỗi telex
             double numerator = 0;
             try
             {
+
                 int lengthExtX = extX.Length;
                 int lengthExtY = extY.Length;
                 int j = 0;
@@ -508,18 +509,20 @@ namespace Spell.Algorithm
             // TODO: trường hợp ch/tr và d/gi/r/v
             int iC1 = -1, iC2 = -1;
             bool isFoundC1_12 = false, isFoundC2_22 = false;
+            string ijRegion;
             for (int i = 0; i < StringConstant.MAXGROUP_REGION_CONFUSED; i++)
                 for (int j = 0; j < StringConstant.MAXCASE_REGION_CONFUSED; j++)
                 {
-
+                    ijRegion = StringConstant.Instance.VNRegion_Confused_Matrix_LowerCase[i, j];
                     if (!isFoundC1_12)
-                        if (StringConstant.Instance.VNRegion_Confused_Matrix_LowerCase[i, j].Equals(c1 + "" + c12))
+                        // Trường hợp ch tr gi
+                        if (ijRegion.Equals(c1 + "" + c12) || ijRegion.Equals(c1 + ""))
                         {
                             isFoundC1_12 = true;
                             iC1 = i;
                         }
                     if (!isFoundC2_22)
-                        if (StringConstant.Instance.VNRegion_Confused_Matrix_LowerCase[i, j].Equals(c2 + "" + c22))
+                        if (ijRegion.Equals(c2 + "" + c22) || ijRegion.Equals(c2 + ""))
                         {
                             isFoundC2_22 = true;
                             iC2 = i;
@@ -731,7 +734,7 @@ namespace Spell.Algorithm
                 return hset;
             hset.UnionWith(VNDictionary.getInstance.findCompoundVNWord_Xx(context));
             hset.UnionWith(VNDictionary.getInstance.findCompoundVNWord_xX(context));
-            
+
 
             return hset;
         }
@@ -766,14 +769,14 @@ namespace Spell.Algorithm
         public HashSet<string> createCandidateByNgram_NoUseLamdaExp(Context context, bool isMajuscule)
         {
             HashSet<string> lstCandidate = new HashSet<string>();
-            foreach (KeyValuePair<string, int> pair  in Ngram.Instance._biAmount)
+            foreach (KeyValuePair<string, int> pair in Ngram.Instance._biAmount)
             {
                 if (pair.Key.Contains(Ngram.Instance.START_STRING) || pair.Key.Contains(Ngram.Instance.END_STRING))
                     continue;
-                if (IsLikely(context.TOKEN, pair.Key) &&(pair.Key.Contains(context.PRE) || pair.Key.Contains(context.NEXT)))
+                if (IsLikely(context.TOKEN, pair.Key) && (pair.Key.Contains(context.PRE) || pair.Key.Contains(context.NEXT)))
                 {
                     string[] word = pair.Key.Split(' ');
-                    if (!word[1].Equals(context.TOKEN.ToLower()) &&word[0].Equals(context.PRE) && word[1].Length > 0)
+                    if (!word[1].Equals(context.TOKEN.ToLower()) && word[0].Equals(context.PRE) && word[1].Length > 0)
                         lstCandidate.Add(word[1]);
                     else if (!word[0].Equals(context.TOKEN.ToLower()) && word[1].Equals(context.NEXT) && word[0].Length > 0)
                         lstCandidate.Add(word[0]);
