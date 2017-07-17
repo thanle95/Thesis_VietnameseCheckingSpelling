@@ -62,42 +62,13 @@ namespace Spell.Algorithm
 
 
         /// <summary>
-        /// Kiểm tra token là in hoa hay thường
-        /// </summary>
-        /// <param name="token"></param>
-        /// <returns></returns>
-        public bool Check_Majuscule(string token)
-        {
-            foreach (char c in StringConstant.Instance.VNAlphabetArr_UpperCase)
-                if (token.Contains(c))
-                    return true;
-            return false;
-        }
-
-        public string toString(HashSet<string> hset)
-        {
-            string ret = "";
-            foreach (string i in hset)
-                ret += i + "\n";
-            return ret;
-        }
-        public string toString(List<string> lst)
-        {
-            string ret = "";
-            foreach (string i in lst)
-                ret += i + "\n";
-            return ret;
-        }
-
-        /// <summary>
         /// Sinh candidate cho token
         /// </summary>
         public HashSet<string> createCandidate(Context context)
         {
-            bool isMajuscule = Check_Majuscule(context.TOKEN);
             if (VNDictionary.getInstance.isSyllableVN(context.TOKEN))
-                return RightWordCandidate.getInstance.createCandidate(context, isMajuscule);
-            return WrongWordCandidate.getInstance.createCandidate(context, isMajuscule);
+                return RightWordCandidate.getInstance.createCandidate(context);
+            return WrongWordCandidate.getInstance.createCandidate(context);
         }
 
 
@@ -339,6 +310,9 @@ namespace Spell.Algorithm
                 signToken.Equals("j") && signCandidate.Equals("x") ||
                 signToken.Equals("x") && signCandidate.Equals("j"))
                 return 0.1;
+            if (signToken.Length > 0 && signCandidate.Length > 0)
+                if (isKeyboardMistake(signToken[0], signCandidate[0]))
+                    return 0.2;
             return 0.5;
         }
 
@@ -360,11 +334,11 @@ namespace Spell.Algorithm
                     if (extX[i] == extY[j])
                         continue;
                     if (i + 1 < lengthExtX && j < lengthExtY)
-                        if(isTelexSign(extX[i], extX[i + 1], extY[j]))
-                    {
-                        numerator += 0.1;
-                        continue;
-                    }
+                        if (isTelexSign(extX[i], extX[i + 1], extY[j]))
+                        {
+                            numerator += 0.1;
+                            continue;
+                        }
                     if (isRegion)
                     {
                         numerator += 1;
@@ -734,7 +708,7 @@ namespace Spell.Algorithm
         /// <param name="nextnext"></param>
         /// <param name="isMajuscule"></param>
         /// <returns></returns>
-        public HashSet<string> createCandByCompoundWord(Context context, bool isMajuscule)
+        public HashSet<string> createCandByCompoundWord(Context context)
         {
             HashSet<string> hset = new HashSet<string>();
             //tìm X
@@ -777,14 +751,14 @@ namespace Spell.Algorithm
         //    }
         //    return lstCandidate;
         //}
-        public HashSet<string> createCandidateByNgram_NoUseLamdaExp(Context context, bool isMajuscule)
+        public HashSet<string> createCandidateByNgram_NoUseLamdaExp(Context context)
         {
             HashSet<string> lstCandidate = new HashSet<string>();
             foreach (KeyValuePair<string, int> pair in Ngram.Instance._biAmount)
             {
                 if (pair.Key.Contains(Ngram.Instance.START_STRING) || pair.Key.Contains(Ngram.Instance.END_STRING))
                     continue;
-                if (IsLikely(context.TOKEN, pair.Key) && (pair.Key.Contains(context.PRE) || pair.Key.Contains(context.NEXT)))
+                if (IsLikely(context.TOKEN, pair.Key)  && (pair.Key.Contains(context.PRE) || pair.Key.Contains(context.NEXT)))
                 {
                     string[] word = pair.Key.Split(' ');
                     if (!word[1].Equals(context.TOKEN.ToLower()) && word[0].Equals(context.PRE) && word[1].Length > 0)
@@ -800,13 +774,15 @@ namespace Spell.Algorithm
             int lenght = syll.Length;
             bool isLongWord = lenght > 3 ? true : false;
             int count = 0;
+
+            // khoong va không
             foreach (char s in syll)
                 foreach (char c in cand)
                 {
                     if (c == s)
                     {
                         count++;
-                        if ((isLongWord && count == lenght - 2) || (!isLongWord && count == lenght - 1))
+                        if ((isLongWord && count >= lenght - 2) || (!isLongWord && count >= lenght - 1))
                             return true;
                         break;
                     }

@@ -330,7 +330,7 @@ namespace Spell.Algorithm
                             if ((_typeError == WRONG_RIGHT_ERROR || _typeError == WRONG_ERROR) && !VNDictionary.getInstance.isSyllableVN(_iWordReplaced))
                             {
                                 _hSetCand.Clear();
-                                _hSetCand = WrongWordCandidate.getInstance.createCandidate(context, false);
+                                _hSetCand = WrongWordCandidate.getInstance.createCandidate(context);
                                 if (_hSetCand.Count > 0)
                                 {
                                     //tự động thay thế bằng candidate tốt nhất
@@ -354,7 +354,7 @@ namespace Spell.Algorithm
                                     //
                                     //thay words[i+1] bằng candidate tốt nhất
                                     _hSetCand.Clear();
-                                    _hSetCand = RightWordCandidate.getInstance.createCandidate(context, false);
+                                    _hSetCand = RightWordCandidate.getInstance.createCandidate(context);
                                     if (_hSetCand.Count > 0)
                                         tmpNext = _hSetCand.ElementAt(0);
                                     context.CopyForm(_originalContext);
@@ -365,7 +365,7 @@ namespace Spell.Algorithm
                                     {
                                         context.CopyForm(_originalContext);
                                         _hSetCand.Clear();
-                                        _hSetCand = RightWordCandidate.getInstance.createCandidate(context, false);
+                                        _hSetCand = RightWordCandidate.getInstance.createCandidate(context);
                                         if (_hSetCand.Count > 0)
                                         {
                                             //tự động thay thế bằng candidate tốt nhất
@@ -380,7 +380,7 @@ namespace Spell.Algorithm
                                 else
                                 {
                                     _hSetCand.Clear();
-                                    _hSetCand = RightWordCandidate.getInstance.createCandidate(context, false);
+                                    _hSetCand = RightWordCandidate.getInstance.createCandidate(context);
                                     if (_hSetCand.Count > 0)
                                     {
                                         //tự động thay thế bằng candidate tốt nhất

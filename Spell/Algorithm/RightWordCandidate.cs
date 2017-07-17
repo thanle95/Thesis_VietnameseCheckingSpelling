@@ -61,7 +61,7 @@ namespace Spell.Algorithm
         /// <param name="nextnext"></param>
         /// <param name="isMajuscule"></param>
         /// <returns></returns>
-        public HashSet<string> createCandidate(Context context, bool isMajuscule)
+        public HashSet<string> createCandidate(Context context)
         {
             HashSet<string> result = new HashSet<string>();
             //giữ cặp <candidate, điểm> để so sánh
@@ -71,8 +71,8 @@ namespace Spell.Algorithm
             //candidate chưa chọn lọc dựa vào số điểm
             HashSet<string> hSetCandidate = new HashSet<string>();
 
-            hSetCandidate.UnionWith(Candidate.getInstance.createCandidateByNgram_NoUseLamdaExp(context, isMajuscule));
-            hSetCandidate.UnionWith(Candidate.getInstance.createCandByCompoundWord(context, isMajuscule));
+            hSetCandidate.UnionWith(Candidate.getInstance.createCandidateByNgram_NoUseLamdaExp(context));
+            hSetCandidate.UnionWith(Candidate.getInstance.createCandByCompoundWord(context));
             //giá trị lamda có được do thống kê
             double lamda1 = 0.3;
             double lamda2 = 0.3;
