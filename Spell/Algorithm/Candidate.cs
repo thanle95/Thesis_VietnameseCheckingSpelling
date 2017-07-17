@@ -285,10 +285,10 @@ namespace Spell.Algorithm
             }
             // Kiểm tra telex
             // nếu ký tự cuối của extWord là s f r x j thì extWord còn dính lỗi telex về dấu
-            if(StringConstant.Instance.VNSign.IndexOf(extWord.Last()) != -1)
+            if (StringConstant.Instance.VNSign.IndexOf(extWord.Last()) != -1)
             {
                 sign = extWord.Last() + "";
-                
+
                 // Bỏ ký tự cuối
                 extWord.Remove(extWord.Length - 1);
             }
@@ -307,8 +307,6 @@ namespace Spell.Algorithm
         {
 
             double diffScore;
-            if (token.Equals("côngn") && candidate.Equals("công"))
-                diffScore = 0;
             //tách dấu ---> tachs dâus
             string[] extTokenArr = extractSignVNNotFully(token);
             string[] extCandidateArr = extractSignVNNotFully(candidate);
@@ -353,80 +351,79 @@ namespace Spell.Algorithm
         {
             // TODO: lỗi telex
             double numerator = 0;
-            try
-            {
-
-                int lengthExtX = extX.Length;
-                int lengthExtY = extY.Length;
-                int j = 0;
-                bool isRegion = false;
-                for (int i = 0; i < lengthExtX; i++, j++)
-                    if (j < lengthExtY)
+            int lengthExtX = extX.Length;
+            int lengthExtY = extY.Length;
+            int j = 0;
+            bool isRegion = false;
+            for (int i = 0; i < lengthExtX; i++, j++)
+                if (j < lengthExtY)
+                {
+                    if (extX[i] == extY[j])
+                        continue;
+                    if (i + 1 < lengthExtX && j < lengthExtY)
+                        if(isTelexSign(extX[i], extX[i + 1], extY[j]))
                     {
-                        if (extX[i] == extY[j])
-                            continue;
-                        if (isRegion)
-                        {
-                            numerator += 1;
-                            continue;
-                        }
-                        else if (i + 1 < lengthExtX && i + 1 < lengthExtY)
-                        {
-                            if (isRegionMistake(extX[i], extX[i + 1], extY[j], extY[j + 1]))
-                            {
-                                numerator += 0.1;
-                                i++;
-                                j++;
-                                isRegion = true;
-                                continue;
-                            }
+                        numerator += 0.1;
+                        continue;
+                    }
+                    if (isRegion)
+                    {
+                        numerator += 1;
+                        continue;
+                    }
 
+                    else if (i + 1 < lengthExtX && j + 1 < lengthExtY)
+                    {
+                        if (isRegionMistake(extX[i], extX[i + 1], extY[j], extY[j + 1]))
+                        {
+                            numerator += 0.1;
+                            i++;
+                            j++;
+                            isRegion = true;
+                            continue;
                         }
-                        if (isRegionMistake(extX[i], extY[j]))
+
+                    }
+                    if (isRegionMistake(extX[i], extY[j]))
+                    {
+                        numerator += 0.1;
+                        continue;
+                    }
+                    int index;
+                    if (j > 0)
+                        index = extY.IndexOf(extX[i], j - 1);
+                    else
+                        index = extY.IndexOf(extX[i], j);
+                    if (index != -1)
+                    {
+                        if (Math.Abs(i - index) == 1)
                         {
                             numerator += 0.1;
                             continue;
                         }
-                        int index;
-                        if (j > 0)
-                            index = extY.IndexOf(extX[i], j - 1);
-                        else
-                            index = extY.IndexOf(extX[i], j);
-                        if (index != -1)
+                        else if (Math.Abs(i - index) == 2)
                         {
-                            if (Math.Abs(i - index) == 1)
-                            {
-                                numerator += 0.1;
-                                continue;
-                            }
-                            else if (Math.Abs(i - index) == 2)
-                            {
-                                numerator += 0.2;
-                                continue;
-                            }
-                        }
-
-                        else if (isVowelVNMistake(extX[i], extY[j]))
-                            numerator += 0.3;
-                        else if (isKeyboardMistake(extX[i], extY[j]))
-                        {
-                            j--;
-                            numerator += 0.5;
-                        }
-                        else {
-                            j--;
-                            numerator += 1;
+                            numerator += 0.2;
+                            continue;
                         }
                     }
 
-                    else
+                    else if (isVowelVNMistake(extX[i], extY[j]))
+                        numerator += 0.3;
+                    else if (isKeyboardMistake(extX[i], extY[j]))
+                    {
+                        j--;
+                        numerator += 0.5;
+                    }
+                    else {
+                        j--;
                         numerator += 1;
+                    }
+                }
 
-            }
-            catch
-            {
-                MessageBox.Show(extX + " " + extY);
-            }
+                else
+                    numerator += 1;
+
             return numerator;
         }
 
@@ -456,7 +453,12 @@ namespace Spell.Algorithm
                 }
             return false;
         }
-
+        private bool isTelexSign(char c1, char c2, char v1)
+        {
+            if ((c1 + "" + c2).Equals(v1 + ""))
+                return true;
+            return false;
+        }
         private bool isKeyboardMistake(char c1, char c2)
         {
             int iC1 = -1, iC2 = -1, jC1 = -1, jC2 = -1;
