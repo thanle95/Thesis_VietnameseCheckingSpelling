@@ -255,6 +255,7 @@
     <None Include="Resources\delete.png" />
     <None Include="Resources\change.png" />
     <None Include="Resources\change all.png" />
+    <None Include="Resources\delete checked range.png" />
     <Content Include="Resources\filteredBi.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

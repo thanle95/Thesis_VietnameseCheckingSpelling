@@ -326,9 +326,25 @@ namespace Spell
 
 
             if (isFirst)
+            {
                 isFirst = false;
+                btnDeleteCheckedRange.Enabled = true;
+            }
             else
                 DocumentHandling.Instance.RemoveUnderline_AllMistake();
+        }
+
+        private void btnDeleteCheckedRange_Click(object sender, RibbonControlEventArgs e)
+        {
+            Word.Range selectionRange = Globals.ThisAddIn.Application.Selection.Range;
+            //nếu người dùng đang chọn một vùng nào đó
+            //thì bỏ gạch dưới vùng đó
+            if (selectionRange.Start < selectionRange.End)
+            {
+                DocumentHandling.Instance.RemoveHighlighChecked(selectionRange.Start, selectionRange.End);
+            }
+            else 
+                DocumentHandling.Instance.RemoveHighlighChecked();
         }
     }
 }

@@ -329,6 +329,7 @@ namespace Spell.Algorithm
                             //Kiểm tra trên từ điển âm tiết
                             if ((_typeError == WRONG_RIGHT_ERROR || _typeError == WRONG_ERROR) && !VNDictionary.getInstance.isSyllableVN(_iWordReplaced))
                             {
+                                // TODO: kiểm tra lại việc thay thế bằng candidate tốt nhất
                                 _hSetCand.Clear();
                                 _hSetCand = WrongWordCandidate.getInstance.createCandidate(context);
                                 if (_hSetCand.Count > 0)
@@ -396,7 +397,7 @@ namespace Spell.Algorithm
                         }
                         _start += _iWord.Length + 1;
                     }//end for: duyệt từng từ trong câu
-                    DocumentHandling.Instance.RemoveHighLight(_range.Start, _range.End);
+                    DocumentHandling.Instance.HighLightCheckedRange(_range);
                 }//end for: duyệt từng câu
 
                 // Kết thúc kiểm lỗi

@@ -101,6 +101,16 @@ namespace Spell.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap delete_checked_range {
+            get {
+                object obj = ResourceManager.GetObject("delete_checked_range", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &lt;s&gt; chắc 30323
         ///chắc hẳn 4395
         ///hẳn những 899

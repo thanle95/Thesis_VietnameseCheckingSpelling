@@ -122,10 +122,7 @@ namespace Spell
         public void RemoveUnderline_AllMistake()
         {
             int count = Globals.ThisAddIn.Application.ActiveDocument.Characters.Count;
-            //int count = characters.Count;
             Word.Range range = Globals.ThisAddIn.Application.ActiveDocument.Range(0, count);
-            //range.HighlightColorIndex = Word.WdColorIndex.wdNoHighlight;
-            //range.Font.Color = Word.WdColor.wdColorAutomatic;
             range.Underline = Word.WdUnderline.wdUnderlineNone;
         }
         public void RemoveUnderline_Mistake(Word.Range range)
@@ -148,7 +145,16 @@ namespace Spell
             Word.Range range = Globals.ThisAddIn.Application.ActiveDocument.Range(startIndex, endIndex);
             range.Underline = Word.WdUnderline.wdUnderlineNone;
         }
-
+        public void RemoveHighlighChecked()
+        {
+            Word.Range range = Globals.ThisAddIn.Application.ActiveDocument.Range(0, Globals.ThisAddIn.Application.ActiveDocument.Characters.Count);
+            range.HighlightColorIndex = Word.WdColorIndex.wdNoHighlight;
+        }
+        public void RemoveHighlighChecked(int start, int end)
+        {
+            Word.Range range = Globals.ThisAddIn.Application.ActiveDocument.Range(start, end);
+            range.HighlightColorIndex = Word.WdColorIndex.wdNoHighlight;
+        }
         public string getActiveDocument(Word.Words words, int start, int end)
         {
             string ret = "";
@@ -160,7 +166,10 @@ namespace Spell
         //
         //---Kiet Start
         //       
-
+        public void HighLightCheckedRange(Word.Range range)
+        {
+            range.HighlightColorIndex = Word.WdColorIndex.wdGray25;
+        }
         // overload dehighlight
         public void RemoveHighLight(int start, int end)
         {
@@ -170,7 +179,7 @@ namespace Spell
         public void HighLight(int start, int end)
         {
             Word.Range range = Globals.ThisAddIn.Application.ActiveDocument.Range(start, end);
-            range.HighlightColorIndex = Microsoft.Office.Interop.Word.WdColorIndex.wdYellow;
+            range.HighlightColorIndex = Word.WdColorIndex.wdYellow;
         }
         //
         //---Kiet End
@@ -245,5 +254,6 @@ namespace Spell
             return result;
         }
 
+       
     }
 }
