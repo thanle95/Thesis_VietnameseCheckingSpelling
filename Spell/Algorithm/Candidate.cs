@@ -349,7 +349,6 @@ namespace Spell.Algorithm
 
         private double calNumeratorForStringDiff(string extX, string extY)
         {
-            // TODO: lỗi telex
             double numerator = 0;
             int lengthExtX = extX.Length;
             int lengthExtY = extY.Length;
@@ -409,7 +408,9 @@ namespace Spell.Algorithm
                     }
 
                     else if (isVowelVNMistake(extX[i], extY[j]))
+                    {
                         numerator += 0.3;
+                    }
                     else if (isKeyboardMistake(extX[i], extY[j]))
                     {
                         j--;
@@ -517,7 +518,6 @@ namespace Spell.Algorithm
         }
         private bool isRegionMistake(char c1, char c12, char c2, char c22)
         {
-            // TODO: trường hợp ch/tr và d/gi/r/v
             int iC1 = -1, iC2 = -1;
             bool isFoundC1_12 = false, isFoundC2_22 = false;
             string ijRegion;

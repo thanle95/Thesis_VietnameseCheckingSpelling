@@ -128,6 +128,10 @@ namespace Spell
             //range.Font.Color = Word.WdColor.wdColorAutomatic;
             range.Underline = Word.WdUnderline.wdUnderlineNone;
         }
+        public void RemoveUnderline_Mistake(Word.Range range)
+        {
+            range.Underline = Word.WdUnderline.wdUnderlineNone;
+        }
         public void RemoveUnderline_Mistake(string fixText, int startIndex, int endIndex)
         {
             Word.Range range = Globals.ThisAddIn.Application.ActiveDocument.Range(startIndex, endIndex);

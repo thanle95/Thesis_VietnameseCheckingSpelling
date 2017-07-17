@@ -283,16 +283,16 @@ namespace Spell
         {
             if (lblWrong.Text.Equals(_ERROR_SPACE))
                 wrongText = " ";
-            foreach (var item in FindError.Instance.dictContext_ErrorRange)
-                if (item.Value.Text.ToLower().Equals(wrongText))
+            foreach (var item in FindError.Instance.dictContext_ErrorString)
+                if (item.Value.ToLower().Equals(wrongText))
                 {
 
                     FindError.Instance.dictContext_ErrorRange.Remove(item.Key);
                     FindError.Instance.dictContext_ErrorString.Remove(item.Key);
 
                     _curRange = Globals.ThisAddIn.Application.Selection.Words.First;
-                    DocumentHandling.Instance.RemoveUnderline_Mistake(_curRange.Text, item.Value.Start, item.Value.Start + _curRange.Text.Length);
-                    if (!item.Value.Text.Equals(wrongText))
+                    DocumentHandling.Instance.RemoveUnderline_Mistake(_curRange);
+                    if (!item.Value.Equals(wrongText))
                         _curRange.Text = fixText[0].ToString().ToUpper() + fixText.Substring(1) + " ";
                     else _curRange.Text = fixText + " ";
 
