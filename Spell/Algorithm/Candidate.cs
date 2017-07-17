@@ -283,6 +283,15 @@ namespace Spell.Algorithm
                     extWord += vnChar;
                 }
             }
+            // Kiểm tra telex
+            // nếu ký tự cuối của extWord là s f r x j thì extWord còn dính lỗi telex về dấu
+            if(StringConstant.Instance.VNSign.IndexOf(extWord.Last()) != -1)
+            {
+                sign = extWord.Last() + "";
+                
+                // Bỏ ký tự cuối
+                extWord.Remove(extWord.Length - 1);
+            }
             ret[0] = extWord;
             ret[1] = sign;
             return ret;
