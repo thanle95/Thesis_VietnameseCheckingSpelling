@@ -182,16 +182,19 @@ namespace Spell.Algorithm
             int min = 1;
             int max = _AllSentences.Count;
             int i = 1;
+            int start,end;
             while (min <= max)
             {
                 i = (min + max) / 2;
+                
                 if (isStart)
                 {
-                    if (key == _AllSentences[i].Start)
+                    start = _AllSentences[i].Start;
+                    if (key == start)
                     {
                         return i;
                     }
-                    else if (key < _AllSentences[i].Start)
+                    else if (key < start)
                     {
                         max = i - 1;
                     }
@@ -201,11 +204,12 @@ namespace Spell.Algorithm
                     }
                 }
                 else {
-                    if (key == _AllSentences[i].End)
+                    end = _AllSentences[i].End;
+                    if (key == end)
                     {
                         return i;
                     }
-                    else if (key < _AllSentences[i].End)
+                    else if (key < end)
                     {
                         max = i - 1;
                     }
@@ -216,6 +220,9 @@ namespace Spell.Algorithm
                 }
 
             }
+            // Trường hợp key > [i].start và key < [i].end
+            if (isStart)
+                return i - 1;
             return i;
         }
         public void Find_Typing(int typeError)
@@ -245,7 +252,7 @@ namespace Spell.Algorithm
 
                 if (selectionRange.Start == selectionRange.End)
                 {
-                    
+
                     isSelected = false;
                     _countSentence = _AllSentences.Count;
                 }

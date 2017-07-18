@@ -553,8 +553,8 @@ namespace Spell
 
         private void gridLog_Paint(object sender, PaintEventArgs e)
         {
-            gridLog.Columns[wrongContext.Name].DefaultCellStyle.ForeColor = Color.Red;
-            gridLog.Columns[rightContext.Name].DefaultCellStyle.ForeColor = Color.ForestGreen;
+            //gridLog.Columns[wrongContext.Name].DefaultCellStyle.ForeColor = Color.Red;
+            //gridLog.Columns[rightContext.Name].DefaultCellStyle.ForeColor = Color.ForestGreen;
         }
 
         private void scrollGridLog()
