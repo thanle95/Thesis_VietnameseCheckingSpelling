@@ -145,6 +145,10 @@ namespace Spell
             Word.Range range = Globals.ThisAddIn.Application.ActiveDocument.Range(startIndex, endIndex);
             range.Underline = Word.WdUnderline.wdUnderlineNone;
         }
+        public void HighLightCheckedRange(Word.Range range)
+        {
+            range.HighlightColorIndex = Word.WdColorIndex.wdGray25;
+        }
         public void RemoveHighlighChecked()
         {
             Word.Range range = Globals.ThisAddIn.Application.ActiveDocument.Range(0, Globals.ThisAddIn.Application.ActiveDocument.Characters.Count);
@@ -166,10 +170,7 @@ namespace Spell
         //
         //---Kiet Start
         //       
-        public void HighLightCheckedRange(Word.Range range)
-        {
-            range.HighlightColorIndex = Word.WdColorIndex.wdGray25;
-        }
+        
         // overload dehighlight
         public void RemoveHighLight(int start, int end)
         {

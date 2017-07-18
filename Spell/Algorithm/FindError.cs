@@ -21,9 +21,6 @@ namespace Spell.Algorithm
         // Cờ đánh dấu dừng kiểm lỗi
         public bool IsStopFindError { get; set; }
 
-        // Danh sách câu được select trong document
-        private Word.Sentences _SelectionSentences;
-
         // Toàn bộ câu trong document
         private Word.Sentences _AllSentences = Globals.ThisAddIn.Application.ActiveDocument.Sentences;
 
@@ -179,33 +176,50 @@ namespace Spell.Algorithm
         /// <summary>
         /// Tìm vị trí câu đầu tiên để kiểm lỗi
         /// </summary>
-        private void FindISentence(int start)
+        private int FindISentence(int key, bool isStart)
         {
             // Dùng binary sort để tìm kiếm dựa trên range.Start
             int min = 1;
             int max = _AllSentences.Count;
-            int key = start;
+            int i = 1;
             while (min <= max)
             {
-                _iSentence = (min + max) / 2;
-                if (key == _AllSentences[_iSentence].Start)
+                i = (min + max) / 2;
+                if (isStart)
                 {
-                    return;
+                    if (key == _AllSentences[i].Start)
+                    {
+                        return i;
+                    }
+                    else if (key < _AllSentences[i].Start)
+                    {
+                        max = i - 1;
+                    }
+                    else
+                    {
+                        min = i + 1;
+                    }
                 }
-                else if (key < _AllSentences[_iSentence].Start)
-                {
-                    max = _iSentence - 1;
+                else {
+                    if (key == _AllSentences[i].End)
+                    {
+                        return i;
+                    }
+                    else if (key < _AllSentences[i].End)
+                    {
+                        max = i - 1;
+                    }
+                    else
+                    {
+                        min = i + 1;
+                    }
                 }
-                else
-                {
-                    min = _iSentence + 1;
-                }
+
             }
+            return i;
         }
         public void Find_Typing(int typeError)
         {
-            //Lấy danh sách câu đang được chọn
-            _SelectionSentences = Globals.ThisAddIn.Application.Selection.Sentences;
             //Trong những câu đang được chọn, lấy câu đầu tiên
             //------
             //......
@@ -223,31 +237,32 @@ namespace Spell.Algorithm
                 // Cờ dùng để đánh dấu có select range câu đang kiểm tra hay không
                 bool isSelected = true;
                 Word.Range selectionRange = Globals.ThisAddIn.Application.Selection.Range;
-                //dùng để tìm ISentence
-                _SelectionSentences = Globals.ThisAddIn.Application.Selection.Sentences;
+                // Tìm ISentence
+                _iSentence = FindISentence(selectionRange.Start, true);
 
                 //nếu bắt đầu và kết thúc bằng nhau
                 //kiểm tra từ câu chứa vị trí con trỏ đến cuối văn bản
+
                 if (selectionRange.Start == selectionRange.End)
                 {
-                    FindISentence(selectionRange.Start);
+                    
                     isSelected = false;
-                    _SelectionSentences = _AllSentences;
+                    _countSentence = _AllSentences.Count;
                 }
                 else {
                     //ngược lại
                     //kiểm tra những câu được chọn
                     //curSentences = Globals.ThisAddIn.Application.Selection.Sentences;
                     isSelected = true;
-                    _iSentence = 1;
+                    _countSentence = FindISentence(selectionRange.End, false);
                 }
-                _countSentence = _SelectionSentences.Count;
+
                 //lấy toàn bộ danh sách các từ trong Active Document, để lấy được ngữ cảnh
                 for (; _iSentence <= _countSentence; _iSentence++)
                 {
                     if (IsStopFindError)
                         break;
-                    _range = _SelectionSentences[_iSentence];
+                    _range = _AllSentences[_iSentence];
                     _sentence = _range.Text.TrimEnd();
 
                     // Kiểm tra trường hợp thiếu khoảng trắng giữa 2 dấu câu liên tiếp
@@ -275,7 +290,7 @@ namespace Spell.Algorithm
                     if (isSelected)
                         DocumentHandling.Instance.HighLight(_range.Start, _range.End);
                     else
-                    //if (_typeFindError != IS_TYPING_TYPE && !isSelected)
+                        //if (_typeFindError != IS_TYPING_TYPE && !isSelected)
                         _range.Select();
 
                     _length = _words.Length;
