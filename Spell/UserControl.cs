@@ -7,6 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.ComponentModel;
 using System.Collections.Generic;
+using System.Drawing;
 
 namespace Spell
 {
@@ -313,7 +314,7 @@ namespace Spell
             }
 
 
-            addRowGridLog();
+            addRowGridLog(wrongText, fixText);
 
             CheckOutOfError_ShowCandidateNextTime();
         }
@@ -372,11 +373,11 @@ namespace Spell
             _SelectedRowGridLog = row.Index;
             SynchronizedInvoke(lblWrongContext, delegate ()
             {
-                lblWrongContext.Text = row.Cells[1].Value.ToString();
+                lblWrongContext.Text = row.Cells[1].ToolTipText;
             });
             SynchronizedInvoke(lblRightContext, delegate ()
             {
-                lblRightContext.Text = row.Cells[2].Value.ToString();
+                lblRightContext.Text = row.Cells[2].ToolTipText;
             });
         }
 
@@ -416,12 +417,12 @@ namespace Spell
                     {
                         if (isInitial)
                         {
-                            min = Levenshtein.Instance.calDistance(row.Cells[2].Value.ToString(), findText.ToString());
+                            min = Levenshtein.Instance.calDistance(row.Cells[2].ToolTipText, findText.ToString());
                             rowIndex = row.Index;
                             isInitial = false;
                             continue;
                         }
-                        distance = Levenshtein.Instance.calDistance(row.Cells[2].Value.ToString(), findText.ToString());
+                        distance = Levenshtein.Instance.calDistance(row.Cells[2].ToolTipText, findText.ToString());
                         if (distance <= min)
                         {
                             min = distance;
@@ -430,7 +431,7 @@ namespace Spell
                     }
                 }
                 ////dùng kết quả sửa lỗi cuối cùng làm chuỗi tìm kiếm
-                findText = gridLog.Rows[rowIndex].Cells[2].Value.ToString();
+                findText = gridLog.Rows[rowIndex].Cells[2].ToolTipText;
                 rng.Find.Execute(ref findText, ref oTrue, ref oFalse, ref oTrue,
                             ref oFalse, ref oFalse, ref oTrue, ref oFindStop, ref oFalse,
                             null, null, null, null, null, null);
@@ -507,7 +508,7 @@ namespace Spell
         }
 
 
-        private void addRowGridLog()
+        private void addRowGridLog(string wrongText, string fixText)
         {
 
             SynchronizedInvoke(pnlShowMore, delegate ()
@@ -538,7 +539,10 @@ namespace Spell
                     Thread.Sleep(5);
                 }
 
-                gridLog.Rows.Add(gridLog.RowCount + 1, _oldContextString, _newContextString);
+                gridLog.Rows.Add(gridLog.RowCount + 1, wrongText, fixText);
+                DataGridViewRow row = gridLog.Rows[gridLog.RowCount - 1];
+                row.Cells[1].ToolTipText = _oldContextString;
+                row.Cells[2].ToolTipText = _newContextString;
                 //
                 //scroll gridlog đến lỗi cuối cùng
                 scrollGridLog();
