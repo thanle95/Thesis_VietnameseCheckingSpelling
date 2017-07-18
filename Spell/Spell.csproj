@@ -180,13 +180,9 @@
     <Compile Include="Algorithm\Candidate.cs" />
     <Compile Include="Algorithm\CompoundWordVn.cs" />
     <Compile Include="Algorithm\Context.cs" />
-    <Compile Include="Algorithm\DataGridViewCellExHelper.cs" />
-    <Compile Include="Algorithm\DataGridViewHelper.cs" />
-    <Compile Include="Algorithm\DataGridViewTextBoxCellEx.cs" />
     <Compile Include="Algorithm\FileManager.cs" />
     <Compile Include="Algorithm\FindError.cs" />
     <Compile Include="Algorithm\FixError.cs" />
-    <Compile Include="Algorithm\ISpannedCell.cs" />
     <Compile Include="Algorithm\Levenshtein.cs" />
     <Compile Include="Algorithm\ProgressReport.cs" />
     <Compile Include="Algorithm\SysMessage.cs" />

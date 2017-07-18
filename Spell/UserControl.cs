@@ -303,7 +303,7 @@ namespace Spell
                     context.getContext();
                     _newContextString = context.ToString();
 
-                    
+
                     break;
                 }
 
@@ -340,7 +340,7 @@ namespace Spell
             string textError = FindError.Instance.dictContext_ErrorString[FindError.Instance.FirstError_Context];
 
             Word.Range tmpRange = FindError.Instance.dictContext_ErrorRange[FindError.Instance.FirstError_Context];
-            tmpRange.Start +=(textErrorRange.Length - textError.Length);
+            tmpRange.Start += (textErrorRange.Length - textError.Length);
             tmpRange.Select();
 
             if (!_IsFixAll)
@@ -523,16 +523,6 @@ namespace Spell
             SynchronizedInvoke(gridLog, delegate ()
             {
                 gridLog.Visible = true;
-                if (_IsFixAll)
-                {
-                    if (gridLog.Size.Height <= 310)
-                        gridLog.Size = new System.Drawing.Size(gridLog.Size.Width, gridLog.Size.Height + 22);
-                }
-                else if (gridLog.Size.Height <= 250)
-                {
-
-                    gridLog.Size = new System.Drawing.Size(gridLog.Size.Width, gridLog.Size.Height + 22);
-                }
                 for (int i = gridLog.Location.Y; i >= 0; i--)
                 {
                     gridLog.Location = new System.Drawing.Point(0, i);
@@ -543,12 +533,30 @@ namespace Spell
                 DataGridViewRow row = gridLog.Rows[gridLog.RowCount - 1];
                 row.Cells[1].ToolTipText = _oldContextString;
                 row.Cells[2].ToolTipText = _newContextString;
+
+                // Auto size
+                int height = 23 + gridLog.RowCount * 20;
+                gridLog.Size = new System.Drawing.Size(gridLog.Size.Width, height);
+                if (_IsFixAll)
+                {
+                    if (gridLog.Height > 310)
+                        gridLog.Height -= 20;
+                }
+                else if (gridLog.Height > 250)
+                    gridLog.Height -= 20;
                 //
                 //scroll gridlog đến lỗi cuối cùng
                 scrollGridLog();
             });
 
         }
+
+        private void gridLog_Paint(object sender, PaintEventArgs e)
+        {
+            gridLog.Columns[wrongContext.Name].DefaultCellStyle.ForeColor = Color.Red;
+            gridLog.Columns[rightContext.Name].DefaultCellStyle.ForeColor = Color.ForestGreen;
+        }
+
         private void scrollGridLog()
         {
             int rowVisible = gridLog.DisplayedRowCount(true);
@@ -669,7 +677,7 @@ namespace Spell
             txtManualFix.SelectAll();
         }
 
-    
+
 
         private void txtManualFix_TextChanged(object sender, EventArgs e)
         {
