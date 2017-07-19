@@ -221,7 +221,7 @@ namespace Spell.Algorithm
 
             }
             // Trường hợp key > [i].start và key < [i].end
-            if (isStart)
+            if (isStart && i - 1 > 0)
                 return i - 1;
             return i;
         }

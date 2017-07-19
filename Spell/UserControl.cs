@@ -33,6 +33,11 @@ namespace Spell
         // Range hiện tại đang sửa lỗi
         private Word.Range _curRange = null;
 
+        // Font size lỗi hiện tại
+        public float FontSize
+        {
+            get; set;
+        }
         // Lỗi hiện tại đang sửa
         private string _ErrorString { get; set; }
 
@@ -43,13 +48,8 @@ namespace Spell
         private bool _IsPause { get; set; }
 
         // Gán nhãn cho lblWrongContext
-        public static string WRONG_TEXT
-        {
-            get
-            {
-                return "\"Từ sai\"";
-            }
-        }
+        public const string WRONG_TEXT = "\"Từ sai\"";
+
         private UserControl()
         {
             InitializeComponent();
@@ -68,6 +68,7 @@ namespace Spell
         /// <param name="isFixAll"></param>
         public void Start(bool isFixAll)
         {
+            FontSize = 0;
             _IsFixAll = isFixAll;
             if (_IsFixAll)
             {
@@ -138,13 +139,25 @@ namespace Spell
         }
         public void showCandidateInTaskPane()
         {
-            FindError.Instance.dictContext_ErrorRange[FindError.Instance.FirstError_Context].Select();
+
             while (FindError.Instance.dictContext_ErrorRange.Count > 0)
             {
                 _IsOutOfError = false;
+                if (FontSize == 0)
+                {
+                    _curRange = FindError.Instance.dictContext_ErrorRange[FindError.Instance.FirstError_Context];
+
+                    FontSize = _curRange.Font.Size;
+                    
+                }
+                _curRange.Select();
+                // Bỏ khoảng trắng
+                if (_curRange.Text.Length != _curRange.Text.Trim().Length)
+                    _curRange.End -= 1;
+                DocumentHandling.Instance.EmphasizeCurrentError(_curRange);
 
                 FixError.Instance.getCandidatesWithContext(FindError.Instance.FirstError_Context, FindError.Instance.dictContext_ErrorRange);
-                _curRange = FindError.Instance.dictContext_ErrorRange[FindError.Instance.FirstError_Context];
+
                 _ErrorString = FixError.Instance.Token;
                 //MessageBox.Show(string.Format("\"{0}\"-\"{1}\"", range.Text, fixError.Token));
                 _oldContextString = FindError.Instance.FirstError_Context.ToString().Trim();
@@ -230,6 +243,7 @@ namespace Spell
                         startIndex = item.Value.Start;
                         endIndex = item.Value.End;
                         DocumentHandling.Instance.RemoveUnderline_Mistake(item.Value.Text, startIndex, endIndex);
+                        DocumentHandling.Instance.RemoveEmphasizeCurrentError(_curRange, FontSize);
                         break;
                     }
                 }
@@ -282,6 +296,7 @@ namespace Spell
         }
         public void change(string wrongText, string fixText, bool isRightClick)
         {
+
             if (lblWrong.Text.Equals(_ERROR_SPACE))
                 wrongText = " ";
             foreach (var item in FindError.Instance.dictContext_ErrorString)
@@ -292,6 +307,7 @@ namespace Spell
                     FindError.Instance.dictContext_ErrorString.Remove(item.Key);
 
                     _curRange = Globals.ThisAddIn.Application.Selection.Words.First;
+                    DocumentHandling.Instance.RemoveEmphasizeCurrentError(_curRange, FontSize);
                     DocumentHandling.Instance.RemoveUnderline_Mistake(_curRange);
                     if (!item.Value.Equals(wrongText))
                         _curRange.Text = fixText[0].ToString().ToUpper() + fixText.Substring(1) + " ";
@@ -341,8 +357,15 @@ namespace Spell
 
             Word.Range tmpRange = FindError.Instance.dictContext_ErrorRange[FindError.Instance.FirstError_Context];
             tmpRange.Start += (textErrorRange.Length - textError.Length);
-            tmpRange.Select();
+            FontSize = tmpRange.Font.Size;
 
+            //// Bỏ khoảng trắng
+            //if(tmpRange.Text.Length != tmpRange.Text.Trim().Length)
+            //tmpRange.End -= 1;
+            //DocumentHandling.Instance.EmphasizeCurrentError(tmpRange);
+
+            _curRange = tmpRange;
+            _curRange.Select();
             if (!_IsFixAll)
                 showCandidateInTaskPane();
 

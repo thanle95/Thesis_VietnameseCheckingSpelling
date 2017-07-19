@@ -41,38 +41,45 @@ namespace Spell
             if (FindError.Instance.CountError > 0 && FindError.Instance.IsStopFindError)
             {
                 //Lấy từ đang chọn
-                Word.Range selectedRange = DocumentHandling.Instance.GetWordByCursorSelection();
+                Word.Range selectedRange = Globals.ThisAddIn.Application.Selection.Words.First;
                 //Trường hợp người dùng tự sửa lỗi
                 //Xử lý remove underline lỗi hiện tại
                 //Bằng việc so sánh với từ được chọn lần trước
-                {
-                    if (!selectedRange.Text.Equals(PreSelectedRangeText) && selectedRange.Start == PreSelectedRangeStart)
-                        DocumentHandling.Instance.RemoveUnderline_Mistake(selectedRange.Text, selectedRange.Start, selectedRange.End);
-                    PreSelectedRangeText = selectedRange.Text;
-                    PreSelectedRangeStart = selectedRange.Start;
-                }
+                if (!selectedRange.Text.Equals(PreSelectedRangeText) && selectedRange.Start == PreSelectedRangeStart)
+                    DocumentHandling.Instance.RemoveUnderline_Mistake(selectedRange.Text, selectedRange.Start, selectedRange.End);
 
                 //Truy cập vào label lblWrong
                 UserControl.Instance.SynchronizedInvoke(UserControl.Instance.lblWrong, delegate ()
                 {
+                    string selectedText = selectedRange.Text.Trim();
                     //Sửa lỗi hiện tại
-                    if (selectedRange.Text.Trim().Equals(UserControl.Instance.lblWrong.Text))
-                        EnableFixError(true);
-                    else {
-                        foreach (var item in FindError.Instance.dictContext_ErrorRange.Keys)
-                            //Sửa lỗi bất kỳ khác
-                            if (selectedRange.Text.Trim().Equals(item.TOKEN))
-                            {
-                                EnableFixError(true);
-                                Word.Words words = Globals.ThisAddIn.Application.Selection.Words;
-                                Word.Sentences sentences = Globals.ThisAddIn.Application.Selection.Sentences;
-                                UserControl.Instance.startFixError(words, sentences);
-                                return;
-                            }
-                        //Không phải là lỗi
-                        EnableFixError(false);
-                    }
+                    if (!UserControl.Instance.lblWrong.Text.Equals(UserControl.WRONG_TEXT))
+                        if (selectedText.Equals(UserControl.Instance.lblWrong.Text))
+                            EnableFixError(true);
+                        else {
+                            // Bỏ emphasize lỗi trước
+                            DocumentHandling.Instance.RemoveEmphasizeCurrentError(PreSelectedRangeStart, PreSelectedRangeText, UserControl.Instance.FontSize);
+                            foreach (var item in FindError.Instance.dictContext_ErrorRange.Keys)
+                                //Sửa lỗi bất kỳ khác
+                                if (selectedText.Equals(item.TOKEN))
+                                {
+                                    EnableFixError(true);
+                                    Word.Words words = Globals.ThisAddIn.Application.Selection.Words;
+                                    Word.Sentences sentences = Globals.ThisAddIn.Application.Selection.Sentences;
+                                    UserControl.Instance.startFixError(words, sentences);
+
+                                    // Emphasize lỗi hiện tại
+                                    UserControl.Instance.FontSize = selectedRange.Font.Size;
+                                    DocumentHandling.Instance.EmphasizeCurrentError(selectedRange);
+                                    PreSelectedRangeText = selectedRange.Text;
+                                    PreSelectedRangeStart = selectedRange.Start;
+                                    return;
+                                }
+                            //Không phải là lỗi
+                            EnableFixError(false);
+                        }
                 });
+               
             }
         }
 
@@ -143,7 +150,8 @@ namespace Spell
                 context.getContext();
 
                 //Tìm lỗi trong danh sách
-                if (FindError.Instance.IsContainError(context, words.First.Start)){
+                if (FindError.Instance.IsContainError(context, words.First.Start))
+                {
                     //Sửa lỗi đã tìm được
                     FixError.Instance.getCandidatesWithContext(context, FindError.Instance.dictContext_ErrorRange);
                     WrongWord = FixError.Instance.Token.ToLower();
