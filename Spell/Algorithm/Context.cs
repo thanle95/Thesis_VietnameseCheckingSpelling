@@ -29,6 +29,23 @@ namespace Spell.Algorithm
         {
             get; set;
         }
+        public int WordCount
+        {
+            get
+            {
+                int count = 1;
+                if (PREPRE.Length > 0)
+                    count++;
+                if (PRE.Length > 0)
+                    count++;
+                if (NEXT.Length > 0)
+                    count++;
+                if (NEXTNEXT.Length > 0)
+                    count++;
+
+                return count;
+            }
+        }
         private Regex regexSPEC = new Regex(StringConstant.Instance.patternSPEC);
         private Regex regexOPEN = new Regex(StringConstant.Instance.patternOPEN);
         private Regex regexCLOSE = new Regex(StringConstant.Instance.patternCLOSE);
@@ -81,7 +98,7 @@ namespace Spell.Algorithm
             int i = 0;
 
             int wordStart = words.First.Start - sentences.First.Start;
-            for(int iFor= 0; iFor < wordStart; iFor++)
+            for (int iFor = 0; iFor < wordStart; iFor++)
             {
                 if (sentences.First.Text[iFor] == ' ')
                     i++;
@@ -146,7 +163,7 @@ namespace Spell.Algorithm
                 preSPEC = regexSPEC.Replace(PRE, "");
                 preClose = regexCLOSE.Replace(PRE, "");
                 preOpen = regexOPEN.Replace(PRE, "");
-                
+
                 bool isUpper = char.IsUpper(PRE[0]) ? true : false;
                 //9
                 // Theo chũ trương
@@ -157,7 +174,8 @@ namespace Spell.Algorithm
                     if (preClose.Length < PRE.Length)
                         PRE = preClose;
                     //5
-                    PRE = PREPRE = "";
+                    if (isUpper && iWord != 1)
+                        PRE = PREPRE = "";
                     findNext_NextNext(iWord, words);
                     return;
                 }
@@ -182,18 +200,31 @@ namespace Spell.Algorithm
                             prepreSPEC = regexSPEC.Replace(PREPRE, "");
                             prepreClose = regexCLOSE.Replace(PREPRE, "");
                             prepreOpen = regexOPEN.Replace(PREPRE, "");
-                           
+
                             isUpper = char.IsUpper(PREPRE[0]) ? true : false;
                             //14
                             if (prepreSPEC.Length < PREPRE.Length || prepreClose.Length < PREPRE.Length || (isUpper && iWord != 2))
                             {
-                                PREPRE = "";
+                                if (prepreSPEC.Length < PREPRE.Length)
+                                    PREPRE = prepreSPEC;
+                                if (prepreClose.Length < PREPRE.Length)
+                                    PREPRE = prepreClose;
+                                //5
+                                if (isUpper && iWord != 2)
+                                    PREPRE = "";
                                 //12
                                 checkTokenContainsClose_FindNext(iWord, words);
                             }
-                            else
+                            else if (prepreOpen.Length < PREPRE.Length)
+                            {
+                                PREPRE = prepreOpen;
+                                //11
+                                //PREPRE = "";
                                 //12
-                                checkTokenContainsClose_FindNext(iWord, words);
+                                //checkTokenContainsClose_FindNext(iWord, words);
+                            }
+                            //12
+                            checkTokenContainsClose_FindNext(iWord, words);
                         }
                         else
                         {
@@ -235,7 +266,7 @@ namespace Spell.Algorithm
                 nextSPEC = regexSPEC.Replace(NEXT, "");
                 nextClose = regexCLOSE.Replace(NEXT, "");
                 nextOpen = regexOPEN.Replace(NEXT, "");
-                
+
                 bool isUpper = char.IsUpper(NEXT[0]) ? true : false;
                 //16
                 if (nextSPEC.Length < NEXT.Length || nextOpen.Length < NEXT.Length || isUpper)
@@ -245,7 +276,8 @@ namespace Spell.Algorithm
                     if (nextOpen.Length < NEXT.Length)
                         NEXT = nextOpen;
                     //17
-                    NEXT = NEXTNEXT = "";
+                    if (isUpper)
+                        NEXT = NEXTNEXT = "";
                     return;
                 }
                 else
@@ -263,21 +295,31 @@ namespace Spell.Algorithm
                         //20
                         if (iWord < words.Length - 2)
                         {
-                            NEXTNEXT  = words[iWord + 2].Trim();
-                            string nextnextSPEC, nextnextOpen;
+                            NEXTNEXT = words[iWord + 2].Trim();
+                            string nextnextSPEC, nextnextOpen, nextnextClose;
                             nextnextSPEC = regexSPEC.Replace(NEXTNEXT, "");
                             nextnextOpen = regexOPEN.Replace(NEXTNEXT, "");
-                           
+                            nextnextClose = regexCLOSE.Replace(NEXTNEXT, "");
                             isUpper = char.IsUpper(NEXTNEXT[0]) ? true : false;
                             //21
                             if (nextnextSPEC.Length < NEXTNEXT.Length || nextnextOpen.Length < NEXTNEXT.Length || isUpper)
                             {
+                                if (nextnextSPEC.Length < NEXTNEXT.Length)
+                                    NEXTNEXT = nextnextSPEC;
+                                if (nextnextOpen.Length < NEXTNEXT.Length)
+                                    NEXTNEXT = nextnextOpen;
+                                //17
+                                if (isUpper)
+                                    NEXTNEXT = "";
                                 //22
-                                NEXTNEXT = "";
                                 return;
                             }
-                            else
+                            else if (nextnextClose.Length < NEXTNEXT.Length)
+                            {
+                                NEXTNEXT = nextnextClose;
+                                //19
                                 return;
+                            }
                         }
                         else
                         {

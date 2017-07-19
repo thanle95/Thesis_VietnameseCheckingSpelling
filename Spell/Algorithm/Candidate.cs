@@ -331,19 +331,18 @@ namespace Spell.Algorithm
             for (int i = 0; i < lengthExtX; i++, j++)
                 if (j < lengthExtY)
                 {
-                    if (extX[i] == extY[j])
-                        continue;
+                    
                     if (i + 1 < lengthExtX && j < lengthExtY)
                         if (isTelexSign(extX[i], extX[i + 1], extY[j]))
                         {
                             numerator += 0.1;
                             continue;
                         }
-                    if (isRegion)
-                    {
-                        numerator += 1;
-                        continue;
-                    }
+                    //if (isRegion)
+                    //{
+                    //    numerator += 1;
+                    //    continue;
+                    //}
 
                     else if (i + 1 < lengthExtX && j + 1 < lengthExtY)
                     {
@@ -357,6 +356,8 @@ namespace Spell.Algorithm
                         }
 
                     }
+                    if (extX[i] == extY[j])
+                        continue;
                     if (isRegionMistake(extX[i], extY[j]))
                     {
                         numerator += 0.1;

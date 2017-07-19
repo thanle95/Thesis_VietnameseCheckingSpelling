@@ -182,43 +182,30 @@ namespace Spell.Algorithm
             int min = 1;
             int max = _AllSentences.Count;
             int i = 1;
-            int start,end;
+            int start, end;
             while (min <= max)
             {
                 i = (min + max) / 2;
-                
+
                 if (isStart)
                 {
                     start = _AllSentences[i].Start;
                     if (key == start)
-                    {
                         return i;
-                    }
                     else if (key < start)
-                    {
                         max = i - 1;
-                    }
                     else
-                    {
                         min = i + 1;
-                    }
                 }
                 else {
                     end = _AllSentences[i].End;
                     if (key == end)
-                    {
                         return i;
-                    }
                     else if (key < end)
-                    {
                         max = i - 1;
-                    }
                     else
-                    {
                         min = i + 1;
-                    }
                 }
-
             }
             // Trường hợp key > [i].start và key < [i].end
             if (isStart && i - 1 > 0)
@@ -264,7 +251,6 @@ namespace Spell.Algorithm
                     _countSentence = FindISentence(selectionRange.End, false);
                 }
 
-                //lấy toàn bộ danh sách các từ trong Active Document, để lấy được ngữ cảnh
                 for (; _iSentence <= _countSentence; _iSentence++)
                 {
                     if (IsStopFindError)
@@ -348,71 +334,39 @@ namespace Spell.Algorithm
                             _end = _start + _iWordReplaced.Length;
 
                             _originalContext.CopyForm(context);
-                            //Kiểm tra trên từ điển âm tiết
+                            // Kiểm tra trên từ điển âm tiết
                             if ((_typeError == WRONG_RIGHT_ERROR || _typeError == WRONG_ERROR) && !VNDictionary.getInstance.isSyllableVN(_iWordReplaced))
                             {
                                 // TODO: kiểm tra lại việc thay thế bằng candidate tốt nhất
-                                _hSetCand.Clear();
-                                _hSetCand = WrongWordCandidate.getInstance.createCandidate(context);
-                                if (_hSetCand.Count > 0)
+
+                                // Kiểm tra từ hiện tại sai có phải do từ sau hay không
+                                if (i < _length - 1)
                                 {
-                                    //tự động thay thế bằng candidate tốt nhất
-                                    //tránh làm sai những gram phía sau
-                                    _words[i] = _hSetCand.ElementAt(0);
-
-                                    ////lấy ngữ cảnh gốc
-                                    //context.getContext(i, originWords);
-                                    dictContext_ErrorRange.Add(context, (DocumentHandling.Instance.UnderlineWrongWord(context.TOKEN, _start, _end)));
+                                    CheckError(context, i, false);
                                 }
-                            }//end if wrong word
+                                else
+                                {
+                                    // Là từ cuối câu nên không ảnh hưởng từ phía sau
+                                    if (hasCandidate(context, false))
+                                        addError(context, false);
 
-                            //kiểm tra token có khả năng sai ngữ cảnh hay k
+                                }
+                            }
+                            // End if wrong word
+
+                            // Kiểm tra token có khả năng sai ngữ cảnh hay k
 
                             else if ((_typeError == WRONG_RIGHT_ERROR || _typeError == RIGHT_ERROR) && !RightWordCandidate.getInstance.checkRightWord(context))
                             {
                                 if (i < _length - 1)
                                 {
-                                    context.getContext(i + 1, _words);
-                                    string tmpNext = "";
-                                    //
-                                    //thay words[i+1] bằng candidate tốt nhất
-                                    _hSetCand.Clear();
-                                    _hSetCand = RightWordCandidate.getInstance.createCandidate(context);
-                                    if (_hSetCand.Count > 0)
-                                        tmpNext = _hSetCand.ElementAt(0);
-                                    context.CopyForm(_originalContext);
-                                    context.NEXT = tmpNext;
-
-                                    //kiểm tra words[i] bị sai có do ảnh hưởng của words[i+1] hay không
-                                    if (!RightWordCandidate.getInstance.checkRightWord(context))
-                                    {
-                                        context.CopyForm(_originalContext);
-                                        _hSetCand.Clear();
-                                        _hSetCand = RightWordCandidate.getInstance.createCandidate(context);
-                                        if (_hSetCand.Count > 0)
-                                        {
-                                            //tự động thay thế bằng candidate tốt nhất
-                                            //tránh làm sai những gram phía sau
-                                            _words[i] = _hSetCand.ElementAt(0);
-                                            ////lấy ngữ cảnh gốc
-                                            //context.getContext(i, originWords);
-                                            dictContext_ErrorRange.Add(context, (DocumentHandling.Instance.UnderlineRightWord(context.TOKEN, _start, _end)));
-                                        }
-                                    }
+                                    CheckError(context, i, true);
                                 }
                                 else
                                 {
-                                    _hSetCand.Clear();
-                                    _hSetCand = RightWordCandidate.getInstance.createCandidate(context);
-                                    if (_hSetCand.Count > 0)
-                                    {
-                                        //tự động thay thế bằng candidate tốt nhất
-                                        //tránh làm sai những gram phía sau
-                                        _words[i] = _hSetCand.ElementAt(0);
-                                        ////lấy ngữ cảnh gốc
-                                        //context.getContext(i, originWords);
-                                        dictContext_ErrorRange.Add(context, (DocumentHandling.Instance.UnderlineRightWord(context.TOKEN, _start, _end)));
-                                    }
+                                    // Là từ cuối câu nên không ảnh hưởng từ phía sau
+                                    if (hasCandidate(context, true))
+                                        addError(context, true);
                                 }
 
                             }// end else if right word
@@ -425,8 +379,8 @@ namespace Spell.Algorithm
                 // Kết thúc kiểm lỗi
                 IsStopFindError = true;
 
-                // Sắp xếp lại danh sách lỗi theo Range.Start
-                dictContext_ErrorRange.OrderBy(x => x.Value.Start).ToDictionary(x => x.Key, x => x.Value);
+                //// Sắp xếp lại danh sách lỗi theo Range.Start
+                //dictContext_ErrorRange.OrderBy(x => x.Value.Start).ToDictionary(x => x.Key, x => x.Value);
 
                 foreach (var item in dictContext_ErrorRange)
                     dictContext_ErrorString.Add(item.Key, item.Value.Text);
@@ -437,5 +391,77 @@ namespace Spell.Algorithm
             }
         }
 
+        private bool hasCandidate(Context context, bool isRightError)
+        {
+            _hSetCand.Clear();
+            if (isRightError)
+                _hSetCand = RightWordCandidate.getInstance.createCandidate(context);
+            else
+                _hSetCand = WrongWordCandidate.getInstance.createCandidate(context);
+            if (_hSetCand.Count > 0)
+                return true;
+            return false;
+        }
+
+        private void addError(Context context, bool isRightError)
+        {
+            if (isRightError)
+                dictContext_ErrorRange.Add(context, (DocumentHandling.Instance.UnderlineRightWord(context.TOKEN, _start, _end)));
+            else
+                dictContext_ErrorRange.Add(context, (DocumentHandling.Instance.UnderlineWrongWord(context.TOKEN, _start, _end)));
+        }
+
+        private void CheckError(Context context, int i, bool isRightError)
+        {
+            // Ngữ cảnh chỉ có một từ nhưng thuộc trường hợp sai do ngữ cảnh
+            if (context.WordCount == 1 && isRightError)
+                return;
+
+            if (char.IsUpper(_words[i + 1][0]))
+            {
+                if (hasCandidate(context, isRightError))
+                    addError(context, isRightError);
+                return;
+            }
+            context.getContext(i + 1, _words);
+            _hSetCand.Clear();
+            _hSetCand = Candidate.getInstance.createCandidate(context);
+
+            // Từ thứ i + 1 có candidate thay thế
+            // nếu không, thì từ hiện tại là sai
+            if (_hSetCand.Count > 0)
+            {
+                context.CopyForm(_originalContext);
+
+
+                context.NEXT = _hSetCand.ElementAt(0);
+                // Dùng candidate tốt nhất làm ngữ cảnh
+                // kiểm tra từ hiện tại có sai do từ sau hay không
+
+                if (hasCandidate(context, isRightError))
+                {
+                    // Từ hiện tại sai mà không phải do từ phía sau
+                    // Tránh làm sai những gram phía sau
+                    _words[i] = _hSetCand.ElementAt(0);
+
+                    context.CopyForm(_originalContext);
+                    addError(context, isRightError);
+                }
+                else
+                {
+                    context.CopyForm(_originalContext);
+                    // Nếu từ hiện tại có candidate thay thế thì thêm vào đó thành một lỗi
+                    if (hasCandidate(context, isRightError))
+                        addError(context, isRightError);
+                }
+            }
+            else
+            {
+                context.CopyForm(_originalContext);
+                // Nếu từ hiện tại có candidate thay thế thì thêm vào đó thành một lỗi
+                if (hasCandidate(context, isRightError))
+                    addError(context, isRightError);
+            }
+        }
     }
 }

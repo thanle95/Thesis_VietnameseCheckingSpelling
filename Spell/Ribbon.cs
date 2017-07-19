@@ -111,7 +111,7 @@ namespace Spell
             FindError.Instance.Find();
 
             //stopwatch.Stop();
-            
+
             int count = FindError.Instance.CountError;
 
             if (count > 0)
@@ -207,12 +207,29 @@ namespace Spell
             new Thread(
                  delegate ()
                  {
-                     foreach (Word.Range range in Globals.ThisAddIn.Application.ActiveDocument.Words)
-                         if (range.Font.Color == Word.WdColor.wdColorRed)
-                         {
-                             sum++;
-                             lblSumError.Label = sum.ToString() + " lỗi";
-                         }
+                     Word.Range selectedRange = Globals.ThisAddIn.Application.Selection.Range;
+
+                     // Kiểm tra toàn bộ văn bản
+                     if (selectedRange.Start == selectedRange.End)
+                     {
+                         foreach (Word.Range range in Globals.ThisAddIn.Application.ActiveDocument.Words)
+                             if (range.Font.Color == Word.WdColor.wdColorRed)
+                             {
+                                 sum++;
+                                 lblSumError.Label = sum.ToString() + " lỗi";
+                             }
+                     }
+
+                     // Kiểm tra một phần văn bản
+                     else
+                     {
+                         foreach (Word.Range range in Globals.ThisAddIn.Application.Selection.Words)
+                             if (range.Font.Color == Word.WdColor.wdColorRed)
+                             {
+                                 sum++;
+                                 lblSumError.Label = sum.ToString() + " lỗi";
+                             }
+                     }
                  }).Start();
         }
 
@@ -343,7 +360,7 @@ namespace Spell
             {
                 DocumentHandling.Instance.RemoveHighlighChecked(selectionRange.Start, selectionRange.End);
             }
-            else 
+            else
                 DocumentHandling.Instance.RemoveHighlighChecked();
         }
     }

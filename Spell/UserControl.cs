@@ -108,16 +108,16 @@ namespace Spell
             if (FindError.Instance.IsContainError(context, wordsDocument.First.Start))
             {
                 FixError.Instance.getCandidatesWithContext(context, FindError.Instance.dictContext_ErrorRange);
-
+                SynchronizedInvoke(lblWrong, delegate ()
+                {
+                    lblWrong.Text = FixError.Instance.Token;
+                });
                 if (FixError.Instance.Count > 0)
                 {
                     wordsDocument.First.Select();
                     _oldContextString = context.ToString().Trim();
                     _newContextString = FixError.Instance.ToString().Trim();
-                    SynchronizedInvoke(lblWrong, delegate ()
-                    {
-                        lblWrong.Text = FixError.Instance.Token;
-                    });
+
                     SynchronizedInvoke(lstbCandidate, delegate () { lstbCandidate.Items.Clear(); });
 
                     foreach (string item in FixError.Instance.hSetCandidate)
@@ -133,7 +133,7 @@ namespace Spell
                 }
                 else
                 {
-                    //MessageBox.Show(SysMessage.Instance.IsNotError(FindError.Instance.SelectedError_Context.TOKEN));
+                    ignore();
                 }
             }
         }
@@ -148,7 +148,7 @@ namespace Spell
                     _curRange = FindError.Instance.dictContext_ErrorRange[FindError.Instance.FirstError_Context];
 
                     FontSize = _curRange.Font.Size;
-                    
+
                 }
                 _curRange.Select();
                 // Bỏ khoảng trắng
@@ -157,37 +157,42 @@ namespace Spell
                 DocumentHandling.Instance.EmphasizeCurrentError(_curRange);
 
                 FixError.Instance.getCandidatesWithContext(FindError.Instance.FirstError_Context, FindError.Instance.dictContext_ErrorRange);
-
-                _ErrorString = FixError.Instance.Token;
-                //MessageBox.Show(string.Format("\"{0}\"-\"{1}\"", range.Text, fixError.Token));
-                _oldContextString = FindError.Instance.FirstError_Context.ToString().Trim();
-                _newContextString = FixError.Instance.ToString().Trim();
-                if (!_IsPause)
+                SynchronizedInvoke(lblWrong, delegate ()
                 {
-                    Globals.ThisAddIn.CustomTaskPanes[0].Visible = true;
-                    change(FixError.Instance.Token.ToLower(), FixError.Instance.hSetCandidate.ElementAt(0), false);
-                    //CurRannge.Select();
+                    lblWrong.Text = FixError.Instance.Token;
+                });
+                if (FixError.Instance.Count > 0)
+                {
+                    _ErrorString = FixError.Instance.Token;
+                    //MessageBox.Show(string.Format("\"{0}\"-\"{1}\"", range.Text, fixError.Token));
+                    _oldContextString = FindError.Instance.FirstError_Context.ToString().Trim();
+                    _newContextString = FixError.Instance.ToString().Trim();
+                    if (!_IsPause)
+                    {
+                        Globals.ThisAddIn.CustomTaskPanes[0].Visible = true;
+                        change(FixError.Instance.Token.ToLower(), FixError.Instance.hSetCandidate.ElementAt(0), false);
+                        //CurRannge.Select();
+                    }
+                    else
+                    {
+
+
+                        Globals.ThisAddIn.CustomTaskPanes[0].Visible = true;
+                        SynchronizedInvoke(lstbCandidate, delegate () { lstbCandidate.Items.Clear(); });
+
+                        foreach (string item in FixError.Instance.hSetCandidate)
+                            if (!item.ToLower().Equals(FixError.Instance.Token.ToLower()))
+                                if (item.Length > 1)
+                                    SynchronizedInvoke(lstbCandidate, delegate () { lstbCandidate.Items.Add(item.Trim()); });
+
+                        SynchronizedInvoke(lstbCandidate, delegate () { lstbCandidate.SetSelected(0, true); });
+                        SynchronizedInvoke(txtManualFix, delegate () { txtManualFix.Text = lstbCandidate.SelectedItem.ToString(); });
+                        SynchronizedInvoke(btnChange, delegate () { btnChange.Focus(); });
+                        return;
+                    }
                 }
                 else
-                {
-                    SynchronizedInvoke(lblWrong, delegate ()
-                    {
-                        lblWrong.Text = FixError.Instance.Token;
-                    });
-
-                    Globals.ThisAddIn.CustomTaskPanes[0].Visible = true;
-                    SynchronizedInvoke(lstbCandidate, delegate () { lstbCandidate.Items.Clear(); });
-
-                    foreach (string item in FixError.Instance.hSetCandidate)
-                        if (!item.ToLower().Equals(FixError.Instance.Token.ToLower()))
-                            if (item.Length > 1)
-                                SynchronizedInvoke(lstbCandidate, delegate () { lstbCandidate.Items.Add(item.Trim()); });
-                    SynchronizedInvoke(lstbCandidate, delegate () { lstbCandidate.SetSelected(0, true); });
-                    SynchronizedInvoke(txtManualFix, delegate () { txtManualFix.Text = lstbCandidate.SelectedItem.ToString(); });
-                    SynchronizedInvoke(btnChange, delegate () { btnChange.Focus(); });
-                    return;
-                }
-
+                    ignore();
             }
         }
 
@@ -268,6 +273,8 @@ namespace Spell
                         startIndex = item.Value.Start;
                         endIndex = item.Value.End;
                         DocumentHandling.Instance.RemoveUnderline_Mistake(startIndex, endIndex);
+                        _curRange = Globals.ThisAddIn.Application.ActiveDocument.Range(startIndex, endIndex);
+                        DocumentHandling.Instance.RemoveEmphasizeCurrentError(_curRange, FontSize);
                         break;
                     }
 

@@ -23,7 +23,7 @@ namespace Spell.Algorithm
         }
         public const int MAX_KEYBOARD_ROW = 3;
         public const int MAX_KEYBOARD_COL = 10;
-        public const int MAXGROUP_REGION_CONFUSED = 6;
+        public const int MAXGROUP_REGION_CONFUSED = 11;
         public const int MAXCASE_REGION_CONFUSED = 4;
         public const int QUESTION_MASK = 2;
         public const int TILDE = 3;
@@ -166,7 +166,13 @@ namespace Spell.Algorithm
             {"n", "ng", "nh",""},
             {"d", "gi" ,"v","r"},
             {"ch", "tr", "",""},
-            {"t", "c", "", "" }
+            {"t", "c", "", "" },
+            {"u", "uô", "", "" },
+            {"g", "gh", "", "" },
+            {"â", "uâ", "", "" },
+            {"ao", "au", "âu", "" },
+            {"v", "qu", "", "" },
+            {"i", "iê", "", "" }
         };
 
         public string[,] VNRegion_Confused_Matrix_UperCase = new string[,]
@@ -193,6 +199,6 @@ namespace Spell.Algorithm
 
         public string patternSPEC = "[-|\\/|\\|>|<|\\[|\\]||@|#|$|%|^|&|\\*|\\d|]";
         public string patternOPEN = "[(|“]";
-        public string patternCLOSE = "[,|)|”]";
+        public string patternCLOSE = "[,|)|”|.!?;:…]";
     }
 }
