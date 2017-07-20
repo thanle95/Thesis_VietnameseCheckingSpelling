@@ -116,6 +116,7 @@ namespace Spell
 
             if (count > 0)
             {
+                MessageBox.Show(string.Format("số lỗi phát hiện: {0}", count));
                 ThreadStart tsPrepareRestore = new ThreadStart(PrepareRestore);
                 Thread tPrepareRestore = new Thread(tsPrepareRestore);
                 tPrepareRestore.Start();

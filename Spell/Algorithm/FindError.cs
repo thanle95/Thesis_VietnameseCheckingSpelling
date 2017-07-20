@@ -211,6 +211,9 @@ namespace Spell.Algorithm
             if (isStart && i - 1 > 0)
                 if (_AllSentences[i - 1].End > key)
                     return i - 1;
+            if (!isStart && i + 1 < _AllSentences.Count)
+                if (_AllSentences[i + 1].Start < key)
+                    return i + 1;
             return i;
         }
         public void Find_Typing(int typeError)
