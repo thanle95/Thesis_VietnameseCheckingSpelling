@@ -150,19 +150,23 @@ namespace Spell
                     FontSize = _curRange.Font.Size;
 
                 }
-                _curRange.Select();
+               
                 // Bỏ khoảng trắng
                 if (_curRange.Text.Length != _curRange.Text.Trim().Length)
                     _curRange.End -= 1;
-                DocumentHandling.Instance.EmphasizeCurrentError(_curRange);
+                
 
                 FixError.Instance.getCandidatesWithContext(FindError.Instance.FirstError_Context, FindError.Instance.dictContext_ErrorRange);
                 SynchronizedInvoke(lblWrong, delegate ()
                 {
                     lblWrong.Text = FixError.Instance.Token;
                 });
+
+                _curRange.Select();
                 if (FixError.Instance.Count > 0)
                 {
+                    
+                    DocumentHandling.Instance.EmphasizeCurrentError(_curRange);
                     _ErrorString = FixError.Instance.Token;
                     //MessageBox.Show(string.Format("\"{0}\"-\"{1}\"", range.Text, fixError.Token));
                     _oldContextString = FindError.Instance.FirstError_Context.ToString().Trim();
@@ -252,11 +256,11 @@ namespace Spell
                         break;
                     }
                 }
-                //không tìm thấy
+                // Không tìm thấy
             }
-            //khi người dùng chỉnh sửa, kiểm tra trong những range.value.text của lstErrorRange
-            //nếu có range không bằng với phần tử trong lstError
-            //thì bỏ qua lỗi tại đó
+            // Khi người dùng chỉnh sửa, kiểm tra trong những range.value.text của lstErrorRange
+            // nếu có range không bằng với phần tử trong lstError
+            // thì bỏ qua lỗi tại đó
             else
             {
                 string iErrorRange;
@@ -372,7 +376,7 @@ namespace Spell
             //DocumentHandling.Instance.EmphasizeCurrentError(tmpRange);
 
             _curRange = tmpRange;
-            _curRange.Select();
+            //_curRange.Select();
             if (!_IsFixAll)
                 showCandidateInTaskPane();
 

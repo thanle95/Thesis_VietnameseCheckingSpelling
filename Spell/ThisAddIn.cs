@@ -55,7 +55,11 @@ namespace Spell
                     //Sửa lỗi hiện tại
                     if (!UserControl.Instance.lblWrong.Text.Equals(UserControl.WRONG_TEXT))
                         if (selectedText.Equals(UserControl.Instance.lblWrong.Text))
+                        {
+                            PreSelectedRangeText = selectedRange.Text;
+                            PreSelectedRangeStart = selectedRange.Start;
                             EnableFixError(true);
+                        }
                         else {
                             // Bỏ emphasize lỗi trước
                             DocumentHandling.Instance.RemoveEmphasizeCurrentError(PreSelectedRangeStart, PreSelectedRangeText, UserControl.Instance.FontSize);

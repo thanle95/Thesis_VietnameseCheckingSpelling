@@ -169,13 +169,8 @@ namespace Spell.Algorithm
                 // Theo chũ trương
                 if (preSPEC.Length < PRE.Length || preClose.Length < PRE.Length || (isUpper && iWord != 1))
                 {
-                    if (preSPEC.Length < PRE.Length)
-                        PRE = preSPEC;
-                    if (preClose.Length < PRE.Length)
-                        PRE = preClose;
-                    //5
-                    if (isUpper && iWord != 1)
-                        PRE = PREPRE = "";
+
+                    PRE = PREPRE = "";
                     findNext_NextNext(iWord, words);
                     return;
                 }
@@ -205,13 +200,9 @@ namespace Spell.Algorithm
                             //14
                             if (prepreSPEC.Length < PREPRE.Length || prepreClose.Length < PREPRE.Length || (isUpper && iWord != 2))
                             {
-                                if (prepreSPEC.Length < PREPRE.Length)
-                                    PREPRE = prepreSPEC;
-                                if (prepreClose.Length < PREPRE.Length)
-                                    PREPRE = prepreClose;
+
                                 //5
-                                if (isUpper && iWord != 2)
-                                    PREPRE = "";
+                                PREPRE = "";
                                 //12
                                 checkTokenContainsClose_FindNext(iWord, words);
                             }
@@ -271,13 +262,10 @@ namespace Spell.Algorithm
                 //16
                 if (nextSPEC.Length < NEXT.Length || nextOpen.Length < NEXT.Length || isUpper)
                 {
-                    if (nextSPEC.Length < NEXT.Length)
-                        NEXT = nextSPEC;
-                    if (nextOpen.Length < NEXT.Length)
-                        NEXT = nextOpen;
+
                     //17
-                    if (isUpper)
-                        NEXT = NEXTNEXT = "";
+
+                    NEXT = NEXTNEXT = "";
                     return;
                 }
                 else
@@ -304,13 +292,8 @@ namespace Spell.Algorithm
                             //21
                             if (nextnextSPEC.Length < NEXTNEXT.Length || nextnextOpen.Length < NEXTNEXT.Length || isUpper)
                             {
-                                if (nextnextSPEC.Length < NEXTNEXT.Length)
-                                    NEXTNEXT = nextnextSPEC;
-                                if (nextnextOpen.Length < NEXTNEXT.Length)
-                                    NEXTNEXT = nextnextOpen;
                                 //17
-                                if (isUpper)
-                                    NEXTNEXT = "";
+                                NEXTNEXT = "";
                                 //22
                                 return;
                             }
