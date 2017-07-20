@@ -209,7 +209,8 @@ namespace Spell.Algorithm
             }
             // Trường hợp key > [i].start và key < [i].end
             if (isStart && i - 1 > 0)
-                return i - 1;
+                if (_AllSentences[i - 1].End > key)
+                    return i - 1;
             return i;
         }
         public void Find_Typing(int typeError)
