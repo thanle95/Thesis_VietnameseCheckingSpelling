@@ -574,10 +574,10 @@ namespace Spell
                 if (_IsFixAll)
                 {
                     if (gridLog.Height > 310)
-                        gridLog.Height -= 20;
+                        gridLog.Height = 310;
                 }
                 else if (gridLog.Height > 250)
-                    gridLog.Height -= 20;
+                    gridLog.Height =250;
                 //
                 //scroll gridlog đến lỗi cuối cùng
                 scrollGridLog();

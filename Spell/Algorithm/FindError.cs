@@ -271,7 +271,7 @@ namespace Spell.Algorithm
                         // Kiểm lỗi từ đầu, vì có thể không cắt được câu đang có lỗi
 
                         _range.Text = " " + _range.Text;
-                        if (isSelected)
+                        //if (isSelected)
                             _range.Select();
                         MessageBox.Show(SysMessage.Instance.Message_Space_Expected);
                         _iSentence = 0;
@@ -284,11 +284,12 @@ namespace Spell.Algorithm
                     // Nếu không phải chế độ bôi đen để kiểm tra văn bản
                     // và chế độ đang đánh máy
                     // thì select range đang chọn.
-                    if (isSelected)
-                        DocumentHandling.Instance.HighLight(_range.Start, _range.End);
-                    else
-                        //if (_typeFindError != IS_TYPING_TYPE && !isSelected)
-                        _range.Select();
+                    _range.Select();
+                    //if (isSelected)
+                    //    DocumentHandling.Instance.HighLight(_range.Start, _range.End);
+                    //else
+                    //    //if (_typeFindError != IS_TYPING_TYPE && !isSelected)
+                        
 
                     _length = _words.Length;
                     // Duyệt qua từng từ trong câu.
