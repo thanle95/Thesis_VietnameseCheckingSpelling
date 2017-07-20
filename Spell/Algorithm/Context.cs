@@ -112,8 +112,8 @@ namespace Spell.Algorithm
             string token = words[iWord].Trim();
             //1
             TOKEN = regexSPEC.Replace(token, "");
-            //không giống như lúc đầu 
-            //---> chứa kí tự đặc biệt
+            // Không giống như lúc đầu 
+            // ---> chứa kí tự đặc biệt
             //2
             if (TOKEN.Length < token.Length)
             {

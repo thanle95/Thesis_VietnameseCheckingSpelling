@@ -172,7 +172,10 @@ namespace Spell.Algorithm
             {"â", "uâ", "", "" },
             {"ao", "au", "âu", "" },
             {"v", "qu", "", "" },
-            {"i", "iê", "", "" }
+            {"i", "iê", "", "" },
+            {"i", "uy", "", "" },
+            {"o", "oa", "", "" }
+
         };
 
         public string[,] VNRegion_Confused_Matrix_UperCase = new string[,]

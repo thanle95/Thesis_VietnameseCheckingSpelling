@@ -97,6 +97,8 @@ namespace Spell.Algorithm
             if (calBiGram_PreToken == 0 && calBigram_TokenNext == 0)
                 return 1;
             double lamda1 = 0, lamda2 = 0;
+            if (calBiGram_PreCand < 1E-5 && calBigram_CandNext < 1E-5)
+                return 0;
             lamda1 = calBiGram_PreCand / calBiGram_PreToken;
             lamda2 = calBigram_CandNext / calBigram_TokenNext;
             if (lamda1 > 100 || lamda2 > 100)
@@ -137,6 +139,8 @@ namespace Spell.Algorithm
             if (calBiGram_PreToken == 0 && calBigram_TokenNext == 0)
                 return 1;
             double lamda1 = 0, lamda2 = 0;
+            if (calBiGram_PreCand < 1E-5 && calBigram_CandNext < 1E-5)
+                return 0;
             lamda1 = calBiGram_PreCand / calBiGram_PreToken;
             lamda2 = calBigram_CandNext / calBigram_TokenNext;
             if (lamda1 > 100 || lamda2 > 100)
