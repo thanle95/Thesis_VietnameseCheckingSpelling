@@ -25,7 +25,6 @@ namespace Spell
             //khởi tạo dữ liệu
             VNDictionary.getInstance.runFirst();
             Ngram.Instance.runFirst();
-
             myApplication = Application;
             //thêm sự kiện click chuột phải
             myApplication.WindowBeforeRightClick +=
