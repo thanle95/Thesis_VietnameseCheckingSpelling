@@ -19,16 +19,24 @@ namespace Spell
         }
         public Word.Range UnderlineWord(string token, int start, int end, Word.WdColor color)
         {
+
             Word.Range range = null;
-            range = Globals.ThisAddIn.Application.ActiveDocument.Range(start, end);
-            while (!range.Text.Equals(token))
+            try
             {
-                range = Globals.ThisAddIn.Application.ActiveDocument.Range(++start, ++end);
+                range = Globals.ThisAddIn.Application.ActiveDocument.Range(start, end);
+                while (!range.Text.Equals(token))
+                {
+                    range = Globals.ThisAddIn.Application.ActiveDocument.Range(++start, ++end);
+                }
+                //range.HighlightColorIndex = colorIndex;
+                //range.Font.Color = color;
+                range.Underline = Word.WdUnderline.wdUnderlineWavy;
+                range.Font.UnderlineColor = color;
             }
-            //range.HighlightColorIndex = colorIndex;
-            //range.Font.Color = color;
-            range.Underline = Word.WdUnderline.wdUnderlineWavy;
-            range.Font.UnderlineColor = color;
+            catch
+            {
+                //System.Windows.Forms.MessageBox.Show(string.Format("token: {0}, start: {1}, end: {2}", token, start, end));
+            }
             return range;
         }
 

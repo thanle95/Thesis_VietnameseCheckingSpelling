@@ -232,8 +232,6 @@ namespace Spell.Algorithm
         {
             try
             {
-                // Cờ dùng để đánh dấu có select range câu đang kiểm tra hay không
-                bool isSelected = true;
                 Word.Range selectionRange = Globals.ThisAddIn.Application.Selection.Range;
                 // Tìm ISentence
                 _iSentence = FindISentence(selectionRange.Start, true);
@@ -244,14 +242,12 @@ namespace Spell.Algorithm
                 if (selectionRange.Start == selectionRange.End)
                 {
 
-                    isSelected = false;
                     _countSentence = _AllSentences.Count;
                 }
                 else {
                     //ngược lại
                     //kiểm tra những câu được chọn
                     //curSentences = Globals.ThisAddIn.Application.Selection.Sentences;
-                    isSelected = true;
                     _countSentence = FindISentence(selectionRange.End, false);
                 }
 
@@ -270,11 +266,11 @@ namespace Spell.Algorithm
                     {
                         // Kiểm lỗi từ đầu, vì có thể không cắt được câu đang có lỗi
 
-                        _range.Text = " " + _range.Text;
-                        //if (isSelected)
-                            _range.Select();
-                        MessageBox.Show(SysMessage.Instance.Message_Space_Expected);
-                        _iSentence = 0;
+                        //_range.Text = " " + _range.Text;
+                        ////if (isSelected)
+                        //    _range.Select();
+                        //MessageBox.Show(SysMessage.Instance.Message_Space_Expected);
+                        //_iSentence --;
                         continue;
                     }
                     _start = _range.Start;
@@ -289,7 +285,7 @@ namespace Spell.Algorithm
                     //    DocumentHandling.Instance.HighLight(_range.Start, _range.End);
                     //else
                     //    //if (_typeFindError != IS_TYPING_TYPE && !isSelected)
-                        
+
 
                     _length = _words.Length;
                     // Duyệt qua từng từ trong câu.
@@ -299,7 +295,7 @@ namespace Spell.Algorithm
                             break;
                         _iWord = _words[i];
                         _originalContext.TOKEN = _iWord.Trim().ToLower();
-                        if (_originalContext.TOKEN.Length < 1)
+                        if (_originalContext.TOKEN.Length == 0)
                         {
                             _start += _iWord.Length + 1;
                             continue;
@@ -378,7 +374,7 @@ namespace Spell.Algorithm
                         }
                         _start += _iWord.Length + 1;
                     }//end for: duyệt từng từ trong câu
-                    DocumentHandling.Instance.HighLightCheckedRange(_range);
+                    //DocumentHandling.Instance.HighLightCheckedRange(_range);
                 }//end for: duyệt từng câu
 
                 // Kết thúc kiểm lỗi
@@ -390,9 +386,9 @@ namespace Spell.Algorithm
                 foreach (var item in dictContext_ErrorRange)
                     dictContext_ErrorString.Add(item.Key, item.Value.Text);
             }
-            catch (Exception e)
+            catch
             {
-                MessageBox.Show(e.ToString());
+              
             }
         }
 
@@ -421,12 +417,14 @@ namespace Spell.Algorithm
             // Ngữ cảnh chỉ có một từ nhưng thuộc trường hợp sai do ngữ cảnh
             if (context.WordCount == 1 && isRightError)
                 return;
-
-            if (char.IsUpper(_words[i + 1][0]))
+            if (_words[i + 1].Length > 0)
             {
-                if (hasCandidate(context, isRightError))
-                    addError(context, isRightError);
-                return;
+                if (char.IsUpper(_words[i + 1][0]))
+                {
+                    if (hasCandidate(context, isRightError))
+                        addError(context, isRightError);
+                    return;
+                }
             }
             context.getContext(i + 1, _words);
             _hSetCand.Clear();

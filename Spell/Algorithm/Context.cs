@@ -159,6 +159,8 @@ namespace Spell.Algorithm
             {
                 //8
                 PRE = words[iWord - 1].Trim();
+                if (PRE.Length == 0)
+                    return;
                 string preSPEC, preClose, preOpen;
                 preSPEC = regexSPEC.Replace(PRE, "");
                 preClose = regexCLOSE.Replace(PRE, "");
@@ -191,6 +193,8 @@ namespace Spell.Algorithm
                         if (iWord > 1)
                         {
                             PREPRE = words[iWord - 2].Trim();
+                            if (PREPRE.Length == 0)
+                                return;
                             string prepreSPEC, prepreClose, prepreOpen;
                             prepreSPEC = regexSPEC.Replace(PREPRE, "");
                             prepreClose = regexCLOSE.Replace(PREPRE, "");
@@ -253,6 +257,8 @@ namespace Spell.Algorithm
             {
                 //15
                 NEXT = words[iWord + 1].Trim();
+                if (NEXT.Length == 0)
+                    return;
                 string nextSPEC, nextClose, nextOpen;
                 nextSPEC = regexSPEC.Replace(NEXT, "");
                 nextClose = regexCLOSE.Replace(NEXT, "");
@@ -284,6 +290,8 @@ namespace Spell.Algorithm
                         if (iWord < words.Length - 2)
                         {
                             NEXTNEXT = words[iWord + 2].Trim();
+                            if (NEXTNEXT.Length == 0)
+                                return;
                             string nextnextSPEC, nextnextOpen, nextnextClose;
                             nextnextSPEC = regexSPEC.Replace(NEXTNEXT, "");
                             nextnextOpen = regexOPEN.Replace(NEXTNEXT, "");
