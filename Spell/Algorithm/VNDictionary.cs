@@ -96,15 +96,20 @@ namespace Spell.Algorithm
         /// </summary>
         /// <param name="next"></param>
         /// <returns></returns>
-        public HashSet<string> findCompoundVNWord_Xx(Context context)
+        public HashSet<string> findCompoundVNWord_Xx(Context context, bool isFoundOnlyOne)
         {
             HashSet<string> hSetResult = new HashSet<string>();
             if (context.NEXT.Length > 0)
             {
                 //duyệt qua tất cả trường hợp, với value là token
                 foreach (KeyValuePair<string, List<string>> pair in CompoundWordVn.Instance.compoundWordVnDict)
+                {
                     if (!pair.Key.ToLower().Equals(context.TOKEN.ToLower()) && pair.Value.Contains(context.NEXT) && Candidate.getInstance.IsLikely(context.TOKEN, pair.Key))
                         hSetResult.Add(pair.Key);
+                    if (isFoundOnlyOne)
+                        if (hSetResult.Count > 0)
+                            return hSetResult;
+                }
             }
             return hSetResult;
         }
@@ -113,7 +118,7 @@ namespace Spell.Algorithm
         /// </summary>
         /// <param name="pre"></param>
         /// <returns></returns>
-        public HashSet<string> findCompoundVNWord_xX(Context context)
+        public HashSet<string> findCompoundVNWord_xX(Context context, bool isFoundOnlyOne)
         {
             HashSet<string> hSetResult = new HashSet<string>();
             if (context.PRE.Trim().Length > 0 && CompoundWordVn.Instance.compoundWordVnDict.ContainsKey(context.PRE.Trim().ToLower()))
@@ -125,6 +130,9 @@ namespace Spell.Algorithm
                     if (iArr.Length == 1)
                         if (!iArr[0].ToLower().Equals(context.TOKEN.ToLower()) && iArr[0].Length > 0 && Candidate.getInstance.IsLikely(context.TOKEN, iArr[0]))
                             hSetResult.Add(iArr[0]);
+                    if (isFoundOnlyOne)
+                        if (hSetResult.Count > 0)
+                            return hSetResult;
                 }
             return hSetResult;
         }
@@ -133,7 +141,7 @@ namespace Spell.Algorithm
         /// </summary>
         /// <param name="token"></param>
         /// <returns></returns>
-        public HashSet<string> findCompoundVNWord_xxX(Context context)
+        public HashSet<string> findCompoundVNWord_xxX(Context context, bool isFoundOnlyOne)
         {
             HashSet<string> hSetResult = new HashSet<string>();
             if (context.PREPRE.Trim().Length > 0 && context.PRE.Trim().Length > 0 && CompoundWordVn.Instance.compoundWordVnDict.ContainsKey(context.PREPRE.Trim().ToLower()))
@@ -148,6 +156,9 @@ namespace Spell.Algorithm
                             && iArr[1].Length > 0
                             && Candidate.getInstance.IsLikely(context.TOKEN, iArr[1]))
                             hSetResult.Add(iArr[1]);
+                    if (isFoundOnlyOne)
+                        if (hSetResult.Count > 0)
+                            return hSetResult;
                 }
             return hSetResult;
         }
@@ -156,7 +167,7 @@ namespace Spell.Algorithm
         /// </summary>
         /// <param name="token"></param>
         /// <returns></returns>
-        public HashSet<string> findCompoundVNWord_xXx(Context context)
+        public HashSet<string> findCompoundVNWord_xXx(Context context, bool isFoundOnlyOne)
         {
             HashSet<string> hSetResult = new HashSet<string>();
             if (context.NEXT.Trim().Length > 0 && context.PRE.Trim().Length > 0 && CompoundWordVn.Instance.compoundWordVnDict.ContainsKey(context.PRE.Trim().ToLower()))
@@ -168,6 +179,9 @@ namespace Spell.Algorithm
                     if (iArr.Length == 2)
                         if (!iArr[0].ToLower().Equals(context.TOKEN.ToLower()) && iArr[1].Equals(context.NEXT.Trim()) && iArr[0].Length > 0 && Candidate.getInstance.IsLikely(context.TOKEN, iArr[0]))
                             hSetResult.Add(iArr[0]);
+                    if (isFoundOnlyOne)
+                        if (hSetResult.Count > 0)
+                            return hSetResult;
                 }
             return hSetResult;
         }
@@ -176,7 +190,7 @@ namespace Spell.Algorithm
         /// </summary>
         /// <param name="token"></param>
         /// <returns></returns>
-        public HashSet<string> findCompoundVNWord_Xxx(Context context)
+        public HashSet<string> findCompoundVNWord_Xxx(Context context, bool isFoundOnlyOne)
         {
             HashSet<string> hSetResult = new HashSet<string>();
             if (context.NEXT.Trim().Length > 0 && context.NEXTNEXT.Trim().Length > 0)
@@ -189,6 +203,9 @@ namespace Spell.Algorithm
                         if (iArr.Length == 2)
                             if (!pair.Key.ToLower().Equals(context.TOKEN.ToLower()) && iArr[0].Equals(context.NEXT.Trim()) && iArr[1].Equals(context.NEXTNEXT.Trim()) && Candidate.getInstance.IsLikely(context.TOKEN, pair.Key))
                                 hSetResult.Add(pair.Key);
+                        if (isFoundOnlyOne)
+                            if (hSetResult.Count > 0)
+                                return hSetResult;
                     }
             return hSetResult;
         }

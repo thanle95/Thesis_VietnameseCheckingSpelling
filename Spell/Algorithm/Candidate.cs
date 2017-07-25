@@ -64,11 +64,11 @@ namespace Spell.Algorithm
         /// <summary>
         /// Sinh candidate cho token
         /// </summary>
-        public HashSet<string> createCandidate(Context context)
+        public HashSet<string> createCandidate(Context context, bool isFoundOnlyOne)
         {
             if (VNDictionary.getInstance.isSyllableVN(context.TOKEN))
-                return RightWordCandidate.getInstance.createCandidate(context);
-            return WrongWordCandidate.getInstance.createCandidate(context);
+                return RightWordCandidate.getInstance.createCandidate(context, isFoundOnlyOne);
+            return WrongWordCandidate.getInstance.createCandidate(context, isFoundOnlyOne);
         }
 
 
@@ -335,31 +335,31 @@ namespace Spell.Algorithm
             for (int i = 0; i < lengthExtX; i++, j++)
                 if (j < lengthExtY)
                 {
-                    
+
                     if (i + 1 < lengthExtX && j < lengthExtY)
                         if (isTelexSign(extX[i], extX[i + 1], extY[j]))
                         {
                             numerator += 0.1;
                             continue;
                         }
-                    //if (isRegion)
-                    //{
-                    //    numerator += 1;
-                    //    continue;
-                    //}
+                        //if (isRegion)
+                        //{
+                        //    numerator += 1;
+                        //    continue;
+                        //}
 
-                    else if (i + 1 < lengthExtX && j + 1 < lengthExtY)
-                    {
-                        if (isRegionMistake(extX[i], extX[i + 1], extY[j], extY[j + 1]))
+                        else if (i + 1 < lengthExtX && j + 1 < lengthExtY)
                         {
-                            numerator += 0.1;
-                            i++;
-                            j++;
-                            isRegion = true;
-                            continue;
-                        }
+                            if (isRegionMistake(extX[i], extX[i + 1], extY[j], extY[j + 1]))
+                            {
+                                numerator += 0.1;
+                                i++;
+                                j++;
+                                isRegion = true;
+                                continue;
+                            }
 
-                    }
+                        }
                     if (extX[i] == extY[j])
                         continue;
                     if (isRegionMistake(extX[i], extY[j]))
@@ -713,17 +713,17 @@ namespace Spell.Algorithm
         /// <param name="nextnext"></param>
         /// <param name="isMajuscule"></param>
         /// <returns></returns>
-        public HashSet<string> createCandByCompoundWord(Context context)
+        public HashSet<string> createCandByCompoundWord(Context context, bool isFoundOnlyOne)
         {
             HashSet<string> hset = new HashSet<string>();
             //tìm X
-            hset.UnionWith(VNDictionary.getInstance.findCompoundVNWord_Xxx(context));
-            hset.UnionWith(VNDictionary.getInstance.findCompoundVNWord_xXx(context));
-            hset.UnionWith(VNDictionary.getInstance.findCompoundVNWord_xxX(context));
+            hset.UnionWith(VNDictionary.getInstance.findCompoundVNWord_Xxx(context, isFoundOnlyOne));
+            hset.UnionWith(VNDictionary.getInstance.findCompoundVNWord_xXx(context, isFoundOnlyOne));
+            hset.UnionWith(VNDictionary.getInstance.findCompoundVNWord_xxX(context, isFoundOnlyOne));
             if (hset.Count > 0)
                 return hset;
-            hset.UnionWith(VNDictionary.getInstance.findCompoundVNWord_Xx(context));
-            hset.UnionWith(VNDictionary.getInstance.findCompoundVNWord_xX(context));
+            hset.UnionWith(VNDictionary.getInstance.findCompoundVNWord_Xx(context, isFoundOnlyOne));
+            hset.UnionWith(VNDictionary.getInstance.findCompoundVNWord_xX(context, isFoundOnlyOne));
 
 
             return hset;
@@ -756,14 +756,14 @@ namespace Spell.Algorithm
         //    }
         //    return lstCandidate;
         //}
-        public HashSet<string> createCandidateByNgram_NoUseLamdaExp(Context context)
+        public HashSet<string> createCandidateByNgram_NoUseLamdaExp(Context context, bool isFoundOnlyOne)
         {
             HashSet<string> lstCandidate = new HashSet<string>();
             foreach (KeyValuePair<string, int> pair in Ngram.Instance._biAmount)
             {
                 if (pair.Key.Contains(Ngram.Instance.START_STRING) || pair.Key.Contains(Ngram.Instance.END_STRING))
                     continue;
-                if (IsLikely(context.TOKEN, pair.Key)  && (pair.Key.Contains(context.PRE) || pair.Key.Contains(context.NEXT)))
+                if (IsLikely(context.TOKEN, pair.Key) && (pair.Key.Contains(context.PRE) || pair.Key.Contains(context.NEXT)))
                 {
                     string[] word = pair.Key.Split(' ');
                     if (!word[1].Equals(context.TOKEN.ToLower()) && word[0].Equals(context.PRE) && word[1].Length > 0)
@@ -771,6 +771,9 @@ namespace Spell.Algorithm
                     else if (!word[0].Equals(context.TOKEN.ToLower()) && word[1].Equals(context.NEXT) && word[0].Length > 0)
                         lstCandidate.Add(word[0]);
                 }
+                if (isFoundOnlyOne)
+                    if (lstCandidate.Count > 0)
+                        return lstCandidate;
             }
             return lstCandidate;
         }
