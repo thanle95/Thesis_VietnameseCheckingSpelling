@@ -64,17 +64,17 @@ namespace Spell.Algorithm
         /// <summary>
         /// Sinh candidate cho token
         /// </summary>
-        public HashSet<string> createCandidate(Context context,bool isRightError,  bool isFoundOnlyOne)
+        public HashSet<string> createCandidate(Context context,bool isRightError)
         {
             if (isRightError)
-                return RightWordCandidate.getInstance.createCandidate(context, isFoundOnlyOne);
-            return WrongWordCandidate.getInstance.createCandidate(context, isFoundOnlyOne);
+                return RightWordCandidate.getInstance.createCandidate(context);
+            return WrongWordCandidate.getInstance.createCandidate(context);
         }
-        public HashSet<string> createCandidate(Context context, bool isFoundOnlyOne)
+        public HashSet<string> createCandidate(Context context)
         {
             if (VNDictionary.getInstance.isSyllableVN(context.TOKEN))
-                return RightWordCandidate.getInstance.createCandidate(context, isFoundOnlyOne);
-            return WrongWordCandidate.getInstance.createCandidate(context, isFoundOnlyOne);
+                return RightWordCandidate.getInstance.createCandidate(context);
+            return WrongWordCandidate.getInstance.createCandidate(context);
         }
 
 
@@ -719,17 +719,17 @@ namespace Spell.Algorithm
         /// <param name="nextnext"></param>
         /// <param name="isMajuscule"></param>
         /// <returns></returns>
-        public HashSet<string> createCandByCompoundWord(Context context, bool isFoundOnlyOne)
+        public HashSet<string> createCandByCompoundWord(Context context)
         {
             HashSet<string> hset = new HashSet<string>();
             //tìm X
-            hset.UnionWith(VNDictionary.getInstance.findCompoundVNWord_Xxx(context, isFoundOnlyOne));
-            hset.UnionWith(VNDictionary.getInstance.findCompoundVNWord_xXx(context, isFoundOnlyOne));
-            hset.UnionWith(VNDictionary.getInstance.findCompoundVNWord_xxX(context, isFoundOnlyOne));
+            hset.UnionWith(VNDictionary.getInstance.findCompoundVNWord_Xxx(context));
+            hset.UnionWith(VNDictionary.getInstance.findCompoundVNWord_xXx(context));
+            hset.UnionWith(VNDictionary.getInstance.findCompoundVNWord_xxX(context));
             if (hset.Count > 0)
                 return hset;
-            hset.UnionWith(VNDictionary.getInstance.findCompoundVNWord_Xx(context, isFoundOnlyOne));
-            hset.UnionWith(VNDictionary.getInstance.findCompoundVNWord_xX(context, isFoundOnlyOne));
+            hset.UnionWith(VNDictionary.getInstance.findCompoundVNWord_Xx(context));
+            hset.UnionWith(VNDictionary.getInstance.findCompoundVNWord_xX(context));
 
 
             return hset;
@@ -762,7 +762,7 @@ namespace Spell.Algorithm
         //    }
         //    return lstCandidate;
         //}
-        public HashSet<string> createCandidateByNgram_NoUseLamdaExp(Context context, bool isFoundOnlyOne)
+        public HashSet<string> createCandidateByNgram_NoUseLamdaExp(Context context)
         {
             HashSet<string> lstCandidate = new HashSet<string>();
             foreach (KeyValuePair<string, int> pair in Ngram.Instance._biAmount)
@@ -777,9 +777,6 @@ namespace Spell.Algorithm
                     else if (!word[0].Equals(context.TOKEN.ToLower()) && word[1].Equals(context.NEXT) && word[0].Length > 0)
                         lstCandidate.Add(word[0]);
                 }
-                if (isFoundOnlyOne)
-                    if (lstCandidate.Count > 0)
-                        return lstCandidate;
             }
             return lstCandidate;
         }

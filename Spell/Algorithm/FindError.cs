@@ -348,7 +348,7 @@ namespace Spell.Algorithm
                                 else
                                 {
                                     // Là từ cuối câu nên không ảnh hưởng từ phía sau
-                                    if (hasCandidate(context, false, true))
+                                    if (hasCandidate(context, false))
                                         addError(context, false);
 
                                 }
@@ -366,7 +366,7 @@ namespace Spell.Algorithm
                                 else
                                 {
                                     // Là từ cuối câu nên không ảnh hưởng từ phía sau
-                                    if (hasCandidate(context, true, true))
+                                    if (hasCandidate(context, true))
                                         addError(context, true);
                                 }
 
@@ -392,13 +392,13 @@ namespace Spell.Algorithm
             }
         }
 
-        private bool hasCandidate(Context context, bool isRightError, bool isFoundOnlyOne)
+        private bool hasCandidate(Context context, bool isRightError)
         {
             _hSetCand.Clear();
             if (isRightError)
-                _hSetCand = RightWordCandidate.getInstance.createCandidate(context, isFoundOnlyOne);
+                _hSetCand = RightWordCandidate.getInstance.createCandidate(context);
             else
-                _hSetCand = WrongWordCandidate.getInstance.createCandidate(context, isFoundOnlyOne);
+                _hSetCand = WrongWordCandidate.getInstance.createCandidate(context);
             if (_hSetCand.Count > 0)
                 return true;
             return false;
@@ -421,7 +421,7 @@ namespace Spell.Algorithm
             {
                 if (char.IsUpper(_words[i + 1][0]))
                 {
-                    if (hasCandidate(context, isRightError, true))
+                    if (hasCandidate(context, isRightError))
                         addError(context, isRightError);
                     return;
                 }
@@ -432,7 +432,7 @@ namespace Spell.Algorithm
                 if (context.ToString().Contains(_originalContext.TOKEN))
                 {
                     _hSetCand.Clear();
-                    _hSetCand = Candidate.getInstance.createCandidate(context, isRightError, false);
+                    _hSetCand = Candidate.getInstance.createCandidate(context, isRightError);
 
                     // Từ thứ i + 1 có candidate thay thế
                     // nếu không, thì từ hiện tại là sai
@@ -445,7 +445,7 @@ namespace Spell.Algorithm
                         // Dùng candidate tốt nhất làm ngữ cảnh
                         // kiểm tra từ hiện tại có sai do từ sau hay không
 
-                        if (hasCandidate(context, isRightError, false))
+                        if (hasCandidate(context, isRightError))
                         {
                             // Từ hiện tại sai mà không phải do từ phía sau
                             // Tránh làm sai những gram phía sau
@@ -458,7 +458,7 @@ namespace Spell.Algorithm
                         {
                             context.CopyForm(_originalContext);
                             // Nếu từ hiện tại có candidate thay thế thì thêm vào đó thành một lỗi
-                            if (hasCandidate(context, isRightError, true))
+                            if (hasCandidate(context, isRightError))
                                 addError(context, isRightError);
                         }
                     }
@@ -466,7 +466,7 @@ namespace Spell.Algorithm
                     {
                         context.CopyForm(_originalContext);
                         // Nếu từ hiện tại có candidate thay thế thì thêm vào đó thành một lỗi
-                        if (hasCandidate(context, isRightError, true))
+                        if (hasCandidate(context, isRightError))
                             addError(context, isRightError);
                     }
                 }
@@ -474,7 +474,7 @@ namespace Spell.Algorithm
                 {
                     context.CopyForm(_originalContext);
                     // Nếu từ hiện tại có candidate thay thế thì thêm vào đó thành một lỗi
-                    if (hasCandidate(context, isRightError, true))
+                    if (hasCandidate(context, isRightError))
                         addError(context, isRightError);
                 }
             }

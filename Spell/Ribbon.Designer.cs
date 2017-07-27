@@ -48,19 +48,19 @@
             this.tab1 = this.Factory.CreateRibbonTab();
             this.group1 = this.Factory.CreateRibbonGroup();
             this.box1 = this.Factory.CreateRibbonBox();
+            this.btnCheckError = this.Factory.CreateRibbonButton();
+            this.btnDeleteFormat = this.Factory.CreateRibbonButton();
+            this.btnDeleteCheckedRange = this.Factory.CreateRibbonButton();
             this.separator1 = this.Factory.CreateRibbonSeparator();
             this.dropTypeFindError = this.Factory.CreateRibbonDropDown();
             this.dropTypeError = this.Factory.CreateRibbonDropDown();
             this.dropCorpus = this.Factory.CreateRibbonDropDown();
+            this.showSumError = this.Factory.CreateRibbonButton();
             this.lblSumError = this.Factory.CreateRibbonLabel();
             this.group2 = this.Factory.CreateRibbonGroup();
-            this.dropDockPosition = this.Factory.CreateRibbonDropDown();
-            this.btnCheckError = this.Factory.CreateRibbonButton();
-            this.btnDeleteFormat = this.Factory.CreateRibbonButton();
-            this.btnDeleteCheckedRange = this.Factory.CreateRibbonButton();
-            this.showSumError = this.Factory.CreateRibbonButton();
             this.btnShowTaskpane = this.Factory.CreateRibbonButton();
             this.btnRestore = this.Factory.CreateRibbonButton();
+            this.dropDockPosition = this.Factory.CreateRibbonDropDown();
             this.tab1.SuspendLayout();
             this.group1.SuspendLayout();
             this.box1.SuspendLayout();
@@ -94,6 +94,44 @@
             this.box1.Items.Add(this.btnDeleteFormat);
             this.box1.Items.Add(this.btnDeleteCheckedRange);
             this.box1.Name = "box1";
+            // 
+            // btnCheckError
+            // 
+            this.btnCheckError.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
+            this.btnCheckError.Image = global::Spell.Properties.Resources.check;
+            this.btnCheckError.Label = "Kiểm lỗi";
+            this.btnCheckError.Name = "btnCheckError";
+            this.btnCheckError.ScreenTip = "Kiểm lỗi";
+            this.btnCheckError.ShowImage = true;
+            this.btnCheckError.SuperTip = "Bôi đen vùng văn bản trước khi nhấn nút để kiểm tra vùng văn bản đó\n\nHoặc để con " +
+    "trỏ tại bất cứ đâu trong văn bản, hệ thống sẽ kiểm lỗi từ đó trở về sau";
+            this.btnCheckError.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.btnCheckError_Click);
+            // 
+            // btnDeleteFormat
+            // 
+            this.btnDeleteFormat.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
+            this.btnDeleteFormat.Enabled = false;
+            this.btnDeleteFormat.Image = global::Spell.Properties.Resources.delete;
+            this.btnDeleteFormat.Label = "Xóa đánh dấu lỗi";
+            this.btnDeleteFormat.Name = "btnDeleteFormat";
+            this.btnDeleteFormat.ScreenTip = "Xóa đánh dấu lỗi";
+            this.btnDeleteFormat.ShowImage = true;
+            this.btnDeleteFormat.SuperTip = "Bôi đen một vùng để xóa đánh dấu lỗi vùng đó\n\nHoặc không bôi đen để xóa đánh dấu " +
+    "lỗi toàn văn bản";
+            this.btnDeleteFormat.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.btnDeleteFormat_Click);
+            // 
+            // btnDeleteCheckedRange
+            // 
+            this.btnDeleteCheckedRange.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
+            this.btnDeleteCheckedRange.Enabled = false;
+            this.btnDeleteCheckedRange.Image = global::Spell.Properties.Resources.delete_checked_range;
+            this.btnDeleteCheckedRange.Label = "Xóa đánh dấu vùng kiểm lỗi";
+            this.btnDeleteCheckedRange.Name = "btnDeleteCheckedRange";
+            this.btnDeleteCheckedRange.ScreenTip = "Xóa đánh dấu vùng kiểm lỗi";
+            this.btnDeleteCheckedRange.ShowImage = true;
+            this.btnDeleteCheckedRange.SuperTip = "Bôi đen một vùng để xóa đánh dấu vùng đó\n\nHoặc không bôi đen để xóa đánh dấu vùng" +
+    " đã kiểm lỗi toàn văn bản";
+            this.btnDeleteCheckedRange.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.btnDeleteCheckedRange_Click);
             // 
             // separator1
             // 
@@ -138,6 +176,12 @@
             this.dropCorpus.SuperTip = "Chọn loại ngữ liệu cho văn bản của bạn";
             this.dropCorpus.SelectionChanged += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.dropCorpus_SelectionChanged);
             // 
+            // showSumError
+            // 
+            this.showSumError.Label = "Xem tổng lỗi";
+            this.showSumError.Name = "showSumError";
+            this.showSumError.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.showSumError_Click);
+            // 
             // lblSumError
             // 
             this.lblSumError.Label = " ";
@@ -150,64 +194,6 @@
             this.group2.Items.Add(this.dropDockPosition);
             this.group2.Label = "Sửa lỗi";
             this.group2.Name = "group2";
-            // 
-            // dropDockPosition
-            // 
-            ribbonDropDownItemImpl9.Label = "Bên phải";
-            ribbonDropDownItemImpl10.Label = "Bên trái";
-            ribbonDropDownItemImpl11.Label = "Không neo";
-            this.dropDockPosition.Items.Add(ribbonDropDownItemImpl9);
-            this.dropDockPosition.Items.Add(ribbonDropDownItemImpl10);
-            this.dropDockPosition.Items.Add(ribbonDropDownItemImpl11);
-            this.dropDockPosition.Label = "Vị trí neo";
-            this.dropDockPosition.Name = "dropDockPosition";
-            this.dropDockPosition.ScreenTip = "Vị trí neo";
-            this.dropDockPosition.SuperTip = "Chọn vị trí bạn muốn neo taskpane";
-            this.dropDockPosition.SelectionChanged += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.dropDockPosition_SelectionChanged);
-            // 
-            // btnCheckError
-            // 
-            this.btnCheckError.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
-            this.btnCheckError.Image = global::Spell.Properties.Resources.check;
-            this.btnCheckError.Label = "Kiểm lỗi";
-            this.btnCheckError.Name = "btnCheckError";
-            this.btnCheckError.ScreenTip = "Kiểm lỗi";
-            this.btnCheckError.ShowImage = true;
-            this.btnCheckError.SuperTip = "Bôi đen vùng văn bản trước khi nhấn nút để kiểm tra vùng văn bản đó\n\nHoặc để con " +
-    "trỏ tại bất cứ đâu trong văn bản, hệ thống sẽ kiểm lỗi từ đó trở về sau";
-            this.btnCheckError.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.btnCheckError_Click);
-            // 
-            // btnDeleteFormat
-            // 
-            this.btnDeleteFormat.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
-            this.btnDeleteFormat.Enabled = false;
-            this.btnDeleteFormat.Image = global::Spell.Properties.Resources.delete;
-            this.btnDeleteFormat.Label = "Xóa đánh dấu lỗi";
-            this.btnDeleteFormat.Name = "btnDeleteFormat";
-            this.btnDeleteFormat.ScreenTip = "Xóa đánh dấu lỗi";
-            this.btnDeleteFormat.ShowImage = true;
-            this.btnDeleteFormat.SuperTip = "Bôi đen một vùng để xóa đánh dấu lỗi vùng đó\n\nHoặc không bôi đen để xóa đánh dấu " +
-    "lỗi toàn văn bản";
-            this.btnDeleteFormat.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.btnDeleteFormat_Click);
-            // 
-            // btnDeleteCheckedRange
-            // 
-            this.btnDeleteCheckedRange.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
-            this.btnDeleteCheckedRange.Enabled = false;
-            this.btnDeleteCheckedRange.Image = global::Spell.Properties.Resources.delete_checked_range;
-            this.btnDeleteCheckedRange.Label = "Xóa đánh dấu vùng kiểm lỗi";
-            this.btnDeleteCheckedRange.Name = "btnDeleteCheckedRange";
-            this.btnDeleteCheckedRange.ScreenTip = "Xóa đánh dấu vùng kiểm lỗi";
-            this.btnDeleteCheckedRange.ShowImage = true;
-            this.btnDeleteCheckedRange.SuperTip = "Bôi đen một vùng để xóa đánh dấu vùng đó\n\nHoặc không bôi đen để xóa đánh dấu vùng" +
-    " đã kiểm lỗi toàn văn bản";
-            this.btnDeleteCheckedRange.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.btnDeleteCheckedRange_Click);
-            // 
-            // showSumError
-            // 
-            this.showSumError.Label = "Xem tổng lỗi";
-            this.showSumError.Name = "showSumError";
-            this.showSumError.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.showSumError_Click);
             // 
             // btnShowTaskpane
             // 
@@ -230,6 +216,20 @@
             this.btnRestore.ScreenTip = "Phục hồi lại văn bản trước lần sửa lỗi gần nhất";
             this.btnRestore.ShowImage = true;
             this.btnRestore.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.btnRestore_Click);
+            // 
+            // dropDockPosition
+            // 
+            ribbonDropDownItemImpl9.Label = "Bên phải";
+            ribbonDropDownItemImpl10.Label = "Bên trái";
+            ribbonDropDownItemImpl11.Label = "Không neo";
+            this.dropDockPosition.Items.Add(ribbonDropDownItemImpl9);
+            this.dropDockPosition.Items.Add(ribbonDropDownItemImpl10);
+            this.dropDockPosition.Items.Add(ribbonDropDownItemImpl11);
+            this.dropDockPosition.Label = "Vị trí neo";
+            this.dropDockPosition.Name = "dropDockPosition";
+            this.dropDockPosition.ScreenTip = "Vị trí neo";
+            this.dropDockPosition.SuperTip = "Chọn vị trí bạn muốn neo taskpane";
+            this.dropDockPosition.SelectionChanged += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.dropDockPosition_SelectionChanged);
             // 
             // Ribbon
             // 
