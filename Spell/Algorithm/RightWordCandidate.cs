@@ -72,6 +72,8 @@ namespace Spell.Algorithm
             HashSet<string> hSetCandidate = new HashSet<string>();
 
             hSetCandidate.UnionWith(Candidate.getInstance.createCandidateByNgram_NoUseLamdaExp(context, isFoundOnlyOne));
+            if (isFoundOnlyOne && hSetCandidate.Count > 0)
+                return hSetCandidate;
             hSetCandidate.UnionWith(Candidate.getInstance.createCandByCompoundWord(context, isFoundOnlyOne));
             if (isFoundOnlyOne)
                 return hSetCandidate;
