@@ -64,6 +64,12 @@ namespace Spell.Algorithm
         /// <summary>
         /// Sinh candidate cho token
         /// </summary>
+        public HashSet<string> createCandidate(Context context,bool isRightError,  bool isFoundOnlyOne)
+        {
+            if (isRightError)
+                return RightWordCandidate.getInstance.createCandidate(context, isFoundOnlyOne);
+            return WrongWordCandidate.getInstance.createCandidate(context, isFoundOnlyOne);
+        }
         public HashSet<string> createCandidate(Context context, bool isFoundOnlyOne)
         {
             if (VNDictionary.getInstance.isSyllableVN(context.TOKEN))

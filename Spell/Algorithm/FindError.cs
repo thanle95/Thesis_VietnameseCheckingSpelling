@@ -425,30 +425,50 @@ namespace Spell.Algorithm
                         addError(context, isRightError);
                     return;
                 }
-            }
-            context.getContext(i + 1, _words);
-            _hSetCand.Clear();
-            _hSetCand = Candidate.getInstance.createCandidate(context, false);
+                // Kiểm tra từ hiện tại có sai do từ tiếp theo hay không
+                context.getContext(i + 1, _words);
 
-            // Từ thứ i + 1 có candidate thay thế
-            // nếu không, thì từ hiện tại là sai
-            if (_hSetCand.Count > 0)
-            {
-                context.CopyForm(_originalContext);
-
-
-                context.NEXT = _hSetCand.ElementAt(0);
-                // Dùng candidate tốt nhất làm ngữ cảnh
-                // kiểm tra từ hiện tại có sai do từ sau hay không
-
-                if (hasCandidate(context, isRightError, false))
+                // Nếu ngữ cảnh của từ tiếp theo, có chứa từ hiện tại thì kiểm tra
+                if (context.ToString().Contains(_originalContext.TOKEN))
                 {
-                    // Từ hiện tại sai mà không phải do từ phía sau
-                    // Tránh làm sai những gram phía sau
-                    _words[i] = _hSetCand.ElementAt(0);
+                    _hSetCand.Clear();
+                    _hSetCand = Candidate.getInstance.createCandidate(context, isRightError, false);
 
-                    context.CopyForm(_originalContext);
-                    addError(context, isRightError);
+                    // Từ thứ i + 1 có candidate thay thế
+                    // nếu không, thì từ hiện tại là sai
+                    if (_hSetCand.Count > 0)
+                    {
+                        context.CopyForm(_originalContext);
+
+
+                        context.NEXT = _hSetCand.ElementAt(0);
+                        // Dùng candidate tốt nhất làm ngữ cảnh
+                        // kiểm tra từ hiện tại có sai do từ sau hay không
+
+                        if (hasCandidate(context, isRightError, false))
+                        {
+                            // Từ hiện tại sai mà không phải do từ phía sau
+                            // Tránh làm sai những gram phía sau
+                            _words[i] = _hSetCand.ElementAt(0);
+
+                            context.CopyForm(_originalContext);
+                            addError(context, isRightError);
+                        }
+                        else
+                        {
+                            context.CopyForm(_originalContext);
+                            // Nếu từ hiện tại có candidate thay thế thì thêm vào đó thành một lỗi
+                            if (hasCandidate(context, isRightError, true))
+                                addError(context, isRightError);
+                        }
+                    }
+                    else
+                    {
+                        context.CopyForm(_originalContext);
+                        // Nếu từ hiện tại có candidate thay thế thì thêm vào đó thành một lỗi
+                        if (hasCandidate(context, isRightError, true))
+                            addError(context, isRightError);
+                    }
                 }
                 else
                 {
@@ -458,13 +478,7 @@ namespace Spell.Algorithm
                         addError(context, isRightError);
                 }
             }
-            else
-            {
-                context.CopyForm(_originalContext);
-                // Nếu từ hiện tại có candidate thay thế thì thêm vào đó thành một lỗi
-                if (hasCandidate(context, isRightError, true))
-                    addError(context, isRightError);
-            }
+
         }
     }
 }

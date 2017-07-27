@@ -45,6 +45,8 @@ namespace Spell.Algorithm
 
             hSetCandidate.UnionWith(Candidate.getInstance.createCandidateByNgram_NoUseLamdaExp(context, isFoundOnlyOne));
             hSetCandidate.UnionWith(Candidate.getInstance.createCandByCompoundWord(context, isFoundOnlyOne));
+            if (isFoundOnlyOne)
+                return hSetCandidate;
             //giá trị lamda có được do thống kê
             double lamda1 = 0.1;
             double lamda2 = 0.3;
