@@ -1,0 +1,551 @@
+{
+  "title" : "",
+  "description" : "",
+  "author" : "",
+  "width" : 1304.0,
+  "height" : 768.0,
+  "version" : "0.5",
+  "editRate" : 30,
+  "authoringClientName" :  {
+    "name" : "Camtasia Studio",
+    "platform" : "Windows",
+    "version" : "9.0"
+  },
+  "sourceBin" : [
+    {
+      "id" : 1,
+      "src" : "C:\\Users\\Than Le\\Documents\\Camtasia Studio\\Rec 08-03-17.trec",
+      "rect" : [0, 0, 1304, 768],
+      "lastMod" : "20170803T121707",
+      "sourceTracks" : [
+        {
+          "range" : [0, 6311],
+          "type" : 0,
+          "editRate" : 30,
+          "trackRect" : [0, 0, 1304, 768],
+          "sampleRate" : 29,
+          "bitDepth" : 0,
+          "numChannels" : 0,
+          "metaData" : "Rec 08-03-17.trec;"
+        }
+      ]
+    }
+  ],
+  "timeline" : {
+    "id" : 2,
+    "sceneTrack" : {
+      "scenes" : [
+        {
+          "duration" : 210.366666666667,
+          "title" : "",
+          "type" : "",
+          "csml" : {
+            "tracks" : [
+              {
+                "trackIndex" : 0,
+                "medias" : [
+                  {
+                    "id" : 3,
+                    "_type" : "ScreenVMFile",
+                    "src" : 1,
+                    "trackNumber" : 0,
+                    "attributes" : {
+                      "ident" : "Rec 08-03-17"
+                    },
+                    "parameters" : {
+                      "translation0" : {
+                        "type" : "double",
+                        "defaultValue" : 0.0,
+                        "interp" : "eioe",
+                        "keyframes" : [
+                          {
+                            "time" : 414,
+                            "value" : -24.0626631853842,
+                            "duration" : 30
+                          },
+                          {
+                            "time" : 1053,
+                            "value" : 3.6682694457113e-05,
+                            "duration" : 30
+                          },
+                          {
+                            "time" : 1270,
+                            "value" : -91.2910251416423,
+                            "duration" : 30
+                          },
+                          {
+                            "time" : 4195,
+                            "value" : 5.33880814010956e-05,
+                            "duration" : 30
+                          },
+                          {
+                            "time" : 4292,
+                            "value" : 22.7458019717061,
+                            "duration" : 30
+                          },
+                          {
+                            "time" : 4927,
+                            "value" : -92.6532699575659,
+                            "duration" : 30
+                          },
+                          {
+                            "time" : 6227,
+                            "value" : 1.72722730695796e-05,
+                            "duration" : 30
+                          }
+                        ]
+                      },
+                      "translation1" : {
+                        "type" : "double",
+                        "defaultValue" : -5.08180164615624e-11,
+                        "interp" : "eioe",
+                        "keyframes" : [
+                          {
+                            "time" : 414,
+                            "value" : 362.945208526207,
+                            "duration" : 30
+                          },
+                          {
+                            "time" : 1053,
+                            "value" : -2.9461844032852e-05,
+                            "duration" : 30
+                          },
+                          {
+                            "time" : 1270,
+                            "value" : 53.7665458977665,
+                            "duration" : 30
+                          },
+                          {
+                            "time" : 4195,
+                            "value" : -0.00010611163941121,
+                            "duration" : 30
+                          },
+                          {
+                            "time" : 4292,
+                            "value" : 193.876926135799,
+                            "duration" : 30
+                          },
+                          {
+                            "time" : 4927,
+                            "value" : 76.49739264478,
+                            "duration" : 30
+                          },
+                          {
+                            "time" : 6227,
+                            "value" : 0.000219809483937183,
+                            "duration" : 30
+                          }
+                        ]
+                      },
+                      "scale0" : {
+                        "type" : "double",
+                        "defaultValue" : 1.0,
+                        "interp" : "eioe",
+                        "keyframes" : [
+                          {
+                            "time" : 414,
+                            "value" : 1.87999991896385,
+                            "duration" : 30
+                          },
+                          {
+                            "time" : 1053,
+                            "value" : 0.999999979295222,
+                            "duration" : 30
+                          },
+                          {
+                            "time" : 1270,
+                            "value" : 1.1400168301507,
+                            "duration" : 30
+                          },
+                          {
+                            "time" : 4195,
+                            "value" : 0.999999960368867,
+                            "duration" : 30
+                          },
+                          {
+                            "time" : 4292,
+                            "value" : 2.02748231492167,
+                            "duration" : 30
+                          },
+                          {
+                            "time" : 4927,
+                            "value" : 1.1421062418986,
+                            "duration" : 30
+                          },
+                          {
+                            "time" : 6227,
+                            "value" : 1.00000000454944,
+                            "duration" : 30
+                          }
+                        ]
+                      },
+                      "scale1" : {
+                        "type" : "double",
+                        "defaultValue" : 1.0,
+                        "interp" : "eioe",
+                        "keyframes" : [
+                          {
+                            "time" : 414,
+                            "value" : 1.87999985367949,
+                            "duration" : 30
+                          },
+                          {
+                            "time" : 1053,
+                            "value" : 0.999999938961466,
+                            "duration" : 30
+                          },
+                          {
+                            "time" : 1270,
+                            "value" : 1.14001721095164,
+                            "duration" : 30
+                          },
+                          {
+                            "time" : 4195,
+                            "value" : 1.00000022123667,
+                            "duration" : 30
+                          },
+                          {
+                            "time" : 4292,
+                            "value" : 2.02748312940286,
+                            "duration" : 30
+                          },
+                          {
+                            "time" : 4927,
+                            "value" : 1.14210662858328,
+                            "duration" : 30
+                          },
+                          {
+                            "time" : 6227,
+                            "value" : 1.00000053540518,
+                            "duration" : 30
+                          }
+                        ]
+                      },
+                      "sourceCrop0" : {
+                        "type" : "double",
+                        "defaultValue" : 0.0,
+                        "interp" : "linr"
+                      },
+                      "sourceCrop1" : {
+                        "type" : "double",
+                        "defaultValue" : 0.0,
+                        "interp" : "linr"
+                      },
+                      "sourceCrop2" : {
+                        "type" : "double",
+                        "defaultValue" : 0.0,
+                        "interp" : "linr"
+                      },
+                      "sourceCrop3" : {
+                        "type" : "double",
+                        "defaultValue" : 0.0,
+                        "interp" : "linr"
+                      },
+                      "geometryCrop0" : {
+                        "type" : "double",
+                        "defaultValue" : 0.0,
+                        "interp" : "linr"
+                      },
+                      "geometryCrop1" : {
+                        "type" : "double",
+                        "defaultValue" : 0.0,
+                        "interp" : "linr"
+                      },
+                      "geometryCrop2" : {
+                        "type" : "double",
+                        "defaultValue" : 0.0,
+                        "interp" : "linr"
+                      },
+                      "geometryCrop3" : {
+                        "type" : "double",
+                        "defaultValue" : 0.0,
+                        "interp" : "linr"
+                      },
+                      "opacity" : {
+                        "type" : "double",
+                        "defaultValue" : 1.0,
+                        "interp" : "linr"
+                      },
+                      "cursorScale" : {
+                        "type" : "double",
+                        "defaultValue" : 1.0,
+                        "interp" : "linr"
+                      },
+                      "cursorOpacity" : {
+                        "type" : "double",
+                        "defaultValue" : 1.0,
+                        "interp" : "linr"
+                      }
+                    },
+                    "effects" : [
+
+                    ],
+                    "start" : 0,
+                    "duration" : 6311,
+                    "mediaStart" : 0,
+                    "mediaDuration" : 6311,
+                    "scalar" : 1,
+                    "metadata" : {
+                      "AutoAppliedSmartFocus" : "False",
+                      "WinSubProjectDisplayName" : "",
+                      "clipSpeedAttribute" : false,
+                      "default-scale0" : 1.0,
+                      "default-scale1" : 1.0,
+                      "default-translation0" : 0.0,
+                      "default-translation1" : 0.0
+                    },
+                    "animationTracks" : {
+                      "visual" : [
+                        {
+                          "range" : [ 414, 30]
+                        },
+                        {
+                          "range" : [ 1053, 30]
+                        },
+                        {
+                          "range" : [ 1270, 30]
+                        },
+                        {
+                          "range" : [ 4195, 30]
+                        },
+                        {
+                          "range" : [ 4292, 30]
+                        },
+                        {
+                          "range" : [ 4927, 30]
+                        },
+                        {
+                          "range" : [ 6227, 30]
+                        }
+                      ]
+                    }
+                  }
+                ]
+              },
+              {
+                "trackIndex" : 1,
+                "medias" : [
+                  {
+                    "id" : 4,
+                    "_type" : "Caption",
+                    "allowTrimOut" : 1,
+                    "maxMediaDuration" : 9.22337e+18,
+                    "parameters" : {
+                      "captionData" : {
+                        "type" : "caption",
+                        "interp" : "left",
+                        "keyframes" : [
+                          {
+                            "time" : -9999999,
+                            "value" : { "text" : "Khi cài đặt add-in, sẽ xuất hiện tab \"Kiểm lỗi chính tả tiếng Việt\" trên thanh Ribbon", "textAttributes" : null },
+                            "duration" : 0
+                          }
+                        ]
+                      }
+                    },
+                    "effects" : [
+
+                    ],
+                    "start" : 90,
+                    "duration" : 187,
+                    "mediaStart" : 0,
+                    "mediaDuration" : 187,
+                    "scalar" : 1,
+                    "metadata" : {
+                      "WinSubProjectDisplayName" : "",
+                      "clipSpeedAttribute" : false
+                    },
+                    "animationTracks" : {
+
+                    }
+                  },
+                  {
+                    "id" : 5,
+                    "_type" : "Caption",
+                    "allowTrimOut" : 1,
+                    "maxMediaDuration" : 9.22337e+18,
+                    "parameters" : {
+                      "captionData" : {
+                        "type" : "caption",
+                        "interp" : "left",
+                        "keyframes" : [
+                          {
+                            "time" : -9999999,
+                            "value" : { "text" : "Để bắt đầu kiểm lỗi, có thể chọn một vùng để kiểm tra", "textAttributes" : null },
+                            "duration" : 0
+                          }
+                        ]
+                      }
+                    },
+                    "effects" : [
+
+                    ],
+                    "start" : 318,
+                    "duration" : 120,
+                    "mediaStart" : 0,
+                    "mediaDuration" : 120,
+                    "scalar" : 1,
+                    "metadata" : {
+                      "WinSubProjectDisplayName" : "",
+                      "clipSpeedAttribute" : false
+                    },
+                    "animationTracks" : {
+
+                    }
+                  },
+                  {
+                    "id" : 6,
+                    "_type" : "Caption",
+                    "allowTrimOut" : 1,
+                    "maxMediaDuration" : 9.22337e+18,
+                    "parameters" : {
+                      "captionData" : {
+                        "type" : "caption",
+                        "interp" : "left",
+                        "keyframes" : [
+                          {
+                            "time" : -9999999,
+                            "value" : { "text" : "Những lỗi sai không có trong từ điển tiếng Việt được gạch dưới màu đỏ", "textAttributes" : null },
+                            "duration" : 0
+                          }
+                        ]
+                      }
+                    },
+                    "effects" : [
+
+                    ],
+                    "start" : 539,
+                    "duration" : 142,
+                    "mediaStart" : -22,
+                    "mediaDuration" : 142,
+                    "scalar" : 1,
+                    "metadata" : {
+                      "WinSubProjectDisplayName" : "",
+                      "clipSpeedAttribute" : false
+                    },
+                    "animationTracks" : {
+
+                    }
+                  },
+                  {
+                    "id" : 7,
+                    "_type" : "Caption",
+                    "allowTrimOut" : 1,
+                    "maxMediaDuration" : 9.22337e+18,
+                    "parameters" : {
+                      "captionData" : {
+                        "type" : "caption",
+                        "interp" : "left",
+                        "keyframes" : [
+                          {
+                            "time" : -9999999,
+                            "value" : { "text" : "Ngược lại, những lỗi có trong từ điển tiếng Việt nhưng không phù hợp với ngữ cảnh hiện tại, gạch dưới màu xanh", "textAttributes" : null },
+                            "duration" : 0
+                          }
+                        ]
+                      }
+                    },
+                    "effects" : [
+
+                    ],
+                    "start" : 681,
+                    "duration" : 142,
+                    "mediaStart" : 0,
+                    "mediaDuration" : 142,
+                    "scalar" : 1,
+                    "metadata" : {
+                      "WinSubProjectDisplayName" : "",
+                      "clipSpeedAttribute" : false
+                    },
+                    "animationTracks" : {
+
+                    }
+                  }
+                ]
+              },
+              {
+                "trackIndex" : 2,
+                "medias" : [
+                ]
+              },
+              {
+                "trackIndex" : 3,
+                "medias" : [
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "trackAttributes" : [
+      {
+        "ident" : "",
+        "audioMuted" : false,
+        "videoHidden" : false,
+        "metadata" : {
+          "IsLocked" : "False",
+          "WinTrackHeight" : "56"
+        }
+      },
+      {
+        "ident" : "",
+        "audioMuted" : false,
+        "videoHidden" : false,
+        "metadata" : {
+          "IsLocked" : "False",
+          "WinTrackHeight" : "56"
+        }
+      },
+      {
+        "ident" : "",
+        "audioMuted" : false,
+        "videoHidden" : false,
+        "metadata" : {
+          "IsLocked" : "False",
+          "WinTrackHeight" : "56"
+        }
+      },
+      {
+        "ident" : "",
+        "audioMuted" : false,
+        "videoHidden" : false,
+        "metadata" : {
+          "IsLocked" : "False",
+          "WinTrackHeight" : "56"
+        }
+      }
+    ],
+    "captionAttributes" : {
+      "enabled" : true,
+      "fontName" : "Arial",
+      "fontSize" : 45,
+      "backgroundColor" : [ 0, 0, 0, 191],
+      "foregroundColor" : [ 255, 255, 255, 255],
+      "lang" : "en",
+      "alignment" : 0,
+      "defaultFontSize" : true,
+      "opacity" : 0.5,
+      "backgroundEnabled" : true,
+      "backgroundOnlyAroundText" : true
+    },
+    "backgroundColor" : [ 0, 0, 0, 255]
+  },
+  "metadata" : {
+    "AutoSaveFile" : "C:\\Users\\Than Le\\AppData\\Local\\TechSmith\\Camtasia Studio\\9.0\\Auto-Saves\\Untitled Project46fc1539.autosave.tscproj",
+    "CanvasZoom" : 49,
+    "Date" : "2017-08-03 07:17:24 PM",
+    "IsAutoSave" : "0",
+    "Language" : "ENU",
+    "ProfileName" : "",
+    "ProjectDimensionsChanged" : "1",
+    "Title" : "Untitled Project",
+    "audioNarrationNotes" : "",
+    "calloutStyle" : "Basic",
+    "canvasDetached" : "False",
+    "canvasPositionHeight" : "0",
+    "canvasPositionLeft" : "0",
+    "canvasPositionTop" : "0",
+    "canvasPositionWidth" : "0"
+  }
+}
